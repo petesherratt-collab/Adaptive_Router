@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "tasks": [
+    {
+      "task_id": "extract_person",
+      "task_class": "extract_structured",
+      "normalization": "structured_json",
+      "prompt": "Extract the facts as one JSON object. Output only JSON. Required keys: name, age. Ada Lovelace is 36 years old.",
+      "expected": {
+        "name": "Ada Lovelace",
+        "age": 36
+      }
+    },
+    {
+      "task_id": "extract_event",
+      "task_class": "extract_structured",
+      "normalization": "structured_json",
+      "prompt": "Extract the facts as one JSON object. Output only JSON. Required keys: event, date, city. The design review is on 2026-08-23 in London.",
+      "expected": {
+        "event": "design review",
+        "date": "2026-08-23",
+        "city": "London"
+      }
+    },
+    {
+      "task_id": "extract_order",
+      "task_class": "extract_structured",
+      "normalization": "structured_json",
+      "prompt": "Extract the facts as one JSON object. Output only JSON. Required keys: order_id, total, currency. Order A-104 costs 19.50 GBP.",
+      "expected": {
+        "order_id": "A-104",
+        "total": 19.5,
+        "currency": "GBP"
+      }
+    },
+    {
+      "task_id": "classify_sentiment",
+      "task_class": "classification",
+      "normalization": "text",
+      "prompt": "Classify the message as exactly one of: positive, negative, neutral. Output only the label. Message: The service was quick and helpful.",
+      "expected": "positive"
+    },
+    {
+      "task_id": "classify_priority",
+      "task_class": "classification",
+      "normalization": "text",
+      "prompt": "Classify the incident as exactly one of: low, medium, high. Output only the label. Incident: The production server is down for all customers.",
+      "expected": "high"
+    },
+    {
+      "task_id": "format_bullets",
+      "task_class": "format",
+      "normalization": "text",
+      "prompt": "Format these items as exactly three Markdown bullets, one item per line, preserving order. Output only the bullets: apples; bananas; pears.",
+      "expected": "- apples\n- bananas\n- pears"
+    },
+    {
+      "task_id": "format_json",
+      "task_class": "format",
+      "normalization": "structured_json",
+      "prompt": "Format the supplied fields as one compact JSON object. Output only JSON. City: London. Country: UK.",
+      "expected": {
+        "city": "London",
+        "country": "UK"
+      }
+    },
+    {
+      "task_id": "format_labels",
+      "task_class": "format",
+      "normalization": "text",
+      "prompt": "Format these two fields as exactly two lines in the form 'key: value'. Output only the lines. name is Ada; role is analyst.",
+      "expected": "name: Ada\nrole: analyst"
+    },
+    {
+      "task_id": "transform_reverse",
+      "task_class": "transform",
+      "normalization": "text",
+      "prompt": "Reverse the characters in this string. Output only the result: router",
+      "expected": "retuor"
+    },
+    {
+      "task_id": "transform_slug",
+      "task_class": "transform",
+      "normalization": "text",
+      "prompt": "Replace each space with a hyphen in this string. Preserve all letters. Output only the result: small deterministic test",
+      "expected": "small-deterministic-test"
+    }
+  ]
+}
