@@ -444,6 +444,7 @@ a 7-day baseline.
 - **Open risk:** telemetry rows remain unattributable to a code revision, and a
   future `git init` run from `/home/peters` would silently adopt the empty stub
   as a home-directory repository.
+- **Later resolution:** the project is now under Git/GitHub version control.
 
 #### 2. A live API key sits beside an absent ignore file
 
@@ -459,6 +460,8 @@ a 7-day baseline.
   `.env`, `.venv/`, and `__pycache__/` must be written before the first
   `git add` in this project, not after.
 - **Open risk:** the sequencing depends on remembering it at commit time.
+- **Later resolution:** `.gitignore` now protects `.env`, virtual environments,
+  caches, and run logs.
 
 #### 3. Remote-route reason codes overwrite their trigger
 
@@ -478,6 +481,65 @@ a 7-day baseline.
   escalation causes for as long as the remote leg stays unconfigured.
 
 ---
+
+## 2026-08-24 — Simulation Zero v1 — ProDesk / Gemma 3 270M
+
+### Environment
+
+- Host: HP ProDesk 400 G2.5 SFF, Linux Mint
+- Model: `gemma3:270m` via Ollama
+- Model resident during measured run
+- Benchmark: 10 deterministic tasks × 3 repetitions = 30 observations
+- No LLM judge
+- Corrected benchmark/oracle frozen before execution
+- Full pre-run test suite: 45 passed, 6 subtests passed
+- `py_compile` passed
+- `git diff --check` passed
+
+### Results
+
+- Overall: 17/30 oracle-correct (56.7%)
+- `extract_person`: 3/3
+- `extract_event`: 3/3
+- `extract_order`: 3/3
+- `classify_sentiment`: 3/3
+- `classify_priority`: 2/3
+- `format_json`: 3/3
+- `format_bullets`: 0/3
+- `format_labels`: 0/3
+- `transform_reverse`: 0/3
+- `transform_slug`: 0/3
+
+### Important observation
+
+`classify_priority`'s failure was inspected directly:
+
+- rep 1 raw `"High\n"` → normalized `"high"` → PASS
+- rep 2 raw `"High\n"` → normalized `"high"` → PASS
+- rep 3 raw `"Low"` → normalized `"low"` → FAIL
+
+Therefore this is an observed model failure, not a normalization/oracle failure.
+
+### Performance observation
+
+Warm resident inference on the ProDesk showed TTFT in the inspected tail
+roughly 40–130 ms and generation roughly 60–80 tok/s. Do not generalize these
+figures beyond the inspected records; calculate full-run statistics separately.
+
+### Preserved evidence
+
+`benchmark_runs_prodesk_simzero_v1.jsonl`
+
+SHA-256:
+`802003f86282bef7b8a918b3d05b0f9f34749bb70bd6da12d7413a1a8afe8670`
+
+### Interpretation
+
+The 270M model shows a strongly task-dependent capability boundary. It was
+perfect on the three structured-extraction tasks and JSON formatting, nearly
+perfect on classification, but failed every observed exact bullet,
+label-formatting, character-reversal, and slug-transformation task. Do not
+infer general task-class capability from 3 repetitions per task.
 
 ## Open questions carried forward
 
