@@ -789,3 +789,56 @@ Replay always-local, always-remote, coarse-class, and fine-capability policies
 using paired measured local and remote outcomes. Retain both strict and audited
 interpretations. Do not use the earlier uniform remote-success assumption as
 the principal result.
+## 2026-08-25 — Measured paired routing simulation v1
+
+The four routing policies were replayed over 150 exactly paired local and remote
+observations. This replaced the earlier hypothetical remote-success assumptions
+with measured Gemma 3 270M and GPT-5.6 Luna outcomes.
+
+### Strict replay
+
+| Policy | Passes | Remote calls | Reported remote cost |
+|---|---:|---:|---:|
+| Always local | 66/150 | 0 | $0 |
+| Always remote | 128/150 | 150 | $0.005432 |
+| Coarse class | 116/150 | 75 | $0.0027282 |
+| Fine capability | 125/150 | 75 | $0.0024892 |
+
+### Audited replay
+
+| Policy | Passes | Remote calls |
+|---|---:|---:|
+| Always local | 71/150 | 0 |
+| Always remote | 143/150 | 150 |
+| Coarse class | 131/150 | 75 |
+| Fine capability | 140/150 | 75 |
+
+Fine routing used 50% fewer remote calls than always remote while remaining two
+percentage points behind its success rate under both interpretations.
+
+Relative to always remote, fine routing reduced:
+
+- reported remote cost by approximately 54.2%;
+- median selected time from 1,847.455 ms to 990.314 ms;
+- summed selected work from 438.850 s to 204.695 s.
+
+At the same 75-call remote budget, fine routing exceeded coarse routing by nine
+passes under both interpretations and reduced unnecessary escalations from 15
+to 1.
+
+The fine policy selected neither of the two measured remote transport failures.
+Under the audited interpretation, always remote produced two harmful
+escalations because the paired local observations passed while the remote calls
+failed.
+
+No energy reduction is claimed because neither local electricity nor remote
+energy consumption was measured.
+
+This remains an in-sample replay: the fine capability map was designed after
+inspecting the local benchmark. The next experiment must evaluate the frozen
+policy on a newly specified out-of-sample suite.
+
+Result document: `ROUTING_SIMULATION_PAIRED_V1.md`
+
+- SHA-256:
+  `fabebffe890ad4833fb981d8fd3c68aa0bf492c5c05992b0dbaff180c3e099f2`
