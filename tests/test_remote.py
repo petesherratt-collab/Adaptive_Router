@@ -16,6 +16,7 @@ CONFIG = {
 
 class Response:
     status_code = 200
+    headers = {"X-OpenRouter-Cache-Status": "MISS"}
 
     def raise_for_status(self):
         pass
@@ -24,17 +25,24 @@ class Response:
         return {
             "id": "generation-test",
             "model": "openai/gpt-5.6-luna",
+            "openrouter_metadata": {
+                "provider_name": "test-provider",
+            },
             "choices": [
                 {
                     "message": {"content": "Positive"},
                     "finish_reason": "stop",
-                    "native_finish_reason": "stop",
+                    "native_finish_reason": "completed",
                 }
             ],
             "usage": {
                 "prompt_tokens": 12,
                 "completion_tokens": 3,
                 "total_tokens": 15,
+                "prompt_tokens_details": {
+                    "cached_tokens": 4,
+                    "cache_write_tokens": 0,
+                },
                 "completion_tokens_details": {
                     "reasoning_tokens": 1,
                 },
@@ -60,6 +68,7 @@ class Session:
 
 class ErrorResponse:
     status_code = 429
+    headers = {}
 
     def raise_for_status(self):
         raise requests.HTTPError("rate limited")
@@ -82,9 +91,14 @@ class RemoteGenerationTests(unittest.TestCase):
         self.assertEqual(result.error, "OPENROUTER_KEY_MISSING")
         self.assertEqual(result.model, CONFIG["model"])
 
-    def test_records_usage_and_identity(self):
+    def test_records_usage_identity_routing_and_cache(self):
         session = Session()
-        result = generate("Classify sentiment", CONFIG, "secret", session)
+        result = generate(
+            "Classify sentiment",
+            CONFIG,
+            "secret",
+            session,
+        )
 
         self.assertTrue(result.success)
         self.assertEqual(result.text, "Positive")
@@ -92,12 +106,19 @@ class RemoteGenerationTests(unittest.TestCase):
         self.assertEqual(result.status_code, 200)
         self.assertEqual(result.model, "openai/gpt-5.6-luna")
         self.assertEqual(result.finish_reason, "stop")
-        self.assertEqual(result.native_finish_reason, "stop")
+        self.assertEqual(result.native_finish_reason, "completed")
         self.assertEqual(result.prompt_tokens, 12)
         self.assertEqual(result.completion_tokens, 3)
         self.assertEqual(result.total_tokens, 15)
         self.assertEqual(result.reasoning_tokens, 1)
+        self.assertEqual(result.cached_tokens, 4)
+        self.assertEqual(result.cache_write_tokens, 0)
         self.assertEqual(result.cost, 0.000006)
+        self.assertEqual(
+            result.router_metadata,
+            {"provider_name": "test-provider"},
+        )
+        self.assertEqual(result.cache_status, "MISS")
 
         self.assertEqual(
             session.url,
@@ -105,10 +126,33 @@ class RemoteGenerationTests(unittest.TestCase):
         )
         self.assertEqual(session.payload["temperature"], 0)
         self.assertEqual(session.payload["max_tokens"], 256)
+        self.assertEqual(
+            session.headers["X-OpenRouter-Metadata"],
+            "enabled",
+        )
         self.assertNotIn("secret", session.payload)
 
+    def test_metadata_excludes_text(self):
+        result = generate(
+            "Classify sentiment",
+            CONFIG,
+            "secret",
+            Session(),
+        )
+
+        metadata = result.metadata()
+
+        self.assertNotIn("text", metadata)
+        self.assertEqual(metadata["response_id"], "generation-test")
+        self.assertEqual(metadata["cached_tokens"], 4)
+
     def test_http_failure_records_status_without_body(self):
-        result = generate("prompt", CONFIG, "secret", ErrorSession())
+        result = generate(
+            "prompt",
+            CONFIG,
+            "secret",
+            ErrorSession(),
+        )
 
         self.assertFalse(result.success)
         self.assertEqual(result.error, "HTTPError")

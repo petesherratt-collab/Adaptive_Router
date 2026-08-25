@@ -19,7 +19,11 @@ class RemoteResult:
     completion_tokens: int | None = None
     total_tokens: int | None = None
     reasoning_tokens: int | None = None
+    cached_tokens: int | None = None
+    cache_write_tokens: int | None = None
     cost: float | None = None
+    router_metadata: dict | None = None
+    cache_status: str | None = None
 
     def metadata(self):
         data = asdict(self)
@@ -39,7 +43,12 @@ def generate(prompt, config, api_key, session=requests):
 
     payload = {
         "model": config["model"],
-        "messages": [{"role": "user", "content": prompt}],
+        "messages": [
+            {
+                "role": "user",
+                "content": prompt,
+            }
+        ],
     }
 
     if "temperature" in config:
@@ -56,6 +65,7 @@ def generate(prompt, config, api_key, session=requests):
             headers={
                 "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json",
+                "X-OpenRouter-Metadata": "enabled",
             },
             json=payload,
             timeout=config["timeout_seconds"],
@@ -66,7 +76,9 @@ def generate(prompt, config, api_key, session=requests):
         choice = body["choices"][0]
         message = choice.get("message") or {}
         usage = body.get("usage") or {}
+        prompt_details = usage.get("prompt_tokens_details") or {}
         completion_details = usage.get("completion_tokens_details") or {}
+        response_headers = getattr(response, "headers", {}) or {}
 
         return RemoteResult(
             True,
@@ -81,7 +93,13 @@ def generate(prompt, config, api_key, session=requests):
             completion_tokens=usage.get("completion_tokens"),
             total_tokens=usage.get("total_tokens"),
             reasoning_tokens=completion_details.get("reasoning_tokens"),
+            cached_tokens=prompt_details.get("cached_tokens"),
+            cache_write_tokens=prompt_details.get("cache_write_tokens"),
             cost=usage.get("cost"),
+            router_metadata=body.get("openrouter_metadata"),
+            cache_status=response_headers.get(
+                "X-OpenRouter-Cache-Status"
+            ),
         )
 
     except Exception as exc:
