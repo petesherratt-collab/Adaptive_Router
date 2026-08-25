@@ -676,3 +676,43 @@ observations. Compare:
 Measure task success, unnecessary escalations, missed escalations, latency,
 monetary cost, and a clearly labelled compute/energy proxy. Do not yet build a
 learned or agentic router.
+
+---
+
+## 2026-08-25 — Routing Simulation Zero v1
+
+The first offline routing-policy replay was completed over the 150 frozen
+Simulation Zero v2 observations. No local or remote model was called.
+
+Four deterministic policies were compared:
+
+1. always local
+2. always remote
+3. coarse task-class routing
+4. fine capability-family routing
+
+Coarse and fine routing each sent 75/150 observations remotely. Under the frozen
+strict interpretation, fine routing retained 65 local passes versus 51 for
+coarse routing, reduced missed escalations from 24 to 10, and reduced
+unnecessary escalations from 15 to 1.
+
+Under the audited interpretation, fine routing retained 70 local passes versus
+56 for coarse routing, reduced missed escalations from 19 to 5, and again
+reduced unnecessary escalations from 15 to 1.
+
+Remote success was not measured. Sensitivity analysis used explicitly
+counterfactual uniform remote-success assumptions of 80%, 90%, 95%, and 100%.
+No monetary cost, remote latency, compute, or energy result was claimed.
+Remote-call count is a routing-volume proxy only.
+
+The fine policy was designed after inspecting the same benchmark. The result is
+therefore an in-sample replay, not evidence of out-of-sample generalization.
+
+Result document: `ROUTING_SIMULATION_ZERO_V1.md`
+
+- SHA-256:
+  `a701d1a9c14f11201fb469e629136fb15f1861d56615d92709ea2a6bdf376f23`
+
+The next evidentiary step is a paired remote benchmark on the same frozen tasks,
+followed by replay using measured task-dependent remote outcomes rather than a
+uniform assumed success rate.
