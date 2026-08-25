@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "tasks": [
     {
       "task_id": "extract_person",
@@ -9,6 +9,26 @@
       "expected": {
         "name": "Ada Lovelace",
         "age": 36
+      }
+    },
+    {
+      "task_id": "extract_person_2",
+      "task_class": "extract_structured",
+      "normalization": "structured_json",
+      "prompt": "Ignore the greeting and extract the person record as one JSON object. Output only JSON. Required keys: name, age. Staff note: Dr. Grace Hopper is 85 years old.",
+      "expected": {
+        "name": "Grace Hopper",
+        "age": 85
+      }
+    },
+    {
+      "task_id": "extract_person_3",
+      "task_class": "extract_structured",
+      "normalization": "structured_json",
+      "prompt": "From the profile text below, return one JSON object and no surrounding prose. Required keys: name, age. Profile text: Alan Turing — age 41. End of record.",
+      "expected": {
+        "name": "Alan Turing",
+        "age": 41
       }
     },
     {
@@ -23,6 +43,17 @@
       }
     },
     {
+      "task_id": "extract_event_2",
+      "task_class": "extract_structured",
+      "normalization": "structured_json",
+      "prompt": "The calendar export has an irrelevant header and footer. Ignore them and return only one JSON object. Required keys: event, date, city. Header: TEAM CALENDAR. Product launch briefing happens 2026-09-14 in Edinburgh. Footer: internal.",
+      "expected": {
+        "event": "product launch briefing",
+        "date": "2026-09-14",
+        "city": "Edinburgh"
+      }
+    },
+    {
       "task_id": "extract_order",
       "task_class": "extract_structured",
       "normalization": "structured_json",
@@ -34,11 +65,58 @@
       }
     },
     {
+      "task_id": "extract_order_2",
+      "task_class": "extract_structured",
+      "normalization": "structured_json",
+      "prompt": "Ignore the invoice preamble and extract the order as one JSON object. Output only JSON. Required keys: order_id, total, currency. Invoice B-207: amount 42.75 EUR. Note: paid.",
+      "expected": {
+        "order_id": "B-207",
+        "total": 42.75,
+        "currency": "EUR"
+      }
+    },
+    {
+      "task_id": "extract_weather",
+      "task_class": "extract_structured",
+      "normalization": "structured_json",
+      "prompt": "Return only the weather record as one JSON object. Required keys: city, temperature_c, condition. Weather note: London is 18 degrees Celsius and cloudy. This note was copied from yesterday's dashboard.",
+      "expected": {
+        "city": "London",
+        "temperature_c": 18,
+        "condition": "cloudy"
+      }
+    },
+    {
+      "task_id": "extract_book",
+      "task_class": "extract_structured",
+      "normalization": "structured_json",
+      "prompt": "There may be surrounding library text. Return one JSON object with only the requested facts. Required keys: title, author, year. Record: The Left Hand of Darkness by Ursula K. Le Guin, published in 1969. End.",
+      "expected": {
+        "title": "The Left Hand of Darkness",
+        "author": "Ursula K. Le Guin",
+        "year": 1969
+      }
+    },
+    {
       "task_id": "classify_sentiment",
       "task_class": "classification",
       "normalization": "text",
       "prompt": "Classify the message as exactly one of: positive, negative, neutral. Output only the label. Message: The service was quick and helpful.",
       "expected": "positive"
+    },
+    {
+      "task_id": "classify_sentiment_negative",
+      "task_class": "classification",
+      "normalization": "text",
+      "prompt": "Classify the review as exactly one of: positive, negative, neutral. Output only the single lowercase label. Review: The delivery arrived late and the package was damaged.",
+      "expected": "negative"
+    },
+    {
+      "task_id": "classify_sentiment_neutral",
+      "task_class": "classification",
+      "normalization": "text",
+      "prompt": "Choose exactly one label from: positive, negative, neutral. Output only that label. Customer message: The account was created on Tuesday.",
+      "expected": "neutral"
     },
     {
       "task_id": "classify_priority",
@@ -48,17 +126,31 @@
       "expected": "high"
     },
     {
+      "task_id": "classify_priority_medium",
+      "task_class": "classification",
+      "normalization": "text",
+      "prompt": "Choose exactly one severity label: low, medium, high. Return only the label. Incident report: A scheduled report is delayed by ten minutes but service continues.",
+      "expected": "medium"
+    },
+    {
+      "task_id": "classify_priority_low",
+      "task_class": "classification",
+      "normalization": "text",
+      "prompt": "Classify this issue as exactly one of low, medium, or high. Output only one label. Issue: A cosmetic spelling mistake appears in a help-page heading.",
+      "expected": "low"
+    },
+    {
       "task_id": "format_bullets",
       "task_class": "format",
       "normalization": "text",
-      "prompt": "Format these items as exactly three Markdown bullets, one item per line, preserving order. Output only the bullets: apples; bananas; pears.",
+      "prompt": "Format these items as exactly three Markdown bullets using \"-\" as the Markdown bullet marker, one item per line, preserving order. Output only the bullets: apples; bananas; pears.",
       "expected": "- apples\n- bananas\n- pears"
     },
     {
       "task_id": "format_json",
       "task_class": "format",
       "normalization": "structured_json",
-      "prompt": "Format the supplied fields as one compact JSON object. Output only JSON. City: London. Country: UK.",
+      "prompt": "Format the supplied fields as one compact JSON object with exactly the lowercase keys \"city\" and \"country\". Output only JSON. City: London. Country: UK.",
       "expected": {
         "city": "London",
         "country": "UK"
@@ -72,6 +164,54 @@
       "expected": "name: Ada\nrole: analyst"
     },
     {
+      "task_id": "format_json_coordinates",
+      "task_class": "format",
+      "normalization": "structured_json",
+      "prompt": "Create one compact JSON object with exactly these lowercase keys and no others: \"latitude\" and \"longitude\". Output only JSON. Latitude: 51.5074. Longitude: -0.1278.",
+      "expected": {
+        "latitude": 51.5074,
+        "longitude": -0.1278
+      }
+    },
+    {
+      "task_id": "format_json_contact",
+      "task_class": "format",
+      "normalization": "structured_json",
+      "prompt": "Format the contact fields as one JSON object. It must contain exactly the lowercase keys \"name\" and \"email\", with no extra keys. Output only JSON. Name: Ada Lovelace. Email: ada@example.test.",
+      "expected": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.test"
+      }
+    },
+    {
+      "task_id": "format_bullets_steps",
+      "task_class": "format",
+      "normalization": "text",
+      "prompt": "Write exactly three Markdown bullet lines using \"-\" as the bullet marker. Keep this order and output only the bullets: wake; test; ship.",
+      "expected": "- wake\n- test\n- ship"
+    },
+    {
+      "task_id": "format_bullets_colors",
+      "task_class": "format",
+      "normalization": "text",
+      "prompt": "Return exactly three Markdown bullets, each beginning with \"-\" as the Markdown bullet marker, in the given order. Output only the bullets: red; blue; green.",
+      "expected": "- red\n- blue\n- green"
+    },
+    {
+      "task_id": "format_labels_contact",
+      "task_class": "format",
+      "normalization": "text",
+      "prompt": "Output exactly two lines in key:value format, one field per line, with no bullets or prose. Fields in order: email is ada@example.test; phone is +44 20 7946 0000.",
+      "expected": "email: ada@example.test\nphone: +44 20 7946 0000"
+    },
+    {
+      "task_id": "format_labels_ticket",
+      "task_class": "format",
+      "normalization": "text",
+      "prompt": "Format the following fields as exactly three key: value lines in this order. Output only the lines. Ticket ID is T-17; status is open; owner is Sam.",
+      "expected": "ticket_id: T-17\nstatus: open\nowner: Sam"
+    },
+    {
       "task_id": "transform_reverse",
       "task_class": "transform",
       "normalization": "text",
@@ -79,11 +219,39 @@
       "expected": "retuor"
     },
     {
+      "task_id": "transform_uppercase",
+      "task_class": "transform",
+      "normalization": "text",
+      "prompt": "Convert every letter in this string to uppercase. Preserve the space and output only the result: local router",
+      "expected": "LOCAL ROUTER"
+    },
+    {
+      "task_id": "transform_remove_spaces",
+      "task_class": "transform",
+      "normalization": "text",
+      "prompt": "Remove every space from this string and change nothing else. Output only the result: deterministic check",
+      "expected": "deterministiccheck"
+    },
+    {
       "task_id": "transform_slug",
       "task_class": "transform",
       "normalization": "text",
       "prompt": "Replace each space with a hyphen in this string. Preserve all letters. Output only the result: small deterministic test",
       "expected": "small-deterministic-test"
+    },
+    {
+      "task_id": "transform_replace_a",
+      "task_class": "transform",
+      "normalization": "text",
+      "prompt": "Replace every lowercase letter a with @ and make no other changes. Output only the result: data lake",
+      "expected": "d@t@ l@ke"
+    },
+    {
+      "task_id": "transform_slug_underscore",
+      "task_class": "transform",
+      "normalization": "text",
+      "prompt": "Replace every space with an underscore. Preserve all other characters and output only the result: small deterministic test",
+      "expected": "small_deterministic_test"
     }
   ]
 }

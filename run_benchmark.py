@@ -1,8 +1,9 @@
-"""Run the fixed deterministic benchmark directly against an Ollama model."""
+"""Run the fixed deterministic Simulation Zero v2 benchmark."""
 
 import argparse
 import json
 from pathlib import Path
+from statistics import median
 
 from local import LocalResult, generate, model_residency
 from validators import FAIL, PASS, _normalize_structured_json
@@ -10,15 +11,22 @@ from validators import FAIL, PASS, _normalize_structured_json
 
 ROOT = Path(__file__).resolve().parent
 DEFAULT_BENCHMARK = ROOT / "benchmark.json"
-DEFAULT_OUTPUT = ROOT / "benchmark_runs.jsonl"
-ORACLE_NAME = "benchmark_oracle_v1"
-EXPECTED_TASK_COUNT = 10
+DEFAULT_OUTPUT = ROOT / "benchmark_runs_simzero_v2.jsonl"
+DEFAULT_SUMMARY = ROOT / "benchmark_summary_simzero_v2.json"
+ORACLE_NAME = "benchmark_oracle_v2"
+EXPECTED_TASK_COUNT = 30
 EXPECTED_TASK_CLASSES = frozenset({
     "extract_structured",
     "classification",
     "format",
     "transform",
 })
+EXPECTED_TASK_CLASS_COUNTS = {
+    "extract_structured": 9,
+    "classification": 6,
+    "format": 9,
+    "transform": 6,
+}
 
 
 def load_benchmark(path=DEFAULT_BENCHMARK):
@@ -35,6 +43,14 @@ def load_benchmark(path=DEFAULT_BENCHMARK):
     task_classes = {task.get("task_class") for task in tasks}
     if task_classes != EXPECTED_TASK_CLASSES:
         raise ValueError("benchmark must cover the four required task classes exactly")
+    task_class_counts = {task_class: sum(
+        task.get("task_class") == task_class for task in tasks
+    ) for task_class in EXPECTED_TASK_CLASSES}
+    if task_class_counts != EXPECTED_TASK_CLASS_COUNTS:
+        raise ValueError(
+            "benchmark task class counts must be "
+            f"{EXPECTED_TASK_CLASS_COUNTS}, got {task_class_counts}"
+        )
     required = {"task_id", "task_class", "normalization", "prompt", "expected"}
     for task in tasks:
         if not required.issubset(task):
@@ -53,6 +69,8 @@ def normalize_output(task, raw_output):
     """Apply only the task's declared deterministic output normalization."""
     if not isinstance(raw_output, str):
         raw_output = ""
+    if task["task_class"] == "classification":
+        return raw_output.strip().lower()
     if task["normalization"] == "text":
         # Boundary whitespace is transport/presentation noise; content is exact.
         return raw_output.strip()
@@ -96,7 +114,7 @@ def _failed_result(exc):
     return LocalResult(False, error=type(exc).__name__)
 
 
-def run_benchmark(tasks, model_config, reps=3, output_path=DEFAULT_OUTPUT,
+def run_benchmark(tasks, model_config, reps=5, output_path=DEFAULT_OUTPUT,
                   generate_fn=generate, residency_fn=model_residency):
     """Run every task ``reps`` times and write exactly one record per run."""
     if reps < 1:
@@ -139,6 +157,83 @@ def run_benchmark(tasks, model_config, reps=3, output_path=DEFAULT_OUTPUT,
     return records
 
 
+def _median_available(records, field):
+    values = [
+        record.get(field)
+        for record in records
+        if isinstance(record.get(field), (int, float))
+        and not isinstance(record.get(field), bool)
+    ]
+    return median(values) if values else None
+
+
+def _summary_bucket():
+    return {"pass_count": 0, "observation_count": 0, "pass_rate": None}
+
+
+def _finish_summary_bucket(bucket):
+    if bucket["observation_count"]:
+        bucket["pass_rate"] = (
+            bucket["pass_count"] / bucket["observation_count"]
+        )
+    return bucket
+
+
+def summarize_records(records):
+    """Return deterministic aggregate metrics for benchmark run records."""
+    records = list(records)
+    per_task = {}
+    per_class = {}
+    overall_pass_count = 0
+    for record in records:
+        task_id = record["task_id"]
+        task_class = record["task_class"]
+        task_bucket = per_task.setdefault(task_id, _summary_bucket())
+        class_bucket = per_class.setdefault(task_class, _summary_bucket())
+        task_bucket["observation_count"] += 1
+        class_bucket["observation_count"] += 1
+        if record.get("oracle_correct"):
+            overall_pass_count += 1
+            task_bucket["pass_count"] += 1
+            class_bucket["pass_count"] += 1
+
+    for bucket in per_task.values():
+        _finish_summary_bucket(bucket)
+    for bucket in per_class.values():
+        _finish_summary_bucket(bucket)
+
+    observation_count = len(records)
+    return {
+        "observation_count": observation_count,
+        "overall_pass_count": overall_pass_count,
+        "overall_pass_rate": (
+            overall_pass_count / observation_count if observation_count else None
+        ),
+        "per_task": per_task,
+        "per_class": per_class,
+        "median_ttft_ms": _median_available(records, "ttft_ms"),
+        "median_total_ms": _median_available(records, "total_ms"),
+        "median_tokens_per_second": _median_available(
+            records, "tokens_per_second"
+        ),
+        "empty_output_count": sum(
+            record.get("raw_output") == "" for record in records
+        ),
+    }
+
+
+def write_summary(records, output_path=DEFAULT_SUMMARY):
+    """Write the deterministic summary report as stable, human-readable JSON."""
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    summary = summarize_records(records)
+    output_path.write_text(
+        json.dumps(summary, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    return summary
+
+
 def _positive_int(value):
     parsed = int(value)
     if parsed < 1:
@@ -149,10 +244,12 @@ def _positive_int(value):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--model", help="Ollama model name; defaults to config.json local.model")
-    parser.add_argument("--reps", type=_positive_int, default=3,
-                        help="number of runs per task (default: 3)")
+    parser.add_argument("--reps", type=_positive_int, default=5,
+                        help="number of runs per task (default: 5)")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT,
-                        help="JSONL output path (default: benchmark_runs.jsonl)")
+                        help="JSONL output path (default: benchmark_runs_simzero_v2.jsonl)")
+    parser.add_argument("--summary-output", type=Path, default=DEFAULT_SUMMARY,
+                        help="summary JSON path (default: benchmark_summary_simzero_v2.json)")
     args = parser.parse_args(argv)
 
     config = json.loads((ROOT / "config.json").read_text(encoding="utf-8"))
@@ -161,7 +258,9 @@ def main(argv=None):
         model_config["model"] = args.model
     tasks = load_benchmark()["tasks"]
     records = run_benchmark(tasks, model_config, args.reps, args.output)
+    write_summary(records, args.summary_output)
     print(f"Wrote {len(records)} records to {args.output}")
+    print(f"Wrote summary to {args.summary_output}")
 
 
 if __name__ == "__main__":
