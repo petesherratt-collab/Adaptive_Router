@@ -144,6 +144,11 @@ class PairedRoutingTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / "paired.csv"
             write_results(results, output)
+            self.assertNotIn(
+                b"\r\n",
+                output.read_bytes(),
+            )
+
 
             with output.open(encoding="utf-8") as handle:
                 rows = list(csv.DictReader(handle))

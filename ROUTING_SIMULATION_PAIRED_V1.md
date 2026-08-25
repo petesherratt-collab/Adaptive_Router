@@ -190,18 +190,18 @@ routing logic.
 
 `simulate_paired_routing.py`
 
-- Bytes: 8,742
+- Bytes: 8,775
 - SHA-256:
-  `b6845bccfe2c538be243d527bdbc63b186252fa13d1a3e6b27426abca5e824fc`
+  `01cd864dd57b788d243d2d245070cae570c6312d53ccf1eac746b3f28591c1e2`
 
 `tests/test_paired_routing.py`
 
-- Bytes: 5,028
+- Bytes: 5,135
 - SHA-256:
-  `cda39e839066fcfd7915fc598ccf3ffbf195b147e72a0d4b3515cb0fdbfdf1af`
+  `a016710fb42002c0696fc6b885b094f8e0af8caa70e601dfd96977561eb99bec`
 
 `routing_simulation_paired_v1.csv`
 
-- Bytes: 1,535
+- Bytes: 1,526
 - SHA-256:
-  `946ef61243ffdf7a90dc3e0604375f8742f3462da4152f4a4edf59e00263e568`
+  `70e60289c01aabe434759764758dd2b18436f0f2088c96d3ea96c46e691db7ad`

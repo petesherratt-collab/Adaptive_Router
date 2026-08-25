@@ -261,6 +261,7 @@ def write_results(results, path=DEFAULT_OUTPUT):
         writer = csv.DictWriter(
             handle,
             fieldnames=list(results[0]),
+            lineterminator="\n",
         )
         writer.writeheader()
         writer.writerows(results)
