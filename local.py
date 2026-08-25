@@ -55,7 +55,7 @@ def generate(prompt, config, session=requests):
         completed, text = time.perf_counter(), "".join(chunks)
         total = (completed - started) * 1000
         count, duration = final.get("eval_count"), final.get("eval_duration")
-        tps = count / (duration / 1e9) if count and duration else None
+        tps = count / (duration / 1e9) if text and count and duration else None
         cps = len(text) / (total / 1000) if total > 0 else None
         return LocalResult(True, text, (first-started)*1000 if first else None, total, tps, cps, count, duration)
     except requests.Timeout:

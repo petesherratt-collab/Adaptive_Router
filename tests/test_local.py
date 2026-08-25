@@ -1,6 +1,7 @@
+import json
 import unittest
 
-from local import model_residency
+from local import generate, model_residency
 
 
 CONFIG = {"base_url": "http://localhost:11434", "model": "gemma3:1b", "timeout_seconds": 45}
@@ -18,14 +19,30 @@ class Response:
 
 
 class Session:
-    def __init__(self, body):
+    def __init__(self, body, stream_body=None):
         self.body = body
+        self.stream_body = stream_body if stream_body is not None else []
         self.url = None
         self.timeout = None
 
     def get(self, url, timeout):
         self.url, self.timeout = url, timeout
         return Response(self.body)
+
+    def post(self, url, json, timeout, stream):
+        self.url, self.timeout = url, timeout
+        return ResponseStream(self.stream_body)
+
+
+class ResponseStream:
+    def __init__(self, body):
+        self.body = body
+
+    def raise_for_status(self):
+        pass
+
+    def iter_lines(self):
+        return [json.dumps(item).encode("utf-8") for item in self.body]
 
 
 class ModelResidencyTests(unittest.TestCase):
@@ -44,6 +61,22 @@ class ModelResidencyTests(unittest.TestCase):
             model_residency(CONFIG, session),
             {"resident": False, "size_bytes": None},
         )
+
+
+class GenerateMetricsTests(unittest.TestCase):
+    def test_empty_output_has_unavailable_tokens_per_second(self):
+        session = Session({}, [
+            {"response": "", "done": True, "eval_count": 1, "eval_duration": 1}
+        ])
+        result = generate("prompt", CONFIG, session)
+        self.assertIsNone(result.tokens_per_second)
+
+    def test_no_token_output_has_unavailable_tokens_per_second(self):
+        session = Session({}, [
+            {"response": "ignored", "done": True, "eval_count": 0, "eval_duration": 1}
+        ])
+        result = generate("prompt", CONFIG, session)
+        self.assertIsNone(result.tokens_per_second)
 
 
 if __name__ == "__main__":
