@@ -716,3 +716,76 @@ Result document: `ROUTING_SIMULATION_ZERO_V1.md`
 The next evidentiary step is a paired remote benchmark on the same frozen tasks,
 followed by replay using measured task-dependent remote outcomes rather than a
 uniform assumed success rate.
+## 2026-08-25 — Measured OpenRouter Luna baseline
+
+A paired remote benchmark was completed over the same frozen 30 tasks × 5
+repetitions used for Gemma 3 270M Simulation Zero v2.
+
+### Frozen execution
+
+- Gateway: OpenRouter
+- Requested and returned model: `openai/gpt-5.6-luna`
+- Code revision:
+  `a844984b1141c67ac499f5d48dac0872248994d3`
+- Temperature: 0
+- Maximum completion tokens: 256
+- No automatic retries
+- Reported cost stop: USD 0.10
+- 150 unique observations recorded
+
+### Frozen strict result
+
+- Overall: 128/150 = 85.3%
+- Structured extraction: 38/45 = 84.4%
+- Classification: 25/30 = 83.3%
+- Formatting: 35/45 = 77.8%
+- Transformation: 30/30 = 100%
+- Successful responses: 148/150
+- Empty outputs: 2
+- Median request time: 1,847.455 ms
+- Total reported cost: USD 0.005432
+- Total tokens: 9,280
+
+All 148 successful responses were directly routed through OpenRouter region
+`LHR`, selected OpenAI on attempt 1, and returned
+`openai/gpt-5.6-luna`. No cached or cache-write tokens were reported.
+
+### Failure audit
+
+The frozen result was not changed.
+
+The two empty observations were a `ConnectionError` and `ReadTimeout`, both on
+`extract_person_2`. They were retained without retry as availability failures.
+
+Fifteen successful strict failures were classified as specification defects:
+
+- five correct `extract_event_2` outputs differed only in unrequested
+  capitalization;
+- five `format_labels_contact` outputs followed the prompt's literal
+  `key:value` syntax while the oracle silently required spaces;
+- five `format_labels_ticket` outputs used the supplied human-readable label
+  while the oracle silently required lowercase snake case.
+
+Five `classify_priority_medium` outputs remain indeterminate because no
+operational priority rubric was supplied.
+
+Separate post-hoc interpretations:
+
+- specification-adjusted: 143/150 = 95.3%
+- specification-adjusted excluding the five indeterminate observations:
+  143/145 = 98.6%
+- successful unambiguous observations after adjustment: 143/143
+
+These do not replace the frozen 128/150 result.
+
+Result audit: `REMOTE_BENCHMARK_LUNA_V1_AUDIT.md`
+
+- SHA-256:
+  `bda54936fdff880dfd96a018c9716d205a8f12862a3a2f139b2532b699e994ed`
+
+### Next analysis
+
+Replay always-local, always-remote, coarse-class, and fine-capability policies
+using paired measured local and remote outcomes. Retain both strict and audited
+interpretations. Do not use the earlier uniform remote-success assumption as
+the principal result.
