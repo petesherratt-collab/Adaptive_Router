@@ -1,0 +1,183 @@
+{
+  "empty_output_count": 2,
+  "median_tokens_per_second": 56.509697385119814,
+  "median_total_ms": 262.13266991544515,
+  "median_ttft_ms": 42.699467507191,
+  "observation_count": 150,
+  "overall_pass_count": 66,
+  "overall_pass_rate": 0.44,
+  "per_class": {
+    "classification": {
+      "observation_count": 30,
+      "pass_count": 16,
+      "pass_rate": 0.5333333333333333
+    },
+    "extract_structured": {
+      "observation_count": 45,
+      "pass_count": 35,
+      "pass_rate": 0.7777777777777778
+    },
+    "format": {
+      "observation_count": 45,
+      "pass_count": 15,
+      "pass_rate": 0.3333333333333333
+    },
+    "transform": {
+      "observation_count": 30,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    }
+  },
+  "per_task": {
+    "classify_priority": {
+      "observation_count": 5,
+      "pass_count": 1,
+      "pass_rate": 0.2
+    },
+    "classify_priority_low": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "classify_priority_medium": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "classify_sentiment": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "classify_sentiment_negative": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "classify_sentiment_neutral": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "extract_book": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "extract_event": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "extract_event_2": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "extract_order": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "extract_order_2": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "extract_person": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "extract_person_2": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "extract_person_3": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "extract_weather": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "format_bullets": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "format_bullets_colors": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "format_bullets_steps": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "format_json": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "format_json_contact": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "format_json_coordinates": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "format_labels": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "format_labels_contact": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "format_labels_ticket": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "transform_remove_spaces": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "transform_replace_a": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "transform_reverse": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "transform_slug": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "transform_slug_underscore": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "transform_uppercase": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    }
+  }
+}

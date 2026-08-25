@@ -554,14 +554,125 @@ with deterministic validators — JSON extraction, classification, formatting,
 mechanical transformation, and short summarisation where an objective constraint
 can be checked. For each model/task pair record runtime telemetry, validator
 result, and a human verdict of good / usable / bad. Do not automate
-routing-table learning yet; first establish the actual capability/latency
-frontier on this hardware.
+routing-table learning yet; first establis
+---
 
-**Longer-term.** Once a useful task suite exists, compare at least *always
-frontier*, *always small/local*, and *adaptive routing*, measuring task success,
-latency, monetary cost, compute/energy proxy, eventually measured or defensibly
-estimated energy per successful task, unnecessary escalations, and missed
-escalations.
+## 2026-08-25 — Simulation Zero v2 result and failure audit
 
-The project should remain an experimental instrument whose routing decisions can
-be audited and falsified.
+### Environment and design
+
+- Host: HP ProDesk 400 G2.5 SFF, Linux Mint
+- Model: `gemma3:270m` via Ollama
+- Benchmark: 30 deterministic tasks × 5 repetitions = 150 observations
+- Model resident during the measured run
+- Remote fallback deliberately unavailable
+- No LLM judge or semantic output repair
+- Benchmark and oracle frozen before execution
+- Pre-run verification: 46 tests passed, 6 subtests passed
+- `py_compile` and `git diff --check` passed
+
+### Frozen strict-oracle result
+
+- Overall: 66/150 = 44.0%
+- Structured extraction: 35/45 = 77.8%
+- Classification: 16/30 = 53.3%
+- Formatting: 15/45 = 33.3%
+- Transformation: 0/30
+- Empty outputs: 2
+
+Median measured performance:
+
+- TTFT: 42.699 ms
+- Total time: 262.133 ms
+- Generation rate: 56.510 tokens/s
+
+This performance is dramatically faster than the earlier low-resource laptop
+condition. Deployment performance and task capability must therefore be treated
+as separate dimensions.
+
+### Fine-grained capability boundary
+
+The aggregate task classes concealed sharp differences:
+
+- Sentiment classification: 15/15
+- Priority classification: 1/15
+- JSON formatting: 15/15
+- Markdown bullets and key:value labels: 0/30
+- Deterministic transformations: 0/30
+
+Seven extraction tasks achieved 5/5. Two initially recorded 0/5.
+
+### Post-run failure audit
+
+The frozen benchmark result was not changed.
+
+`extract_person_2` accounted for five recorded failures. Every output preserved
+the source value `Dr. Grace Hopper`, while the oracle expected `Grace Hopper`.
+Because the prompt did not instruct removal of honorifics, these five failures
+were classified as benchmark/specification defects rather than model-capability
+failures.
+
+The separate post-hoc specification-adjusted interpretation is therefore:
+
+- Overall: 71/150 = 47.3%
+- Structured extraction: 40/45 = 88.9%
+
+These adjusted figures do not replace the frozen strict-oracle result.
+
+`extract_event_2` was a genuine systematic failure: all five outputs selected
+the explicitly irrelevant calendar header instead of the event description.
+
+Representative inspection confirmed genuine exact-instruction failures across
+bullet formatting, key:value labels, and all six deterministic transformation
+tasks. The two empty generations were correctly represented with unavailable
+TTFT and tokens-per-second values.
+
+Priority classification produced strong observed failures, especially for the
+face-valid low- and high-priority examples. However, future benchmarks must
+define an operational severity rubric rather than relying only on intuitive
+low/medium/high semantics.
+
+No normalization, oracle-implementation, or telemetry defect was demonstrated
+by the audit.
+
+### Preserved evidence
+
+`benchmark_runs_simzero_v2.jsonl`
+
+- Bytes: 80,476
+- SHA-256:
+  `5637130c56894a0263c534bb87c5037901f0e535df28e658f68d5e85c03f7f6e`
+
+`benchmark_summary_simzero_v2.json`
+
+- Bytes: 4,086
+- SHA-256:
+  `ab878c4e4320c602da41c0e16f0ed8341f0f6e23e8c372883708bf23b71346b3`
+
+The independent audit interpretation is recorded in
+`SIMULATION_ZERO_V2_AUDIT.md`.
+
+### Resolution of the previous immediate question
+
+The v2 experiment supplies the requested minimum evidence for several narrow
+task capabilities. Gemma 3 270M is a credible local candidate for exact JSON
+formatting, sentiment classification, and many structured-extraction patterns.
+It is not supported for priority classification, bullet/label formatting, or
+deterministic string transformations.
+
+This is a capability map, not a scalar easy-to-hard hierarchy and not yet a
+production routing policy.
+
+### Next experiment
+
+Proceed to an offline routing-policy simulation using the frozen empirical
+observations. Compare:
+
+1. always local
+2. always remote/frontier
+3. coarse task-class routing
+4. fine-grained empirical capability routing
+
+Measure task success, unnecessary escalations, missed escalations, latency,
+monetary cost, and a clearly labelled compute/energy proxy. Do not yet build a
+learned or agentic router.
