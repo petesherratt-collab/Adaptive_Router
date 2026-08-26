@@ -1,0 +1,390 @@
+{
+  "version": 3,
+  "suite_id": "oos_validation_v1",
+  "task_count": 40,
+  "capability_family_counts": {
+    "structured_extraction": 10,
+    "sentiment": 5,
+    "json_format": 5,
+    "priority": 5,
+    "markdown_bullets": 5,
+    "key_value_labels": 5,
+    "transformation": 5
+  },
+  "tasks": [
+    {
+      "task_id": "oos_extract_person",
+      "task_class": "extract_structured",
+      "capability_family": "structured_extraction",
+      "normalization": "structured_json",
+      "prompt": "Extract one JSON object from the source record. Required keys exactly: name, age. Preserve source spelling, capitalization, underscores, and punctuation in string values. Represent numeric values as JSON numbers. Do not infer unstated values. Output only JSON. Source: Employee record: Maya Chen is 29 years old.",
+      "expected": {
+        "name": "Maya Chen",
+        "age": 29
+      }
+    },
+    {
+      "task_id": "oos_sentiment_positive_service",
+      "task_class": "classification",
+      "capability_family": "sentiment",
+      "normalization": "text",
+      "prompt": "Use this rubric: Positive means a clearly favourable evaluation; Negative means a clearly unfavourable evaluation; Neutral means a factual statement without evaluation. Classify the following text. Output exactly one label: Positive, Negative, or Neutral. Text: The support team resolved everything brilliantly.",
+      "expected": "positive"
+    },
+    {
+      "task_id": "oos_json_server",
+      "task_class": "format",
+      "capability_family": "json_format",
+      "normalization": "structured_json",
+      "prompt": "Format the supplied fields as one JSON object. Use exactly these lowercase keys: host, port. Use the supplied values without modification. Include no additional keys or prose. Source: Host is edge-7 and port is 8443.",
+      "expected": {
+        "host": "edge-7",
+        "port": 8443
+      }
+    },
+    {
+      "task_id": "oos_priority_high_deadline",
+      "task_class": "classification",
+      "capability_family": "priority",
+      "normalization": "text",
+      "prompt": "Use this rubric: High means a present safety or security incident, work blocked now, or an explicit deadline within 24 hours. Medium means action is required after 24 hours but within seven days, with no present safety or security incident and no current blocker. Low means no action is required, or the explicit deadline is more than seven days away. Classify the following item. Output exactly one label: High, Medium, or Low. Item: The signed response must be submitted in six hours. Work is not currently blocked and there is no safety or security incident.",
+      "expected": "high"
+    },
+    {
+      "task_id": "oos_bullets_fruit",
+      "task_class": "format",
+      "capability_family": "markdown_bullets",
+      "normalization": "text",
+      "prompt": "Output exactly 3 Markdown bullet lines in the supplied order. Every line must contain the literal hyphen marker followed by exactly one space and then the exact item text. Include no heading, blank line, or surrounding prose. Items: pear; plum; kiwi.",
+      "expected": "- pear\n- plum\n- kiwi"
+    },
+    {
+      "task_id": "oos_labels_account",
+      "task_class": "format",
+      "capability_family": "key_value_labels",
+      "normalization": "text",
+      "prompt": "Output exactly 2 lines in this order using these exact lowercase keys: account_id, state. Every line must use the exact format key, then a colon, then exactly one space, then the supplied value. Preserve every value exactly. Include no additional lines or prose. Fields: account_id=AC-55; state=active.",
+      "expected": "account_id: AC-55\nstate: active"
+    },
+    {
+      "task_id": "oos_transform_reverse",
+      "task_class": "transform",
+      "capability_family": "transformation",
+      "normalization": "text",
+      "prompt": "Reverse the characters in the string `signal`. Output only the transformed string.",
+      "expected": "langis"
+    },
+    {
+      "task_id": "oos_extract_shipment",
+      "task_class": "extract_structured",
+      "capability_family": "structured_extraction",
+      "normalization": "structured_json",
+      "prompt": "Extract one JSON object from the source record. Required keys exactly: tracking_id, status, carrier. Preserve source spelling, capitalization, underscores, and punctuation in string values. Represent numeric values as JSON numbers. Do not infer unstated values. Output only JSON. Source: Shipment record: tracking ID ZX-4401; status in_transit; carrier DPD.",
+      "expected": {
+        "tracking_id": "ZX-4401",
+        "status": "in_transit",
+        "carrier": "DPD"
+      }
+    },
+    {
+      "task_id": "oos_extract_event",
+      "task_class": "extract_structured",
+      "capability_family": "structured_extraction",
+      "normalization": "structured_json",
+      "prompt": "Extract one JSON object from the source record. Required keys exactly: event, date, city. Preserve source spelling, capitalization, underscores, and punctuation in string values. Represent numeric values as JSON numbers. Do not infer unstated values. Output only JSON. Source: Schedule record: accessibility workshop; date 2026-11-03; city Bristol.",
+      "expected": {
+        "event": "accessibility workshop",
+        "date": "2026-11-03",
+        "city": "Bristol"
+      }
+    },
+    {
+      "task_id": "oos_sentiment_negative_device",
+      "task_class": "classification",
+      "capability_family": "sentiment",
+      "normalization": "text",
+      "prompt": "Use this rubric: Positive means a clearly favourable evaluation; Negative means a clearly unfavourable evaluation; Neutral means a factual statement without evaluation. Classify the following text. Output exactly one label: Positive, Negative, or Neutral. Text: The replacement device is unreliable and frustrating.",
+      "expected": "negative"
+    },
+    {
+      "task_id": "oos_json_contact",
+      "task_class": "format",
+      "capability_family": "json_format",
+      "normalization": "structured_json",
+      "prompt": "Format the supplied fields as one JSON object. Use exactly these lowercase keys: first_name, postcode. Use the supplied values without modification. Include no additional keys or prose. Source: First name is Leila and postcode is SE18 6HQ.",
+      "expected": {
+        "first_name": "Leila",
+        "postcode": "SE18 6HQ"
+      }
+    },
+    {
+      "task_id": "oos_priority_high_blocked",
+      "task_class": "classification",
+      "capability_family": "priority",
+      "normalization": "text",
+      "prompt": "Use this rubric: High means a present safety or security incident, work blocked now, or an explicit deadline within 24 hours. Medium means action is required after 24 hours but within seven days, with no present safety or security incident and no current blocker. Low means no action is required, or the explicit deadline is more than seven days away. Classify the following item. Output exactly one label: High, Medium, or Low. Item: Deployment work is blocked now because the required certificate is missing. There is no safety or security incident.",
+      "expected": "high"
+    },
+    {
+      "task_id": "oos_bullets_stages",
+      "task_class": "format",
+      "capability_family": "markdown_bullets",
+      "normalization": "text",
+      "prompt": "Output exactly 2 Markdown bullet lines in the supplied order. Every line must contain the literal hyphen marker followed by exactly one space and then the exact item text. Include no heading, blank line, or surrounding prose. Items: collect; verify.",
+      "expected": "- collect\n- verify"
+    },
+    {
+      "task_id": "oos_labels_sensor",
+      "task_class": "format",
+      "capability_family": "key_value_labels",
+      "normalization": "text",
+      "prompt": "Output exactly 3 lines in this order using these exact lowercase keys: sensor, reading, unit. Every line must use the exact format key, then a colon, then exactly one space, then the supplied value. Preserve every value exactly. Include no additional lines or prose. Fields: sensor=S-9; reading=18.4; unit=C.",
+      "expected": "sensor: S-9\nreading: 18.4\nunit: C"
+    },
+    {
+      "task_id": "oos_transform_uppercase",
+      "task_class": "transform",
+      "capability_family": "transformation",
+      "normalization": "text",
+      "prompt": "Convert every lowercase letter in the string `edge node` to uppercase. Preserve the space and output only the transformed string.",
+      "expected": "EDGE NODE"
+    },
+    {
+      "task_id": "oos_extract_device",
+      "task_class": "extract_structured",
+      "capability_family": "structured_extraction",
+      "normalization": "structured_json",
+      "prompt": "Extract one JSON object from the source record. Required keys exactly: asset_id, operating_system, version. Preserve source spelling, capitalization, underscores, and punctuation in string values. Represent numeric values as JSON numbers. Do not infer unstated values. Output only JSON. Source: Device record: asset ID LT-882; operating system Fedora; version 42.",
+      "expected": {
+        "asset_id": "LT-882",
+        "operating_system": "Fedora",
+        "version": 42
+      }
+    },
+    {
+      "task_id": "oos_extract_order",
+      "task_class": "extract_structured",
+      "capability_family": "structured_extraction",
+      "normalization": "structured_json",
+      "prompt": "Extract one JSON object from the source record. Required keys exactly: order_id, total, currency. Preserve source spelling, capitalization, underscores, and punctuation in string values. Represent numeric values as JSON numbers. Do not infer unstated values. Output only JSON. Source: Order record: C-318; total 73.20; currency USD.",
+      "expected": {
+        "order_id": "C-318",
+        "total": 73.2,
+        "currency": "USD"
+      }
+    },
+    {
+      "task_id": "oos_sentiment_neutral_delivery",
+      "task_class": "classification",
+      "capability_family": "sentiment",
+      "normalization": "text",
+      "prompt": "Use this rubric: Positive means a clearly favourable evaluation; Negative means a clearly unfavourable evaluation; Neutral means a factual statement without evaluation. Classify the following text. Output exactly one label: Positive, Negative, or Neutral. Text: The parcel arrived at 14:10 on Tuesday.",
+      "expected": "neutral"
+    },
+    {
+      "task_id": "oos_json_coordinates",
+      "task_class": "format",
+      "capability_family": "json_format",
+      "normalization": "structured_json",
+      "prompt": "Format the supplied fields as one JSON object. Use exactly these lowercase keys: x, y. Use the supplied values without modification. Include no additional keys or prose. Source: The x value is 17 and the y value is -4.",
+      "expected": {
+        "x": 17,
+        "y": -4
+      }
+    },
+    {
+      "task_id": "oos_priority_medium_three_days",
+      "task_class": "classification",
+      "capability_family": "priority",
+      "normalization": "text",
+      "prompt": "Use this rubric: High means a present safety or security incident, work blocked now, or an explicit deadline within 24 hours. Medium means action is required after 24 hours but within seven days, with no present safety or security incident and no current blocker. Low means no action is required, or the explicit deadline is more than seven days away. Classify the following item. Output exactly one label: High, Medium, or Low. Item: Approve the routine supplier form within three days. Nothing is blocked and there is no safety or security incident.",
+      "expected": "medium"
+    },
+    {
+      "task_id": "oos_bullets_directions",
+      "task_class": "format",
+      "capability_family": "markdown_bullets",
+      "normalization": "text",
+      "prompt": "Output exactly 4 Markdown bullet lines in the supplied order. Every line must contain the literal hyphen marker followed by exactly one space and then the exact item text. Include no heading, blank line, or surrounding prose. Items: north; east; south; west.",
+      "expected": "- north\n- east\n- south\n- west"
+    },
+    {
+      "task_id": "oos_labels_route",
+      "task_class": "format",
+      "capability_family": "key_value_labels",
+      "normalization": "text",
+      "prompt": "Output exactly 2 lines in this order using these exact lowercase keys: origin, destination. Every line must use the exact format key, then a colon, then exactly one space, then the supplied value. Preserve every value exactly. Include no additional lines or prose. Fields: origin=Woolwich; destination=Lewisham.",
+      "expected": "origin: Woolwich\ndestination: Lewisham"
+    },
+    {
+      "task_id": "oos_transform_remove_spaces",
+      "task_class": "transform",
+      "capability_family": "transformation",
+      "normalization": "text",
+      "prompt": "Remove every space from the string `paired sample` and make no other change. Output only the transformed string.",
+      "expected": "pairedsample"
+    },
+    {
+      "task_id": "oos_extract_meeting",
+      "task_class": "extract_structured",
+      "capability_family": "structured_extraction",
+      "normalization": "structured_json",
+      "prompt": "Extract one JSON object from the source record. Required keys exactly: topic, time, room. Preserve source spelling, capitalization, underscores, and punctuation in string values. Represent numeric values as JSON numbers. Do not infer unstated values. Output only JSON. Source: Meeting record: topic budget review; time 14:30; room Cedar.",
+      "expected": {
+        "topic": "budget review",
+        "time": "14:30",
+        "room": "Cedar"
+      }
+    },
+    {
+      "task_id": "oos_extract_weather",
+      "task_class": "extract_structured",
+      "capability_family": "structured_extraction",
+      "normalization": "structured_json",
+      "prompt": "Extract one JSON object from the source record. Required keys exactly: city, temperature_c, condition. Preserve source spelling, capitalization, underscores, and punctuation in string values. Represent numeric values as JSON numbers. Do not infer unstated values. Output only JSON. Source: Weather record: city Glasgow; temperature 11 degrees Celsius; condition rain.",
+      "expected": {
+        "city": "Glasgow",
+        "temperature_c": 11,
+        "condition": "rain"
+      }
+    },
+    {
+      "task_id": "oos_sentiment_positive_report",
+      "task_class": "classification",
+      "capability_family": "sentiment",
+      "normalization": "text",
+      "prompt": "Use this rubric: Positive means a clearly favourable evaluation; Negative means a clearly unfavourable evaluation; Neutral means a factual statement without evaluation. Classify the following text. Output exactly one label: Positive, Negative, or Neutral. Text: This report is exceptionally clear and useful.",
+      "expected": "positive"
+    },
+    {
+      "task_id": "oos_json_inventory",
+      "task_class": "format",
+      "capability_family": "json_format",
+      "normalization": "structured_json",
+      "prompt": "Format the supplied fields as one JSON object. Use exactly these lowercase keys: sku, in_stock. Use the supplied values without modification. Include no additional keys or prose. Source: SKU is R-204 and in_stock is true.",
+      "expected": {
+        "sku": "R-204",
+        "in_stock": true
+      }
+    },
+    {
+      "task_id": "oos_priority_medium_five_days",
+      "task_class": "classification",
+      "capability_family": "priority",
+      "normalization": "text",
+      "prompt": "Use this rubric: High means a present safety or security incident, work blocked now, or an explicit deadline within 24 hours. Medium means action is required after 24 hours but within seven days, with no present safety or security incident and no current blocker. Low means no action is required, or the explicit deadline is more than seven days away. Classify the following item. Output exactly one label: High, Medium, or Low. Item: Update the ordinary rota within five days. Nothing is blocked and there is no safety or security incident.",
+      "expected": "medium"
+    },
+    {
+      "task_id": "oos_bullets_codes",
+      "task_class": "format",
+      "capability_family": "markdown_bullets",
+      "normalization": "text",
+      "prompt": "Output exactly 3 Markdown bullet lines in the supplied order. Every line must contain the literal hyphen marker followed by exactly one space and then the exact item text. Include no heading, blank line, or surrounding prose. Items: AX-1; BY-2; CZ-3.",
+      "expected": "- AX-1\n- BY-2\n- CZ-3"
+    },
+    {
+      "task_id": "oos_labels_build",
+      "task_class": "format",
+      "capability_family": "key_value_labels",
+      "normalization": "text",
+      "prompt": "Output exactly 3 lines in this order using these exact lowercase keys: build_id, result, duration_s. Every line must use the exact format key, then a colon, then exactly one space, then the supplied value. Preserve every value exactly. Include no additional lines or prose. Fields: build_id=B-602; result=passed; duration_s=47.",
+      "expected": "build_id: B-602\nresult: passed\nduration_s: 47"
+    },
+    {
+      "task_id": "oos_transform_underscores",
+      "task_class": "transform",
+      "capability_family": "transformation",
+      "normalization": "text",
+      "prompt": "Replace every space in the string `frozen policy check` with an underscore. Preserve all letters and output only the transformed string.",
+      "expected": "frozen_policy_check"
+    },
+    {
+      "task_id": "oos_extract_product",
+      "task_class": "extract_structured",
+      "capability_family": "structured_extraction",
+      "normalization": "structured_json",
+      "prompt": "Extract one JSON object from the source record. Required keys exactly: sku, quantity, unit_price. Preserve source spelling, capitalization, underscores, and punctuation in string values. Represent numeric values as JSON numbers. Do not infer unstated values. Output only JSON. Source: Product record: SKU P-77; quantity 12; unit price 4.25.",
+      "expected": {
+        "sku": "P-77",
+        "quantity": 12,
+        "unit_price": 4.25
+      }
+    },
+    {
+      "task_id": "oos_extract_book",
+      "task_class": "extract_structured",
+      "capability_family": "structured_extraction",
+      "normalization": "structured_json",
+      "prompt": "Extract one JSON object from the source record. Required keys exactly: title, author, year. Preserve source spelling, capitalization, underscores, and punctuation in string values. Represent numeric values as JSON numbers. Do not infer unstated values. Output only JSON. Source: Catalogue record: Kindred; author Octavia E. Butler; year 1979.",
+      "expected": {
+        "title": "Kindred",
+        "author": "Octavia E. Butler",
+        "year": 1979
+      }
+    },
+    {
+      "task_id": "oos_sentiment_negative_room",
+      "task_class": "classification",
+      "capability_family": "sentiment",
+      "normalization": "text",
+      "prompt": "Use this rubric: Positive means a clearly favourable evaluation; Negative means a clearly unfavourable evaluation; Neutral means a factual statement without evaluation. Classify the following text. Output exactly one label: Positive, Negative, or Neutral. Text: The meeting room was dirty and unpleasant.",
+      "expected": "negative"
+    },
+    {
+      "task_id": "oos_json_ticket",
+      "task_class": "format",
+      "capability_family": "json_format",
+      "normalization": "structured_json",
+      "prompt": "Format the supplied fields as one JSON object. Use exactly these lowercase keys: id, open. Use the supplied values without modification. Include no additional keys or prose. Source: Ticket id is Q-91 and open is false.",
+      "expected": {
+        "id": "Q-91",
+        "open": false
+      }
+    },
+    {
+      "task_id": "oos_priority_low_fourteen_days",
+      "task_class": "classification",
+      "capability_family": "priority",
+      "normalization": "text",
+      "prompt": "Use this rubric: High means a present safety or security incident, work blocked now, or an explicit deadline within 24 hours. Medium means action is required after 24 hours but within seven days, with no present safety or security incident and no current blocker. Low means no action is required, or the explicit deadline is more than seven days away. Classify the following item. Output exactly one label: High, Medium, or Low. Item: Review the optional colour choices in fourteen days. Nothing is blocked and there is no safety or security incident.",
+      "expected": "low"
+    },
+    {
+      "task_id": "oos_bullets_dates",
+      "task_class": "format",
+      "capability_family": "markdown_bullets",
+      "normalization": "text",
+      "prompt": "Output exactly 2 Markdown bullet lines in the supplied order. Every line must contain the literal hyphen marker followed by exactly one space and then the exact item text. Include no heading, blank line, or surrounding prose. Items: 2026-10-02; 2026-10-09.",
+      "expected": "- 2026-10-02\n- 2026-10-09"
+    },
+    {
+      "task_id": "oos_labels_owner",
+      "task_class": "format",
+      "capability_family": "key_value_labels",
+      "normalization": "text",
+      "prompt": "Output exactly 2 lines in this order using these exact lowercase keys: owner, team. Every line must use the exact format key, then a colon, then exactly one space, then the supplied value. Preserve every value exactly. Include no additional lines or prose. Fields: owner=Nadia; team=Orchid.",
+      "expected": "owner: Nadia\nteam: Orchid"
+    },
+    {
+      "task_id": "oos_transform_replace_o",
+      "task_class": "transform",
+      "capability_family": "transformation",
+      "normalization": "text",
+      "prompt": "Replace every lowercase letter o in the string `local model` with the digit 0 and make no other change. Output only the transformed string.",
+      "expected": "l0cal m0del"
+    },
+    {
+      "task_id": "oos_extract_train",
+      "task_class": "extract_structured",
+      "capability_family": "structured_extraction",
+      "normalization": "structured_json",
+      "prompt": "Extract one JSON object from the source record. Required keys exactly: origin, destination, departure. Preserve source spelling, capitalization, underscores, and punctuation in string values. Represent numeric values as JSON numbers. Do not infer unstated values. Output only JSON. Source: Train record: origin Norwich; destination Cambridge; departure 09:17.",
+      "expected": {
+        "origin": "Norwich",
+        "destination": "Cambridge",
+        "departure": "09:17"
+      }
+    }
+  ]
+}
