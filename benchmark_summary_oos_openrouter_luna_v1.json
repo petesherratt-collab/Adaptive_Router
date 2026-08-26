@@ -1,0 +1,291 @@
+{
+  "benchmark_sha256": "6e255b2d44599f49a1cda82f989b110a015c16c55da54ea6501f4b8cb18fa295",
+  "cache_statuses": {},
+  "empty_output_count": 0,
+  "finish_reasons": {
+    "stop": 200
+  },
+  "median_total_ms": 1690.077641629614,
+  "observation_count": 200,
+  "pass_count": 200,
+  "pass_rate": 1.0,
+  "per_class": {
+    "classification": {
+      "observation_count": 50,
+      "pass_count": 50,
+      "pass_rate": 1.0
+    },
+    "extract_structured": {
+      "observation_count": 50,
+      "pass_count": 50,
+      "pass_rate": 1.0
+    },
+    "format": {
+      "observation_count": 75,
+      "pass_count": 75,
+      "pass_rate": 1.0
+    },
+    "transform": {
+      "observation_count": 25,
+      "pass_count": 25,
+      "pass_rate": 1.0
+    }
+  },
+  "per_family": {
+    "json_format": {
+      "observation_count": 25,
+      "pass_count": 25,
+      "pass_rate": 1.0
+    },
+    "key_value_labels": {
+      "observation_count": 25,
+      "pass_count": 25,
+      "pass_rate": 1.0
+    },
+    "markdown_bullets": {
+      "observation_count": 25,
+      "pass_count": 25,
+      "pass_rate": 1.0
+    },
+    "priority": {
+      "observation_count": 25,
+      "pass_count": 25,
+      "pass_rate": 1.0
+    },
+    "sentiment": {
+      "observation_count": 25,
+      "pass_count": 25,
+      "pass_rate": 1.0
+    },
+    "structured_extraction": {
+      "observation_count": 50,
+      "pass_count": 50,
+      "pass_rate": 1.0
+    },
+    "transformation": {
+      "observation_count": 25,
+      "pass_count": 25,
+      "pass_rate": 1.0
+    }
+  },
+  "per_task": {
+    "oos_bullets_codes": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_bullets_dates": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_bullets_directions": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_bullets_fruit": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_bullets_stages": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_extract_book": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_extract_device": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_extract_event": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_extract_meeting": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_extract_order": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_extract_person": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_extract_product": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_extract_shipment": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_extract_train": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_extract_weather": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_json_contact": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_json_coordinates": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_json_inventory": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_json_server": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_json_ticket": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_labels_account": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_labels_build": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_labels_owner": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_labels_route": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_labels_sensor": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_priority_high_blocked": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_priority_high_deadline": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_priority_low_fourteen_days": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_priority_medium_five_days": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_priority_medium_three_days": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_sentiment_negative_device": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_sentiment_negative_room": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_sentiment_neutral_delivery": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_sentiment_positive_report": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_sentiment_positive_service": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_transform_remove_spaces": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_transform_replace_o": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_transform_reverse": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_transform_underscores": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_transform_uppercase": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    }
+  },
+  "provider": "openrouter",
+  "request_parameters": {
+    "max_tokens": 256,
+    "temperature": 0
+  },
+  "requested_model": "openai/gpt-5.6-luna",
+  "returned_models": {
+    "openai/gpt-5.6-luna": 200
+  },
+  "successful_response_count": 200,
+  "suite_id": "oos_validation_v1",
+  "total_cache_write_tokens": 0,
+  "total_cached_tokens": 0,
+  "total_completion_tokens": 3247,
+  "total_cost": 0.0066464,
+  "total_prompt_tokens": 13750,
+  "total_reasoning_tokens": 514,
+  "total_tokens": 16997
+}
