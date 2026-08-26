@@ -842,3 +842,170 @@ Result document: `ROUTING_SIMULATION_PAIRED_V1.md`
 
 - SHA-256:
   `52813cdfcd0f09b2dc33a2e1d7c81fa1613fba0e8758363219762d178b92e7da`
+
+---
+
+## 2026-08-26 — Out-of-sample paired routing validation v1
+
+### Preregistered design
+
+A genuinely new benchmark was frozen before model execution:
+
+- 40 new tasks
+- 7 explicit capability families
+- 5 repetitions per task and model
+- 200 local observations
+- 200 remote observations
+- 200 paired `(task_id, repetition)` keys
+- deterministic strict oracle
+- no LLM judge or semantic repair
+
+The frozen fine policy routed structured extraction, sentiment, and JSON
+formatting locally. Priority, Markdown bullets, key/value labels, and
+deterministic transformations were routed remotely.
+
+The primary descriptive criterion required:
+
+1. exactly 100 rather than 200 remote calls; and
+2. a fine-routing strict pass rate no more than five percentage points below
+   always remote.
+
+### Frozen evidence
+
+Benchmark:
+
+- `benchmark_oos_v1.json`
+- SHA-256:
+  `6e255b2d44599f49a1cda82f989b110a015c16c55da54ea6501f4b8cb18fa295`
+
+Execution runner:
+
+- revision:
+  `50387be90fca40cf6f3f9467106a09abdc9a3c71`
+
+Local observations:
+
+- `benchmark_runs_oos_local_v1.jsonl`
+- 200 observations
+- SHA-256:
+  `425fa9328781ff2e53f69ce0a054531e106be3a6ed1380c148e35ec3d47c8ca0`
+
+Remote observations:
+
+- `benchmark_runs_oos_openrouter_luna_v1.jsonl`
+- 200 observations
+- SHA-256:
+  `cd2029a23d73bbef0287b3028d3c97b9ecad44613f091448972bdd551398caae`
+
+Both evidence files contain the same 200 unique paired keys and record the same
+benchmark hash and execution-runner revision.
+
+### Strict result
+
+| Policy | Passes | Pass rate | Remote calls |
+|---|---:|---:|---:|
+| Always local | 78/200 | 39.0% | 0 |
+| Always remote | 200/200 | 100.0% | 200 |
+| Coarse task class | 157/200 | 78.5% | 100 |
+| Fine capability | 171/200 | 85.5% | 100 |
+
+Fine routing halved remote calls but lost 14.5 percentage points relative to
+always remote. It therefore failed the preregistered five-point tolerance.
+
+The paired task-cluster bootstrap sensitivity analysis used all five
+repetitions within each sampled task:
+
+- samples: 6,000
+- seed: `20260826`
+- fine minus always-remote estimate: -14.5 percentage points
+- percentile 95% interval: [-25.0, -5.5] percentage points
+
+This is not a formal non-inferiority result.
+
+### Capability-family result
+
+| Capability family | Local | Remote |
+|---|---:|---:|
+| Structured extraction | 40/50 | 50/50 |
+| Sentiment | 10/25 | 25/25 |
+| JSON formatting | 21/25 | 25/25 |
+| Priority | 7/25 | 25/25 |
+| Markdown bullets | 0/25 | 25/25 |
+| Key/value labels | 0/25 | 25/25 |
+| Transformation | 0/25 | 25/25 |
+
+Fine routing improved on coarse routing by 14 observations, showing that
+fine-grained capability distinctions generalized better than broad task
+classes. However, the earlier sentiment result did not generalize: only 10 of
+25 new sentiment observations passed locally.
+
+### Failure audit
+
+The fine policy incurred 29 misses:
+
+- 15 sentiment-label failures
+- 10 structured-extraction schema/type failures
+- 4 JSON numeric-type failures
+
+The prompts contained explicit rubrics, required keys, and numeric-type
+instructions. Inspection found no defensible specification, normalization,
+oracle, transport, or instrumentation correction.
+
+Accordingly, the audited interpretation equals the frozen strict result.
+
+All 16 empty local outputs occurred in Markdown-bullet or transformation
+tasks, which the fine policy routed remotely. OpenRouter Luna returned 200
+successful responses, 200 strict passes, and no empty outputs.
+
+The complete audit is preserved in `OOS_VALIDATION_V1_AUDIT.md`.
+
+### Cost and latency observations
+
+Reported OpenRouter cost:
+
+- always remote: USD 0.00664640
+- fine routing: USD 0.00321820
+- reduction: approximately 51.6%
+
+Measured median selected total time:
+
+- always remote: 1,690.078 ms
+- fine routing: 1,115.469 ms
+
+Summed sequential selected work:
+
+- always remote: 476,651.369 ms
+- fine routing: 327,977.701 ms
+
+These are not direct energy measurements. No energy reduction is inferred.
+
+### Disclosed procedural deviations
+
+The OOS-specific analysis code was not committed before model execution,
+although the suite, routing policy, execution runner, validators, and tests
+were committed.
+
+The preregistration required a fixed bootstrap seed but omitted the numeric
+value. The date-derived seed `20260826` was selected after data collection.
+
+Neither deviation changed the frozen observations or strict point estimates,
+but the analysis must not be described as fully code-preregistered.
+
+### Conclusion and next direction
+
+The fixed fine capability policy is rejected as sufficiently reliable under
+the preregistered criterion.
+
+The result demonstrates three important points:
+
+1. routing at capability-family level outperforms routing at broad task-class
+   level;
+2. strong in-sample performance can fail to generalize even for apparently
+   narrow deterministic tasks;
+3. a routing policy needs uncertainty, evidence thresholds, and
+   within-family heterogeneity rather than a permanent binary capability map.
+
+The next experiment should not immediately redefine the policy around these
+40 observed tasks. First quantify task-level uncertainty and compare
+conservative evidence-thresholded routing rules using nested or additional
+held-out data.
