@@ -1,0 +1,494 @@
+{
+  "analysis_deviations": [
+    "OOS-specific analysis code was not committed before model execution.",
+    "The preregistration required a fixed random seed but did not record its numeric value; seed 20260826 was selected after data collection."
+  ],
+  "analysis_id": "oos_validation_v1_strict",
+  "benchmark_sha256": "6e255b2d44599f49a1cda82f989b110a015c16c55da54ea6501f4b8cb18fa295",
+  "bootstrap": {
+    "estimate": -0.14500000000000002,
+    "method": "paired task-cluster bootstrap",
+    "percentile_95_interval": {
+      "lower": -0.25,
+      "upper": -0.05500000000000005
+    },
+    "repetitions_retained_per_task": 5,
+    "resampling_unit": "task",
+    "samples": 6000,
+    "seed": 20260826
+  },
+  "interpretation": "strict",
+  "per_family": {
+    "json_format": {
+      "local_pass_rate": 0.84,
+      "local_passes": 21,
+      "observations": 25,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 25
+    },
+    "key_value_labels": {
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 25,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 25
+    },
+    "markdown_bullets": {
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 25,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 25
+    },
+    "priority": {
+      "local_pass_rate": 0.28,
+      "local_passes": 7,
+      "observations": 25,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 25
+    },
+    "sentiment": {
+      "local_pass_rate": 0.4,
+      "local_passes": 10,
+      "observations": 25,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 25
+    },
+    "structured_extraction": {
+      "local_pass_rate": 0.8,
+      "local_passes": 40,
+      "observations": 50,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 50
+    },
+    "transformation": {
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 25,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 25
+    }
+  },
+  "per_task": {
+    "oos_bullets_codes": {
+      "capability_family": "markdown_bullets",
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_bullets_dates": {
+      "capability_family": "markdown_bullets",
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_bullets_directions": {
+      "capability_family": "markdown_bullets",
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_bullets_fruit": {
+      "capability_family": "markdown_bullets",
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_bullets_stages": {
+      "capability_family": "markdown_bullets",
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_extract_book": {
+      "capability_family": "structured_extraction",
+      "local_pass_rate": 1.0,
+      "local_passes": 5,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_extract_device": {
+      "capability_family": "structured_extraction",
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_extract_event": {
+      "capability_family": "structured_extraction",
+      "local_pass_rate": 1.0,
+      "local_passes": 5,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_extract_meeting": {
+      "capability_family": "structured_extraction",
+      "local_pass_rate": 1.0,
+      "local_passes": 5,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_extract_order": {
+      "capability_family": "structured_extraction",
+      "local_pass_rate": 1.0,
+      "local_passes": 5,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_extract_person": {
+      "capability_family": "structured_extraction",
+      "local_pass_rate": 1.0,
+      "local_passes": 5,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_extract_product": {
+      "capability_family": "structured_extraction",
+      "local_pass_rate": 1.0,
+      "local_passes": 5,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_extract_shipment": {
+      "capability_family": "structured_extraction",
+      "local_pass_rate": 1.0,
+      "local_passes": 5,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_extract_train": {
+      "capability_family": "structured_extraction",
+      "local_pass_rate": 1.0,
+      "local_passes": 5,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_extract_weather": {
+      "capability_family": "structured_extraction",
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_json_contact": {
+      "capability_family": "json_format",
+      "local_pass_rate": 1.0,
+      "local_passes": 5,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_json_coordinates": {
+      "capability_family": "json_format",
+      "local_pass_rate": 1.0,
+      "local_passes": 5,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_json_inventory": {
+      "capability_family": "json_format",
+      "local_pass_rate": 1.0,
+      "local_passes": 5,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_json_server": {
+      "capability_family": "json_format",
+      "local_pass_rate": 0.2,
+      "local_passes": 1,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_json_ticket": {
+      "capability_family": "json_format",
+      "local_pass_rate": 1.0,
+      "local_passes": 5,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_labels_account": {
+      "capability_family": "key_value_labels",
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_labels_build": {
+      "capability_family": "key_value_labels",
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_labels_owner": {
+      "capability_family": "key_value_labels",
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_labels_route": {
+      "capability_family": "key_value_labels",
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_labels_sensor": {
+      "capability_family": "key_value_labels",
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_priority_high_blocked": {
+      "capability_family": "priority",
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_priority_high_deadline": {
+      "capability_family": "priority",
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_priority_low_fourteen_days": {
+      "capability_family": "priority",
+      "local_pass_rate": 0.8,
+      "local_passes": 4,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_priority_medium_five_days": {
+      "capability_family": "priority",
+      "local_pass_rate": 0.2,
+      "local_passes": 1,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_priority_medium_three_days": {
+      "capability_family": "priority",
+      "local_pass_rate": 0.4,
+      "local_passes": 2,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_sentiment_negative_device": {
+      "capability_family": "sentiment",
+      "local_pass_rate": 0.2,
+      "local_passes": 1,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_sentiment_negative_room": {
+      "capability_family": "sentiment",
+      "local_pass_rate": 0.6,
+      "local_passes": 3,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_sentiment_neutral_delivery": {
+      "capability_family": "sentiment",
+      "local_pass_rate": 0.8,
+      "local_passes": 4,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_sentiment_positive_report": {
+      "capability_family": "sentiment",
+      "local_pass_rate": 0.2,
+      "local_passes": 1,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_sentiment_positive_service": {
+      "capability_family": "sentiment",
+      "local_pass_rate": 0.2,
+      "local_passes": 1,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_transform_remove_spaces": {
+      "capability_family": "transformation",
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_transform_replace_o": {
+      "capability_family": "transformation",
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_transform_reverse": {
+      "capability_family": "transformation",
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_transform_underscores": {
+      "capability_family": "transformation",
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    },
+    "oos_transform_uppercase": {
+      "capability_family": "transformation",
+      "local_pass_rate": 0.0,
+      "local_passes": 0,
+      "observations": 5,
+      "remote_pass_rate": 1.0,
+      "remote_passes": 5
+    }
+  },
+  "policies": [
+    {
+      "beneficial_escalations": 0,
+      "harmful_escalations": 0,
+      "interpretation": "strict",
+      "local_calls": 200,
+      "median_selected_total_ms": 514.3269980326295,
+      "missed_escalations": 122,
+      "observations": 200,
+      "oracle_ceiling_passes": 200,
+      "oracle_ceiling_rate": 1.0,
+      "policy": "always_local",
+      "remote_call_rate": 0.0,
+      "remote_calls": 0,
+      "remote_calls_with_reported_cost": 0,
+      "reported_remote_cost": 0,
+      "selected_pass_rate": 0.39,
+      "selected_passes": 78,
+      "selected_transport_failures": 0,
+      "summed_selected_work_ms": 122459.21006938443,
+      "unnecessary_escalations": 0,
+      "unrecoverable_local_failures": 0
+    },
+    {
+      "beneficial_escalations": 122,
+      "harmful_escalations": 0,
+      "interpretation": "strict",
+      "local_calls": 0,
+      "median_selected_total_ms": 1690.077641629614,
+      "missed_escalations": 0,
+      "observations": 200,
+      "oracle_ceiling_passes": 200,
+      "oracle_ceiling_rate": 1.0,
+      "policy": "always_remote",
+      "remote_call_rate": 1.0,
+      "remote_calls": 200,
+      "remote_calls_with_reported_cost": 200,
+      "reported_remote_cost": 0.0066464,
+      "selected_pass_rate": 1.0,
+      "selected_passes": 200,
+      "selected_transport_failures": 0,
+      "summed_selected_work_ms": 476651.369323954,
+      "unnecessary_escalations": 78,
+      "unrecoverable_local_failures": 0
+    },
+    {
+      "beneficial_escalations": 79,
+      "harmful_escalations": 0,
+      "interpretation": "strict",
+      "local_calls": 100,
+      "median_selected_total_ms": 1115.4694334836677,
+      "missed_escalations": 43,
+      "observations": 200,
+      "oracle_ceiling_passes": 200,
+      "oracle_ceiling_rate": 1.0,
+      "policy": "coarse_class",
+      "remote_call_rate": 0.5,
+      "remote_calls": 100,
+      "remote_calls_with_reported_cost": 100,
+      "reported_remote_cost": 0.0032302,
+      "selected_pass_rate": 0.785,
+      "selected_passes": 157,
+      "selected_transport_failures": 0,
+      "summed_selected_work_ms": 302335.60052583925,
+      "unnecessary_escalations": 21,
+      "unrecoverable_local_failures": 0
+    },
+    {
+      "beneficial_escalations": 93,
+      "harmful_escalations": 0,
+      "interpretation": "strict",
+      "local_calls": 100,
+      "median_selected_total_ms": 1115.4694334836677,
+      "missed_escalations": 29,
+      "observations": 200,
+      "oracle_ceiling_passes": 200,
+      "oracle_ceiling_rate": 1.0,
+      "policy": "fine_capability",
+      "remote_call_rate": 0.5,
+      "remote_calls": 100,
+      "remote_calls_with_reported_cost": 100,
+      "reported_remote_cost": 0.0032182,
+      "selected_pass_rate": 0.855,
+      "selected_passes": 171,
+      "selected_transport_failures": 0,
+      "summed_selected_work_ms": 327977.7005838696,
+      "unnecessary_escalations": 7,
+      "unrecoverable_local_failures": 0
+    }
+  ],
+  "primary_criterion": {
+    "minimum_allowed_success_gap": -0.05,
+    "observed_remote_calls": 100,
+    "observed_success_gap": -0.14500000000000002,
+    "overall_passed": false,
+    "remote_call_condition_passed": true,
+    "required_remote_calls": 100,
+    "success_gap_condition_passed": false
+  },
+  "runner_revision": "50387be90fca40cf6f3f9467106a09abdc9a3c71"
+}
