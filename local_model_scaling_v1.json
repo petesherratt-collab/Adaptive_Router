@@ -1,0 +1,1111 @@
+{
+  "amendment_sha256": "f10c2a890a8e543e97bb80f53a8dabcbe3d5633caeafc40fe3cfef8bcbace71f",
+  "analysis_id": "local_model_scaling_v1_strict",
+  "baseline_evidence_sha256": "425fa9328781ff2e53f69ce0a054531e106be3a6ed1380c148e35ec3d47c8ca0",
+  "benchmark_sha256": "6e255b2d44599f49a1cda82f989b110a015c16c55da54ea6501f4b8cb18fa295",
+  "comparison_id": "local_model_scaling_v1",
+  "execution_revision": "2538ac9db7470b7e5fa184393dc5335b7cb51fd0",
+  "interpretation": "strict",
+  "interpretation_boundaries": [
+    "Frozen-suite regression comparison, not new OOS validation.",
+    "Qualification prompts exposed representative failure types.",
+    "Quantization differs between 270M and larger packages.",
+    "No energy inference is made.",
+    "Gate results simulate post-generation gates only.",
+    "Gate survival does not imply strict correctness."
+  ],
+  "model_order": [
+    "gemma3:270m",
+    "gemma3:1b",
+    "gemma3:4b"
+  ],
+  "models": {
+    "gemma3:1b": {
+      "empty_output_count": 0,
+      "error_count": 0,
+      "model_identity": {
+        "digest": "8648f39daa8fbf5b18c7b4e6a8fb4990c692751d49917417b8842ca5758e7ffc",
+        "family": "gemma3",
+        "format": "gguf",
+        "name": "gemma3:1b",
+        "package_size_bytes": 815319791,
+        "parameter_size": "999.89M",
+        "quantization_level": "Q4_K_M"
+      },
+      "observation_count": 200,
+      "pass_count": 99,
+      "pass_rate": 0.495,
+      "per_family": {
+        "json_format": {
+          "observation_count": 25,
+          "pass_count": 23,
+          "pass_rate": 0.92
+        },
+        "key_value_labels": {
+          "observation_count": 25,
+          "pass_count": 3,
+          "pass_rate": 0.12
+        },
+        "markdown_bullets": {
+          "observation_count": 25,
+          "pass_count": 4,
+          "pass_rate": 0.16
+        },
+        "priority": {
+          "observation_count": 25,
+          "pass_count": 12,
+          "pass_rate": 0.48
+        },
+        "sentiment": {
+          "observation_count": 25,
+          "pass_count": 25,
+          "pass_rate": 1.0
+        },
+        "structured_extraction": {
+          "observation_count": 50,
+          "pass_count": 29,
+          "pass_rate": 0.58
+        },
+        "transformation": {
+          "observation_count": 25,
+          "pass_count": 3,
+          "pass_rate": 0.12
+        }
+      },
+      "per_task": {
+        "oos_bullets_codes": {
+          "observation_count": 5,
+          "pass_count": 3,
+          "pass_rate": 0.6
+        },
+        "oos_bullets_dates": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_bullets_directions": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_bullets_fruit": {
+          "observation_count": 5,
+          "pass_count": 1,
+          "pass_rate": 0.2
+        },
+        "oos_bullets_stages": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_extract_book": {
+          "observation_count": 5,
+          "pass_count": 3,
+          "pass_rate": 0.6
+        },
+        "oos_extract_device": {
+          "observation_count": 5,
+          "pass_count": 1,
+          "pass_rate": 0.2
+        },
+        "oos_extract_event": {
+          "observation_count": 5,
+          "pass_count": 4,
+          "pass_rate": 0.8
+        },
+        "oos_extract_meeting": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_extract_order": {
+          "observation_count": 5,
+          "pass_count": 2,
+          "pass_rate": 0.4
+        },
+        "oos_extract_person": {
+          "observation_count": 5,
+          "pass_count": 4,
+          "pass_rate": 0.8
+        },
+        "oos_extract_product": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_extract_shipment": {
+          "observation_count": 5,
+          "pass_count": 4,
+          "pass_rate": 0.8
+        },
+        "oos_extract_train": {
+          "observation_count": 5,
+          "pass_count": 4,
+          "pass_rate": 0.8
+        },
+        "oos_extract_weather": {
+          "observation_count": 5,
+          "pass_count": 2,
+          "pass_rate": 0.4
+        },
+        "oos_json_contact": {
+          "observation_count": 5,
+          "pass_count": 3,
+          "pass_rate": 0.6
+        },
+        "oos_json_coordinates": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_json_inventory": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_json_server": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_json_ticket": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_labels_account": {
+          "observation_count": 5,
+          "pass_count": 1,
+          "pass_rate": 0.2
+        },
+        "oos_labels_build": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_labels_owner": {
+          "observation_count": 5,
+          "pass_count": 1,
+          "pass_rate": 0.2
+        },
+        "oos_labels_route": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_labels_sensor": {
+          "observation_count": 5,
+          "pass_count": 1,
+          "pass_rate": 0.2
+        },
+        "oos_priority_high_blocked": {
+          "observation_count": 5,
+          "pass_count": 1,
+          "pass_rate": 0.2
+        },
+        "oos_priority_high_deadline": {
+          "observation_count": 5,
+          "pass_count": 1,
+          "pass_rate": 0.2
+        },
+        "oos_priority_low_fourteen_days": {
+          "observation_count": 5,
+          "pass_count": 2,
+          "pass_rate": 0.4
+        },
+        "oos_priority_medium_five_days": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_priority_medium_three_days": {
+          "observation_count": 5,
+          "pass_count": 3,
+          "pass_rate": 0.6
+        },
+        "oos_sentiment_negative_device": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_sentiment_negative_room": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_sentiment_neutral_delivery": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_sentiment_positive_report": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_sentiment_positive_service": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_transform_remove_spaces": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_transform_replace_o": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_transform_reverse": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_transform_underscores": {
+          "observation_count": 5,
+          "pass_count": 3,
+          "pass_rate": 0.6
+        },
+        "oos_transform_uppercase": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        }
+      },
+      "post_generation_gate_simulation": {
+        "maximum_ttft_ms": 8000,
+        "minimum_generation_rate": 1.5,
+        "overall": {
+          "false_accept_count": 100,
+          "first_outcome_counts": {
+            "GENERATION_FAILED": 0,
+            "GENERATION_TOO_SLOW": 0,
+            "SURVIVED": 198,
+            "TTFT_EXCEEDED": 1,
+            "VALIDATOR_FAILED": 1
+          },
+          "missing_throughput_count": 0,
+          "missing_ttft_count": 0,
+          "observation_count": 200,
+          "rejected_correct_count": 1,
+          "strict_pass_count_among_survivors": 98,
+          "strict_pass_rate_among_survivors": 0.494949494949495,
+          "survivor_count": 198,
+          "survivor_rate": 0.99
+        },
+        "residency": {
+          "nonresident": {
+            "false_accept_count": 0,
+            "first_outcome_counts": {
+              "GENERATION_FAILED": 0,
+              "GENERATION_TOO_SLOW": 0,
+              "SURVIVED": 0,
+              "TTFT_EXCEEDED": 1,
+              "VALIDATOR_FAILED": 0
+            },
+            "missing_throughput_count": 0,
+            "missing_ttft_count": 0,
+            "observation_count": 1,
+            "rejected_correct_count": 1,
+            "strict_pass_count_among_survivors": 0,
+            "strict_pass_rate_among_survivors": null,
+            "survivor_count": 0,
+            "survivor_rate": 0.0
+          },
+          "resident": {
+            "false_accept_count": 100,
+            "first_outcome_counts": {
+              "GENERATION_FAILED": 0,
+              "GENERATION_TOO_SLOW": 0,
+              "SURVIVED": 198,
+              "TTFT_EXCEEDED": 0,
+              "VALIDATOR_FAILED": 1
+            },
+            "missing_throughput_count": 0,
+            "missing_ttft_count": 0,
+            "observation_count": 199,
+            "rejected_correct_count": 0,
+            "strict_pass_count_among_survivors": 98,
+            "strict_pass_rate_among_survivors": 0.494949494949495,
+            "survivor_count": 198,
+            "survivor_rate": 0.9949748743718593
+          },
+          "unknown": {
+            "false_accept_count": 0,
+            "first_outcome_counts": {
+              "GENERATION_FAILED": 0,
+              "GENERATION_TOO_SLOW": 0,
+              "SURVIVED": 0,
+              "TTFT_EXCEEDED": 0,
+              "VALIDATOR_FAILED": 0
+            },
+            "missing_throughput_count": 0,
+            "missing_ttft_count": 0,
+            "observation_count": 0,
+            "rejected_correct_count": 0,
+            "strict_pass_count_among_survivors": 0,
+            "strict_pass_rate_among_survivors": null,
+            "survivor_count": 0,
+            "survivor_rate": null
+          }
+        }
+      },
+      "residency": {
+        "nonresident_observation_count": 1,
+        "nonresident_timing": {
+          "median_tokens_per_second": 14.862060075876533,
+          "median_total_ms": 11435.577728087083,
+          "median_ttft_ms": 9685.346380108967
+        },
+        "resident_observation_count": 199,
+        "resident_timing": {
+          "median_tokens_per_second": 15.713535954141616,
+          "median_total_ms": 1891.5438919793814,
+          "median_ttft_ms": 180.03809405490756
+        },
+        "unknown_observation_count": 0
+      },
+      "successful_response_count": 200,
+      "timing": {
+        "median_tokens_per_second": 15.69456267815157,
+        "median_total_ms": 1896.9699419103563,
+        "median_ttft_ms": 180.16985361464322
+      }
+    },
+    "gemma3:270m": {
+      "empty_output_count": 16,
+      "error_count": 0,
+      "model_identity": {
+        "digest": "e7d36fb2c3b3293cfe56d55889867a064b3a2b22e98335f2e6e8a387e081d6be",
+        "family": "gemma3",
+        "format": "gguf",
+        "name": "gemma3:270m",
+        "package_size_bytes": 291554930,
+        "parameter_size": "268.10M",
+        "quantization_level": "Q8_0"
+      },
+      "observation_count": 200,
+      "pass_count": 78,
+      "pass_rate": 0.39,
+      "per_family": {
+        "json_format": {
+          "observation_count": 25,
+          "pass_count": 21,
+          "pass_rate": 0.84
+        },
+        "key_value_labels": {
+          "observation_count": 25,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "markdown_bullets": {
+          "observation_count": 25,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "priority": {
+          "observation_count": 25,
+          "pass_count": 7,
+          "pass_rate": 0.28
+        },
+        "sentiment": {
+          "observation_count": 25,
+          "pass_count": 10,
+          "pass_rate": 0.4
+        },
+        "structured_extraction": {
+          "observation_count": 50,
+          "pass_count": 40,
+          "pass_rate": 0.8
+        },
+        "transformation": {
+          "observation_count": 25,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        }
+      },
+      "per_task": {
+        "oos_bullets_codes": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_bullets_dates": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_bullets_directions": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_bullets_fruit": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_bullets_stages": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_extract_book": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_extract_device": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_extract_event": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_extract_meeting": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_extract_order": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_extract_person": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_extract_product": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_extract_shipment": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_extract_train": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_extract_weather": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_json_contact": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_json_coordinates": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_json_inventory": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_json_server": {
+          "observation_count": 5,
+          "pass_count": 1,
+          "pass_rate": 0.2
+        },
+        "oos_json_ticket": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_labels_account": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_labels_build": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_labels_owner": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_labels_route": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_labels_sensor": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_priority_high_blocked": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_priority_high_deadline": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_priority_low_fourteen_days": {
+          "observation_count": 5,
+          "pass_count": 4,
+          "pass_rate": 0.8
+        },
+        "oos_priority_medium_five_days": {
+          "observation_count": 5,
+          "pass_count": 1,
+          "pass_rate": 0.2
+        },
+        "oos_priority_medium_three_days": {
+          "observation_count": 5,
+          "pass_count": 2,
+          "pass_rate": 0.4
+        },
+        "oos_sentiment_negative_device": {
+          "observation_count": 5,
+          "pass_count": 1,
+          "pass_rate": 0.2
+        },
+        "oos_sentiment_negative_room": {
+          "observation_count": 5,
+          "pass_count": 3,
+          "pass_rate": 0.6
+        },
+        "oos_sentiment_neutral_delivery": {
+          "observation_count": 5,
+          "pass_count": 4,
+          "pass_rate": 0.8
+        },
+        "oos_sentiment_positive_report": {
+          "observation_count": 5,
+          "pass_count": 1,
+          "pass_rate": 0.2
+        },
+        "oos_sentiment_positive_service": {
+          "observation_count": 5,
+          "pass_count": 1,
+          "pass_rate": 0.2
+        },
+        "oos_transform_remove_spaces": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_transform_replace_o": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_transform_reverse": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_transform_underscores": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_transform_uppercase": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        }
+      },
+      "post_generation_gate_simulation": {
+        "maximum_ttft_ms": 8000,
+        "minimum_generation_rate": 1.5,
+        "overall": {
+          "false_accept_count": 98,
+          "first_outcome_counts": {
+            "GENERATION_FAILED": 0,
+            "GENERATION_TOO_SLOW": 0,
+            "SURVIVED": 176,
+            "TTFT_EXCEEDED": 0,
+            "VALIDATOR_FAILED": 24
+          },
+          "missing_throughput_count": 16,
+          "missing_ttft_count": 16,
+          "observation_count": 200,
+          "rejected_correct_count": 0,
+          "strict_pass_count_among_survivors": 78,
+          "strict_pass_rate_among_survivors": 0.4431818181818182,
+          "survivor_count": 176,
+          "survivor_rate": 0.88
+        },
+        "residency": {
+          "nonresident": {
+            "false_accept_count": 0,
+            "first_outcome_counts": {
+              "GENERATION_FAILED": 0,
+              "GENERATION_TOO_SLOW": 0,
+              "SURVIVED": 1,
+              "TTFT_EXCEEDED": 0,
+              "VALIDATOR_FAILED": 0
+            },
+            "missing_throughput_count": 0,
+            "missing_ttft_count": 0,
+            "observation_count": 1,
+            "rejected_correct_count": 0,
+            "strict_pass_count_among_survivors": 1,
+            "strict_pass_rate_among_survivors": 1.0,
+            "survivor_count": 1,
+            "survivor_rate": 1.0
+          },
+          "resident": {
+            "false_accept_count": 98,
+            "first_outcome_counts": {
+              "GENERATION_FAILED": 0,
+              "GENERATION_TOO_SLOW": 0,
+              "SURVIVED": 175,
+              "TTFT_EXCEEDED": 0,
+              "VALIDATOR_FAILED": 24
+            },
+            "missing_throughput_count": 16,
+            "missing_ttft_count": 16,
+            "observation_count": 199,
+            "rejected_correct_count": 0,
+            "strict_pass_count_among_survivors": 77,
+            "strict_pass_rate_among_survivors": 0.44,
+            "survivor_count": 175,
+            "survivor_rate": 0.8793969849246231
+          },
+          "unknown": {
+            "false_accept_count": 0,
+            "first_outcome_counts": {
+              "GENERATION_FAILED": 0,
+              "GENERATION_TOO_SLOW": 0,
+              "SURVIVED": 0,
+              "TTFT_EXCEEDED": 0,
+              "VALIDATOR_FAILED": 0
+            },
+            "missing_throughput_count": 0,
+            "missing_ttft_count": 0,
+            "observation_count": 0,
+            "rejected_correct_count": 0,
+            "strict_pass_count_among_survivors": 0,
+            "strict_pass_rate_among_survivors": null,
+            "survivor_count": 0,
+            "survivor_rate": null
+          }
+        }
+      },
+      "residency": {
+        "nonresident_observation_count": 1,
+        "nonresident_timing": {
+          "median_tokens_per_second": 54.84422131752695,
+          "median_total_ms": 4147.974068997428,
+          "median_ttft_ms": 3673.002607887611
+        },
+        "resident_observation_count": 199,
+        "resident_timing": {
+          "median_tokens_per_second": 54.06382311552821,
+          "median_total_ms": 512.3661109246314,
+          "median_ttft_ms": 50.38329097442329
+        },
+        "unknown_observation_count": 0
+      },
+      "successful_response_count": 200,
+      "timing": {
+        "median_tokens_per_second": 54.06744115921124,
+        "median_total_ms": 514.3269980326295,
+        "median_ttft_ms": 50.455279531888664
+      }
+    },
+    "gemma3:4b": {
+      "empty_output_count": 0,
+      "error_count": 0,
+      "model_identity": {
+        "digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+        "family": "gemma3",
+        "format": "gguf",
+        "name": "gemma3:4b",
+        "package_size_bytes": 3338801804,
+        "parameter_size": "4.3B",
+        "quantization_level": "Q4_K_M"
+      },
+      "observation_count": 200,
+      "pass_count": 158,
+      "pass_rate": 0.79,
+      "per_family": {
+        "json_format": {
+          "observation_count": 25,
+          "pass_count": 20,
+          "pass_rate": 0.8
+        },
+        "key_value_labels": {
+          "observation_count": 25,
+          "pass_count": 25,
+          "pass_rate": 1.0
+        },
+        "markdown_bullets": {
+          "observation_count": 25,
+          "pass_count": 23,
+          "pass_rate": 0.92
+        },
+        "priority": {
+          "observation_count": 25,
+          "pass_count": 15,
+          "pass_rate": 0.6
+        },
+        "sentiment": {
+          "observation_count": 25,
+          "pass_count": 25,
+          "pass_rate": 1.0
+        },
+        "structured_extraction": {
+          "observation_count": 50,
+          "pass_count": 40,
+          "pass_rate": 0.8
+        },
+        "transformation": {
+          "observation_count": 25,
+          "pass_count": 10,
+          "pass_rate": 0.4
+        }
+      },
+      "per_task": {
+        "oos_bullets_codes": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_bullets_dates": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_bullets_directions": {
+          "observation_count": 5,
+          "pass_count": 3,
+          "pass_rate": 0.6
+        },
+        "oos_bullets_fruit": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_bullets_stages": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_extract_book": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_extract_device": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_extract_event": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_extract_meeting": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_extract_order": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_extract_person": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_extract_product": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_extract_shipment": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_extract_train": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_extract_weather": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_json_contact": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_json_coordinates": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_json_inventory": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_json_server": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_json_ticket": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_labels_account": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_labels_build": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_labels_owner": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_labels_route": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_labels_sensor": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_priority_high_blocked": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_priority_high_deadline": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_priority_low_fourteen_days": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_priority_medium_five_days": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_priority_medium_three_days": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_sentiment_negative_device": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_sentiment_negative_room": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_sentiment_neutral_delivery": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_sentiment_positive_report": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_sentiment_positive_service": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_transform_remove_spaces": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_transform_replace_o": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_transform_reverse": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        },
+        "oos_transform_underscores": {
+          "observation_count": 5,
+          "pass_count": 5,
+          "pass_rate": 1.0
+        },
+        "oos_transform_uppercase": {
+          "observation_count": 5,
+          "pass_count": 0,
+          "pass_rate": 0.0
+        }
+      },
+      "post_generation_gate_simulation": {
+        "maximum_ttft_ms": 8000,
+        "minimum_generation_rate": 1.5,
+        "overall": {
+          "false_accept_count": 42,
+          "first_outcome_counts": {
+            "GENERATION_FAILED": 0,
+            "GENERATION_TOO_SLOW": 0,
+            "SURVIVED": 196,
+            "TTFT_EXCEEDED": 4,
+            "VALIDATOR_FAILED": 0
+          },
+          "missing_throughput_count": 0,
+          "missing_ttft_count": 0,
+          "observation_count": 200,
+          "rejected_correct_count": 4,
+          "strict_pass_count_among_survivors": 154,
+          "strict_pass_rate_among_survivors": 0.7857142857142857,
+          "survivor_count": 196,
+          "survivor_rate": 0.98
+        },
+        "residency": {
+          "nonresident": {
+            "false_accept_count": 0,
+            "first_outcome_counts": {
+              "GENERATION_FAILED": 0,
+              "GENERATION_TOO_SLOW": 0,
+              "SURVIVED": 0,
+              "TTFT_EXCEEDED": 1,
+              "VALIDATOR_FAILED": 0
+            },
+            "missing_throughput_count": 0,
+            "missing_ttft_count": 0,
+            "observation_count": 1,
+            "rejected_correct_count": 1,
+            "strict_pass_count_among_survivors": 0,
+            "strict_pass_rate_among_survivors": null,
+            "survivor_count": 0,
+            "survivor_rate": 0.0
+          },
+          "resident": {
+            "false_accept_count": 42,
+            "first_outcome_counts": {
+              "GENERATION_FAILED": 0,
+              "GENERATION_TOO_SLOW": 0,
+              "SURVIVED": 196,
+              "TTFT_EXCEEDED": 3,
+              "VALIDATOR_FAILED": 0
+            },
+            "missing_throughput_count": 0,
+            "missing_ttft_count": 0,
+            "observation_count": 199,
+            "rejected_correct_count": 3,
+            "strict_pass_count_among_survivors": 154,
+            "strict_pass_rate_among_survivors": 0.7857142857142857,
+            "survivor_count": 196,
+            "survivor_rate": 0.9849246231155779
+          },
+          "unknown": {
+            "false_accept_count": 0,
+            "first_outcome_counts": {
+              "GENERATION_FAILED": 0,
+              "GENERATION_TOO_SLOW": 0,
+              "SURVIVED": 0,
+              "TTFT_EXCEEDED": 0,
+              "VALIDATOR_FAILED": 0
+            },
+            "missing_throughput_count": 0,
+            "missing_ttft_count": 0,
+            "observation_count": 0,
+            "rejected_correct_count": 0,
+            "strict_pass_count_among_survivors": 0,
+            "strict_pass_rate_among_survivors": null,
+            "survivor_count": 0,
+            "survivor_rate": null
+          }
+        }
+      },
+      "residency": {
+        "nonresident_observation_count": 1,
+        "nonresident_timing": {
+          "median_tokens_per_second": 6.7317877373081405,
+          "median_total_ms": 29646.638608071953,
+          "median_ttft_ms": 26674.9478969723
+        },
+        "resident_observation_count": 199,
+        "resident_timing": {
+          "median_tokens_per_second": 6.58901070152953,
+          "median_total_ms": 4269.5308569818735,
+          "median_ttft_ms": 500.16016815789044
+        },
+        "unknown_observation_count": 0
+      },
+      "successful_response_count": 200,
+      "timing": {
+        "median_tokens_per_second": 6.590298811863455,
+        "median_total_ms": 4287.655644933693,
+        "median_ttft_ms": 500.17762754578143
+      }
+    }
+  },
+  "paired_against_270m": {
+    "gemma3:1b": {
+      "baseline_passes": 78,
+      "both_fail": 81,
+      "both_pass": 58,
+      "candidate_passes": 99,
+      "gained_passes": 41,
+      "lost_passes": 20,
+      "observation_count": 200,
+      "pass_difference": 21,
+      "pass_rate_difference": 0.105
+    },
+    "gemma3:4b": {
+      "baseline_passes": 78,
+      "both_fail": 28,
+      "both_pass": 64,
+      "candidate_passes": 158,
+      "gained_passes": 94,
+      "lost_passes": 14,
+      "observation_count": 200,
+      "pass_difference": 80,
+      "pass_rate_difference": 0.4
+    }
+  },
+  "plan_sha256": "97359083cc1f4b2352ea383e02076cc8ba6170336499d745be4f15742bf98363"
+}

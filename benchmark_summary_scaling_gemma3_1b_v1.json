@@ -1,0 +1,296 @@
+{
+  "benchmark_sha256": "6e255b2d44599f49a1cda82f989b110a015c16c55da54ea6501f4b8cb18fa295",
+  "comparison_id": "local_model_scaling_v1",
+  "empty_output_count": 0,
+  "error_count": 0,
+  "median_tokens_per_second": 15.69456267815157,
+  "median_total_ms": 1896.9699419103563,
+  "median_ttft_ms": 180.16985361464322,
+  "model_identity": {
+    "digest": "8648f39daa8fbf5b18c7b4e6a8fb4990c692751d49917417b8842ca5758e7ffc",
+    "family": "gemma3",
+    "format": "gguf",
+    "name": "gemma3:1b",
+    "package_size_bytes": 815319791,
+    "parameter_size": "999.89M",
+    "quantization_level": "Q4_K_M"
+  },
+  "nonresident_median_total_ms": 11435.577728087083,
+  "nonresident_median_ttft_ms": 9685.346380108967,
+  "nonresident_observation_count": 1,
+  "observation_count": 200,
+  "pass_count": 99,
+  "pass_rate": 0.495,
+  "per_class": {
+    "classification": {
+      "observation_count": 50,
+      "pass_count": 37,
+      "pass_rate": 0.74
+    },
+    "extract_structured": {
+      "observation_count": 50,
+      "pass_count": 29,
+      "pass_rate": 0.58
+    },
+    "format": {
+      "observation_count": 75,
+      "pass_count": 30,
+      "pass_rate": 0.4
+    },
+    "transform": {
+      "observation_count": 25,
+      "pass_count": 3,
+      "pass_rate": 0.12
+    }
+  },
+  "per_family": {
+    "json_format": {
+      "observation_count": 25,
+      "pass_count": 23,
+      "pass_rate": 0.92
+    },
+    "key_value_labels": {
+      "observation_count": 25,
+      "pass_count": 3,
+      "pass_rate": 0.12
+    },
+    "markdown_bullets": {
+      "observation_count": 25,
+      "pass_count": 4,
+      "pass_rate": 0.16
+    },
+    "priority": {
+      "observation_count": 25,
+      "pass_count": 12,
+      "pass_rate": 0.48
+    },
+    "sentiment": {
+      "observation_count": 25,
+      "pass_count": 25,
+      "pass_rate": 1.0
+    },
+    "structured_extraction": {
+      "observation_count": 50,
+      "pass_count": 29,
+      "pass_rate": 0.58
+    },
+    "transformation": {
+      "observation_count": 25,
+      "pass_count": 3,
+      "pass_rate": 0.12
+    }
+  },
+  "per_task": {
+    "oos_bullets_codes": {
+      "observation_count": 5,
+      "pass_count": 3,
+      "pass_rate": 0.6
+    },
+    "oos_bullets_dates": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "oos_bullets_directions": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "oos_bullets_fruit": {
+      "observation_count": 5,
+      "pass_count": 1,
+      "pass_rate": 0.2
+    },
+    "oos_bullets_stages": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "oos_extract_book": {
+      "observation_count": 5,
+      "pass_count": 3,
+      "pass_rate": 0.6
+    },
+    "oos_extract_device": {
+      "observation_count": 5,
+      "pass_count": 1,
+      "pass_rate": 0.2
+    },
+    "oos_extract_event": {
+      "observation_count": 5,
+      "pass_count": 4,
+      "pass_rate": 0.8
+    },
+    "oos_extract_meeting": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "oos_extract_order": {
+      "observation_count": 5,
+      "pass_count": 2,
+      "pass_rate": 0.4
+    },
+    "oos_extract_person": {
+      "observation_count": 5,
+      "pass_count": 4,
+      "pass_rate": 0.8
+    },
+    "oos_extract_product": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_extract_shipment": {
+      "observation_count": 5,
+      "pass_count": 4,
+      "pass_rate": 0.8
+    },
+    "oos_extract_train": {
+      "observation_count": 5,
+      "pass_count": 4,
+      "pass_rate": 0.8
+    },
+    "oos_extract_weather": {
+      "observation_count": 5,
+      "pass_count": 2,
+      "pass_rate": 0.4
+    },
+    "oos_json_contact": {
+      "observation_count": 5,
+      "pass_count": 3,
+      "pass_rate": 0.6
+    },
+    "oos_json_coordinates": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_json_inventory": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_json_server": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_json_ticket": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_labels_account": {
+      "observation_count": 5,
+      "pass_count": 1,
+      "pass_rate": 0.2
+    },
+    "oos_labels_build": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "oos_labels_owner": {
+      "observation_count": 5,
+      "pass_count": 1,
+      "pass_rate": 0.2
+    },
+    "oos_labels_route": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "oos_labels_sensor": {
+      "observation_count": 5,
+      "pass_count": 1,
+      "pass_rate": 0.2
+    },
+    "oos_priority_high_blocked": {
+      "observation_count": 5,
+      "pass_count": 1,
+      "pass_rate": 0.2
+    },
+    "oos_priority_high_deadline": {
+      "observation_count": 5,
+      "pass_count": 1,
+      "pass_rate": 0.2
+    },
+    "oos_priority_low_fourteen_days": {
+      "observation_count": 5,
+      "pass_count": 2,
+      "pass_rate": 0.4
+    },
+    "oos_priority_medium_five_days": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_priority_medium_three_days": {
+      "observation_count": 5,
+      "pass_count": 3,
+      "pass_rate": 0.6
+    },
+    "oos_sentiment_negative_device": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_sentiment_negative_room": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_sentiment_neutral_delivery": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_sentiment_positive_report": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_sentiment_positive_service": {
+      "observation_count": 5,
+      "pass_count": 5,
+      "pass_rate": 1.0
+    },
+    "oos_transform_remove_spaces": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "oos_transform_replace_o": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "oos_transform_reverse": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    },
+    "oos_transform_underscores": {
+      "observation_count": 5,
+      "pass_count": 3,
+      "pass_rate": 0.6
+    },
+    "oos_transform_uppercase": {
+      "observation_count": 5,
+      "pass_count": 0,
+      "pass_rate": 0.0
+    }
+  },
+  "provider": "ollama",
+  "requested_model": "gemma3:1b",
+  "resident_median_total_ms": 1891.5438919793814,
+  "resident_median_ttft_ms": 180.03809405490756,
+  "resident_observation_count": 199,
+  "resident_sizes_bytes": [
+    880541695
+  ],
+  "successful_response_count": 200,
+  "suite_id": "oos_validation_v1",
+  "unknown_residency_observation_count": 0
+}
