@@ -2,6 +2,19 @@
 
 A small Linux terminal experiment testing whether externally observable, deterministic runtime evidence can support local-to-remote model escalation. It routes a narrow set of mechanical tasks to Ollama, applies explicit health/runtime/validation gates, and sends other or rejected tasks to OpenRouter. Each request produces metadata-only JSONL telemetry.
 
+## Out-of-sample case study
+
+The first frozen out-of-sample validation rejected the current fine-grained
+routing policy. Fine capability routing used 100 rather than 200 remote calls
+and achieved 85.5% strict accuracy, outperforming coarse routing at 78.5%, but
+fell 14.5 percentage points below always remote. The preregistered tolerance
+allowed a maximum five-point loss.
+
+Read the illustrated [`CASE_STUDY.md`](CASE_STUDY.md) for the research question,
+method, negative result, limitations, and proposed accuracy–remote-capacity
+experiments. The complete frozen result and procedural deviations remain in
+[`OOS_VALIDATION_V1_AUDIT.md`](OOS_VALIDATION_V1_AUDIT.md).
+
 ## What this project does
 
 It measures RAM, swap, load, time to first output, generation throughput, adapter failures, and task-specific deterministic validation. Classification is a small ruleset, not a difficulty estimate. Every gate has a stable reason code and no opaque score. Direct observations, deterministic derivations, and interpretations are kept separate.
@@ -55,4 +68,10 @@ Stable reasons: `LOCAL_ACCEPTED`, `REMOTE_DEFAULT_TASK`, `LOW_RAM`, `ACTIVE_SWAP
 
 Before a local-eligible request, the router checks Ollama's local `/api/ps` endpoint. The minimum-available-RAM gate applies only when the configured model is not resident. Swap occupancy is logged but does not reject local inference by itself; swap-out activity observed during the fixed 0.1-second preflight sampling window does. If residency cannot be confirmed, the router conservatively treats the model as not resident.
 
-After v0.1, hold thresholds steady and collect ordinary usage data. The next step is evaluating whether TTFT, throughput, health, and the observational probe explain outcomes—not feature expansion.
+## Current research direction
+
+Runtime health signals remain useful for operational rejection, but the
+out-of-sample failures show that they cannot predict many clean semantic and
+schema errors. The next experiment will estimate accuracy under explicit
+remote-call budgets, compare stronger local models, and separate
+oracle-supplied capability labels from automatic prompt classification.
