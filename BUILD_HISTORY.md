@@ -1009,3 +1009,116 @@ The next experiment should not immediately redefine the policy around these
 40 observed tasks. First quantify task-level uncertainty and compare
 conservative evidence-thresholded routing rules using nested or additional
 held-out data.
+
+## 2026-08-27 — The production validator was weaker than the benchmark oracle
+
+### Category
+
+`INSTRUMENTATION ISSUE`, in the live routing gate rather than in the
+benchmark. No model-capability conclusion changes. No frozen evidence,
+benchmark specification, oracle, or analysis output is modified by this
+entry or by the accompanying code change.
+
+### What was found
+
+Replaying the frozen out-of-sample local outputs through the *live router's*
+`validators.validate` showed that `json_structure_v1` returned `PASS` on all
+10 structured-extraction observations that the benchmark oracle recorded as
+strict failures.
+
+The cause was a silent degradation. The required-key extractor was:
+
+``` text
+(?:required keys?|keys?)\s*[:=]\s*([\w, ]+)
+```
+
+The frozen prompts say `Required keys exactly: city, temperature_c,
+condition`. The word `exactly` sits between `keys` and the colon, so the
+pattern captured nothing, `required` became `[]`, and the key check was
+skipped entirely. The validator then fell through to "did this parse as
+JSON" and reported `PASS`.
+
+The defect is not principally the regex. It is that a validator could
+report `PASS` on a materially weaker guarantee than its name asserted, and
+left no trace of having done so: `detail` was `None` on the pass path, so
+no run log could distinguish "three required keys checked" from "no keys
+checked".
+
+This is the exact failure the project's measurement rules exist to prevent:
+
+> Never allow a weak validator to support a stronger claim than it measures.
+
+### Why the benchmark did not catch it
+
+The benchmark oracle compares against frozen expected values and never
+calls `validators.validate`. The live router calls `validators.validate`
+and never sees an expected value. The two paths had drifted apart with no
+test comparing them. The 200 OOS observations therefore measured a
+validation layer the router does not use.
+
+### Second finding: inconsistent fence normalization
+
+`extract_structured` stripped one outer ```json fence; the `format` JSON
+path called bare `json.loads`. Consequently `oos_json_server` was rejected
+by the live validator — but for the wrong reason. The fence broke the
+parse; the actual defect was the port emitted as the string `"8443"`. The
+same output unfenced passed.
+
+### Changes made
+
+1. `required_keys()` separates *declaration* from *extraction*. A prompt
+   that mentions keys but whose key list cannot be parsed now fails closed
+   with the explicit reason `REQUIRED_KEYS_UNPARSED` and escalates, rather
+   than passing on a degraded check.
+2. Every applicable pass records the keys actually checked
+   (`CHECKED_KEYS=...` plus a `checked_keys` field), and a pass on a prompt
+   with no key specification is labelled `NO_KEY_SPECIFICATION`.
+3. One outer JSON fence is now stripped identically on both the
+   `extract_structured` and `format` JSON paths.
+4. `MISSING_REQUIRED_KEYS` names the missing keys, and a non-object JSON
+   value under a key requirement gets its own `NOT_A_JSON_OBJECT` code.
+5. `ValidationResult` carries `value_types_checked`, which is `False`
+   everywhere, because no current validator has an explicit deterministic
+   schema.
+6. `_normalize_structured_json` is retained as an alias with identical
+   behaviour so the frozen benchmark harness is untouched.
+7. Regression tests in `tests/test_validator_scope.py` use the verbatim
+   frozen prompts and outputs for `temperature`/`temperature_c`, numeric
+   `42`, and numeric `8443`.
+
+### Measured effect, including the part that got worse
+
+Against the frozen local evidence, false accepts among observations the
+fine policy routed locally:
+
+``` text
+before: 10   (5 oos_extract_weather, 5 oos_extract_device)
+after:   9   (5 oos_extract_device, 4 oos_json_server)
+```
+
+Newly rejected correct outputs: 0.
+
+The five `oos_extract_weather` false accepts are genuinely fixed: the wrong
+key name is now caught. The four `oos_json_server` observations moved the
+other way. They were previously rejected only because the fence broke the
+parse. Removing that accident exposes that the validator never had any
+means of catching a string-typed port.
+
+The headline count barely moves, and that is the honest result. The
+underlying limitation — no value-type checking — is unchanged and was never
+fixable without a schema. What changed is that the validator no longer
+claims more than it checked. A `PASS` that was silently worthless is now
+either a `FAIL` or a `PASS` that discloses its own scope.
+
+### Standing consequence
+
+The remaining nine are all value-type defects. Closing them requires an
+explicit deterministic schema per task, supplied to the validator rather
+than inferred from prompt prose. Until such a schema exists, a local
+`LOCAL_ACCEPTED` on a structured-extraction task establishes required-key
+presence and JSON syntax only, and must not be read as task correctness.
+
+Recorded gap, not yet addressed: `router.classify()` has no `classification`
+task class, so `validate()` returns `NOT_APPLICABLE` for sentiment and
+priority prompts. The capability family with the worst measured local
+performance currently has no deterministic gate at all.
