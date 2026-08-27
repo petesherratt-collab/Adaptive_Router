@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="690" viewBox="0 0 1060 690" role="img" aria-labelledby="chart-title chart-description">
+<title id="chart-title">Capability did not generalize uniformly</title>
+<desc id="chart-description">Local and remote strict pass rates for seven capability families in the out-of-sample validation.</desc>
+<rect width="1060" height="690" fill="#ffffff"/>
+<style>text{font-family:Inter,Segoe UI,Arial,sans-serif;fill:#172033}.title{font-size:26px;font-weight:700}.subtitle{font-size:14px;fill:#5f6b7a}.label{font-size:14px}.small{font-size:12px;fill:#5f6b7a}.value{font-size:13px;font-weight:700}</style>
+<text x="52" y="48" class="title" text-anchor="start">Capability did not generalize uniformly</text>
+<text x="52" y="74" class="subtitle" text-anchor="start">Local Gemma 3 270M versus remote GPT-5.6 Luna</text>
+<rect x="700" y="91" width="16" height="16" rx="3" fill="#386cb0"/>
+<text x="724" y="104" class="small" text-anchor="start">Local</text>
+<rect x="790" y="91" width="16" height="16" rx="3" fill="#1b9e77"/>
+<text x="814" y="104" class="small" text-anchor="start">Remote</text>
+<line x1="230.0" y1="132" x2="230.0" y2="630" stroke="#d9dee7" stroke-width="1"/>
+<text x="230.0" y="655" class="small" text-anchor="middle">0%</text>
+<line x1="382.0" y1="132" x2="382.0" y2="630" stroke="#d9dee7" stroke-width="1"/>
+<text x="382.0" y="655" class="small" text-anchor="middle">20%</text>
+<line x1="534.0" y1="132" x2="534.0" y2="630" stroke="#d9dee7" stroke-width="1"/>
+<text x="534.0" y="655" class="small" text-anchor="middle">40%</text>
+<line x1="686.0" y1="132" x2="686.0" y2="630" stroke="#d9dee7" stroke-width="1"/>
+<text x="686.0" y="655" class="small" text-anchor="middle">60%</text>
+<line x1="838.0" y1="132" x2="838.0" y2="630" stroke="#d9dee7" stroke-width="1"/>
+<text x="838.0" y="655" class="small" text-anchor="middle">80%</text>
+<line x1="990.0" y1="132" x2="990.0" y2="630" stroke="#d9dee7" stroke-width="1"/>
+<text x="990.0" y="655" class="small" text-anchor="middle">100%</text>
+<text x="212" y="169" class="label" text-anchor="end">Structured extraction</text>
+<rect x="230" y="142" width="608.0" height="22" rx="3" fill="#386cb0"/>
+<rect x="230" y="171" width="760.0" height="22" rx="3" fill="#1b9e77"/>
+<text x="846.0" y="158" class="value" text-anchor="start">80.0%</text>
+<text x="998.0" y="187" class="value" text-anchor="start">100.0%</text>
+<text x="212" y="239" class="label" text-anchor="end">Sentiment</text>
+<rect x="230" y="212" width="304.0" height="22" rx="3" fill="#386cb0"/>
+<rect x="230" y="241" width="760.0" height="22" rx="3" fill="#1b9e77"/>
+<text x="542.0" y="228" class="value" text-anchor="start">40.0%</text>
+<text x="998.0" y="257" class="value" text-anchor="start">100.0%</text>
+<text x="212" y="309" class="label" text-anchor="end">JSON formatting</text>
+<rect x="230" y="282" width="638.4" height="22" rx="3" fill="#386cb0"/>
+<rect x="230" y="311" width="760.0" height="22" rx="3" fill="#1b9e77"/>
+<text x="876.4" y="298" class="value" text-anchor="start">84.0%</text>
+<text x="998.0" y="327" class="value" text-anchor="start">100.0%</text>
+<text x="212" y="379" class="label" text-anchor="end">Priority</text>
+<rect x="230" y="352" width="212.8" height="22" rx="3" fill="#386cb0"/>
+<rect x="230" y="381" width="760.0" height="22" rx="3" fill="#1b9e77"/>
+<text x="450.8" y="368" class="value" text-anchor="start">28.0%</text>
+<text x="998.0" y="397" class="value" text-anchor="start">100.0%</text>
+<text x="212" y="449" class="label" text-anchor="end">Markdown bullets</text>
+<rect x="230" y="422" width="0.0" height="22" rx="3" fill="#386cb0"/>
+<rect x="230" y="451" width="760.0" height="22" rx="3" fill="#1b9e77"/>
+<text x="238.0" y="438" class="value" text-anchor="start">0.0%</text>
+<text x="998.0" y="467" class="value" text-anchor="start">100.0%</text>
+<text x="212" y="519" class="label" text-anchor="end">Key/value labels</text>
+<rect x="230" y="492" width="0.0" height="22" rx="3" fill="#386cb0"/>
+<rect x="230" y="521" width="760.0" height="22" rx="3" fill="#1b9e77"/>
+<text x="238.0" y="508" class="value" text-anchor="start">0.0%</text>
+<text x="998.0" y="537" class="value" text-anchor="start">100.0%</text>
+<text x="212" y="589" class="label" text-anchor="end">Transformation</text>
+<rect x="230" y="562" width="0.0" height="22" rx="3" fill="#386cb0"/>
+<rect x="230" y="591" width="760.0" height="22" rx="3" fill="#1b9e77"/>
+<text x="238.0" y="578" class="value" text-anchor="start">0.0%</text>
+<text x="998.0" y="607" class="value" text-anchor="start">100.0%</text>
+</svg>
