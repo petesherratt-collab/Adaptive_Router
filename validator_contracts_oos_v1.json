@@ -1,0 +1,358 @@
+{
+  "schema_version": "validator_contracts_oos_v1",
+  "benchmark_sha256": "6e255b2d44599f49a1cda82f989b110a015c16c55da54ea6501f4b8cb18fa295",
+  "contracts": [
+    {
+      "task_id": "oos_extract_person",
+      "task_class": "extract_structured",
+      "capability_family": "structured_extraction",
+      "contract_type": "extract_structured",
+      "exact_keys": ["name", "age"],
+      "explicit_types": {"name": "string", "age": "number"}
+    },
+    {
+      "task_id": "oos_sentiment_positive_service",
+      "task_class": "classification",
+      "capability_family": "sentiment",
+      "contract_type": "classification",
+      "permitted_labels": ["Positive", "Negative", "Neutral"]
+    },
+    {
+      "task_id": "oos_json_server",
+      "task_class": "format",
+      "capability_family": "json_format",
+      "contract_type": "format_json",
+      "exact_keys": ["host", "port"],
+      "explicit_types": {"host": "string", "port": ["number", "string"]},
+      "supplied_field_values": {"host": "edge-7", "port": [8443, "8443"]}
+    },
+    {
+      "task_id": "oos_priority_high_deadline",
+      "task_class": "classification",
+      "capability_family": "priority",
+      "contract_type": "classification",
+      "permitted_labels": ["High", "Medium", "Low"]
+    },
+    {
+      "task_id": "oos_bullets_fruit",
+      "task_class": "format",
+      "capability_family": "markdown_bullets",
+      "contract_type": "format_bullets",
+      "line_count": 3,
+      "marker": "-",
+      "separator": " ",
+      "items": ["pear", "plum", "kiwi"]
+    },
+    {
+      "task_id": "oos_labels_account",
+      "task_class": "format",
+      "capability_family": "key_value_labels",
+      "contract_type": "format_labels",
+      "line_count": 2,
+      "separator": ":",
+      "spacing": " ",
+      "ordered_fields": [
+        {"key": "account_id", "value": "AC-55"},
+        {"key": "state", "value": "active"}
+      ]
+    },
+    {
+      "task_id": "oos_transform_reverse",
+      "task_class": "transform",
+      "capability_family": "transformation",
+      "contract_type": "transform",
+      "source_literal": "signal",
+      "operation": "reverse"
+    },
+    {
+      "task_id": "oos_extract_shipment",
+      "task_class": "extract_structured",
+      "capability_family": "structured_extraction",
+      "contract_type": "extract_structured",
+      "exact_keys": ["tracking_id", "status", "carrier"],
+      "explicit_types": {"tracking_id": "string", "status": "string", "carrier": "string"}
+    },
+    {
+      "task_id": "oos_extract_event",
+      "task_class": "extract_structured",
+      "capability_family": "structured_extraction",
+      "contract_type": "extract_structured",
+      "exact_keys": ["event", "date", "city"],
+      "explicit_types": {"event": "string", "date": "string", "city": "string"}
+    },
+    {
+      "task_id": "oos_sentiment_negative_device",
+      "task_class": "classification",
+      "capability_family": "sentiment",
+      "contract_type": "classification",
+      "permitted_labels": ["Positive", "Negative", "Neutral"]
+    },
+    {
+      "task_id": "oos_json_contact",
+      "task_class": "format",
+      "capability_family": "json_format",
+      "contract_type": "format_json",
+      "exact_keys": ["first_name", "postcode"],
+      "explicit_types": {"first_name": "string", "postcode": "string"},
+      "supplied_field_values": {"first_name": "Leila", "postcode": "SE18 6HQ"}
+    },
+    {
+      "task_id": "oos_priority_high_blocked",
+      "task_class": "classification",
+      "capability_family": "priority",
+      "contract_type": "classification",
+      "permitted_labels": ["High", "Medium", "Low"]
+    },
+    {
+      "task_id": "oos_bullets_stages",
+      "task_class": "format",
+      "capability_family": "markdown_bullets",
+      "contract_type": "format_bullets",
+      "line_count": 2,
+      "marker": "-",
+      "separator": " ",
+      "items": ["collect", "verify"]
+    },
+    {
+      "task_id": "oos_labels_sensor",
+      "task_class": "format",
+      "capability_family": "key_value_labels",
+      "contract_type": "format_labels",
+      "line_count": 3,
+      "separator": ":",
+      "spacing": " ",
+      "ordered_fields": [
+        {"key": "sensor", "value": "S-9"},
+        {"key": "reading", "value": "18.4"},
+        {"key": "unit", "value": "C"}
+      ]
+    },
+    {
+      "task_id": "oos_transform_uppercase",
+      "task_class": "transform",
+      "capability_family": "transformation",
+      "contract_type": "transform",
+      "source_literal": "edge node",
+      "operation": "uppercase"
+    },
+    {
+      "task_id": "oos_extract_device",
+      "task_class": "extract_structured",
+      "capability_family": "structured_extraction",
+      "contract_type": "extract_structured",
+      "exact_keys": ["asset_id", "operating_system", "version"],
+      "explicit_types": {"asset_id": "string", "operating_system": "string", "version": "number"}
+    },
+    {
+      "task_id": "oos_extract_order",
+      "task_class": "extract_structured",
+      "capability_family": "structured_extraction",
+      "contract_type": "extract_structured",
+      "exact_keys": ["order_id", "total", "currency"],
+      "explicit_types": {"order_id": "string", "total": "number", "currency": "string"}
+    },
+    {
+      "task_id": "oos_sentiment_neutral_delivery",
+      "task_class": "classification",
+      "capability_family": "sentiment",
+      "contract_type": "classification",
+      "permitted_labels": ["Positive", "Negative", "Neutral"]
+    },
+    {
+      "task_id": "oos_json_coordinates",
+      "task_class": "format",
+      "capability_family": "json_format",
+      "contract_type": "format_json",
+      "exact_keys": ["x", "y"],
+      "explicit_types": {"x": "number", "y": "number"},
+      "supplied_field_values": {"x": 17, "y": -4}
+    },
+    {
+      "task_id": "oos_priority_medium_three_days",
+      "task_class": "classification",
+      "capability_family": "priority",
+      "contract_type": "classification",
+      "permitted_labels": ["High", "Medium", "Low"]
+    },
+    {
+      "task_id": "oos_bullets_directions",
+      "task_class": "format",
+      "capability_family": "markdown_bullets",
+      "contract_type": "format_bullets",
+      "line_count": 4,
+      "marker": "-",
+      "separator": " ",
+      "items": ["north", "east", "south", "west"]
+    },
+    {
+      "task_id": "oos_labels_route",
+      "task_class": "format",
+      "capability_family": "key_value_labels",
+      "contract_type": "format_labels",
+      "line_count": 2,
+      "separator": ":",
+      "spacing": " ",
+      "ordered_fields": [
+        {"key": "origin", "value": "Woolwich"},
+        {"key": "destination", "value": "Lewisham"}
+      ]
+    },
+    {
+      "task_id": "oos_transform_remove_spaces",
+      "task_class": "transform",
+      "capability_family": "transformation",
+      "contract_type": "transform",
+      "source_literal": "paired sample",
+      "operation": "remove_spaces"
+    },
+    {
+      "task_id": "oos_extract_meeting",
+      "task_class": "extract_structured",
+      "capability_family": "structured_extraction",
+      "contract_type": "extract_structured",
+      "exact_keys": ["topic", "time", "room"],
+      "explicit_types": {"topic": "string", "time": "string", "room": "string"}
+    },
+    {
+      "task_id": "oos_extract_weather",
+      "task_class": "extract_structured",
+      "capability_family": "structured_extraction",
+      "contract_type": "extract_structured",
+      "exact_keys": ["city", "temperature_c", "condition"],
+      "explicit_types": {"city": "string", "temperature_c": "number", "condition": "string"}
+    },
+    {
+      "task_id": "oos_sentiment_positive_report",
+      "task_class": "classification",
+      "capability_family": "sentiment",
+      "contract_type": "classification",
+      "permitted_labels": ["Positive", "Negative", "Neutral"]
+    },
+    {
+      "task_id": "oos_json_inventory",
+      "task_class": "format",
+      "capability_family": "json_format",
+      "contract_type": "format_json",
+      "exact_keys": ["sku", "in_stock"],
+      "explicit_types": {"sku": "string", "in_stock": "boolean"},
+      "supplied_field_values": {"sku": "R-204", "in_stock": true}
+    },
+    {
+      "task_id": "oos_priority_medium_five_days",
+      "task_class": "classification",
+      "capability_family": "priority",
+      "contract_type": "classification",
+      "permitted_labels": ["High", "Medium", "Low"]
+    },
+    {
+      "task_id": "oos_bullets_codes",
+      "task_class": "format",
+      "capability_family": "markdown_bullets",
+      "contract_type": "format_bullets",
+      "line_count": 3,
+      "marker": "-",
+      "separator": " ",
+      "items": ["AX-1", "BY-2", "CZ-3"]
+    },
+    {
+      "task_id": "oos_labels_build",
+      "task_class": "format",
+      "capability_family": "key_value_labels",
+      "contract_type": "format_labels",
+      "line_count": 3,
+      "separator": ":",
+      "spacing": " ",
+      "ordered_fields": [
+        {"key": "build_id", "value": "B-602"},
+        {"key": "result", "value": "passed"},
+        {"key": "duration_s", "value": "47"}
+      ]
+    },
+    {
+      "task_id": "oos_transform_underscores",
+      "task_class": "transform",
+      "capability_family": "transformation",
+      "contract_type": "transform",
+      "source_literal": "frozen policy check",
+      "operation": "replace_spaces_with_underscores"
+    },
+    {
+      "task_id": "oos_extract_product",
+      "task_class": "extract_structured",
+      "capability_family": "structured_extraction",
+      "contract_type": "extract_structured",
+      "exact_keys": ["sku", "quantity", "unit_price"],
+      "explicit_types": {"sku": "string", "quantity": "number", "unit_price": "number"}
+    },
+    {
+      "task_id": "oos_extract_book",
+      "task_class": "extract_structured",
+      "capability_family": "structured_extraction",
+      "contract_type": "extract_structured",
+      "exact_keys": ["title", "author", "year"],
+      "explicit_types": {"title": "string", "author": "string", "year": "number"}
+    },
+    {
+      "task_id": "oos_sentiment_negative_room",
+      "task_class": "classification",
+      "capability_family": "sentiment",
+      "contract_type": "classification",
+      "permitted_labels": ["Positive", "Negative", "Neutral"]
+    },
+    {
+      "task_id": "oos_json_ticket",
+      "task_class": "format",
+      "capability_family": "json_format",
+      "contract_type": "format_json",
+      "exact_keys": ["id", "open"],
+      "explicit_types": {"id": "string", "open": "boolean"},
+      "supplied_field_values": {"id": "Q-91", "open": false}
+    },
+    {
+      "task_id": "oos_priority_low_fourteen_days",
+      "task_class": "classification",
+      "capability_family": "priority",
+      "contract_type": "classification",
+      "permitted_labels": ["High", "Medium", "Low"]
+    },
+    {
+      "task_id": "oos_bullets_dates",
+      "task_class": "format",
+      "capability_family": "markdown_bullets",
+      "contract_type": "format_bullets",
+      "line_count": 2,
+      "marker": "-",
+      "separator": " ",
+      "items": ["2026-10-02", "2026-10-09"]
+    },
+    {
+      "task_id": "oos_labels_owner",
+      "task_class": "format",
+      "capability_family": "key_value_labels",
+      "contract_type": "format_labels",
+      "line_count": 2,
+      "separator": ":",
+      "spacing": " ",
+      "ordered_fields": [
+        {"key": "owner", "value": "Nadia"},
+        {"key": "team", "value": "Orchid"}
+      ]
+    },
+    {
+      "task_id": "oos_transform_replace_o",
+      "task_class": "transform",
+      "capability_family": "transformation",
+      "contract_type": "transform",
+      "source_literal": "local model",
+      "operation": "replace_lowercase_o_with_0"
+    },
+    {
+      "task_id": "oos_extract_train",
+      "task_class": "extract_structured",
+      "capability_family": "structured_extraction",
+      "contract_type": "extract_structured",
+      "exact_keys": ["origin", "destination", "departure"],
+      "explicit_types": {"origin": "string", "destination": "string", "departure": "string"}
+    }
+  ]
+}
