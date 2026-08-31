@@ -1,7 +1,7 @@
 # Adaptive Router build history
 
-**Project path:** `/home/peters/adaptive-router`
-**Updated:** 2026-08-23
+**Project path:** `/home/peter/adaptive-router`
+**Updated:** 2026-08-31
 
 This is the single history for Adaptive Router. It combines the narrative
 project history (motivation, lessons, standing rules) with the dated engineering
@@ -15,12 +15,12 @@ says **reconstructed**, the claim comes from the superseded project history or
 from telemetry written by an earlier session, and is not presented as a fresh
 observation.
 
-**Anchoring caveat.** The companion Personal Watchdog log anchors verified
-claims to Git commit hashes. This project is not under version control (see
-2026-08-23, Gotcha 1), so verification here anchors only to command output at a
-stated time. That establishes that a check passed; it does not establish which
-revision of the code it passed against. Treat every "directly verified" claim
-below as scoped to the working tree as it stood at the timestamp of its entry.
+**Anchoring caveat.** Entries through the 2026-08-23 baseline predate valid
+project-level Git history and remain anchored only to the command output named
+in those entries. Later entries are anchored to Git commits and authenticated
+artifact hashes where recorded. The later-resolution notes under the 2026-08-23
+gotchas document when project-level version control and ignore rules were
+established.
 
 ---
 
@@ -1122,3 +1122,179 @@ Recorded gap, not yet addressed: `router.classify()` has no `classification`
 task class, so `validate()` returns `NOT_APPLICABLE` for sentiment and
 priority prompts. The capability family with the worst measured local
 performance currently has no deterministic gate at all.
+
+---
+
+## 2026-08-27 – 2026-08-28 — Local Model Scaling comparison v1
+
+### Objective and frozen design
+
+Measure how capability and latency changed from Gemma 3 270M to 1B and 4B on
+the same frozen out-of-sample suite, without changing tasks, repetitions,
+strict oracle, routing thresholds, or post-generation gate definitions.
+
+- Benchmark: 40 tasks × 5 repetitions = 200 observations per model
+- Frozen 270M baseline: 200 observations
+- New execution: 1B and 4B, 200 observations each
+- Total comparison: 600 observations
+- No LLM judge, semantic repair, or retry
+- Benchmark SHA-256:
+  `6e255b2d44599f49a1cda82f989b110a015c16c55da54ea6501f4b8cb18fa295`
+- Plan SHA-256:
+  `97359083cc1f4b2352ea383e02076cc8ba6170336499d745be4f15742bf98363`
+- Pre-execution amendment SHA-256:
+  `f10c2a890a8e543e97bb80f53a8dabcbe3d5633caeafc40fe3cfef8bcbace71f`
+
+The execution package was committed at `2538ac9` before either new model run.
+The six canonical evidence and analysis outputs were committed together at
+`8a8b459`. The independent audit was later merged through PR #2.
+
+### Strict result
+
+| Model | Strict passes | Pass rate | Change from 270M |
+|---|---:|---:|---:|
+| Gemma 3 270M | 78/200 | 39.0% | baseline |
+| Gemma 3 1B | 99/200 | 49.5% | +10.5 percentage points |
+| Gemma 3 4B | 158/200 | 79.0% | +40.0 percentage points |
+
+Paired against 270M, 1B gained 41 passes and lost 20, for a net gain of 21.
+4B gained 94 and lost 14, for a net gain of 80. The improvement was therefore
+large but not monotonic at every paired observation or task.
+
+### Post-generation gate result
+
+| Model | Gate survivors | False accepts | Correct outputs rejected |
+|---|---:|---:|---:|
+| Gemma 3 270M | 176/200 | 98 | 0 |
+| Gemma 3 1B | 198/200 | 100 | 1 |
+| Gemma 3 4B | 196/200 | 42 | 4 |
+
+The larger model materially improved strict correctness, but the live gates
+did not establish correctness. At 4B they still accepted 42 strict failures
+and rejected four correct outputs. The validators were principally
+shape/health gates, and some frozen task classes had no applicable validator.
+
+Resident 4B median latency was approximately 4.27 seconds. This establishes a
+real local accuracy–latency frontier on the measured ProDesk, not a universal
+model-size rule and not an energy result.
+
+### Preserved outputs
+
+| Artifact | SHA-256 |
+|---|---|
+| `benchmark_runs_scaling_gemma3_1b_v1.jsonl` | `a3bde560ccf875658f9129c3eaa321b51c6c29f3f5a7096d9a97eca070310622` |
+| `benchmark_summary_scaling_gemma3_1b_v1.json` | `bcddf854832a83ca6a04d2dbc633877cadea68567d7b934b900a4172cccc58ab` |
+| `benchmark_runs_scaling_gemma3_4b_v1.jsonl` | `c0576396252f39523840ca1d970648a84ec03960ca746451a10c0ef83b6cb676` |
+| `benchmark_summary_scaling_gemma3_4b_v1.json` | `1cc8daec80df9d443f39d2d95040bcfe325dc91a0531ecf1cd9dacf16159d4a3` |
+| `local_model_scaling_v1.json` | `e93fc2be593256ffce0e7f5dcd587a21c7916d6611651dc1c626c285beb7e0ca` |
+| `local_model_scaling_v1.csv` | `24c2bcec0110475f033329015d4fbca051116af1656ca83f61dbe320d62371ab` |
+
+Audit: `LOCAL_MODEL_SCALING_V1_AUDIT.md`
+
+- SHA-256:
+  `ed70eb18229c2a5aadab1999ae5855406ff202ccea026ff0372311409608f1ee`
+
+### Decision
+
+Do not choose a local tier from model accuracy alone. Model capability,
+resident latency, gate coverage, and the cost of false acceptance are separate
+axes. The immediate problem exposed by scaling was validator capability, not
+the absence of another model size.
+
+---
+
+## 2026-08-28 – 2026-08-31 — Validator Contract Replay v1
+
+### Objective and scope
+
+Retrospectively replay all 600 frozen local observations through explicit
+deterministic task contracts and ask how many baseline false accepts those
+contracts would have caught. No model or network call was made.
+
+The experiment deliberately separated:
+
+1. raw contract conformance;
+2. operational baseline/counterfactual gate survival; and
+3. frozen-oracle correctness.
+
+The contracts could not receive expected answers, oracle correctness,
+normalized output, or recorded benchmark-validator results.
+
+### Frozen chain
+
+| Role | Commit |
+|---|---|
+| Plan | `99927cf` |
+| Implementation, contracts and tests | `c1fb5e0` |
+| Canonical JSON/CSV results | `0cbb019` |
+| Audit | `36c332b` |
+| Merge to main | `b8286b8` |
+
+| Artifact | SHA-256 |
+|---|---|
+| Plan | `ac7cb2ee4b47ee07c4a0a63b122d56ce47d49dffb88ff82e19fd9a32d638edf0` |
+| Contract file | `ea585eaf7775426ca9d58e8b8276a7bc18d7789545f84bb370aae6ac4ce6a1f0` |
+| Canonical JSON | `45c4a04438adc1761de54f130b231b562c5b60c14fcfd9a75c3f90b7761a05ed` |
+| Canonical CSV | `d33b0e92f7984893f4ea936d18a960ae35bbbc51a1cdaabc559bc086d4a33ad0` |
+| Audit | `68bdf9f47b76938ac56b2bb02dc4f754158cc2d8ca7374b4dfc3465df0280f42` |
+
+### Result
+
+| Scope | Baseline false accepts | Caught | Remaining | Newly rejected correct |
+|---|---:|---:|---:|---:|
+| Gemma 3 270M | 98 | 61 | 37 | 0 |
+| Gemma 3 1B | 100 | 79 | 21 | 2 |
+| Gemma 3 4B | 42 | 27 | 15 | 10 |
+| **Overall** | **240** | **167** | **73** | **12** |
+
+The contracts caught 167 of 240 retained baseline false accepts (69.6%).
+Counterfactual survivors fell from 570 to 391 and counterfactual false accepts
+fell from 240 to 73. No incorrect observation rejected by the baseline gate
+was newly admitted.
+
+### What the aggregate concealed
+
+**Classification.** All 150 sentiment/priority outputs used permitted labels,
+but 56 were oracle-incorrect. Permitted-label conformance is not semantic
+correctness. These 56 cases account for most of the 73 remaining false
+accepts.
+
+**Ambiguous server port.** The frozen `oos_json_server` contract accepted both
+numeric `8443` and string `"8443"`, because the prompt did not specify the JSON
+type. Nine false accepts therefore remained across the three models, including
+all five 4B observations. Tightening the type after seeing the outcomes would
+reverse the frozen `TYPE_UNSPECIFIED_BY_PROMPT` ruling.
+
+**Transformations.** Executable exact contracts caught all 62 baseline false
+accepts in the transformation family, but also rejected all 12 newly rejected
+correct outputs. Each differed from the computed result only by one trailing
+newline. The strict raw-output contract and the benchmark oracle had different
+whitespace semantics.
+
+### Interpretation boundaries and procedural disclosure
+
+The contracts were designed after the model evidence existed, although the
+plan and contract file were frozen and hashed before the canonical replay.
+The 69.6% catch rate is therefore retrospective evidence about these 600
+observations, not an unbiased prospective estimate for unseen work.
+
+A discarded pre-commit test version briefly exercised internal write mode
+against the real frozen evidence using temporary paths. No canonical output
+was retained from that execution. The canonical result was produced only
+after implementation commit `c1fb5e0`; the deviation is disclosed in the
+audit rather than omitted.
+
+Audit: `VALIDATOR_CONTRACT_REPLAY_V1_AUDIT.md`
+
+### Decision and next boundary
+
+Explicit deterministic contracts materially improve acceptance reliability
+where the task supplies checkable structure or an executable operation. They
+do not solve semantic classification, and exact contracts can reject correct
+outputs when their normalization differs from the benchmark.
+
+The next capability claim must be prospective: freeze contracts before
+collecting a fresh suite. Classification needs either a separately evaluated
+deterministic semantic classifier or escalation; permitted-label validation
+alone must never be presented as correctness. Any numeric-only server-port
+contract belongs in a successor specification rather than a post-hoc change.
