@@ -1298,3 +1298,343 @@ collecting a fresh suite. Classification needs either a separately evaluated
 deterministic semantic classifier or escalation; permitted-label validation
 alone must never be presented as correctness. Any numeric-only server-port
 contract belongs in a successor specification rather than a post-hoc change.
+
+---
+
+## 2026-08-31 – 2026-09-01 — Prospective Contract Validation v1/v2
+
+### Objective
+
+Test prospectively specified deterministic output contracts as an additional
+gate on top of the Adaptive Router's legacy validator and telemetry gate.
+
+The primary question was:
+
+> When the legacy router gate accepts an LLM output that is actually wrong,
+> how often can a deterministic contract catch that false accept?
+
+Unlike Validator Contract Replay v1, the tasks, prompts, contracts,
+implementation and analysis procedure were frozen before the canonical V2
+model outputs existed.
+
+The experiment used:
+
+* Gemma 3 270M, 1B and 4B
+* 40 tasks per model
+* 5 repetitions per task
+* 200 observations per model
+* 600 observations overall
+* temperature 0
+* maximum 256 output tokens
+* no retries
+* no prompt repair
+* no skipped failures
+* no model or stratum interleaving
+
+The four cohorts were:
+
+1. A — structural schema;
+2. B — format conformance;
+3. C — label conformance, reported separately; and
+4. D — deterministic execution, reported separately as bypassable work.
+
+The primary A+B estimand contained 20 tasks × 5 repetitions × 3 models =
+300 observations.
+
+### V1 execution incident
+
+V1 was halted after completing the 270M stratum because the frozen runner
+contained a protocol-instrument contradiction.
+
+Every standalone model invocation required all canonical output paths to be
+absent. The subsequent 1B invocation therefore failed because the legitimate
+completed 270M files already existed.
+
+V1 was formally classified:
+
+> PARTIAL / EXECUTION HALTED DUE TO FROZEN PROTOCOL-INSTRUMENT CONTRADICTION
+
+The completed V1 270M evidence was sealed and retained. It was not used to
+tune V2.
+
+V2 used new task IDs, prompts, literals and oracle values.
+
+### V2 state-machine correction
+
+V2 replaced the contradictory preflight with a frozen monotonic state machine:
+
+```text
+EMPTY
+  ->
+270M_COMPLETE
+  ->
+1B_COMPLETE
+  ->
+4B_COMPLETE
+  ->
+ANALYZED
+```
+
+Before a later stratum could run:
+
+* every previous stratum had to exist;
+* every previous stratum had to authenticate;
+* completed strata were immutable;
+* current and future outputs had to be absent; and
+* partial files blocked execution.
+
+A completed canonical stratum could not be overwritten, appended, resumed or
+rerun.
+
+The real canonical experiment successfully traversed:
+
+```text
+EMPTY -> 270M_COMPLETE -> 1B_COMPLETE -> 4B_COMPLETE -> ANALYZED
+```
+
+The specific V1 failure mode was therefore eliminated prospectively rather
+than repaired after observing V2 results.
+
+Focused V2 tests passed 23/23. The synthetic dry-run produced 600 rows while
+making zero generation requests and creating zero canonical outputs. The
+critical synthetic transition from `270M_COMPLETE` to the 1B preflight passed.
+
+### Frozen chain
+
+| Role                           | Commit                                     |
+| ------------------------------ | ------------------------------------------ |
+| V1 design freeze               | `9021d4b2c51d05f247c7d3f04c087a62ad789d03` |
+| V1 implementation freeze       | `34f5f1f3451524325d98fb8d672fd03baebb8747` |
+| V1 halted results and incident | `5837f2a8b8bd0ead1a21b9af231d8ecfec2902db` |
+| V2 design freeze               | `d7de1d5eeab6c3a3fc58554c46e1fa68388c0136` |
+| V2 implementation freeze       | `fb2d68f3c18dc080f276151386b8a92878701c91` |
+| V2 canonical results freeze    | `e84a7a21d9e492d4e562d2ef9f4973caef8c2136` |
+
+V2 frozen design hashes:
+
+| Artifact                                     | SHA-256                                                            |
+| -------------------------------------------- | ------------------------------------------------------------------ |
+| `PROSPECTIVE_CONTRACT_VALIDATION_V2_PLAN.md` | `5eb789d210360e5ade44755cfdc3a1e54f3f67f08d95f3f11a66da33a0a62528` |
+| `benchmark_prospective_contract_v2.json`     | `9932a510ed5592801b8a2bc3ab4cc3dbbebd3042a3b434fe6d683e48daf50e27` |
+| `validator_contracts_prospective_v2.json`    | `cfbb36c1d9c3dc2ecc755348ffc9e4ca620d56220501b0879580a0f4d6868007` |
+
+### Primary result
+
+All 300 primary generations completed successfully.
+
+| Stage                         | Accepted | Correct | Incorrect |
+| ----------------------------- | -------: | ------: | --------: |
+| Legacy baseline gate          |      274 |      99 |       175 |
+| After deterministic contracts |      130 |      99 |        31 |
+
+The prospective contracts caught 144 of the 175 baseline false accepts:
+
+```text
+144 / 175 = 82.2857%
+```
+
+Primary false-accept catch rate:
+
+```text
+82.3%
+```
+
+No baseline-correct survivor was rejected:
+
+```text
+0 / 99
+```
+
+No incorrect output rejected by the baseline gate was newly admitted.
+
+The wrong-answer share among accepted outputs fell from:
+
+```text
+175 / 274 = 63.9%
+```
+
+to:
+
+```text
+31 / 130 = 23.8%
+```
+
+### Frozen bootstrap
+
+The analysis used a deterministic 10,000-draw task-cluster bootstrap:
+
+* namespace: `prospective_contract_validation_v2`
+* seed: `20260901`
+* 20 primary tasks sampled with replacement
+* all five repetitions and all three model strata carried together
+* SHA-256 counter sampler
+* Hyndman-Fan Type 7 percentiles
+* 2.5% and 97.5% bounds
+
+The 95% interval for the primary false-accept catch rate was:
+
+```text
+63.9%–96.7%
+```
+
+All 10,000 draws were defined.
+
+The historical retrospective result of 69.6% lies inside this interval.
+The prospective experiment therefore supports replication of a large
+false-accept reduction. It does not establish superiority, equivalence or
+non-inferiority relative to the retrospective result.
+
+### Result by model
+
+| Model        | Primary correctness | Baseline false accepts | Caught | Remaining | Catch rate | Correct rejected |
+| ------------ | ------------------: | ---------------------: | -----: | --------: | ---------: | ---------------: |
+| Gemma 3 270M |              10/100 |                     80 |     70 |        10 |      87.5% |                0 |
+| Gemma 3 1B   |              25/100 |                     65 |     49 |        16 |      75.4% |                0 |
+| Gemma 3 4B   |              70/100 |                     30 |     25 |         5 |      83.3% |                0 |
+
+Increasing model size materially reduced the underlying error burden:
+
+```text
+270M: 10% correct
+1B:   25% correct
+4B:   70% correct
+```
+
+Deterministic contracts nevertheless caught false accepts at all three model
+sizes.
+
+No model-specific significance test was preregistered. The differences between
+the three catch rates must not be described as statistically meaningful without
+a new explicitly defined analysis.
+
+### Result by primary contract type
+
+| Contract type   | Baseline false accepts | Caught | Catch rate |
+| --------------- | ---------------------: | -----: | ---------: |
+| Bullet format   |                     45 |     45 |       100% |
+| Label format    |                     60 |     59 |     98.33% |
+| JSON format     |                     35 |     25 |     71.43% |
+| Structured JSON |                     35 |     15 |     42.86% |
+
+By primary cohort:
+
+| Cohort             | Baseline false accepts | Caught | Remaining | Catch rate |
+| ------------------ | ---------------------: | -----: | --------: | ---------: |
+| Format conformance |                    105 |    104 |         1 |     99.05% |
+| Structural schema  |                     70 |     40 |        30 |     57.14% |
+
+The contracts were strongest when incorrect output created an observable
+format or structural violation. They were weaker when an incorrect answer
+could still satisfy the declared schema.
+
+No baseline-correct survivor was rejected in any primary contract type.
+
+### C — semantic boundary
+
+Label conformance was reported separately from the primary result.
+
+| Observations | Oracle-correct | Baseline false accepts | Caught | Remaining |
+| -----------: | -------------: | ---------------------: | -----: | --------: |
+|          150 |            100 |                     50 |      5 |        45 |
+
+Catch rate:
+
+```text
+5 / 50 = 10%
+```
+
+All 45 remaining errors were wrong-but-permitted labels.
+
+A permitted-label contract can establish whether an output belongs to the
+allowed label set. It cannot establish which permitted label is semantically
+correct.
+
+This was an intended boundary condition and prevents the primary finding from
+being presented as a general solution to semantic correctness.
+
+### D — deterministic bypass
+
+Deterministic execution was also reported separately from the primary result.
+
+| Observations | Oracle-correct | Baseline false accepts | Caught | Remaining |
+| -----------: | -------------: | ---------------------: | -----: | --------: |
+|          150 |             15 |                    135 |    135 |         0 |
+
+The deterministic executor separated correct and incorrect outputs perfectly
+in this sample.
+
+This is not evidence of 100% validator effectiveness. It is evidence that these
+mechanical transformations should bypass generative inference and be executed
+directly.
+
+D must not be folded into the primary contract-validator headline.
+
+### Preserved canonical V2 outputs
+
+| Artifact                                                     | SHA-256                                                            |
+| ------------------------------------------------------------ | ------------------------------------------------------------------ |
+| `benchmark_prospective_contract_v2_gemma3_270m.jsonl`        | `ff99425c76877758971784db03b9943c49ee9aa94b03034b112bfeb74ad2ef1e` |
+| `benchmark_prospective_contract_v2_gemma3_270m_summary.json` | `bc79ab6594b85e81319fda75a6a6c7832740997d423c7d042b58d74adb1d2d6b` |
+| `benchmark_prospective_contract_v2_gemma3_1b.jsonl`          | `51ef79b72e4ac02d2aa12b039c606550978dc87d8df15069a9f6a93356ab7052` |
+| `benchmark_prospective_contract_v2_gemma3_1b_summary.json`   | `a5c80d6c2b5780f5296309df3766c97f755ca43487df2cedcec4091376bdff90` |
+| `benchmark_prospective_contract_v2_gemma3_4b.jsonl`          | `a9102caa11242cb275f3956e26daddd0e3be5f6f2fbae47533c8375289de9c18` |
+| `benchmark_prospective_contract_v2_gemma3_4b_summary.json`   | `e95efa983d4e0f6fc3db4cf23633062b517b4fbe60aa7a3fa8a7845045f3b8ca` |
+| `prospective_contract_validation_v2_analysis.json`           | `c6d5dda2398072ee1f6c8ab0a539672ee321edf0d7013b80202ffb6c0379e159` |
+| `prospective_contract_validation_v2_analysis.csv`            | `a8f35a6ddd4dfddeb4ceecc1da8894c6e49e1b4e0db37b1935a07d9910a1c995` |
+
+These canonical artifacts are sealed. They must not be modified or rerun.
+
+### Architectural interpretation
+
+The experiment supports a three-layer Adaptive Router architecture:
+
+1. **Model capability** reduces how often the model is wrong.
+2. **Deterministic contracts** reduce how often observable wrong outputs are
+   accepted.
+3. **Deterministic execution** bypasses the model for work ordinary code can
+   perform exactly.
+
+Increasing model capability and deterministic contract validation are
+complementary controls. Neither substitutes for the other.
+
+### Interpretation boundaries
+
+The experiment does not establish that:
+
+* contracts make outputs 82.3% correct;
+* deterministic contracts solve semantic correctness;
+* the prospective result is significantly better than the historical 69.6%;
+* model-specific catch rates differ significantly;
+* zero observed correct rejections proves that the true rejection rate is zero;
+* contracts reduce cost or energy per successful task; or
+* the router can yet select the best contract for arbitrary unseen work.
+
+The evidence is limited to three sizes of one local model family, 20 primary
+constructed tasks, five repetitions per task and temperature-zero generation.
+The task-cluster interval is consequently broad.
+
+### Decision and next phase
+
+Prospective Contract Validation V2 is complete.
+
+No further canonical model execution is required, and no canonical evidence or
+analysis artifact is to be changed.
+
+The next phase is public research communication:
+
+* concise methodology;
+* experiment lineage;
+* result graphs;
+* architectural implications;
+* semantic-boundary and deterministic-bypass findings;
+* limitations; and
+* reproducibility references.
+
+A self-contained public case-study draft has been prepared outside the
+canonical experiment. It is not part of the V2 evidence freeze. Before any
+repository or public release, every displayed count, percentage, interval,
+filename and hash must be checked byte-for-byte against the sealed canonical
+analysis artifacts.
+
+No new model experiment should begin until its intended research question has
+been explicitly defined.
