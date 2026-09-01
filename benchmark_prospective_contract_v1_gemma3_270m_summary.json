@@ -1,0 +1,24 @@
+{
+  "benchmark_sha256": "661e364d5fc11bd17f8bddc5326d77853fe1d2dae2d7ed5eb7d39c26af99b040",
+  "contracts_sha256": "a7bf6044333c0dcb63024cb0086bda0a0deaaabff07a2621067c766b35f4fbd9",
+  "implementation_revision": "34f5f1f3451524325d98fb8d672fd03baebb8747",
+  "model": "gemma3:270m",
+  "model_identity": {
+    "digest": "e7d36fb2c3b3293cfe56d55889867a064b3a2b22e98335f2e6e8a387e081d6be",
+    "family": "gemma3",
+    "format": "gguf",
+    "name": "gemma3:270m",
+    "package_size_bytes": 291554930,
+    "parameter_size": "268.10M",
+    "quantization_level": "Q8_0"
+  },
+  "model_identity_source_sha256": {
+    "scaling_analysis": "e93fc2be593256ffce0e7f5dcd587a21c7916d6611651dc1c626c285beb7e0ca",
+    "scaling_audit": "ed70eb18229c2a5aadab1999ae5855406ff202ccea026ff0372311409608f1ee"
+  },
+  "observation_count": 200,
+  "oracle_correct_count": 46,
+  "schema_version": "prospective_contract_validation_v1",
+  "suite_id": "prospective_contract_validation_v1",
+  "task_success_count": 200
+}
