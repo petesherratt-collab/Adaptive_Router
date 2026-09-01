@@ -17,13 +17,13 @@
 <text x="756.0" y="396" class="small" text-anchor="middle">80%</text>
 <line x1="890.0" y1="130" x2="890.0" y2="368" stroke="#d9dee7" stroke-width="1"/>
 <text x="890.0" y="396" class="small" text-anchor="middle">100%</text>
-<text x="202" y="162" class="label" text-anchor="end">Gemma 3 270M</text>
+<text x="52" y="162" class="label" text-anchor="start">Gemma 3 270M</text>
 <rect x="220" y="135" width="67.0" height="38" rx="3" fill="#45a7c4"/>
 <text x="296.0" y="160" class="value" text-anchor="start">10/100 · 10%</text>
-<text x="202" y="244" class="label" text-anchor="end">Gemma 3 1B</text>
+<text x="52" y="244" class="label" text-anchor="start">Gemma 3 1B</text>
 <rect x="220" y="217" width="167.5" height="38" rx="3" fill="#45a7c4"/>
 <text x="396.5" y="242" class="value" text-anchor="start">25/100 · 25%</text>
-<text x="202" y="326" class="label" text-anchor="end">Gemma 3 4B</text>
+<text x="52" y="326" class="label" text-anchor="start">Gemma 3 4B</text>
 <rect x="220" y="299" width="469.0" height="38" rx="3" fill="#1b9e77"/>
 <text x="698.0" y="324" class="value" text-anchor="start">70/100 · 70%</text>
 </svg>

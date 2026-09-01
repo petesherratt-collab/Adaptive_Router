@@ -19,10 +19,10 @@
 <text x="890.0" y="466" class="small" text-anchor="middle">100%</text>
 <text x="222" y="160" class="label" text-anchor="end">Bullet format</text>
 <rect x="240" y="135" width="650.0" height="36" rx="3" fill="#386cb0"/>
-<text x="878" y="159" class="value" text-anchor="start">45/45 · 100.00%</text>
+<text x="880.0" y="159" class="value light" text-anchor="end">45/45 · 100.00%</text>
 <text x="222" y="232" class="label" text-anchor="end">Label format</text>
 <rect x="240" y="207" width="639.1666666666666" height="36" rx="3" fill="#386cb0"/>
-<text x="878" y="231" class="value" text-anchor="start">59/60 · 98.33%</text>
+<text x="869.1666666666666" y="231" class="value light" text-anchor="end">59/60 · 98.33%</text>
 <text x="222" y="304" class="label" text-anchor="end">JSON format</text>
 <rect x="240" y="279" width="464.2857142857143" height="36" rx="3" fill="#45a7c4"/>
 <text x="713.2857142857142" y="303" class="value" text-anchor="start">25/35 · 71.43%</text>
