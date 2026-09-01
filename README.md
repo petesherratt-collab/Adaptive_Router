@@ -2,6 +2,20 @@
 
 A small Linux terminal experiment testing whether externally observable, deterministic runtime evidence can support local-to-remote model escalation. It routes a narrow set of mechanical tasks to Ollama, applies explicit health/runtime/validation gates, and sends other or rejected tasks to OpenRouter. Each request produces metadata-only JSONL telemetry.
 
+## Prospective deterministic-contract case study
+
+A prospectively frozen experiment across Gemma 3 270M, 1B, and 4B found that
+deterministic output contracts caught 144 of 175 false accepts admitted by the
+legacy gate: 82.3%, with a task-cluster bootstrap 95% interval of 63.9%–96.7%.
+No baseline-correct survivor was rejected. A separate label cohort demonstrates
+the semantic boundary, while deterministic execution identifies work that
+should bypass the model entirely.
+
+Read the illustrated
+[prospective contract validation V2 case study](PROSPECTIVE_CONTRACT_VALIDATION_V2_CASE_STUDY.md)
+for the methodology, results, limitations, experiment lineage, and
+reproducibility references.
+
 ## Out-of-sample case study
 
 The first frozen out-of-sample validation rejected the current fine-grained
