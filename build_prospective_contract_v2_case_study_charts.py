@@ -144,12 +144,12 @@ def add_percent_grid(lines, left, top, plot_width, bottom_y, maximum=100):
 
 
 def render_false_accepts(document):
-    width, height = 960, 430
+    width, height = 960, 460
     left, right, top = 220, 70, 135
     plot_width = width - left - right
     maximum = 80
 
-    title = "Deterministic contracts caught false accepts at every model size"
+    title = "Contracts caught false accepts at every model size"
     lines = svg_start(
         width,
         height,
@@ -175,13 +175,13 @@ def render_false_accepts(document):
     by_model = document["primary"]["by_model"]
     for index, model in enumerate(MODEL_ORDER):
         row = by_model[model]
-        y = top + index * 82
+        y = top + index * 90
         caught = row["false_accepts_caught_count"]
         remaining = row["false_accepts_remaining_count"]
         caught_width = plot_width * caught / maximum
         remaining_width = plot_width * remaining / maximum
 
-        text(lines, left - 18, y + 27, MODEL_LABELS[model], "label", "end")
+        text(lines, 52, y + 27, MODEL_LABELS[model], "label")
         rect(lines, left, y, caught_width, 38, BLUE)
         rect(lines, left + caught_width, y, remaining_width, 38, RED)
 
@@ -215,8 +215,8 @@ def render_false_accepts(document):
         rate = row["false_accept_catch_rate"] * 100
         text(
             lines,
-            left + caught_width + remaining_width + 52,
-            y + 25,
+            left,
+            y + 58,
             f"{rate:.1f}% caught",
             "small",
         )
@@ -261,16 +261,27 @@ def render_contract_types(document):
             "end",
         )
         rect(lines, left, y, bar_width, 36, colors[index])
-        text(
-            lines,
-            min(left + bar_width + 9, width - 82),
-            y + 24,
-            (
-                f"{row['false_accepts_caught_count']}/"
-                f"{row['baseline_false_accept_count']} · {rate:.2f}%"
-            ),
-            "value",
+        value = (
+            f"{row['false_accepts_caught_count']}/"
+            f"{row['baseline_false_accept_count']} · {rate:.2f}%"
         )
+        if rate >= 80:
+            text(
+                lines,
+                left + bar_width - 10,
+                y + 24,
+                value,
+                "value light",
+                "end",
+            )
+        else:
+            text(
+                lines,
+                left + bar_width + 9,
+                y + 24,
+                value,
+                "value",
+            )
 
     lines.append("</svg>")
     return "\n".join(lines) + "\n"
@@ -302,7 +313,7 @@ def render_correctness(document):
         rate = row["oracle_correct_count"]
         bar_width = plot_width * rate / 100
 
-        text(lines, left - 18, y + 27, MODEL_LABELS[model], "label", "end")
+        text(lines, 52, y + 27, MODEL_LABELS[model], "label")
         rect(lines, left, y, bar_width, 38, GREEN if model == "gemma3:4b" else CYAN)
         text(
             lines,
@@ -317,7 +328,7 @@ def render_correctness(document):
 
 
 def render_accepted_error(document):
-    width, height = 960, 360
+    width, height = 960, 400
     left, right, top = 260, 70, 135
     plot_width = width - left - right
     maximum = 70
@@ -359,10 +370,17 @@ def render_accepted_error(document):
     for index, (label, rate, color, detail) in enumerate(rows):
         y = top + index * 86
         bar_width = plot_width * rate / maximum
-        text(lines, left - 18, y + 27, label, "label", "end")
+        text(lines, 52, y + 27, label, "label")
         rect(lines, left, y, bar_width, 38, color)
-        text(lines, left + bar_width + 9, y + 19, f"{rate:.1f}%", "value")
-        text(lines, left + bar_width + 9, y + 36, detail, "small")
+        text(
+            lines,
+            left + bar_width - 10,
+            y + 25,
+            f"{rate:.1f}%",
+            "value light",
+            "end",
+        )
+        text(lines, left, y + 56, detail, "small")
 
     lines.append("</svg>")
     return "\n".join(lines) + "\n"
