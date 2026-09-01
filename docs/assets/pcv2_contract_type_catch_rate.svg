@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="500" viewBox="0 0 960 500" role="img" aria-labelledby="chart-title chart-description">
+<title id="chart-title">Contract effectiveness depended on what was observable</title>
+<desc id="chart-description">False-accept catch rate for four primary deterministic contract types.</desc>
+<rect width="960" height="500" fill="#ffffff"/>
+<style>text{font-family:Inter,Segoe UI,Arial,sans-serif;fill:#172033}.title{font-size:26px;font-weight:700}.subtitle{font-size:14px;fill:#5f6b7a}.label{font-size:14px}.small{font-size:12px;fill:#5f6b7a}.value{font-size:13px;font-weight:700}.light{fill:#ffffff}</style>
+<text x="52" y="48" class="title" text-anchor="start">Contract effectiveness depended on what was observable</text>
+<text x="52" y="74" class="subtitle" text-anchor="start">Primary false-accept catch rate by frozen contract type</text>
+<line x1="240.0" y1="130" x2="240.0" y2="438" stroke="#d9dee7" stroke-width="1"/>
+<text x="240.0" y="466" class="small" text-anchor="middle">0%</text>
+<line x1="370.0" y1="130" x2="370.0" y2="438" stroke="#d9dee7" stroke-width="1"/>
+<text x="370.0" y="466" class="small" text-anchor="middle">20%</text>
+<line x1="500.0" y1="130" x2="500.0" y2="438" stroke="#d9dee7" stroke-width="1"/>
+<text x="500.0" y="466" class="small" text-anchor="middle">40%</text>
+<line x1="630.0" y1="130" x2="630.0" y2="438" stroke="#d9dee7" stroke-width="1"/>
+<text x="630.0" y="466" class="small" text-anchor="middle">60%</text>
+<line x1="760.0" y1="130" x2="760.0" y2="438" stroke="#d9dee7" stroke-width="1"/>
+<text x="760.0" y="466" class="small" text-anchor="middle">80%</text>
+<line x1="890.0" y1="130" x2="890.0" y2="438" stroke="#d9dee7" stroke-width="1"/>
+<text x="890.0" y="466" class="small" text-anchor="middle">100%</text>
+<text x="222" y="160" class="label" text-anchor="end">Bullet format</text>
+<rect x="240" y="135" width="650.0" height="36" rx="3" fill="#386cb0"/>
+<text x="878" y="159" class="value" text-anchor="start">45/45 · 100.00%</text>
+<text x="222" y="232" class="label" text-anchor="end">Label format</text>
+<rect x="240" y="207" width="639.1666666666666" height="36" rx="3" fill="#386cb0"/>
+<text x="878" y="231" class="value" text-anchor="start">59/60 · 98.33%</text>
+<text x="222" y="304" class="label" text-anchor="end">JSON format</text>
+<rect x="240" y="279" width="464.2857142857143" height="36" rx="3" fill="#45a7c4"/>
+<text x="713.2857142857142" y="303" class="value" text-anchor="start">25/35 · 71.43%</text>
+<text x="222" y="376" class="label" text-anchor="end">Structured JSON</text>
+<rect x="240" y="351" width="278.57142857142856" height="36" rx="3" fill="#45a7c4"/>
+<text x="527.5714285714286" y="375" class="value" text-anchor="start">15/35 · 42.86%</text>
+</svg>

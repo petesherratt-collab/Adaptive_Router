@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="430" viewBox="0 0 960 430" role="img" aria-labelledby="chart-title chart-description">
+<title id="chart-title">Model capability reduced the underlying error burden</title>
+<desc id="chart-description">Primary oracle correctness for three Gemma 3 model sizes.</desc>
+<rect width="960" height="430" fill="#ffffff"/>
+<style>text{font-family:Inter,Segoe UI,Arial,sans-serif;fill:#172033}.title{font-size:26px;font-weight:700}.subtitle{font-size:14px;fill:#5f6b7a}.label{font-size:14px}.small{font-size:12px;fill:#5f6b7a}.value{font-size:13px;font-weight:700}.light{fill:#ffffff}</style>
+<text x="52" y="48" class="title" text-anchor="start">Model capability reduced the underlying error burden</text>
+<text x="52" y="74" class="subtitle" text-anchor="start">Oracle-correct primary observations; 100 observations per model</text>
+<line x1="220.0" y1="130" x2="220.0" y2="368" stroke="#d9dee7" stroke-width="1"/>
+<text x="220.0" y="396" class="small" text-anchor="middle">0%</text>
+<line x1="354.0" y1="130" x2="354.0" y2="368" stroke="#d9dee7" stroke-width="1"/>
+<text x="354.0" y="396" class="small" text-anchor="middle">20%</text>
+<line x1="488.0" y1="130" x2="488.0" y2="368" stroke="#d9dee7" stroke-width="1"/>
+<text x="488.0" y="396" class="small" text-anchor="middle">40%</text>
+<line x1="622.0" y1="130" x2="622.0" y2="368" stroke="#d9dee7" stroke-width="1"/>
+<text x="622.0" y="396" class="small" text-anchor="middle">60%</text>
+<line x1="756.0" y1="130" x2="756.0" y2="368" stroke="#d9dee7" stroke-width="1"/>
+<text x="756.0" y="396" class="small" text-anchor="middle">80%</text>
+<line x1="890.0" y1="130" x2="890.0" y2="368" stroke="#d9dee7" stroke-width="1"/>
+<text x="890.0" y="396" class="small" text-anchor="middle">100%</text>
+<text x="202" y="162" class="label" text-anchor="end">Gemma 3 270M</text>
+<rect x="220" y="135" width="67.0" height="38" rx="3" fill="#45a7c4"/>
+<text x="296.0" y="160" class="value" text-anchor="start">10/100 · 10%</text>
+<text x="202" y="244" class="label" text-anchor="end">Gemma 3 1B</text>
+<rect x="220" y="217" width="167.5" height="38" rx="3" fill="#45a7c4"/>
+<text x="396.5" y="242" class="value" text-anchor="start">25/100 · 25%</text>
+<text x="202" y="326" class="label" text-anchor="end">Gemma 3 4B</text>
+<rect x="220" y="299" width="469.0" height="38" rx="3" fill="#1b9e77"/>
+<text x="698.0" y="324" class="value" text-anchor="start">70/100 · 70%</text>
+</svg>
