@@ -1560,12 +1560,10 @@ Deterministic execution was also reported separately from the primary result.
 | -----------: | -------------: | ---------------------: | -----: | --------: |
 |          150 |             15 |                    135 |    135 |         0 |
 
-The deterministic executor separated correct and incorrect outputs perfectly
-in this sample.
-
-This is not evidence of 100% validator effectiveness. It is evidence that these
-mechanical transformations should bypass generative inference and be executed
-directly.
+By construction, the deterministic executor and oracle compute the same
+function, so their exact agreement carries no information about validator
+effectiveness. The cohort demonstrates that these mechanical transformations
+are executable in code and should bypass generative inference.
 
 D must not be folded into the primary contract-validator headline.
 
