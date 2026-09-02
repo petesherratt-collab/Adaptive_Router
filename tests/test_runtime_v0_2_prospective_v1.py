@@ -165,6 +165,8 @@ class DryRunTests(unittest.TestCase):
         with patch.object(
             runner.pv, "implementation_revision", return_value="revision"
         ), patch.object(
+            runner, "load_dotenv"
+        ), patch.object(
             runner, "fetch_installed_model_metadata", return_value=pv.MODEL_SPEC
         ), patch.object(
             runner.local, "generate", side_effect=AssertionError("local generation")
