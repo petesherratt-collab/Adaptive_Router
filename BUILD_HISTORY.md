@@ -1560,12 +1560,10 @@ Deterministic execution was also reported separately from the primary result.
 | -----------: | -------------: | ---------------------: | -----: | --------: |
 |          150 |             15 |                    135 |    135 |         0 |
 
-The deterministic executor separated correct and incorrect outputs perfectly
-in this sample.
-
-This is not evidence of 100% validator effectiveness. It is evidence that these
-mechanical transformations should bypass generative inference and be executed
-directly.
+By construction, the deterministic executor and oracle compute the same
+function, so their exact agreement carries no information about validator
+effectiveness. The cohort demonstrates that these mechanical transformations
+are executable in code and should bypass generative inference.
 
 D must not be folded into the primary contract-validator headline.
 
@@ -1638,3 +1636,104 @@ analysis artifacts.
 
 No new model experiment should begin until its intended research question has
 been explicitly defined.
+
+---
+
+## 2026-09-02 — Repository repair and measured paired routing replay v1
+
+### V1 regression repair
+
+An external repository review reproduced all published Prospective Contract
+Validation V2 headline figures from the raw JSONL, then identified one
+permanent failure in the full test suite.
+
+The V1 dry-run test still expected a successful empty-output preflight after
+the halted 270M evidence had been sealed in the repository. The frozen V1
+runner correctly refused those existing canonical paths, so the test encoded
+the same protocol-instrument contradiction documented in
+`PROSPECTIVE_CONTRACT_VALIDATION_V1_EXECUTION_INCIDENT.md`.
+
+PR #7 replaced that impossible expectation with a regression test asserting
+that:
+
+- the sealed V1 270M evidence blocks the superseded dry run;
+- both canonical filenames appear in the failure; and
+- no generation request occurs.
+
+The repair did not modify V1 semantics or any sealed evidence. The same PR
+tightened the public V2 case study by stating that Cohort D executor/oracle
+agreement is exact by construction, identifying structured JSON as the source
+of 20 of 31 remaining primary false accepts, and qualifying the 0/99 observed
+correct-rejection result.
+
+Merge commit: `857d6db`
+
+Full repository result after the repair: 256 tests passed.
+
+### Measured replay objective
+
+Replace Routing Simulation Zero v1's uniform assumed remote-success rates with
+the 150 paired outcomes actually measured for Gemma 3 270M and OpenRouter Luna.
+No model or network request was made.
+
+| Input | SHA-256 |
+|---|---|
+| `benchmark_runs_simzero_v2.jsonl` | `5637130c56894a0263c534bb87c5037901f0e535df28e658f68d5e85c03f7f6e` |
+| `benchmark_runs_openrouter_luna_v1.jsonl` | `341d203f34f3789e489329030895970e719483334e42d2ac144080516e3c0405` |
+
+All 150 task/repetition keys paired exactly. The committed implementation used
+for canonical output was `773a63333bfcce031b991ae24ebc3615cf60b6ff`.
+The two result files were committed together at `120df2b`.
+
+### Paired overlap
+
+| Interpretation | Both correct | Local only | Remote only | Neither | Oracle selector ceiling |
+|---|---:|---:|---:|---:|---:|
+| Strict | 66 | 0 | 62 | 22 | 128/150 |
+| Audited | 69 | 2 | 74 | 5 | 145/150 |
+
+Under the strict oracle, local correctness was a subset of remote correctness.
+The two audited local-only observations corresponded to remote transport
+failures, not a demonstrated local capability advantage.
+
+### Policy result
+
+| Interpretation | Policy | Passes | Remote calls | Reported remote cost | Median selected time |
+|---|---|---:|---:|---:|---:|
+| Strict | Always local | 66/150 | 0 | $0 | 262.133 ms |
+| Strict | Always remote | 128/150 | 150 | $0.0054320 | 1,847.455 ms |
+| Strict | Coarse class | 116/150 | 75 | $0.0027282 | 966.929 ms |
+| Strict | Fine capability | 125/150 | 75 | $0.0024892 | 990.314 ms |
+| Audited | Always local | 71/150 | 0 | $0 | 262.133 ms |
+| Audited | Always remote | 143/150 | 150 | $0.0054320 | 1,847.455 ms |
+| Audited | Coarse class | 131/150 | 75 | $0.0027282 | 966.929 ms |
+| Audited | Fine capability | 140/150 | 75 | $0.0024892 | 990.314 ms |
+
+At the same 75-call budget, fine routing gained nine passes over coarse routing
+under both interpretations. Relative to always remote, fine routing used 50%
+fewer remote calls, reduced recorded remote cost by approximately 54.2%, and
+lost three passes, or 2.0 percentage points.
+
+The latency values replay one selected route and do not represent a live
+local-first fallback. Reported OpenRouter cost is not an energy measurement.
+
+### Preserved outputs
+
+| Artifact | SHA-256 |
+|---|---|
+| `routing_simulation_measured_v1.json` | `8eb3a3514e544d10594bf0fd82223293347340c4619400acaa7e9e20a41622ed` |
+| `routing_simulation_measured_v1.csv` | `8e2d6ef34678840390bd7ca36e7c163644e6fa634d33b3427731455eb2713d53` |
+
+Result document: `ROUTING_SIMULATION_MEASURED_V1.md`
+
+### Decision
+
+The measured replay is promising enough to continue but does not validate the
+270M fine policy for deployment. It is in-sample with respect to local
+capability selection and omits the later scaling, contract, and deterministic
+executor components.
+
+The next product phase is an explicit end-to-end router design combining direct
+deterministic execution, an empirically selected local tier, task contracts,
+OpenRouter escalation, and defined remote failure handling. That complete
+policy requires a fresh prospective evaluation of final user-visible outcomes.
