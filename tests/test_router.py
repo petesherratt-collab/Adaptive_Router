@@ -86,12 +86,16 @@ class RouterTests(unittest.TestCase):
         router, calls, log_path = self.build_router(**kwargs)
         result = router.route(prompt)
         record = json.loads(log_path.read_text().splitlines()[-1])
+        self.assertNotIn("_route_started", record)
+        self.assertGreaterEqual(record["decision"]["total_ms"], 0)
         return result, calls, record
 
     def run_request(self, request, **kwargs):
         router, calls, log_path = self.build_router(**kwargs)
         result = router.route_request(request)
         record = json.loads(log_path.read_text().splitlines()[-1])
+        self.assertNotIn("_route_started", record)
+        self.assertGreaterEqual(record["decision"]["total_ms"], 0)
         return result, calls, record
 
     def test_healthy_valid_local(self):
