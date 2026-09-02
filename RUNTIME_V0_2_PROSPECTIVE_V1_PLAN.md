@@ -344,4 +344,3 @@ reported cost, failure modes, and the paired overlap together.
 
 Any post-result change to task contracts, prompts, normalization, or routing
 belongs to a separately versioned successor experiment.
-d051be7261d708d3adef7f807b8899ca02b88c11531e4f9b3e28eb4ef3c3de98  RUNTIME_V0_2_PROSPECTIVE_V1_PLAN.md
