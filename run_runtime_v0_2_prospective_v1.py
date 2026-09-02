@@ -265,6 +265,8 @@ def _synthetic_text(task):
 
 
 def dry_run():
+    import analyze_runtime_v0_2_prospective_v1 as analyzer
+
     _, tasks, _ = pv.load_frozen_inputs()
     config = _config()
     pv.validate_config(config)
@@ -300,12 +302,13 @@ def dry_run():
         name: path.exists() for name, path in pv.output_paths().items()
     }
     with tempfile.TemporaryDirectory() as directory:
+        temporary_root = Path(directory)
         report = execute_observations(
             tasks,
             config,
             "synthetic-runtime-v0.2-pv1",
             pv.MODEL_SPEC,
-            Path(directory),
+            temporary_root,
             local_fake,
             remote_fake,
             lambda: {
@@ -326,6 +329,12 @@ def dry_run():
             lambda provider_config: {"resident": True, "size_bytes": 291554930},
             "synthetic-key",
         )
+        analysis = analyzer.write_analysis(temporary_root)
+        if not all(
+            pv.output_paths(temporary_root)[name].exists()
+            for name in ("analysis_json", "analysis_csv")
+        ):
+            raise pv.StateError("DRY_RUN_ANALYSIS_OUTPUT_MISSING")
     canonical_after = {
         name: path.exists() for name, path in pv.output_paths().items()
     }
@@ -341,6 +350,7 @@ def dry_run():
         "synthetic_local_calls": calls["local"],
         "synthetic_remote_calls": calls["remote"],
         "runtime_correct_count": report["runtime_correct_count"],
+        "bootstrap_draws": analysis["generative"]["bootstrap"]["draw_count"],
     }
 
 
