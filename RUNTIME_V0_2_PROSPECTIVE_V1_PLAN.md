@@ -170,8 +170,10 @@ All tasks have deterministic expected outputs frozen in the benchmark.
   by construction, so this cohort provides no validator-effectiveness claim.
 
 Oracle evaluation receives raw provider/final output only after the relevant
-call. Expected values are never included in model prompts, contracts, router
-objects, or provider configuration.
+call. The benchmark's `oracle` object and assembled expected output are never
+passed as separate model input, contract data, router metadata, or provider
+configuration. Prompts necessarily contain the source facts or line content
+needed to perform each task; those prompts are frozen before execution.
 
 Transport failure, empty output, withheld final output, or missing required
 provider arm is oracle-incorrect and retained rather than retried.
@@ -313,7 +315,8 @@ Before execution, tests must prove:
 - exact task/cohort/contract counts and canonical order;
 - fresh unique IDs, non-empty prompts, and three repetitions;
 - strict benchmark schema and duplicate-key rejection;
-- expected values never enter `RuntimeRequest` or provider calls;
+- the benchmark `oracle` object is stripped before `RuntimeRequest`
+  construction and never enters provider-call arguments;
 - all runtime request objects revalidate through released schema code;
 - oracle/contract separation with wrong-but-conforming fixtures;
 - actual route wrappers capture calls without changing arguments/results;
@@ -341,3 +344,4 @@ reported cost, failure modes, and the paired overlap together.
 
 Any post-result change to task contracts, prompts, normalization, or routing
 belongs to a separately versioned successor experiment.
+d051be7261d708d3adef7f807b8899ca02b88c11531e4f9b3e28eb4ef3c3de98  RUNTIME_V0_2_PROSPECTIVE_V1_PLAN.md
