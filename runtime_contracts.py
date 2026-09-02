@@ -221,6 +221,22 @@ def _line_normalize(raw: str) -> str:
     return value[:-1] if value.endswith("\n") else value
 
 
+def _json_candidate(raw: str) -> str:
+    """Allow only the frozen V2 contract's narrow outer-fence normalization."""
+    value = _line_normalize(raw)
+    lines = value.split("\n")
+    if lines and lines[0] in {"\`\`\`", "\`\`\`json"}:
+        if len(lines) < 2 or lines[-1] != "\`\`\`":
+            raise ValueError("INCOMPLETE_OUTER_FENCE")
+        body = lines[1:-1]
+        if any("\`\`\`" in line for line in body):
+            raise ValueError("NESTED_OR_MULTIPLE_FENCE")
+        return "\n".join(body)
+    if any("\`\`\`" in line for line in lines):
+        raise ValueError("INCOMPLETE_OR_SURROUNDING_FENCE")
+    return value
+
+
 def _finite(value: Any) -> None:
     if type(value) is float and not math.isfinite(value):
         raise ValueError("NON_FINITE_NUMBER")
@@ -249,7 +265,7 @@ def _json_type(value: Any) -> str:
 
 
 def _json_object(raw: str) -> dict[str, Any]:
-    value = _strict_json_loads(_line_normalize(raw))
+    value = _strict_json_loads(_json_candidate(raw))
     _finite(value)
     if not isinstance(value, dict):
         raise ValueError("NOT_A_JSON_OBJECT")
