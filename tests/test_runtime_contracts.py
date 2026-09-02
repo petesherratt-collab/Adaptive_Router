@@ -56,6 +56,46 @@ class RuntimeContractTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeContractError, "DUPLICATE_JSON_KEY"):
                 load_runtime_request(path)
 
+    def test_malformed_nested_values_raise_contract_errors(self):
+        malformed = (
+            (
+                "format",
+                {
+                    "contract_type": ["bullet_format"],
+                    "line_count": 1,
+                    "marker": "-",
+                    "separator": " ",
+                },
+            ),
+            (
+                "extract_structured",
+                {
+                    "contract_type": "structured_json",
+                    "exact_keys": [["name"]],
+                    "explicit_types": {"name": "string"},
+                },
+            ),
+            (
+                "extract_structured",
+                {
+                    "contract_type": "structured_json",
+                    "exact_keys": ["name"],
+                    "explicit_types": {"name": {"type": "string"}},
+                },
+            ),
+            (
+                "classification",
+                {
+                    "contract_type": "classification_labels",
+                    "permitted_labels": [["positive"]],
+                },
+            ),
+        )
+        for task_class, contract in malformed:
+            with self.subTest(contract=contract):
+                with self.assertRaises(RuntimeContractError):
+                    request(task_class, contract)
+
     def test_task_and_contract_must_agree(self):
         with self.assertRaisesRegex(RuntimeContractError, "TASK_CONTRACT_MISMATCH"):
             request(
