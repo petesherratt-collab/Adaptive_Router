@@ -243,6 +243,13 @@ def authenticate_complete(root=pv.ROOT):
         or len(telemetry) != pv.OBSERVATION_COUNT
         or [row["router_request_id"] for row in rows]
         != [record.get("request_id") for record in telemetry]
+        or any(
+            record.get("request_mode") != "explicit_contract"
+            or record.get("task_class") != row.get("task_class")
+            or record.get("contract_type") != row.get("contract_type")
+            or record.get("decision") != row.get("router_decision")
+            for row, record in zip(rows, telemetry)
+        )
         or summary.get("runs_sha256") != pv.file_sha256(paths["runs"])
         or summary.get("router_telemetry_sha256")
         != pv.file_sha256(paths["telemetry"])
