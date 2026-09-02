@@ -100,6 +100,37 @@ class RuntimeContractTests(unittest.TestCase):
             "KEY_SET_MISMATCH",
         )
 
+    def test_json_contract_allows_one_complete_outer_fence(self):
+        contract = request(
+            "extract_structured",
+            {
+                "contract_type": "structured_json",
+                "exact_keys": ["name", "count"],
+                "explicit_types": {"name": "string", "count": "number"},
+            },
+        ).contract
+        output = "```json\n{\\"name\\":\\"Ada\\",\\"count\\":2}\n```"
+        self.assertEqual(validate_runtime_output(contract, output).status, "PASS")
+
+    def test_json_contract_rejects_surrounding_or_incomplete_fence(self):
+        contract = request(
+            "format",
+            {
+                "contract_type": "json_format",
+                "exact_keys": ["count"],
+                "explicit_types": {"count": "number"},
+            },
+        ).contract
+        for output in (
+            "Here it is:\n```json\n{\\"count\\":2}\n```",
+            "```json\n{\\"count\\":2}",
+            "```json\n```\n{\\"count\\":2}\n```",
+        ):
+            with self.subTest(output=output):
+                self.assertEqual(
+                    validate_runtime_output(contract, output).status, "FAIL"
+                )
+
     def test_boolean_does_not_satisfy_number_type(self):
         contract = request(
             "format",
