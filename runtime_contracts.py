@@ -183,7 +183,7 @@ def _validated_contract(value: Any) -> dict[str, Any]:
         if (
             not isinstance(value["source_literal"], str)
             or not value["source_literal"]
-            or value["operation"] not in OPERATIONS
+            or not isinstance(value["operation"], str)\n            or value["operation"] not in OPERATIONS
         ):
             raise RuntimeContractError("INVALID_EXECUTOR_CONTRACT")
     return dict(value)
