@@ -1,0 +1,9 @@
+{
+  "schema_version": "runtime_request_v1",
+  "task_class": "classification",
+  "prompt": "Classify the sentiment of this text as positive, negative, or neutral. Output only the label: The parcel arrived early and undamaged.",
+  "contract": {
+    "contract_type": "classification_labels",
+    "permitted_labels": ["positive", "negative", "neutral"]
+  }
+}
