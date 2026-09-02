@@ -370,6 +370,24 @@ def preflight_execution():
     return tasks, config, revision, identity
 
 
+def preflight_report():
+    tasks, config, revision, identity = preflight_execution()
+    return {
+        "status": "PASS",
+        "suite_id": pv.SUITE_ID,
+        "implementation_revision": revision,
+        "plan_sha256": pv.PLAN_SHA256,
+        "benchmark_sha256": pv.BENCHMARK_SHA256,
+        "config_sha256": pv.CONFIG_SHA256,
+        "task_count": len(tasks),
+        "runtime_observations": len(tasks) * pv.REPETITIONS,
+        "local_model_identity": identity,
+        "remote_model": config["remote"]["model"],
+        "output_state": "EMPTY",
+        "provider_generation_requests": 0,
+    }
+
+
 def execute():
     tasks, config, revision, identity = preflight_execution()
     return execute_observations(
@@ -391,9 +409,15 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--dry-run", action="store_true")
+    mode.add_argument("--preflight", action="store_true")
     mode.add_argument("--execute", action="store_true")
     args = parser.parse_args(argv)
-    result = dry_run() if args.dry_run else execute()
+    if args.dry_run:
+        result = dry_run()
+    elif args.preflight:
+        result = preflight_report()
+    else:
+        result = execute()
     print(json.dumps(result, ensure_ascii=False, sort_keys=True))
     return 0
 
