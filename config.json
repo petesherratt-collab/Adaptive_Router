@@ -3,7 +3,10 @@
     "provider": "ollama",
     "base_url": "http://localhost:11434",
     "model": "gemma3:270m",
-    "timeout_seconds": 45
+    "timeout_seconds": 45,
+    "temperature": 0,
+    "max_tokens": 256,
+    "keep_alive": -1
   },
   "remote": {
     "provider": "openrouter",
