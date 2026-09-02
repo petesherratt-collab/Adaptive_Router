@@ -293,9 +293,23 @@ class SafetyAndAuthenticationTests(ProspectiveFixtureMixin, unittest.TestCase):
 
 
 class DryRunTests(unittest.TestCase):
-    def test_dry_run_has_zero_generation_requests_and_zero_canonical_outputs(self):
-        with patch.object(runner, "generate_one", side_effect=AssertionError("generation called")):
-            result = runner.dry_run()
-        self.assertEqual(result["model_generation_requests"], 0)
-        self.assertEqual(result["canonical_outputs_created"], 0)
-        self.assertEqual(result["status"], "PASS")
+    def test_v1_dry_run_is_blocked_by_its_own_sealed_evidence(self):
+        """The frozen V1 preflight is unsatisfiable after sealing its 270M run."""
+        with patch.object(
+            runner,
+            "generate_one",
+            side_effect=AssertionError("generation called"),
+        ) as generation:
+            with self.assertRaises(FileExistsError) as raised:
+                runner.dry_run()
+
+        message = str(raised.exception)
+        self.assertIn(
+            "benchmark_prospective_contract_v1_gemma3_270m.jsonl",
+            message,
+        )
+        self.assertIn(
+            "benchmark_prospective_contract_v1_gemma3_270m_summary.json",
+            message,
+        )
+        generation.assert_not_called()
