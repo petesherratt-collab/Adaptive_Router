@@ -109,7 +109,7 @@ class RuntimeContractTests(unittest.TestCase):
                 "explicit_types": {"name": "string", "count": "number"},
             },
         ).contract
-        output = "```json\n{\\"name\\":\\"Ada\\",\\"count\\":2}\n```"
+        output = '```json\n{"name":"Ada","count":2}\n```'
         self.assertEqual(validate_runtime_output(contract, output).status, "PASS")
 
     def test_json_contract_rejects_surrounding_or_incomplete_fence(self):
@@ -122,9 +122,9 @@ class RuntimeContractTests(unittest.TestCase):
             },
         ).contract
         for output in (
-            "Here it is:\n```json\n{\\"count\\":2}\n```",
-            "```json\n{\\"count\\":2}",
-            "```json\n```\n{\\"count\\":2}\n```",
+            'Here it is:\n```json\n{"count":2}\n```',
+            '```json\n{"count":2}',
+            '```json\n```\n{"count":2}\n```',
         ):
             with self.subTest(output=output):
                 self.assertEqual(
