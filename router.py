@@ -34,6 +34,7 @@ LOCAL_ALLOWED = {"rewrite", "summarise_short", "extract_structured", "format"}
     GENERATION_TOO_SLOW,
     VALIDATOR_FAILED,
     VALIDATOR_NOT_APPLICABLE,
+    REMOTE_CONTRACT_FAILED,
     REMOTE_ERROR,
     SHADOW_SAMPLE,
 ) = (
@@ -49,6 +50,7 @@ LOCAL_ALLOWED = {"rewrite", "summarise_short", "extract_structured", "format"}
     "GENERATION_TOO_SLOW",
     "VALIDATOR_FAILED",
     "VALIDATOR_NOT_APPLICABLE",
+    "REMOTE_CONTRACT_FAILED",
     "REMOTE_ERROR",
     "SHADOW_SAMPLE",
 )
@@ -66,6 +68,7 @@ REASON_CODES = frozenset(
         GENERATION_TOO_SLOW,
         VALIDATOR_FAILED,
         VALIDATOR_NOT_APPLICABLE,
+        REMOTE_CONTRACT_FAILED,
         REMOTE_ERROR,
         SHADOW_SAMPLE,
     )
@@ -161,7 +164,12 @@ class Router:
                 "explicit_contract",
                 request.contract["contract_type"],
             )
-            return self._remote(request.prompt, record, CONTRACT_REMOTE_ONLY)
+            return self._remote(
+                request.prompt,
+                record,
+                CONTRACT_REMOTE_ONLY,
+                request.contract,
+            )
         return self._route_model(
             prompt=request.prompt,
             task=request.task_class,
@@ -204,7 +212,7 @@ class Router:
         record = self._new_record(prompt, task, request_mode, contract_type)
 
         if task not in LOCAL_ALLOWED:
-            return self._remote(prompt, record, REMOTE_DEFAULT_TASK)
+            return self._remote(prompt, record, REMOTE_DEFAULT_TASK, contract)
 
         residency = self.residency_fn(self.config["local"])
         record["local_model_resident"] = residency["resident"]
@@ -213,24 +221,24 @@ class Router:
             record["system"], self.config, residency["resident"]
         )
         if not healthy:
-            return self._remote(prompt, record, health_reason)
+            return self._remote(prompt, record, health_reason, contract)
 
         result = self.local_fn(prompt, self.config["local"])
         record["local"] = {"attempted": True, **result.metadata()}
         if not result.success:
             reason = LOCAL_TIMEOUT if result.error == LOCAL_TIMEOUT else LOCAL_ERROR
-            return self._remote(prompt, record, reason)
+            return self._remote(prompt, record, reason, contract)
         if (
             result.ttft_ms is not None
             and result.ttft_ms > self.config["routing"]["maximum_ttft_ms"]
         ):
-            return self._remote(prompt, record, TTFT_EXCEEDED)
+            return self._remote(prompt, record, TTFT_EXCEEDED, contract)
         if (
             result.tokens_per_second is not None
             and result.tokens_per_second
             < self.config["routing"]["minimum_generation_rate"]
         ):
-            return self._remote(prompt, record, GENERATION_TOO_SLOW)
+            return self._remote(prompt, record, GENERATION_TOO_SLOW, contract)
 
         check = (
             validate_runtime_output(contract, result.text)
@@ -244,7 +252,7 @@ class Router:
                 if check.status == "FAIL"
                 else VALIDATOR_NOT_APPLICABLE
             )
-            return self._remote(prompt, record, reason)
+            return self._remote(prompt, record, reason, contract)
 
         record["decision"] = {"route": "local", "reason": LOCAL_ACCEPTED}
         self._log(record)
@@ -293,12 +301,19 @@ class Router:
             "remote": None,
         }
 
-    def _remote(self, original_prompt, record, reason):
+    def _remote(self, original_prompt, record, reason, contract=None):
         result = self.remote_fn(
             original_prompt, self.config["remote"], self.api_key
         )
         record["remote"] = result.metadata()
         final_reason = reason if result.success else REMOTE_ERROR
+        returned_text = result.text
+        if result.success and contract is not None:
+            check = validate_runtime_output(contract, result.text)
+            record["remote_validator"] = check.__dict__
+            if check.status != "PASS":
+                final_reason = REMOTE_CONTRACT_FAILED
+                returned_text = ""
         record["decision"] = {
             "route": "remote",
             "reason": final_reason,
@@ -306,7 +321,7 @@ class Router:
         }
         self._log(record)
         return {
-            "text": result.text,
+            "text": returned_text,
             "route": "remote",
             "reason": final_reason,
             "trigger": reason,
