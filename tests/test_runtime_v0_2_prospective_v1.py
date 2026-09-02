@@ -22,6 +22,9 @@ class DesignTests(unittest.TestCase):
         self.assertEqual(
             pv.file_sha256(pv.ROOT / pv.BENCHMARK_NAME), pv.BENCHMARK_SHA256
         )
+        self.assertEqual(
+            pv.file_sha256(pv.ROOT / pv.CONFIG_NAME), pv.CONFIG_SHA256
+        )
         self.assertEqual(len(self.tasks), 40)
         self.assertEqual(
             [(task["task_id"], rep) for task in self.tasks for rep in range(1, 4)],
