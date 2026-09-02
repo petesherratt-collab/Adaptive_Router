@@ -10,6 +10,7 @@ from pathlib import Path
 import tempfile
 
 import requests
+from dotenv import load_dotenv
 
 import local
 from local import LocalResult
@@ -355,6 +356,7 @@ def dry_run():
 
 
 def preflight_execution():
+    load_dotenv(pv.ROOT / ".env")
     _, tasks, _ = pv.load_frozen_inputs()
     config = _config()
     pv.validate_config(config)
