@@ -169,6 +169,7 @@ class Router:
         )
 
     def _new_record(self, prompt, task, request_mode, contract_type=None):
+        started = time.perf_counter()
         request_id = str(uuid.uuid4())
         metrics = self.metrics_fn()
         probe_ms = (
@@ -181,6 +182,7 @@ class Router:
             request_id, shadow_cfg["sample_rate"], shadow_cfg["salt"]
         )
         return {
+            "_route_started": started,
             "request_id": request_id,
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "request_mode": request_mode,
@@ -254,8 +256,10 @@ class Router:
         }
 
     def _execute_request(self, request):
+        started = time.perf_counter()
         text = execute_deterministic(request.contract)
         record = {
+            "_route_started": started,
             "request_id": str(uuid.uuid4()),
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "request_mode": "explicit_contract",
@@ -310,6 +314,11 @@ class Router:
         }
 
     def _log(self, record):
+        started = record.pop("_route_started", None)
+        if started is not None:
+            record["decision"]["total_ms"] = (
+                time.perf_counter() - started
+            ) * 1000
         self.log_path.parent.mkdir(parents=True, exist_ok=True)
         with self.log_path.open("a", encoding="utf-8") as handle:
             handle.write(json.dumps(record, separators=(",", ":")) + "\n")
