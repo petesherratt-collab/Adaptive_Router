@@ -1,6 +1,7 @@
 from dataclasses import asdict, dataclass
 import json
 import time
+
 import requests
 
 
@@ -34,31 +35,75 @@ class LocalResult:
     error: str | None = None
 
     def metadata(self):
-        data = asdict(self); data.pop("text")
+        data = asdict(self)
+        data.pop("text")
         return data
+
+
+def _payload(prompt, config):
+    payload = {
+        "model": config["model"],
+        "prompt": prompt,
+        "stream": True,
+    }
+    options = {}
+    if "temperature" in config:
+        options["temperature"] = config["temperature"]
+    if "max_tokens" in config:
+        options["num_predict"] = config["max_tokens"]
+    if options:
+        payload["options"] = options
+    if "keep_alive" in config:
+        payload["keep_alive"] = config["keep_alive"]
+    return payload
 
 
 def generate(prompt, config, session=requests):
     started, first, chunks, final = time.perf_counter(), None, [], {}
     try:
-        response = session.post(config["base_url"].rstrip("/") + "/api/generate",
-            json={"model": config["model"], "prompt": prompt, "stream": True},
-            timeout=config["timeout_seconds"], stream=True)
+        response = session.post(
+            config["base_url"].rstrip("/") + "/api/generate",
+            json=_payload(prompt, config),
+            timeout=config["timeout_seconds"],
+            stream=True,
+        )
         response.raise_for_status()
         for line in response.iter_lines():
-            if not line: continue
+            if not line:
+                continue
             item = json.loads(line)
             text = item.get("response", "")
-            if text and first is None: first = time.perf_counter()
+            if text and first is None:
+                first = time.perf_counter()
             chunks.append(text)
-            if item.get("done"): final = item
+            if item.get("done"):
+                final = item
         completed, text = time.perf_counter(), "".join(chunks)
         total = (completed - started) * 1000
         count, duration = final.get("eval_count"), final.get("eval_duration")
-        tps = count / (duration / 1e9) if text and count and duration else None
-        cps = len(text) / (total / 1000) if total > 0 else None
-        return LocalResult(True, text, (first-started)*1000 if first else None, total, tps, cps, count, duration)
+        tokens_per_second = (
+            count / (duration / 1e9) if text and count and duration else None
+        )
+        chars_per_second = len(text) / (total / 1000) if total > 0 else None
+        return LocalResult(
+            True,
+            text,
+            (first - started) * 1000 if first else None,
+            total,
+            tokens_per_second,
+            chars_per_second,
+            count,
+            duration,
+        )
     except requests.Timeout:
-        return LocalResult(False, total_ms=(time.perf_counter()-started)*1000, error="LOCAL_TIMEOUT")
+        return LocalResult(
+            False,
+            total_ms=(time.perf_counter() - started) * 1000,
+            error="LOCAL_TIMEOUT",
+        )
     except Exception as exc:
-        return LocalResult(False, total_ms=(time.perf_counter()-started)*1000, error=type(exc).__name__)
+        return LocalResult(
+            False,
+            total_ms=(time.perf_counter() - started) * 1000,
+            error=type(exc).__name__,
+        )
