@@ -59,7 +59,10 @@ The primary estimand was A+B: 20 tasks × 5 repetitions × 3 models =
 
 The contracts caught 144 of the 175 false accepts that survived the legacy
 gate. They rejected none of the 99 correct legacy survivors and newly admitted
-no incorrect output.
+no incorrect output. The observed correct-survivor rejection rate was therefore
+0/99. Under an independent-binomial approximation, its one-sided 95% upper
+bound is about 3.0%; the repeated observations within tasks mean that bound is
+descriptive rather than a task-cluster-adjusted population limit.
 
 ![Accepted-output error share](docs/assets/pcv2_accepted_error_share.svg)
 
@@ -99,6 +102,13 @@ Contracts were strongest where incorrect output created an observable format
 violation. They were weaker when an incorrect answer could still satisfy the
 declared schema.
 
+Structured JSON was the weakest contract type at 42.86% and accounted for 20
+of the 31 remaining primary false accepts, the largest single block. This is
+the same residual failure mode exposed by the earlier `json_structure_v1`
+validator: a wrong value can satisfy a correctly declared schema. Two rounds
+of contract work improved acceptance reliability without removing that
+fundamental boundary.
+
 This is the central limitation of deterministic output contracts: they can
 establish only what they actually inspect.
 
@@ -131,12 +141,13 @@ The deterministic-executor cohort also contained 150 observations:
 |---:|---:|---:|---:|
 | 15 | 135 | 135 | 0 |
 
-For these mechanical transformations, deterministic execution perfectly
-separated correct and incorrect outputs in this sample.
+By construction, the executor and the oracle compute the same function, so
+their agreement is exact and carries no information about validator
+effectiveness. This cohort demonstrates only that these tasks are executable
+in code.
 
-This is not 100% validator effectiveness. It is an architectural bypass result:
-do not ask a generative model to perform work that ordinary code can execute
-exactly.
+The architectural implication is still useful: do not ask a generative model
+to perform work that ordinary code can execute exactly.
 
 ## Architectural result
 
