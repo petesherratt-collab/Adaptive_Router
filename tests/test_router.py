@@ -28,6 +28,7 @@ class RouterTests(unittest.TestCase):
     def build_router(
         self,
         local_result=None,
+        remote_result=None,
         ram=5000,
         swap=0,
         swap_percent=0,
@@ -45,7 +46,7 @@ class RouterTests(unittest.TestCase):
 
         def remote_fn(prompt, config, key):
             calls["remote"] += 1
-            return RemoteResult(True, "remote", 100, "y")
+            return remote_result or RemoteResult(True, "remote", 100, "y")
 
         metrics = lambda: {
             "available_ram_mb": ram,
@@ -276,6 +277,34 @@ class RouterTests(unittest.TestCase):
         self.assertEqual(
             record["validator"]["detail"], "JSON_VALUE_TYPE_MISMATCH"
         )
+        self.assertEqual(result["reason"], "REMOTE_CONTRACT_FAILED")
+        self.assertEqual(result["text"], "")
+        self.assertEqual(record["remote_validator"]["status"], "FAIL")
+
+    def test_remote_fallback_must_also_satisfy_json_contract(self):
+        request = {
+            "schema_version": "runtime_request_v1",
+            "task_class": "extract_structured",
+            "prompt": "Extract the name and count.",
+            "contract": {
+                "contract_type": "structured_json",
+                "exact_keys": ["name", "count"],
+                "explicit_types": {"name": "string", "count": "number"},
+            },
+        }
+        result, calls, record = self.run_request(
+            request,
+            local_result=LocalResult(
+                True, '{"name":"Ada","count":"two"}', 100, 1000, 5
+            ),
+            remote_result=RemoteResult(
+                True, '{"name":"Ada","count":2}', 100, "y"
+            ),
+        )
+        self.assertEqual(result["reason"], "VALIDATOR_FAILED")
+        self.assertEqual(result["text"], '{"name":"Ada","count":2}')
+        self.assertEqual(calls, {"local": 1, "remote": 1})
+        self.assertEqual(record["remote_validator"]["status"], "PASS")
 
     def test_semantic_label_contract_routes_directly_remote(self):
         request = {
@@ -287,10 +316,35 @@ class RouterTests(unittest.TestCase):
                 "permitted_labels": ["positive", "negative", "neutral"],
             },
         }
-        result, calls, record = self.run_request(request)
+        result, calls, record = self.run_request(
+            request,
+            remote_result=RemoteResult(True, "Positive", 100, "y"),
+        )
         self.assertEqual(result["trigger"], "CONTRACT_REMOTE_ONLY")
         self.assertEqual(calls, {"local": 0, "remote": 1})
         self.assertEqual(record["contract_type"], "classification_labels")
+        self.assertEqual(record["remote_validator"]["status"], "PASS")
+        self.assertEqual(result["text"], "Positive")
+
+    def test_remote_contract_failure_returns_no_invalid_output(self):
+        request = {
+            "schema_version": "runtime_request_v1",
+            "task_class": "classification",
+            "prompt": "Classify sentiment: The parcel arrived.",
+            "contract": {
+                "contract_type": "classification_labels",
+                "permitted_labels": ["positive", "negative", "neutral"],
+            },
+        }
+        result, calls, record = self.run_request(
+            request,
+            remote_result=RemoteResult(True, "It seems positive.", 100, "y"),
+        )
+        self.assertEqual(result["reason"], "REMOTE_CONTRACT_FAILED")
+        self.assertEqual(result["trigger"], "CONTRACT_REMOTE_ONLY")
+        self.assertEqual(result["text"], "")
+        self.assertEqual(calls, {"local": 0, "remote": 1})
+        self.assertEqual(record["remote_validator"]["status"], "FAIL")
 
     def test_deterministic_request_calls_neither_model(self):
         request = {
