@@ -212,6 +212,15 @@ def contract_route(contract: dict[str, Any]) -> str:
     return "deterministic"
 
 
+def _ascii_lower(value: str) -> str:
+    return value.translate(
+        str.maketrans(
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+            "abcdefghijklmnopqrstuvwxyz",
+        )
+    )
+
+
 def _line_normalize(raw: str) -> str:
     if not isinstance(raw, str):
         raise ValueError("INVALID_OUTPUT_TYPE")
@@ -276,12 +285,25 @@ def validate_runtime_output(
     contract: dict[str, Any], raw_output: str
 ) -> RuntimeValidationResult:
     kind = contract["contract_type"]
-    if kind not in LOCAL_CONTRACT_TYPES:
+    if kind not in LOCAL_CONTRACT_TYPES | REMOTE_ONLY_CONTRACT_TYPES:
         return RuntimeValidationResult(
-            "runtime_contract_v1", FAIL, "CONTRACT_NOT_LOCAL"
+            "runtime_contract_v1", FAIL, "CONTRACT_NOT_GENERATIVE"
         )
     try:
         value = _line_normalize(raw_output)
+        if kind == "classification_labels":
+            lines = value.split("\n")
+            if len(lines) != 1 or not lines[0]:
+                return RuntimeValidationResult(
+                    kind + "_v1", FAIL, "CLASSIFICATION_LINE_COUNT_MISMATCH"
+                )
+            candidate = _ascii_lower(lines[0].strip(" \t"))
+            accepted = candidate in contract["permitted_labels"]
+            return RuntimeValidationResult(
+                kind + "_v1",
+                PASS if accepted else FAIL,
+                "LABEL_MEMBERSHIP_ONLY" if accepted else "LABEL_NOT_PERMITTED",
+            )
         if kind in {"structured_json", "json_format"}:
             parsed = _json_object(value)
             if set(parsed) != set(contract["exact_keys"]):
