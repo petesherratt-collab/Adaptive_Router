@@ -14,7 +14,7 @@ from simulate_routing_measured_v1 import (
 )
 
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 LOCAL = ROOT / "benchmark_runs_simzero_v2.jsonl"
 REMOTE = ROOT / "benchmark_runs_openrouter_luna_v1.jsonl"
 
