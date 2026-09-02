@@ -7,6 +7,7 @@ from unittest.mock import patch
 
 from remote import RemoteResult
 from runtime_contracts import RuntimeRequest, validate_runtime_output
+import analyze_runtime_v0_2_prospective_v1 as analyzer
 import runtime_v0_2_prospective_v1 as pv
 import run_runtime_v0_2_prospective_v1 as runner
 
@@ -174,6 +175,7 @@ class DryRunTests(unittest.TestCase):
         self.assertEqual(result["synthetic_local_calls"], 90)
         self.assertEqual(result["synthetic_remote_calls"], 90)
         self.assertEqual(result["runtime_correct_count"], 120)
+        self.assertEqual(result["bootstrap_draws"], 10_000)
 
     def test_dry_run_does_not_change_canonical_output_existence(self):
         before = {
@@ -229,6 +231,56 @@ class DryRunTests(unittest.TestCase):
         self.assertEqual(len(rows), 120)
         self.assertNotIn("oracle", {key for _, _, keys in seen_arguments for key in keys})
         pv.validate_rows(rows, tasks, "revision")
+
+
+class AnalysisTests(unittest.TestCase):
+    def test_type7_percentile_fixture(self):
+        self.assertEqual(analyzer.percentile_type7([0.0, 10.0], 0.025), 0.25)
+        self.assertEqual(analyzer.percentile_type7([0.0, 10.0], 0.975), 9.75)
+
+    def test_synthetic_analysis_reconciles(self):
+        _, tasks, _ = pv.load_frozen_inputs()
+        config = runner._config()
+        prompts = {
+            task["runtime_request"]["prompt"]: runner._synthetic_text(task)
+            for task in tasks
+        }
+
+        def local_fake(prompt, provider_config):
+            return runner.LocalResult(True, prompts[prompt], 1, 2, 50, 100)
+
+        def remote_fake(prompt, provider_config, key):
+            return RemoteResult(
+                True, prompts[prompt], 2, provider_config["model"],
+                attempt_count=1, cost=0.000001,
+            )
+
+        metrics = lambda: {
+            "available_ram_mb": 5000, "swap_used_mb": 0, "cpu_percent": 1,
+            "load_average": [0, 0, 0], "ram_percent": 10, "swap_percent": 0,
+            "swap_activity_sample_seconds": 0.1, "swap_in_bytes": 0,
+            "swap_in_pages": 0, "swap_out_bytes": 0, "swap_out_pages": 0,
+            "timestamp": "synthetic",
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            runner.execute_observations(
+                tasks, config, "revision", pv.MODEL_SPEC, root,
+                local_fake, remote_fake, metrics, lambda count: 0,
+                lambda provider_config: {"resident": True, "size_bytes": 1},
+                "key",
+            )
+            report = analyzer.write_analysis(root)
+            self.assertTrue(pv.output_paths(root)["analysis_json"].exists())
+            self.assertTrue(pv.output_paths(root)["analysis_csv"].exists())
+        overall = report["generative"]["overall"]
+        self.assertEqual(overall["observation_count"], 90)
+        self.assertEqual(overall["runtime_correct_count"], 90)
+        self.assertEqual(overall["actual_remote_logical_calls"], 30)
+        self.assertEqual(overall["remote_calls_avoided_vs_always_remote"], 60)
+        self.assertEqual(sum(overall["overlap"].values()), 90)
+        self.assertEqual(report["deterministic"]["observation_count"], 30)
+        self.assertEqual(report["deterministic"]["provider_call_count"], 0)
 
 
 if __name__ == "__main__":
