@@ -1,6 +1,6 @@
-# Adaptive Router v0.1
+# Adaptive Router v0.2
 
-A small Linux terminal experiment testing whether externally observable, deterministic runtime evidence can support local-to-remote model escalation. It routes a narrow set of mechanical tasks to Ollama, applies explicit health/runtime/validation gates, and sends other or rejected tasks to OpenRouter. Each request produces metadata-only JSONL telemetry.
+A small Linux terminal router for deterministic execution, contract-gated Ollama inference, and OpenRouter escalation. It preserves the research instruments that established its current boundaries, but v0.2 begins turning those findings into a usable runtime. Each request produces metadata-only JSONL telemetry.
 
 ## Prospective deterministic-contract case study
 
@@ -68,7 +68,29 @@ python main.py --stats
 python -m unittest discover -s tests -v
 ```
 
-Prompts and answers are not logged. `runs.jsonl` contains task class, input size, system/runtime measurements, validator state, route/reason, deterministic shadow selection, and the Ollama-reported residency of the configured local model. When Ollama supplies it, the loaded model size is recorded in bytes. Shadow execution defaults off and never affects the user-visible result. Remote fallback always receives the original prompt, not failed local output.
+## Explicit runtime requests
+
+`--request-json` accepts a strict `runtime_request_v1` document. The caller
+declares a task class, the prompt, and one contract. Supported behavior is:
+
+- `deterministic_executor`: execute one allowlisted operation in Python; call
+  neither Ollama nor OpenRouter.
+- `structured_json` and `json_format`: try Ollama and accept only an exact
+  key set with declared JSON value types.
+- `bullet_format` and `label_format`: try Ollama and accept only the
+  declared line shape.
+- `classification_labels`: route directly to OpenRouter. Permitted-label
+  membership cannot establish semantic correctness.
+
+A malformed request is rejected before either provider is called. A valid
+contract describes observable conformance, not truth: correctly typed JSON can
+still contain wrong values. If a local output fails its contract, OpenRouter
+receives the original prompt; the failed local output is never used as repair
+context.
+
+See the checked-in examples under `examples/`.
+
+Prompts, answers, and contract source literals are not logged. `runs.jsonl` contains request mode, contract type, task class, input size, system/runtime measurements, validator state, route/reason, deterministic shadow selection, and the Ollama-reported residency of the configured local model. When Ollama supplies it, the loaded model size is recorded in bytes. Shadow execution defaults off and never affects the user-visible result. Remote fallback always receives the original prompt, not failed local output.
 
 Rolling seven-day medians exclude hard-health rejections and local errors. They and Wilson 95% intervals are reported only as evidence; v0.1 never tunes or routes from aggregate statistics. Fewer than the configured 30 suitable observations produces `INSUFFICIENT_BASELINE_DATA` or `INSUFFICIENT_EVIDENCE`.
 
