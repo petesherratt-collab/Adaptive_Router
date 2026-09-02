@@ -282,6 +282,37 @@ class AnalysisTests(unittest.TestCase):
         self.assertEqual(report["deterministic"]["observation_count"], 30)
         self.assertEqual(report["deterministic"]["provider_call_count"], 0)
 
+    def test_row_router_decision_mismatch_rejects(self):
+        _, tasks, _ = pv.load_frozen_inputs()
+        rows = []
+        for task in tasks:
+            for repetition in range(1, 4):
+                rows.append({
+                    "schema_version": pv.SCHEMA_VERSION,
+                    "suite_id": pv.SUITE_ID,
+                    "plan_sha256": pv.PLAN_SHA256,
+                    "benchmark_sha256": pv.BENCHMARK_SHA256,
+                    "config_sha256": pv.CONFIG_SHA256,
+                    "implementation_revision": "revision",
+                    "model_identity": pv.MODEL_SPEC,
+                    "task_id": task["task_id"],
+                    "repetition": repetition,
+                    "cohort": task["cohort"],
+                    "router_request_id": "request",
+                    "actual_route": "deterministic",
+                    "actual_reason": "DETERMINISTIC_EXECUTED",
+                    "actual_trigger": None,
+                    "router_decision": {
+                        "route": "remote", "reason": "wrong", "total_ms": 1
+                    },
+                    "local": {"present": task["cohort"] != "deterministic"},
+                    "remote": {"present": task["cohort"] != "deterministic"},
+                })
+        with self.assertRaisesRegex(
+            pv.FrozenDesignError, "OBSERVATION_IDENTITY_MISMATCH"
+        ):
+            pv.validate_rows(rows, tasks, "revision")
+
 
 if __name__ == "__main__":
     unittest.main()
