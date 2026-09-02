@@ -1,0 +1,218 @@
+{
+  "analysis": "measured_paired_routing_replay_v1",
+  "boundaries": [
+    "Policies are replayed in-sample and are not prospectively validated.",
+    "Reported cost is the OpenRouter cost field recorded in the frozen run.",
+    "Selected latency is a replay of one chosen path, not a measured live router.",
+    "No retry, contract fallback, or deterministic executor is simulated here."
+  ],
+  "interpretation_rules": {
+    "audited": {
+      "indeterminate_remote_tasks_left_incorrect": [
+        "classify_priority_medium"
+      ],
+      "local_tasks_reclassified_correct": [
+        "extract_person_2"
+      ],
+      "remote_tasks_reclassified_correct": [
+        "extract_event_2",
+        "format_labels_contact",
+        "format_labels_ticket"
+      ]
+    },
+    "strict": "Frozen oracle_correct values without adjustment."
+  },
+  "interpretations": {
+    "audited": {
+      "overlap": {
+        "both_correct": 69,
+        "local_only": 2,
+        "neither": 5,
+        "oracle_selector_pass_rate": 0.9666666666666667,
+        "oracle_selector_passes": 145,
+        "remote_only": 74
+      },
+      "policies": [
+        {
+          "failures": 79,
+          "interpretation": "audited",
+          "local_calls": 150,
+          "median_selected_total_ms": 262.13266991544515,
+          "observations": 150,
+          "pass_delta_vs_always_remote": -72,
+          "pass_rate": 0.47333333333333333,
+          "passes": 71,
+          "policy": "always_local",
+          "remote_call_rate": 0.0,
+          "remote_calls": 0,
+          "remote_calls_saved_vs_always_remote": 150,
+          "remote_calls_with_reported_cost": 0,
+          "remote_transport_failures": 0,
+          "reported_remote_cost_saved_usd": 0.005432,
+          "reported_remote_cost_usd": 0.0,
+          "selected_latency_observation_count": 150,
+          "summed_selected_total_ms": 62310.67772838287
+        },
+        {
+          "failures": 7,
+          "interpretation": "audited",
+          "local_calls": 0,
+          "median_selected_total_ms": 1847.4554425338283,
+          "observations": 150,
+          "pass_delta_vs_always_remote": 0,
+          "pass_rate": 0.9533333333333334,
+          "passes": 143,
+          "policy": "always_remote",
+          "remote_call_rate": 1.0,
+          "remote_calls": 150,
+          "remote_calls_saved_vs_always_remote": 0,
+          "remote_calls_with_reported_cost": 148,
+          "remote_transport_failures": 2,
+          "reported_remote_cost_saved_usd": 0.0,
+          "reported_remote_cost_usd": 0.005432,
+          "selected_latency_observation_count": 150,
+          "summed_selected_total_ms": 438850.4649589304
+        },
+        {
+          "failures": 19,
+          "interpretation": "audited",
+          "local_calls": 75,
+          "median_selected_total_ms": 966.9290675083175,
+          "observations": 150,
+          "pass_delta_vs_always_remote": -12,
+          "pass_rate": 0.8733333333333333,
+          "passes": 131,
+          "policy": "coarse_class",
+          "remote_call_rate": 0.5,
+          "remote_calls": 75,
+          "remote_calls_saved_vs_always_remote": 75,
+          "remote_calls_with_reported_cost": 75,
+          "remote_transport_failures": 0,
+          "reported_remote_cost_saved_usd": 0.0027038,
+          "reported_remote_cost_usd": 0.0027282,
+          "selected_latency_observation_count": 150,
+          "summed_selected_total_ms": 190712.74194004945
+        },
+        {
+          "failures": 10,
+          "interpretation": "audited",
+          "local_calls": 75,
+          "median_selected_total_ms": 990.314192022197,
+          "observations": 150,
+          "pass_delta_vs_always_remote": -3,
+          "pass_rate": 0.9333333333333333,
+          "passes": 140,
+          "policy": "fine_capability",
+          "remote_call_rate": 0.5,
+          "remote_calls": 75,
+          "remote_calls_saved_vs_always_remote": 75,
+          "remote_calls_with_reported_cost": 75,
+          "remote_transport_failures": 0,
+          "reported_remote_cost_saved_usd": 0.0029428,
+          "reported_remote_cost_usd": 0.0024892,
+          "selected_latency_observation_count": 150,
+          "summed_selected_total_ms": 204695.4473608639
+        }
+      ]
+    },
+    "strict": {
+      "overlap": {
+        "both_correct": 66,
+        "local_only": 0,
+        "neither": 22,
+        "oracle_selector_pass_rate": 0.8533333333333334,
+        "oracle_selector_passes": 128,
+        "remote_only": 62
+      },
+      "policies": [
+        {
+          "failures": 84,
+          "interpretation": "strict",
+          "local_calls": 150,
+          "median_selected_total_ms": 262.13266991544515,
+          "observations": 150,
+          "pass_delta_vs_always_remote": -62,
+          "pass_rate": 0.44,
+          "passes": 66,
+          "policy": "always_local",
+          "remote_call_rate": 0.0,
+          "remote_calls": 0,
+          "remote_calls_saved_vs_always_remote": 150,
+          "remote_calls_with_reported_cost": 0,
+          "remote_transport_failures": 0,
+          "reported_remote_cost_saved_usd": 0.005432,
+          "reported_remote_cost_usd": 0.0,
+          "selected_latency_observation_count": 150,
+          "summed_selected_total_ms": 62310.67772838287
+        },
+        {
+          "failures": 22,
+          "interpretation": "strict",
+          "local_calls": 0,
+          "median_selected_total_ms": 1847.4554425338283,
+          "observations": 150,
+          "pass_delta_vs_always_remote": 0,
+          "pass_rate": 0.8533333333333334,
+          "passes": 128,
+          "policy": "always_remote",
+          "remote_call_rate": 1.0,
+          "remote_calls": 150,
+          "remote_calls_saved_vs_always_remote": 0,
+          "remote_calls_with_reported_cost": 148,
+          "remote_transport_failures": 2,
+          "reported_remote_cost_saved_usd": 0.0,
+          "reported_remote_cost_usd": 0.005432,
+          "selected_latency_observation_count": 150,
+          "summed_selected_total_ms": 438850.4649589304
+        },
+        {
+          "failures": 34,
+          "interpretation": "strict",
+          "local_calls": 75,
+          "median_selected_total_ms": 966.9290675083175,
+          "observations": 150,
+          "pass_delta_vs_always_remote": -12,
+          "pass_rate": 0.7733333333333333,
+          "passes": 116,
+          "policy": "coarse_class",
+          "remote_call_rate": 0.5,
+          "remote_calls": 75,
+          "remote_calls_saved_vs_always_remote": 75,
+          "remote_calls_with_reported_cost": 75,
+          "remote_transport_failures": 0,
+          "reported_remote_cost_saved_usd": 0.0027038,
+          "reported_remote_cost_usd": 0.0027282,
+          "selected_latency_observation_count": 150,
+          "summed_selected_total_ms": 190712.74194004945
+        },
+        {
+          "failures": 25,
+          "interpretation": "strict",
+          "local_calls": 75,
+          "median_selected_total_ms": 990.314192022197,
+          "observations": 150,
+          "pass_delta_vs_always_remote": -3,
+          "pass_rate": 0.8333333333333334,
+          "passes": 125,
+          "policy": "fine_capability",
+          "remote_call_rate": 0.5,
+          "remote_calls": 75,
+          "remote_calls_saved_vs_always_remote": 75,
+          "remote_calls_with_reported_cost": 75,
+          "remote_transport_failures": 0,
+          "reported_remote_cost_saved_usd": 0.0029428,
+          "reported_remote_cost_usd": 0.0024892,
+          "selected_latency_observation_count": 150,
+          "summed_selected_total_ms": 204695.4473608639
+        }
+      ]
+    }
+  },
+  "source_identity": {
+    "local_jsonl": "benchmark_runs_simzero_v2.jsonl",
+    "local_sha256": "5637130c56894a0263c534bb87c5037901f0e535df28e658f68d5e85c03f7f6e",
+    "paired_observations": 150,
+    "remote_jsonl": "benchmark_runs_openrouter_luna_v1.jsonl",
+    "remote_sha256": "341d203f34f3789e489329030895970e719483334e42d2ac144080516e3c0405"
+  }
+}
