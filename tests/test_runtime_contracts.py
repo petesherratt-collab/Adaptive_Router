@@ -187,10 +187,25 @@ class RuntimeContractTests(unittest.TestCase):
             },
         ).contract
         self.assertEqual(contract_route(contract), "remote")
+        accepted = validate_runtime_output(contract, "Positive")
+        self.assertEqual(accepted.status, "PASS")
+        self.assertEqual(accepted.detail, "LABEL_MEMBERSHIP_ONLY")
         self.assertEqual(
-            validate_runtime_output(contract, "positive").detail,
-            "CONTRACT_NOT_LOCAL",
+            validate_runtime_output(contract, "uncertain").status,
+            "FAIL",
         )
+
+    def test_classification_labels_must_be_canonical_lowercase(self):
+        with self.assertRaisesRegex(
+            RuntimeContractError, "INVALID_CLASSIFICATION_CONTRACT"
+        ):
+            request(
+                "classification",
+                {
+                    "contract_type": "classification_labels",
+                    "permitted_labels": ["Positive", "negative"],
+                },
+            )
 
     def test_deterministic_executor_bypasses_models(self):
         contract = request(
