@@ -1,0 +1,13 @@
+{
+  "schema_version": "runtime_request_v1",
+  "task_class": "extract_structured",
+  "prompt": "Extract the name and count from: Ada requested 2 copies. Output only JSON.",
+  "contract": {
+    "contract_type": "structured_json",
+    "exact_keys": ["name", "count"],
+    "explicit_types": {
+      "name": "string",
+      "count": "number"
+    }
+  }
+}
