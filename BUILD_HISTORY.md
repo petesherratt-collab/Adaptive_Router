@@ -1737,3 +1737,109 @@ The next product phase is an explicit end-to-end router design combining direct
 deterministic execution, an empirically selected local tier, task contracts,
 OpenRouter escalation, and defined remote failure handling. That complete
 policy requires a fresh prospective evaluation of final user-visible outcomes.
+---
+
+## 2026-09-02 — Runtime v0.2 contract-routing product slice
+
+### Objective
+
+Turn the accumulated routing, scaling, contract-validation and deterministic-
+executor evidence into a first usable runtime slice. This was product
+implementation, not a new benchmark and not a claim that the complete router
+policy is deployment-ready.
+
+Branch: `feature/runtime-v0.2-contract-routing`
+
+Base commit: `e986714`
+
+### Implemented boundary
+
+- Added strict `runtime_request_v1` request documents.
+- Added exact-key and declared-type JSON contracts, bullet and label-format
+  contracts, and remote-only classification-label contracts.
+- Added allowlisted deterministic operations that bypass both Ollama and
+  OpenRouter.
+- Changed legacy validation to fail closed: `NOT_APPLICABLE` now escalates
+  instead of accepting local output.
+- Applied explicit contracts to final successful remote responses as well as
+  local responses. A nonconforming final response is withheld under
+  `REMOTE_CONTRACT_FAILED`.
+- Added bounded OpenRouter retries for timeouts, connection failures, HTTP
+  408/429 and HTTP 5xx. Authentication/client failures and malformed success
+  responses are not retried.
+- Changed the checked-in remote model from the unusable `CHANGE_ME` placeholder
+  to the measured `openai/gpt-5.6-luna` model.
+- Aligned live Ollama generation with the frozen prospective settings:
+  temperature zero, 256 maximum output tokens and persistent residency.
+- Aligned JSON outer-fence normalization with Prospective Contract Validation
+  V2.
+- Added end-to-end `decision.total_ms` telemetry without logging prompts,
+  answers or deterministic source literals.
+
+### Verification
+
+Final pre-PR local result:
+
+```text
+14 focused runtime-contract tests passed
+295 full repository tests passed
+suite_exit=0
+```
+
+The seven pre-existing untracked audit/review artifacts were not staged,
+modified or deleted.
+
+### Bounded live smoke observations
+
+These were ordinary live checks against the development branch. Their
+`runs.jsonl` records remain local and uncommitted; they are not canonical
+benchmark evidence.
+
+| Path | Visible result | Route/provider time | Cost | Interpretation |
+|---|---|---:|---:|---|
+| Legacy unknown prompt | exact requested text | Luna 1,410 ms | $0.0000194 | Direct remote path, one attempt |
+| Initial structured request | correct remote JSON after local parse rejection | local 7,085 ms + remote 2,271 ms | $0.0000418 | Safety worked, but local-first fallback imposed at least 9.36 s provider time |
+| Aligned structured request | fenced JSON with `name` and `count` | 714 ms end to end; local 569 ms | $0 | Local contract path, no remote call |
+| Classification contract | `positive` | 1,445 ms end to end; Luna 1,306 ms | $0.0000128 | Direct remote; final label-membership contract passed |
+
+The aligned structured output visibly matched the supplied example, but the
+runtime gate established only exact keys and JSON value types. It did not
+establish semantic truth. Likewise, label membership does not establish that
+the selected label is semantically correct.
+
+The large difference between the two local structured runs is not attributed
+to one cause. Residency/warm state, generation settings and contract
+normalization changed between them. These smokes were not a controlled paired
+experiment.
+
+### Development incidents before merge
+
+One remote edit inserted a literal `\\n` into Python source and prevented the
+new modules from importing. Focused execution exposed it; commit `c5e7f2e`
+restored valid syntax.
+
+End-to-end latency instrumentation initially referenced `time.perf_counter()`
+without importing `time`. The live request aborted before metrics collection,
+model calls or logging. Commit `17d6a77` added the import, and router tests
+require `decision.total_ms` on every recorded route.
+
+A new regression test then showed that uppercase permitted-label declarations
+were not rejected by the request schema. Commits `0af6d17` and `49e80ab`
+closed that boundary and added malformed nested-value cases.
+
+None of these defects reached `main`, altered sealed evidence or produced a
+canonical result.
+
+### Decision and next boundary
+
+Runtime v0.2 now demonstrates three functioning user-visible paths:
+deterministic execution, contract-gated local inference and contract-checked
+OpenRouter routing. The slice is suitable for pull-request review.
+
+It is not yet a validated adaptive policy. In particular, structured JSON can
+contain semantically wrong but schema-conforming values, and local-first
+fallback can be much slower than direct remote routing. After merge, the next
+phase must define and freeze the automatic pre-routing policy, then evaluate
+the assembled runtime prospectively on fresh tasks. Percentages from earlier
+unpaired suites must not be combined as if they were observations from this
+runtime.

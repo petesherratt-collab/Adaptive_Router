@@ -1,0 +1,10 @@
+{
+  "schema_version": "runtime_request_v1",
+  "task_class": "deterministic",
+  "prompt": "Remove hyphens from the supplied source.",
+  "contract": {
+    "contract_type": "deterministic_executor",
+    "source_literal": "north-star-5",
+    "operation": "remove_hyphens"
+  }
+}
