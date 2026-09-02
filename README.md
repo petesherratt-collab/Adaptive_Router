@@ -56,7 +56,7 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
-Set `OPENROUTER_API_KEY` only in `.env`, and replace `CHANGE_ME` in `config.json` with the chosen remote model. Do not commit `.env`. Thresholds in `config.json` are experimental settings, not scientific constants.
+Set `OPENROUTER_API_KEY` only in `.env`; do not commit `.env`. The checked-in remote default is `openai/gpt-5.6-luna`, the model used by the measured paired replay. Model names, retry limits, and routing thresholds in `config.json` are explicit operating settings, not scientific constants.
 
 ## Usage
 
