@@ -138,7 +138,16 @@ class Router:
 
     def route_request(self, request):
         """Route a caller-supplied, explicit runtime request contract."""
-        if not isinstance(request, RuntimeRequest):
+        if isinstance(request, RuntimeRequest):
+            request = RuntimeRequest.from_mapping(
+                {
+                    "schema_version": request.schema_version,
+                    "task_class": request.task_class,
+                    "prompt": request.prompt,
+                    "contract": request.contract,
+                }
+            )
+        else:
             request = RuntimeRequest.from_mapping(request)
 
         destination = contract_route(request.contract)
