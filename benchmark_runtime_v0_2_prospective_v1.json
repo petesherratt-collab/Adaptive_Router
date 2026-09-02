@@ -1,0 +1,462 @@
+{
+  "schema_version": "runtime_v0_2_prospective_benchmark_v1",
+  "suite_id": "runtime_v0_2_prospective_v1",
+  "released_runtime_tag": "v0.2.0",
+  "released_runtime_commit": "307a47389fea10df38623bc2f238a14a11081269",
+  "repetitions": 3,
+  "task_order": [
+    "rtv02pv1_d_01", "rtv02pv1_s_01", "rtv02pv1_f_01", "rtv02pv1_c_01",
+    "rtv02pv1_d_02", "rtv02pv1_s_02", "rtv02pv1_f_02", "rtv02pv1_c_02",
+    "rtv02pv1_d_03", "rtv02pv1_s_03", "rtv02pv1_f_03", "rtv02pv1_c_03",
+    "rtv02pv1_d_04", "rtv02pv1_s_04", "rtv02pv1_f_04", "rtv02pv1_c_04",
+    "rtv02pv1_d_05", "rtv02pv1_s_05", "rtv02pv1_f_05", "rtv02pv1_c_05",
+    "rtv02pv1_d_06", "rtv02pv1_s_06", "rtv02pv1_f_06", "rtv02pv1_c_06",
+    "rtv02pv1_d_07", "rtv02pv1_s_07", "rtv02pv1_f_07", "rtv02pv1_c_07",
+    "rtv02pv1_d_08", "rtv02pv1_s_08", "rtv02pv1_f_08", "rtv02pv1_c_08",
+    "rtv02pv1_d_09", "rtv02pv1_s_09", "rtv02pv1_c_09",
+    "rtv02pv1_d_10", "rtv02pv1_s_10", "rtv02pv1_c_10",
+    "rtv02pv1_s_11", "rtv02pv1_s_12"
+  ],
+  "tasks": [
+    {
+      "task_id": "rtv02pv1_d_01",
+      "cohort": "deterministic",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "deterministic",
+        "prompt": "Rotate the supplied source left by one Unicode code point.",
+        "contract": {"contract_type": "deterministic_executor", "source_literal": "bracken", "operation": "rotate_left_one"}
+      },
+      "oracle": {"kind": "exact_text", "expected": "rackenb"}
+    },
+    {
+      "task_id": "rtv02pv1_s_01",
+      "cohort": "structural_json",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Extract this vendor record: vendor is Rowan Supply, invoice count is 6, active is true. Output only one JSON object with exactly the keys vendor, invoice_count, active. vendor must be a string, invoice_count a number, and active a boolean.",
+        "contract": {"contract_type": "structured_json", "exact_keys": ["vendor", "invoice_count", "active"], "explicit_types": {"vendor": "string", "invoice_count": "number", "active": "boolean"}}
+      },
+      "oracle": {"kind": "json_object", "expected": {"vendor": "Rowan Supply", "invoice_count": 6, "active": true}}
+    },
+    {
+      "task_id": "rtv02pv1_f_01",
+      "cohort": "line_format",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "format",
+        "prompt": "Output exactly three lines and nothing else. Each line must begin with '- '. Use these items in this order: copper wire; glass bead; linen cord.",
+        "contract": {"contract_type": "bullet_format", "line_count": 3, "marker": "-", "separator": " "}
+      },
+      "oracle": {"kind": "exact_lines", "expected": "- copper wire\n- glass bead\n- linen cord"}
+    },
+    {
+      "task_id": "rtv02pv1_c_01",
+      "cohort": "classification",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "classification",
+        "prompt": "Classify the sentiment as exactly positive, negative, or neutral. positive means clearly favourable or approving; negative means clearly unfavourable or disapproving; neutral means factual without evaluation. Text: The repair was excellent and I am delighted with the result. Output only the label.",
+        "contract": {"contract_type": "classification_labels", "permitted_labels": ["positive", "negative", "neutral"]}
+      },
+      "oracle": {"kind": "classification_label", "expected": "positive"}
+    },
+    {
+      "task_id": "rtv02pv1_d_02",
+      "cohort": "deterministic",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "deterministic",
+        "prompt": "Rotate the supplied source right by two Unicode code points.",
+        "contract": {"contract_type": "deterministic_executor", "source_literal": "marigold", "operation": "rotate_right_two"}
+      },
+      "oracle": {"kind": "exact_text", "expected": "ldmarigo"}
+    },
+    {
+      "task_id": "rtv02pv1_s_02",
+      "cohort": "structural_json",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Extract this sensor record: station is East Pier, reading is 18.75, calibrated is false. Output only one JSON object with exactly station, reading, calibrated; use string, number, boolean respectively.",
+        "contract": {"contract_type": "structured_json", "exact_keys": ["station", "reading", "calibrated"], "explicit_types": {"station": "string", "reading": "number", "calibrated": "boolean"}}
+      },
+      "oracle": {"kind": "json_object", "expected": {"station": "East Pier", "reading": 18.75, "calibrated": false}}
+    },
+    {
+      "task_id": "rtv02pv1_f_02",
+      "cohort": "line_format",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "format",
+        "prompt": "Output exactly two lines and nothing else. Each line must begin with '* '. Use these items in order: inspect hinge; tighten bracket.",
+        "contract": {"contract_type": "bullet_format", "line_count": 2, "marker": "*", "separator": " "}
+      },
+      "oracle": {"kind": "exact_lines", "expected": "* inspect hinge\n* tighten bracket"}
+    },
+    {
+      "task_id": "rtv02pv1_c_02",
+      "cohort": "classification",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "classification",
+        "prompt": "Classify the sentiment as exactly positive, negative, or neutral. positive means clearly favourable or approving; negative means clearly unfavourable or disapproving; neutral means factual without evaluation. Text: The service was careless and the outcome was deeply disappointing. Output only the label.",
+        "contract": {"contract_type": "classification_labels", "permitted_labels": ["positive", "negative", "neutral"]}
+      },
+      "oracle": {"kind": "classification_label", "expected": "negative"}
+    },
+    {
+      "task_id": "rtv02pv1_d_03",
+      "cohort": "deterministic",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "deterministic",
+        "prompt": "Remove lowercase ASCII vowels from the supplied source.",
+        "contract": {"contract_type": "deterministic_executor", "source_literal": "aqueduct", "operation": "remove_vowels"}
+      },
+      "oracle": {"kind": "exact_text", "expected": "qdct"}
+    },
+    {
+      "task_id": "rtv02pv1_s_03",
+      "cohort": "structural_json",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Extract this library record: title is Stone Orchard, pages is 224, available is true. Output only one JSON object with exactly title, pages, available; use string, number, boolean respectively.",
+        "contract": {"contract_type": "structured_json", "exact_keys": ["title", "pages", "available"], "explicit_types": {"title": "string", "pages": "number", "available": "boolean"}}
+      },
+      "oracle": {"kind": "json_object", "expected": {"title": "Stone Orchard", "pages": 224, "available": true}}
+    },
+    {
+      "task_id": "rtv02pv1_f_03",
+      "cohort": "line_format",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "format",
+        "prompt": "Output exactly four lines and nothing else. Each line must begin with '> '. Use these compass points in order: north; east; south; west.",
+        "contract": {"contract_type": "bullet_format", "line_count": 4, "marker": ">", "separator": " "}
+      },
+      "oracle": {"kind": "exact_lines", "expected": "> north\n> east\n> south\n> west"}
+    },
+    {
+      "task_id": "rtv02pv1_c_03",
+      "cohort": "classification",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "classification",
+        "prompt": "Classify the sentiment as exactly positive, negative, or neutral. positive means clearly favourable or approving; negative means clearly unfavourable or disapproving; neutral means factual without evaluation. Text: The parcel weighed 4 kilograms and arrived at 14:20. Output only the label.",
+        "contract": {"contract_type": "classification_labels", "permitted_labels": ["positive", "negative", "neutral"]}
+      },
+      "oracle": {"kind": "classification_label", "expected": "neutral"}
+    },
+    {
+      "task_id": "rtv02pv1_d_04",
+      "cohort": "deterministic",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "deterministic",
+        "prompt": "Replace each lowercase ASCII e in the supplied source with 7.",
+        "contract": {"contract_type": "deterministic_executor", "source_literal": "referee", "operation": "replace_letter_e_with_7"}
+      },
+      "oracle": {"kind": "exact_text", "expected": "r7f7r77"}
+    },
+    {
+      "task_id": "rtv02pv1_s_04",
+      "cohort": "structural_json",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Extract this shipment record: container is BX-41, mass_kg is 73, sealed is false. Output only one JSON object with exactly container, mass_kg, sealed; use string, number, boolean respectively.",
+        "contract": {"contract_type": "structured_json", "exact_keys": ["container", "mass_kg", "sealed"], "explicit_types": {"container": "string", "mass_kg": "number", "sealed": "boolean"}}
+      },
+      "oracle": {"kind": "json_object", "expected": {"container": "BX-41", "mass_kg": 73, "sealed": false}}
+    },
+    {
+      "task_id": "rtv02pv1_f_04",
+      "cohort": "line_format",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "format",
+        "prompt": "Output exactly three lines and nothing else. Each line must begin with '+ '. Use these stages in order: gather samples; label jars; store records.",
+        "contract": {"contract_type": "bullet_format", "line_count": 3, "marker": "+", "separator": " "}
+      },
+      "oracle": {"kind": "exact_lines", "expected": "+ gather samples\n+ label jars\n+ store records"}
+    },
+    {
+      "task_id": "rtv02pv1_c_04",
+      "cohort": "classification",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "classification",
+        "prompt": "Classify the sentiment as exactly positive, negative, or neutral. positive means clearly favourable or approving; negative means clearly unfavourable or disapproving; neutral means factual without evaluation. Text: I strongly approve of the clear and thoughtful proposal. Output only the label.",
+        "contract": {"contract_type": "classification_labels", "permitted_labels": ["positive", "negative", "neutral"]}
+      },
+      "oracle": {"kind": "classification_label", "expected": "positive"}
+    },
+    {
+      "task_id": "rtv02pv1_d_05",
+      "cohort": "deterministic",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "deterministic",
+        "prompt": "Collapse every Unicode whitespace run in the supplied source to one ASCII space.",
+        "contract": {"contract_type": "deterministic_executor", "source_literal": "amber\t  field\nlane", "operation": "collapse_whitespace_runs"}
+      },
+      "oracle": {"kind": "exact_text", "expected": "amber field lane"}
+    },
+    {
+      "task_id": "rtv02pv1_s_05",
+      "cohort": "structural_json",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Extract this project record: project is Blue Lantern, milestones are design and trial in that order, owner has name Mira and team Delta. Output only one JSON object with exactly project, milestones, owner. project is a string, milestones an array, owner an object.",
+        "contract": {"contract_type": "structured_json", "exact_keys": ["project", "milestones", "owner"], "explicit_types": {"project": "string", "milestones": "array", "owner": "object"}}
+      },
+      "oracle": {"kind": "json_object", "expected": {"project": "Blue Lantern", "milestones": ["design", "trial"], "owner": {"name": "Mira", "team": "Delta"}}}
+    },
+    {
+      "task_id": "rtv02pv1_f_05",
+      "cohort": "line_format",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "format",
+        "prompt": "Output exactly three lines and nothing else, each with exactly one ' :: ' separator. Use these pairs in order: colour and teal; size and medium; stock and 17.",
+        "contract": {"contract_type": "label_format", "line_count": 3, "separator": " :: "}
+      },
+      "oracle": {"kind": "exact_lines", "expected": "colour :: teal\nsize :: medium\nstock :: 17"}
+    },
+    {
+      "task_id": "rtv02pv1_c_05",
+      "cohort": "classification",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "classification",
+        "prompt": "Classify the sentiment as exactly positive, negative, or neutral. positive means clearly favourable or approving; negative means clearly unfavourable or disapproving; neutral means factual without evaluation. Text: I regret choosing this unreliable and frustrating product. Output only the label.",
+        "contract": {"contract_type": "classification_labels", "permitted_labels": ["positive", "negative", "neutral"]}
+      },
+      "oracle": {"kind": "classification_label", "expected": "negative"}
+    },
+    {
+      "task_id": "rtv02pv1_d_06",
+      "cohort": "deterministic",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "deterministic",
+        "prompt": "Swap ASCII uppercase and lowercase in the supplied source.",
+        "contract": {"contract_type": "deterministic_executor", "source_literal": "Harbor9Light", "operation": "swap_ascii_case"}
+      },
+      "oracle": {"kind": "exact_text", "expected": "hARBOR9lIGHT"}
+    },
+    {
+      "task_id": "rtv02pv1_s_06",
+      "cohort": "structural_json",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Extract this event record: event is Dawn Survey, attendees is 12, location is explicitly null. Output only one JSON object with exactly event, attendees, location; use string, number, null respectively.",
+        "contract": {"contract_type": "structured_json", "exact_keys": ["event", "attendees", "location"], "explicit_types": {"event": "string", "attendees": "number", "location": "null"}}
+      },
+      "oracle": {"kind": "json_object", "expected": {"event": "Dawn Survey", "attendees": 12, "location": null}}
+    },
+    {
+      "task_id": "rtv02pv1_f_06",
+      "cohort": "line_format",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "format",
+        "prompt": "Output exactly two lines and nothing else, each with exactly one ' => ' separator. Use these pairs in order: inlet and open; outlet and closed.",
+        "contract": {"contract_type": "label_format", "line_count": 2, "separator": " => "}
+      },
+      "oracle": {"kind": "exact_lines", "expected": "inlet => open\noutlet => closed"}
+    },
+    {
+      "task_id": "rtv02pv1_c_06",
+      "cohort": "classification",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "classification",
+        "prompt": "Classify priority as exactly high, medium, or low. high means an active safety/security event, blocked work, or a deadline within 24 hours; medium means action due after 24 hours and within 7 days while work can continue; low means no action is needed or the deadline is beyond 7 days. Situation: A failed access-control service is blocking all staff from starting work now. Output only the label.",
+        "contract": {"contract_type": "classification_labels", "permitted_labels": ["high", "medium", "low"]}
+      },
+      "oracle": {"kind": "classification_label", "expected": "high"}
+    },
+    {
+      "task_id": "rtv02pv1_d_07",
+      "cohort": "deterministic",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "deterministic",
+        "prompt": "Remove ASCII hyphens from the supplied source.",
+        "contract": {"contract_type": "deterministic_executor", "source_literal": "silver-arch-12", "operation": "remove_hyphens"}
+      },
+      "oracle": {"kind": "exact_text", "expected": "silverarch12"}
+    },
+    {
+      "task_id": "rtv02pv1_s_07",
+      "cohort": "structural_json",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Extract this recipe record: dish is Juniper Soup, servings is 2, ingredients in order are lentils, leek, thyme. Output only one JSON object with exactly dish, servings, ingredients; use string, number, array respectively.",
+        "contract": {"contract_type": "structured_json", "exact_keys": ["dish", "servings", "ingredients"], "explicit_types": {"dish": "string", "servings": "number", "ingredients": "array"}}
+      },
+      "oracle": {"kind": "json_object", "expected": {"dish": "Juniper Soup", "servings": 2, "ingredients": ["lentils", "leek", "thyme"]}}
+    },
+    {
+      "task_id": "rtv02pv1_f_07",
+      "cohort": "line_format",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "format",
+        "prompt": "Output exactly four lines and nothing else, each with exactly one ' = ' separator. Use these pairs in order: alpha and 3; beta and 5; gamma and 8; delta and 13.",
+        "contract": {"contract_type": "label_format", "line_count": 4, "separator": " = "}
+      },
+      "oracle": {"kind": "exact_lines", "expected": "alpha = 3\nbeta = 5\ngamma = 8\ndelta = 13"}
+    },
+    {
+      "task_id": "rtv02pv1_c_07",
+      "cohort": "classification",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "classification",
+        "prompt": "Classify priority as exactly high, medium, or low. high means an active safety/security event, blocked work, or a deadline within 24 hours; medium means action due after 24 hours and within 7 days while work can continue; low means no action is needed or the deadline is beyond 7 days. Situation: Review the draft in three days; current work can continue and there is no safety or security issue. Output only the label.",
+        "contract": {"contract_type": "classification_labels", "permitted_labels": ["high", "medium", "low"]}
+      },
+      "oracle": {"kind": "classification_label", "expected": "medium"}
+    },
+    {
+      "task_id": "rtv02pv1_d_08",
+      "cohort": "deterministic",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "deterministic",
+        "prompt": "Sort the supplied Unicode code points in ascending numeric order.",
+        "contract": {"contract_type": "deterministic_executor", "source_literal": "c5Ba!", "operation": "sort_codepoints_ascending"}
+      },
+      "oracle": {"kind": "exact_text", "expected": "!5Bac"}
+    },
+    {
+      "task_id": "rtv02pv1_s_08",
+      "cohort": "structural_json",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Extract this device record: device is Loom-7, voltage is 3.3, online is true. Output only one JSON object with exactly device, voltage, online; use string, number, boolean respectively.",
+        "contract": {"contract_type": "structured_json", "exact_keys": ["device", "voltage", "online"], "explicit_types": {"device": "string", "voltage": "number", "online": "boolean"}}
+      },
+      "oracle": {"kind": "json_object", "expected": {"device": "Loom-7", "voltage": 3.3, "online": true}}
+    },
+    {
+      "task_id": "rtv02pv1_f_08",
+      "cohort": "line_format",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "format",
+        "prompt": "Output exactly three lines and nothing else, each with exactly one ' | ' separator. Use these pairs in order: oak and sturdy; reed and flexible; moss and soft.",
+        "contract": {"contract_type": "label_format", "line_count": 3, "separator": " | "}
+      },
+      "oracle": {"kind": "exact_lines", "expected": "oak | sturdy\nreed | flexible\nmoss | soft"}
+    },
+    {
+      "task_id": "rtv02pv1_c_08",
+      "cohort": "classification",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "classification",
+        "prompt": "Classify priority as exactly high, medium, or low. high means an active safety/security event, blocked work, or a deadline within 24 hours; medium means action due after 24 hours and within 7 days while work can continue; low means no action is needed or the deadline is beyond 7 days. Situation: This record is archived for reference and no action is required. Output only the label.",
+        "contract": {"contract_type": "classification_labels", "permitted_labels": ["high", "medium", "low"]}
+      },
+      "oracle": {"kind": "classification_label", "expected": "low"}
+    },
+    {
+      "task_id": "rtv02pv1_d_09",
+      "cohort": "deterministic",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "deterministic",
+        "prompt": "Duplicate the final Unicode code point of the supplied source.",
+        "contract": {"contract_type": "deterministic_executor", "source_literal": "quartz", "operation": "duplicate_final_character"}
+      },
+      "oracle": {"kind": "exact_text", "expected": "quartzz"}
+    },
+    {
+      "task_id": "rtv02pv1_s_09",
+      "cohort": "structural_json",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "format",
+        "prompt": "Create only one JSON object from these values: x is -4, y is 9, label is ridge. Use exactly the keys x, y, label with number, number, string types.",
+        "contract": {"contract_type": "json_format", "exact_keys": ["x", "y", "label"], "explicit_types": {"x": "number", "y": "number", "label": "string"}}
+      },
+      "oracle": {"kind": "json_object", "expected": {"x": -4, "y": 9, "label": "ridge"}}
+    },
+    {
+      "task_id": "rtv02pv1_c_09",
+      "cohort": "classification",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "classification",
+        "prompt": "Classify priority as exactly high, medium, or low. high means an active safety/security event, blocked work, or a deadline within 24 hours; medium means action due after 24 hours and within 7 days while work can continue; low means no action is needed or the deadline is beyond 7 days. Situation: Submit the compliance response within the next 10 hours. Output only the label.",
+        "contract": {"contract_type": "classification_labels", "permitted_labels": ["high", "medium", "low"]}
+      },
+      "oracle": {"kind": "classification_label", "expected": "high"}
+    },
+    {
+      "task_id": "rtv02pv1_d_10",
+      "cohort": "deterministic",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "deterministic",
+        "prompt": "Alphabetize the ASCII-space-separated words in the supplied source.",
+        "contract": {"contract_type": "deterministic_executor", "source_literal": "willow cedar birch", "operation": "alphabetize_words"}
+      },
+      "oracle": {"kind": "exact_text", "expected": "birch cedar willow"}
+    },
+    {
+      "task_id": "rtv02pv1_s_10",
+      "cohort": "structural_json",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "format",
+        "prompt": "Create only one JSON object from these feature values: search is true, export is false, version is 4. Use exactly the keys search, export, version with boolean, boolean, number types.",
+        "contract": {"contract_type": "json_format", "exact_keys": ["search", "export", "version"], "explicit_types": {"search": "boolean", "export": "boolean", "version": "number"}}
+      },
+      "oracle": {"kind": "json_object", "expected": {"search": true, "export": false, "version": 4}}
+    },
+    {
+      "task_id": "rtv02pv1_c_10",
+      "cohort": "classification",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "classification",
+        "prompt": "Classify priority as exactly high, medium, or low. high means an active safety/security event, blocked work, or a deadline within 24 hours; medium means action due after 24 hours and within 7 days while work can continue; low means no action is needed or the deadline is beyond 7 days. Situation: Renew the optional catalogue subscription in 14 days; no work is blocked. Output only the label.",
+        "contract": {"contract_type": "classification_labels", "permitted_labels": ["high", "medium", "low"]}
+      },
+      "oracle": {"kind": "classification_label", "expected": "low"}
+    },
+    {
+      "task_id": "rtv02pv1_s_11",
+      "cohort": "structural_json",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "format",
+        "prompt": "Create only one JSON object from these note values: heading is Tidal Window, flags in order are review and coastal, archived is false. Use exactly heading, flags, archived with string, array, boolean types.",
+        "contract": {"contract_type": "json_format", "exact_keys": ["heading", "flags", "archived"], "explicit_types": {"heading": "string", "flags": "array", "archived": "boolean"}}
+      },
+      "oracle": {"kind": "json_object", "expected": {"heading": "Tidal Window", "flags": ["review", "coastal"], "archived": false}}
+    },
+    {
+      "task_id": "rtv02pv1_s_12",
+      "cohort": "structural_json",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "format",
+        "prompt": "Create only one JSON object from these account values: code is AC-82, balance is 51.2, contact is explicitly null. Use exactly code, balance, contact with string, number, null types.",
+        "contract": {"contract_type": "json_format", "exact_keys": ["code", "balance", "contact"], "explicit_types": {"code": "string", "balance": "number", "contact": "null"}}
+      },
+      "oracle": {"kind": "json_object", "expected": {"code": "AC-82", "balance": 51.2, "contact": null}}
+    }
+  ]
+}
