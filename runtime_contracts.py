@@ -122,24 +122,32 @@ def _validated_contract(value: Any) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise RuntimeContractError("MALFORMED_CONTRACT")
     kind = value.get("contract_type")
-    if kind not in CONTRACT_TYPES:
+    if not isinstance(kind, str) or kind not in CONTRACT_TYPES:
         raise RuntimeContractError("UNKNOWN_CONTRACT_TYPE")
 
     if kind in {"structured_json", "json_format"}:
-        _require_exact_fields(value, {"contract_type", "exact_keys", "explicit_types"})
+        _require_exact_fields(
+            value, {"contract_type", "exact_keys", "explicit_types"}
+        )
         keys, types = value["exact_keys"], value["explicit_types"]
         if (
             not isinstance(keys, list)
             or not keys
-            or len(set(keys)) != len(keys)
             or any(not isinstance(key, str) or not key for key in keys)
+            or len(set(keys)) != len(keys)
             or not isinstance(types, dict)
             or set(types) != set(keys)
         ):
             raise RuntimeContractError("INVALID_JSON_CONTRACT")
         for declared in types.values():
             choices = declared if isinstance(declared, list) else [declared]
-            if not choices or any(choice not in JSON_TYPES for choice in choices):
+            if (
+                not choices
+                or any(
+                    not isinstance(choice, str) or choice not in JSON_TYPES
+                    for choice in choices
+                )
+            ):
                 raise RuntimeContractError("INVALID_JSON_TYPE")
     elif kind == "bullet_format":
         _require_exact_fields(
@@ -157,7 +165,9 @@ def _validated_contract(value: Any) -> dict[str, Any]:
         ):
             raise RuntimeContractError("INVALID_BULLET_CONTRACT")
     elif kind == "label_format":
-        _require_exact_fields(value, {"contract_type", "line_count", "separator"})
+        _require_exact_fields(
+            value, {"contract_type", "line_count", "separator"}
+        )
         if (
             type(value["line_count"]) is not int
             or value["line_count"] <= 0
@@ -172,8 +182,13 @@ def _validated_contract(value: Any) -> dict[str, Any]:
         if (
             not isinstance(labels, list)
             or not labels
+            or any(
+                not isinstance(label, str)
+                or not label
+                or label != _ascii_lower(label)
+                for label in labels
+            )
             or len(set(labels)) != len(labels)
-            or any(not isinstance(label, str) or not label for label in labels)
         ):
             raise RuntimeContractError("INVALID_CLASSIFICATION_CONTRACT")
     else:
