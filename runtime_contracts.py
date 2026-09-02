@@ -225,14 +225,14 @@ def _json_candidate(raw: str) -> str:
     """Allow only the frozen V2 contract's narrow outer-fence normalization."""
     value = _line_normalize(raw)
     lines = value.split("\n")
-    if lines and lines[0] in {"\`\`\`", "\`\`\`json"}:
-        if len(lines) < 2 or lines[-1] != "\`\`\`":
+    if lines and lines[0] in {"```", "```json"}:
+        if len(lines) < 2 or lines[-1] != "```":
             raise ValueError("INCOMPLETE_OUTER_FENCE")
         body = lines[1:-1]
-        if any("\`\`\`" in line for line in body):
+        if any("```" in line for line in body):
             raise ValueError("NESTED_OR_MULTIPLE_FENCE")
         return "\n".join(body)
-    if any("\`\`\`" in line for line in lines):
+    if any("```" in line for line in lines):
         raise ValueError("INCOMPLETE_OR_SURROUNDING_FENCE")
     return value
 
