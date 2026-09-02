@@ -443,6 +443,7 @@ def validate_rows(rows, tasks, revision):
     if keys != expected_keys(tasks) or len(set(keys)) != len(keys):
         raise FrozenDesignError("OBSERVATION_ORDER_MISMATCH")
     for row in rows:
+        decision = row.get("router_decision")
         if (
             row.get("schema_version") != SCHEMA_VERSION
             or row.get("suite_id") != SUITE_ID
@@ -450,7 +451,14 @@ def validate_rows(rows, tasks, revision):
             or row.get("benchmark_sha256") != BENCHMARK_SHA256
             or row.get("config_sha256") != CONFIG_SHA256
             or row.get("implementation_revision") != revision
+            or row.get("model_identity") != MODEL_SPEC
             or not isinstance(row.get("router_request_id"), str)
+            or not isinstance(decision, dict)
+            or decision.get("route") != row.get("actual_route")
+            or decision.get("reason") != row.get("actual_reason")
+            or decision.get("trigger") != row.get("actual_trigger")
+            or type(decision.get("total_ms")) not in (int, float)
+            or decision.get("total_ms") < 0
         ):
             raise FrozenDesignError("OBSERVATION_IDENTITY_MISMATCH")
     generative = [row for row in rows if row["cohort"] != "deterministic"]
