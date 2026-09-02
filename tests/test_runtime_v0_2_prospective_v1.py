@@ -161,6 +161,23 @@ class BudgetAndStateTests(unittest.TestCase):
 
 
 class DryRunTests(unittest.TestCase):
+    def test_metadata_preflight_makes_no_generation_request(self):
+        with patch.object(
+            runner.pv, "implementation_revision", return_value="revision"
+        ), patch.object(
+            runner, "fetch_installed_model_metadata", return_value=pv.MODEL_SPEC
+        ), patch.object(
+            runner.local, "generate", side_effect=AssertionError("local generation")
+        ), patch.object(
+            runner.remote, "generate", side_effect=AssertionError("remote generation")
+        ), patch.dict(runner.os.environ, {"OPENROUTER_API_KEY": "present"}):
+            result = runner.preflight_report()
+        self.assertEqual(result["status"], "PASS")
+        self.assertEqual(result["output_state"], "EMPTY")
+        self.assertEqual(result["provider_generation_requests"], 0)
+        self.assertEqual(result["runtime_observations"], 120)
+        self.assertEqual(result["local_model_identity"], pv.MODEL_SPEC)
+
     def test_dry_run_makes_no_real_provider_call(self):
         with patch.object(
             runner.local, "generate", side_effect=AssertionError("local network")
