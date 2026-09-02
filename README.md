@@ -39,9 +39,7 @@ It does not detect intelligence, directly measure semantic difficulty, guarantee
 
 Deterministic validators are task-specific. For many open-ended question-answering tasks no defensible generic deterministic correctness validator is currently implemented.
 
-Probe latency is observational in v0.1. It is being tested as a possible explanatory signal and does not influence routing decisions.
-
-The v0.1 workload probe is observational only. Its predictive value must be established empirically before it can influence routing.
+Probe latency remains observational in v0.2. It does not influence routing decisions, and its predictive value has not been established.
 
 Routing statistics must display both sample size and uncertainty. Categories with fewer than 30 observations are not treated as established evidence.
 
@@ -63,6 +61,8 @@ Set `OPENROUTER_API_KEY` only in `.env`; do not commit `.env`. The checked-in re
 ```bash
 python main.py
 python main.py --prompt "Rewrite this paragraph..."
+python main.py --request-json examples/runtime_request_deterministic.json
+python main.py --request-json examples/runtime_request_structured_json.json
 python main.py --diagnostics
 python main.py --stats
 python -m unittest discover -s tests -v
@@ -86,28 +86,32 @@ A malformed request is rejected before either provider is called. A valid
 contract describes observable conformance, not truth: correctly typed JSON can
 still contain wrong values. If a local output fails its contract, OpenRouter
 receives the original prompt; the failed local output is never used as repair
-context.
+context. A successful remote transport response is checked against the same
+contract; a nonconforming final response is withheld and recorded as
+`REMOTE_CONTRACT_FAILED`. OpenRouter retries are bounded and apply only to
+timeouts, connection failures, HTTP 408/429, and HTTP 5xx. Authentication and
+other client errors, plus malformed success responses, are not retried.
 
 See the checked-in examples under `examples/`.
 
-Prompts, answers, and contract source literals are not logged. `runs.jsonl` contains request mode, contract type, task class, input size, system/runtime measurements, validator state, route/reason, deterministic shadow selection, and the Ollama-reported residency of the configured local model. When Ollama supplies it, the loaded model size is recorded in bytes. Shadow execution defaults off and never affects the user-visible result. Remote fallback always receives the original prompt, not failed local output.
+Prompts, answers, and contract source literals are not logged. `runs.jsonl` contains request mode, contract type, task class, input size, system/runtime measurements, local and remote validator states, route/reason, total route latency, deterministic shadow selection, and the Ollama-reported residency of the configured local model. When Ollama supplies it, the loaded model size is recorded in bytes. Shadow execution defaults off and never affects the user-visible result. Remote fallback always receives the original prompt, not failed local output.
 
-Rolling seven-day medians exclude hard-health rejections and local errors. They and Wilson 95% intervals are reported only as evidence; v0.1 never tunes or routes from aggregate statistics. Fewer than the configured 30 suitable observations produces `INSUFFICIENT_BASELINE_DATA` or `INSUFFICIENT_EVIDENCE`.
+Rolling seven-day medians exclude hard-health rejections and local errors. They and Wilson 95% intervals are reported only as evidence; v0.2 never tunes or routes from aggregate statistics. Fewer than the configured 30 suitable observations produces `INSUFFICIENT_BASELINE_DATA` or `INSUFFICIENT_EVIDENCE`.
 
 ## Initial policy
 
-Local eligible: `rewrite`, `summarise_short`, `extract_structured`, `format`.
+Legacy local eligible: `rewrite`, `summarise_short`, `extract_structured`, and `format`, but only an applicable validator `PASS` accepts local output. `NOT_APPLICABLE` escalates.
 
-Remote default: `code`, `research`, `unknown`.
+Explicit structural JSON, JSON-format, bullet-format, and label-format contracts are local eligible. Deterministic executor requests bypass both models. Semantic classification contracts route directly to OpenRouter. `code`, `research`, and `unknown` remain remote defaults.
 
-Stable reasons: `LOCAL_ACCEPTED`, `REMOTE_DEFAULT_TASK`, `LOW_RAM`, `ACTIVE_SWAP_PRESSURE`, `LOCAL_TIMEOUT`, `LOCAL_ERROR`, `TTFT_EXCEEDED`, `GENERATION_TOO_SLOW`, `VALIDATOR_FAILED`, `REMOTE_ERROR`, and `SHADOW_SAMPLE`.
+Stable v0.2 reasons add `CONTRACT_REMOTE_ONLY`, `DETERMINISTIC_EXECUTED`, `VALIDATOR_NOT_APPLICABLE`, and `REMOTE_CONTRACT_FAILED` to the existing operational and provider reason codes.
 
 Before a local-eligible request, the router checks Ollama's local `/api/ps` endpoint. The minimum-available-RAM gate applies only when the configured model is not resident. Swap occupancy is logged but does not reject local inference by itself; swap-out activity observed during the fixed 0.1-second preflight sampling window does. If residency cannot be confirmed, the router conservatively treats the model as not resident.
 
-## Current research direction
+## Current product direction
 
-Runtime health signals remain useful for operational rejection, but the
-out-of-sample failures show that they cannot predict many clean semantic and
-schema errors. The next experiment will estimate accuracy under explicit
-remote-call budgets, compare stronger local models, and separate
-oracle-supplied capability labels from automatic prompt classification.
+Runtime health signals remain operational gates, not correctness estimates.
+v0.2 now has deterministic bypass, explicit caller contracts, contract checks
+on both local and final remote outputs, bounded remote retries, and measured
+end-to-end latency. A fresh prospective evaluation of this assembled runtime
+is still required before it should be treated as deployment-ready software.
