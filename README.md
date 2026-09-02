@@ -62,7 +62,8 @@ Set `OPENROUTER_API_KEY` only in `.env`; do not commit `.env`. The checked-in re
 python main.py
 python main.py --prompt "Rewrite this paragraph..."
 python main.py --request-json examples/runtime_request_deterministic.json
-python main.py --request-json examples/runtime_request_structured_json.json\npython main.py --request-json examples/runtime_request_classification.json
+python main.py --request-json examples/runtime_request_structured_json.json
+python main.py --request-json examples/runtime_request_classification.json
 python main.py --diagnostics
 python main.py --stats
 python -m unittest discover -s tests -v
