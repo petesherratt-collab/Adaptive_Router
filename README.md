@@ -1,6 +1,6 @@
-# Adaptive Router v0.2
+# Adaptive Router v0.3
 
-A small Linux terminal router for deterministic execution, contract-gated Ollama inference, and OpenRouter escalation. It preserves the research instruments that established its current boundaries, but v0.2 begins turning those findings into a usable runtime. Each request produces metadata-only JSONL telemetry.
+A small Linux terminal router for deterministic execution and remote-authoritative generative inference through OpenRouter. Ollama is retained as an opt-in, non-authoritative shadow measurement path. The runtime preserves the research instruments that established this safety boundary, and each request produces metadata-only JSONL telemetry.
 
 ## Prospective deterministic-contract case study
 
@@ -39,7 +39,7 @@ It does not detect intelligence, directly measure semantic difficulty, guarantee
 
 Deterministic validators are task-specific. For many open-ended question-answering tasks no defensible generic deterministic correctness validator is currently implemented.
 
-Probe latency remains observational in v0.2. It does not influence routing decisions, and its predictive value has not been established.
+Probe latency remains observational in v0.3. It does not influence routing decisions, and its predictive value has not been established.
 
 Routing statistics must display both sample size and uncertainty. Categories with fewer than 30 observations are not treated as established evidence.
 
@@ -76,43 +76,64 @@ declares a task class, the prompt, and one contract. Supported behavior is:
 
 - `deterministic_executor`: execute one allowlisted operation in Python; call
   neither Ollama nor OpenRouter.
-- `structured_json` and `json_format`: try Ollama and accept only an exact
-  key set with declared JSON value types.
-- `bullet_format` and `label_format`: try Ollama and accept only the
-  declared line shape.
-- `classification_labels`: route directly to OpenRouter. Permitted-label
-  membership cannot establish semantic correctness.
+- `structured_json`, `json_format`, `bullet_format`, and
+  `label_format`: route to OpenRouter and enforce the declared output shape
+  on the final response.
+- `classification_labels`: route to OpenRouter and enforce permitted-label
+  membership, which cannot establish semantic correctness.
 
 A malformed request is rejected before either provider is called. A valid
 contract describes observable conformance, not truth: correctly typed JSON can
-still contain wrong values. If a local output fails its contract, OpenRouter
-receives the original prompt; the failed local output is never used as repair
-context. A successful remote transport response is checked against the same
-contract; a nonconforming final response is withheld and recorded as
+still contain wrong values. OpenRouter receives the original caller prompt; local shadow output is never
+used as repair context or returned to the caller. A successful remote transport
+response is checked against the declared contract; a nonconforming final
+response is withheld and recorded as
 `REMOTE_CONTRACT_FAILED`. OpenRouter retries are bounded and apply only to
 timeouts, connection failures, HTTP 408/429, and HTTP 5xx. Authentication and
 other client errors, plus malformed success responses, are not retried.
 
 See the checked-in examples under `examples/`.
 
-Prompts, answers, and contract source literals are not logged. `runs.jsonl` contains request mode, contract type, task class, input size, system/runtime measurements, local and remote validator states, route/reason, total route latency, deterministic shadow selection, and the Ollama-reported residency of the configured local model. When Ollama supplies it, the loaded model size is recorded in bytes. Shadow execution defaults off and never affects the user-visible result. Remote fallback always receives the original prompt, not failed local output.
+Prompts, answers, and contract source literals are not logged. `runs.jsonl` contains request mode, contract type, task class, input size, system/runtime measurements, local and remote validator states, route/reason, total route latency, deterministic shadow selection, and the Ollama-reported residency of the configured local model. When Ollama supplies it, the loaded model size is recorded in bytes. Shadow execution defaults off. When explicitly enabled, an eligible sampled
+request is measured locally after the authoritative remote call; only
+metadata and conformance status are logged. Shadow text is neither logged nor
+returned, and a shadow failure cannot alter or withhold the remote result.
 
-Rolling seven-day medians exclude hard-health rejections and local errors. They and Wilson 95% intervals are reported only as evidence; v0.2 never tunes or routes from aggregate statistics. Fewer than the configured 30 suitable observations produces `INSUFFICIENT_BASELINE_DATA` or `INSUFFICIENT_EVIDENCE`.
+Rolling seven-day medians exclude hard-health rejections and local errors. They and Wilson 95% intervals are reported only as evidence; v0.3 never tunes or routes from aggregate statistics. Fewer than the configured 30 suitable observations produces `INSUFFICIENT_BASELINE_DATA` or `INSUFFICIENT_EVIDENCE`.
 
-## Initial policy
+## Current safe policy
 
-Legacy local eligible: `rewrite`, `summarise_short`, `extract_structured`, and `format`, but only an applicable validator `PASS` accepts local output. `NOT_APPLICABLE` escalates.
+Deterministic executor requests bypass both models. Every generative request,
+including legacy prompts and all generative contract types, is
+remote-authoritative by default. `classification_labels` remains explicitly
+remote-only because label membership is not semantic validation.
 
-Explicit structural JSON, JSON-format, bullet-format, and label-format contracts are local eligible. Deterministic executor requests bypass both models. Semantic classification contracts route directly to OpenRouter. `code`, `research`, and `unknown` remain remote defaults.
+The checked-in `routing.allow_user_visible_local` setting is `false`. The old
+local-first implementation remains behind that explicit operator override for
+controlled comparison and rollback, but it is not the shipped policy.
+`SAFE_REMOTE_POLICY` records requests kept remote by this boundary.
 
-Stable v0.2 reasons add `CONTRACT_REMOTE_ONLY`, `DETERMINISTIC_EXECUTED`, `VALIDATOR_NOT_APPLICABLE`, and `REMOTE_CONTRACT_FAILED` to the existing operational and provider reason codes.
+Optional local shadow execution requires `shadow.enabled` and
+`shadow.execute`, plus deterministic sampling. It runs synchronously after the
+remote result is fixed, so enabling it adds measurement latency. It never
+changes the user-visible answer.
 
-Before a local-eligible request, the router checks Ollama's local `/api/ps` endpoint. The minimum-available-RAM gate applies only when the configured model is not resident. Swap occupancy is logged but does not reject local inference by itself; swap-out activity observed during the fixed 0.1-second preflight sampling window does. If residency cannot be confirmed, the router conservatively treats the model as not resident.
+Before any local execution, the router checks Ollama's local `/api/ps`
+endpoint. The minimum-available-RAM gate applies only when the configured model
+is not resident. Swap occupancy is logged but does not reject local inference
+by itself; swap-out activity observed during the fixed 0.1-second preflight
+sampling window does. If residency cannot be confirmed, the router
+conservatively treats the model as not resident.
 
 ## Current product direction
 
-Runtime health signals remain operational gates, not correctness estimates.
-v0.2 now has deterministic bypass, explicit caller contracts, contract checks
-on both local and final remote outputs, bounded remote retries, and measured
-end-to-end latency. A fresh prospective evaluation of this assembled runtime
-is still required before it should be treated as deployment-ready software.
+Runtime health signals and output contracts remain operational or conformance
+checks, not correctness estimates. The prospective v0.2 runtime evaluation
+produced 117/120 correct outputs overall and 87/90 on generative tasks. It
+avoided 21 remote calls but accepted three repeated bullet-content errors;
+the paired remote arm was correct on all 90 generative observations.
+
+v0.3 therefore converts that measured result into a product boundary:
+deterministic work executes in code, generative work is remote-authoritative,
+and local candidates must be measured in shadow before any narrower capability
+can earn user-visible authority.
