@@ -218,13 +218,21 @@ def _check_task_contract_pair(task_class: str, kind: str) -> None:
         raise RuntimeContractError("TASK_CONTRACT_MISMATCH")
 
 
-def contract_route(contract: dict[str, Any]) -> str:
+def contract_route(
+    contract: dict[str, Any], *, allow_user_visible_local: bool = False
+) -> str:
+    """Choose a provider boundary without treating conformance as correctness.
+
+    Generative contracts are remote by default. The local route remains
+    available only as an explicit operator override; deterministic executor
+    requests continue to bypass both providers.
+    """
     kind = contract["contract_type"]
-    if kind in LOCAL_CONTRACT_TYPES:
+    if kind == DETERMINISTIC_CONTRACT_TYPE:
+        return "deterministic"
+    if kind in LOCAL_CONTRACT_TYPES and allow_user_visible_local:
         return "local"
-    if kind in REMOTE_ONLY_CONTRACT_TYPES:
-        return "remote"
-    return "deterministic"
+    return "remote"
 
 
 def _ascii_lower(value: str) -> str:
