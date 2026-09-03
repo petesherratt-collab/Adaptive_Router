@@ -297,7 +297,6 @@ class Router:
             shadow["reason"] = "TASK_NOT_ELIGIBLE"
             return
 
-        shadow["executed"] = True
         try:
             residency = self.residency_fn(self.config["local"])
             shadow["model_resident"] = residency["resident"]
@@ -309,6 +308,7 @@ class Router:
                 shadow["reason"] = health_reason
                 return
 
+            shadow["executed"] = True
             result = self.local_fn(original_prompt, self.config["local"])
             shadow.update(result.metadata())
             if not result.success:
