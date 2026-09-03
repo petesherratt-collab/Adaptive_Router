@@ -218,6 +218,21 @@ class RuntimeContractTests(unittest.TestCase):
             "FAIL",
         )
 
+    def test_generative_contracts_are_remote_by_default(self):
+        contract = request(
+            "extract_structured",
+            {
+                "contract_type": "structured_json",
+                "exact_keys": ["name"],
+                "explicit_types": {"name": "string"},
+            },
+        ).contract
+        self.assertEqual(contract_route(contract), "remote")
+        self.assertEqual(
+            contract_route(contract, allow_user_visible_local=True),
+            "local",
+        )
+
     def test_classification_contract_is_remote_only(self):
         contract = request(
             "classification",
