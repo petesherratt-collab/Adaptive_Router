@@ -25,6 +25,7 @@ LOCAL_ALLOWED = {"rewrite", "summarise_short", "extract_structured", "format"}
     LOCAL_ACCEPTED,
     REMOTE_DEFAULT_TASK,
     CONTRACT_REMOTE_ONLY,
+    SAFE_REMOTE_POLICY,
     DETERMINISTIC_EXECUTED,
     LOW_RAM,
     ACTIVE_SWAP_PRESSURE,
@@ -41,6 +42,7 @@ LOCAL_ALLOWED = {"rewrite", "summarise_short", "extract_structured", "format"}
     "LOCAL_ACCEPTED",
     "REMOTE_DEFAULT_TASK",
     "CONTRACT_REMOTE_ONLY",
+    "SAFE_REMOTE_POLICY",
     "DETERMINISTIC_EXECUTED",
     "LOW_RAM",
     "ACTIVE_SWAP_PRESSURE",
@@ -59,6 +61,7 @@ REASON_CODES = frozenset(
         LOCAL_ACCEPTED,
         REMOTE_DEFAULT_TASK,
         CONTRACT_REMOTE_ONLY,
+        SAFE_REMOTE_POLICY,
         DETERMINISTIC_EXECUTED,
         LOW_RAM,
         ACTIVE_SWAP_PRESSURE,
@@ -130,8 +133,9 @@ class Router:
     def route(self, prompt):
         """Route a legacy free-form prompt.
 
-        Natural-language classification remains available for compatibility,
-        but a local result is accepted only when its validator returns PASS.
+        Natural-language classification remains available for compatibility.
+        Generative results are remote-authoritative unless the operator enables
+        the explicit user-visible-local override.
         """
         return self._route_model(
             prompt=prompt,
@@ -154,7 +158,10 @@ class Router:
         else:
             request = RuntimeRequest.from_mapping(request)
 
-        destination = contract_route(request.contract)
+        destination = contract_route(
+            request.contract,
+            allow_user_visible_local=self._allow_user_visible_local(),
+        )
         if destination == "deterministic":
             return self._execute_request(request)
         if destination == "remote":
@@ -164,10 +171,15 @@ class Router:
                 "explicit_contract",
                 request.contract["contract_type"],
             )
+            reason = (
+                CONTRACT_REMOTE_ONLY
+                if request.contract["contract_type"] == "classification_labels"
+                else SAFE_REMOTE_POLICY
+            )
             return self._remote(
                 request.prompt,
                 record,
-                CONTRACT_REMOTE_ONLY,
+                reason,
                 request.contract,
             )
         return self._route_model(
@@ -207,12 +219,17 @@ class Router:
             "shadow": {"selected": selected, "executed": False},
         }
 
+    def _allow_user_visible_local(self):
+        return self.config["routing"].get("allow_user_visible_local", False) is True
+
     def _route_model(self, prompt, task, request_mode, contract):
         contract_type = contract["contract_type"] if contract else None
         record = self._new_record(prompt, task, request_mode, contract_type)
 
         if task not in LOCAL_ALLOWED:
             return self._remote(prompt, record, REMOTE_DEFAULT_TASK, contract)
+        if not self._allow_user_visible_local():
+            return self._remote(prompt, record, SAFE_REMOTE_POLICY, contract)
 
         residency = self.residency_fn(self.config["local"])
         record["local_model_resident"] = residency["resident"]
@@ -264,6 +281,51 @@ class Router:
             "remote": None,
         }
 
+    def _run_shadow(self, original_prompt, record, contract):
+        """Measure a local candidate without allowing it to affect the result."""
+        shadow = record["shadow"]
+        if not shadow["selected"]:
+            return
+        shadow_cfg = self.config["shadow"]
+        if shadow_cfg.get("execute", False) is not True:
+            shadow["reason"] = "EXECUTION_DISABLED"
+            return
+        if record["local"].get("attempted"):
+            shadow["reason"] = "LOCAL_ALREADY_ATTEMPTED"
+            return
+        if contract is None and record["task_class"] not in LOCAL_ALLOWED:
+            shadow["reason"] = "TASK_NOT_ELIGIBLE"
+            return
+
+        shadow["executed"] = True
+        try:
+            residency = self.residency_fn(self.config["local"])
+            shadow["model_resident"] = residency["resident"]
+            shadow["model_size_bytes"] = residency.get("size_bytes")
+            healthy, health_reason = system_is_healthy(
+                record["system"], self.config, residency["resident"]
+            )
+            if not healthy:
+                shadow["reason"] = health_reason
+                return
+
+            result = self.local_fn(original_prompt, self.config["local"])
+            shadow.update(result.metadata())
+            if not result.success:
+                shadow["reason"] = result.error or LOCAL_ERROR
+                return
+
+            check = (
+                validate_runtime_output(contract, result.text)
+                if contract is not None
+                else validate(record["task_class"], original_prompt, result.text)
+            )
+            shadow["validator"] = check.__dict__
+            shadow["reason"] = "MEASURED"
+        except Exception as exc:
+            shadow["reason"] = "SHADOW_ERROR"
+            shadow["error"] = type(exc).__name__
+
     def _execute_request(self, request):
         started = time.perf_counter()
         text = execute_deterministic(request.contract)
@@ -314,6 +376,10 @@ class Router:
             if check.status != "PASS":
                 final_reason = REMOTE_CONTRACT_FAILED
                 returned_text = ""
+
+        # The remote result is already fixed before optional local measurement.
+        # Shadow output is never returned or supplied to the remote provider.
+        self._run_shadow(original_prompt, record, contract)
         record["decision"] = {
             "route": "remote",
             "reason": final_reason,
