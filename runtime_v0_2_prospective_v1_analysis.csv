@@ -1,0 +1,10 @@
+scope_type,scope_name,observation_count,runtime_correct_count,local_correct_count,remote_correct_count,accepted_error_count,withheld_count,actual_remote_logical_calls
+overall,generative,90,87,36,90,3,0,69
+cohort,structural_json,36,36,18,36,0,0,18
+cohort,line_format,24,21,0,24,3,0,21
+cohort,classification,30,30,18,30,0,0,30
+contract_type,structured_json,24,24,15,24,0,0,9
+contract_type,json_format,12,12,3,12,0,0,9
+contract_type,bullet_format,12,9,0,12,3,0,9
+contract_type,label_format,12,12,0,12,0,0,12
+contract_type,classification_labels,30,30,18,30,0,0,30
