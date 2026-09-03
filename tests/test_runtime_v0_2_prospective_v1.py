@@ -161,8 +161,10 @@ class BudgetAndStateTests(unittest.TestCase):
 
 
 class DryRunTests(unittest.TestCase):
-    def test_metadata_preflight_makes_no_generation_request(self):
+    def test_metadata_preflight_report_for_empty_state(self):
         with patch.object(
+            runner.pv, "assert_empty_state"
+        ) as empty_state, patch.object(
             runner.pv, "implementation_revision", return_value="revision"
         ), patch.object(
             runner, "load_dotenv"
@@ -170,15 +172,41 @@ class DryRunTests(unittest.TestCase):
             runner, "fetch_installed_model_metadata", return_value=pv.MODEL_SPEC
         ), patch.object(
             runner.local, "generate", side_effect=AssertionError("local generation")
-        ), patch.object(
+        ) as local_generate, patch.object(
             runner.remote, "generate", side_effect=AssertionError("remote generation")
-        ), patch.dict(runner.os.environ, {"OPENROUTER_API_KEY": "present"}):
+        ) as remote_generate, patch.dict(
+            runner.os.environ, {"OPENROUTER_API_KEY": "present"}
+        ):
             result = runner.preflight_report()
+        empty_state.assert_called_once_with()
+        local_generate.assert_not_called()
+        remote_generate.assert_not_called()
         self.assertEqual(result["status"], "PASS")
         self.assertEqual(result["output_state"], "EMPTY")
         self.assertEqual(result["provider_generation_requests"], 0)
         self.assertEqual(result["runtime_observations"], 120)
         self.assertEqual(result["local_model_identity"], pv.MODEL_SPEC)
+
+    def test_metadata_preflight_is_blocked_by_sealed_evidence(self):
+        with patch.object(
+            runner, "load_dotenv"
+        ), patch.object(
+            runner,
+            "fetch_installed_model_metadata",
+            side_effect=AssertionError("model metadata requested"),
+        ) as model_metadata, patch.object(
+            runner.local, "generate", side_effect=AssertionError("local generation")
+        ) as local_generate, patch.object(
+            runner.remote, "generate", side_effect=AssertionError("remote generation")
+        ) as remote_generate:
+            with self.assertRaisesRegex(
+                pv.StateError,
+                r"OUTPUT_STATE_NOT_EMPTY=runtime_v0_2_prospective_v1_runs\.jsonl",
+            ):
+                runner.preflight_report()
+        model_metadata.assert_not_called()
+        local_generate.assert_not_called()
+        remote_generate.assert_not_called()
 
     def test_dry_run_makes_no_real_provider_call(self):
         with patch.object(
