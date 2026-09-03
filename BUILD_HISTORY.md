@@ -1,7 +1,7 @@
 # Adaptive Router build history
 
 **Project path:** `/home/peter/adaptive-router`
-**Updated:** 2026-08-31
+**Updated:** 2026-09-03
 
 This is the single history for Adaptive Router. It combines the narrative
 project history (motivation, lessons, standing rules) with the dated engineering
@@ -1843,3 +1843,190 @@ phase must define and freeze the automatic pre-routing policy, then evaluate
 the assembled runtime prospectively on fresh tasks. Percentages from earlier
 unpaired suites must not be combined as if they were observations from this
 runtime.
+
+---
+
+## 2026-09-02 – 2026-09-03 — Runtime v0.2 prospective evaluation v1
+
+### Objective and frozen boundary
+
+Evaluate the released v0.2 product runtime end to end on fresh,
+deterministically scored requests. The primary question was whether the
+assembled runtime returned correct final user-visible results while reducing
+OpenRouter use relative to always-remote execution.
+
+The suite contained 40 tasks with three repetitions each:
+
+| Cohort | Tasks | Runtime observations | Runtime path |
+|---|---:|---:|---|
+| Deterministic | 10 | 30 | Python executor; neither provider |
+| Structural JSON | 12 | 36 | Local first; contract-gated fallback |
+| Line format | 8 | 24 | Local first; contract-gated fallback |
+| Classification | 10 | 30 | Direct OpenRouter |
+| **Total** | **40** | **120** | |
+
+Each of the 90 generative observations retained one local and one remote
+provider output. The actual runtime output supplied an arm where possible and
+only the missing provider arm was run as a control. Canonical execution
+therefore made exactly 90 logical Ollama calls, 90 logical OpenRouter calls and
+30 deterministic executions. There were no experiment-level retries,
+replacement tasks or skipped failures.
+
+Frozen identities:
+
+| Item | Identity |
+|---|---|
+| Released runtime | tag `v0.2.0`, commit `307a47389fea10df38623bc2f238a14a11081269` |
+| Execution implementation | `18b04a27a64dbd8fffa841d36be9394285562610` |
+| Local model | `gemma3:270m`, Q8_0 digest `e7d36fb2c3b3293cfe56d55889867a064b3a2b22e98335f2e6e8a387e081d6be` |
+| Remote model | `openai/gpt-5.6-luna` |
+| Plan SHA-256 | `d051be7261d708d3adef7f807b8899ca02b88c11531e4f9b3e28eb4ef3c3de98` |
+| Benchmark SHA-256 | `384a64905d6bee062a51444442752737911d2c5c5b96a14eba0164a35c7c8acb` |
+| Config SHA-256 | `0ca3fb1cae7ae78798ff9566f72fe3a70bf45c0d5f184acc1360ee96c0d44522` |
+
+Before execution, 22 focused tests and all 317 repository tests passed. The
+synthetic dry run exercised all 120 observations, 90 synthetic local calls and
+90 synthetic remote calls while making zero provider requests and creating
+zero repository outputs. The metadata-only preflight authenticated the
+revision, input hashes, provider identities and empty output state without
+making a generation request.
+
+### Canonical execution
+
+The one-shot execution completed successfully with exit status zero:
+
+| Measure | Result |
+|---|---:|
+| Runtime observations | 120 |
+| Final outputs correct | 117/120 |
+| Accepted errors | 3 |
+| Withheld outputs | 0 |
+| Local logical calls | 90 |
+| Remote logical calls | 90 |
+| Remote HTTP attempts | 90 |
+| Internal remote retries | 0 |
+| Total reported remote-control cost | USD 0.0032856 |
+
+The evidence was committed at `8509d2b`; the canonical analysis was committed
+separately at `487e6b3`.
+
+### Generative policy result
+
+The 30 deterministic observations were all correct and made no provider call.
+They demonstrate the released bypass path, not model routing or validator
+effectiveness.
+
+For the 90 generative observations:
+
+| Policy or provider | Correct | Remote calls | Median time |
+|---|---:|---:|---:|
+| Released v0.2 runtime | 87/90 | 69 | 2,316.095 ms |
+| Paired always local | 36/90 | 0 | 539.214 ms |
+| Paired always remote | 90/90 | 90 | 1,948.776 ms |
+
+Provider overlap was:
+
+| Both correct | Local only | Remote only | Neither |
+|---:|---:|---:|---:|
+| 36 | 0 | 54 | 0 |
+
+Local correctness was therefore a strict subset of remote correctness in this
+suite. The runtime avoided 21 remote calls but lost three correct results
+relative to always remote. The task-cluster bootstrap used 10,000 frozen
+SHA-256-defined draws with zero undefined draws. Its 95% interval was 90%–100%
+for runtime correctness and -10 to 0 percentage points for runtime minus
+always-remote correctness.
+
+Actual runtime remote calls reported USD 0.0024438, USD 0.0008418 less than
+the paired always-remote total, a reduction of approximately 25.6%. This is
+reported provider cost only. Local energy and local monetary cost were not
+measured.
+
+The runtime median was about 367 ms slower than the paired direct-remote
+median. This is consistent with local-first failures paying local work before
+fallback, but the difference between medians is descriptive and is not a
+paired latency estimate.
+
+### Where the policy worked and failed
+
+| Cohort | Runtime correct | Local accepted | Remote calls | Accepted errors |
+|---|---:|---:|---:|---:|
+| Structural JSON | 36/36 | 18 | 18 | 0 |
+| Line format | 21/24 | 3 | 21 | 3 |
+| Classification | 30/30 | 0 | 30 | 0 |
+
+All three accepted errors were `bullet_format` outputs. The local provider
+was oracle-incorrect on all 24 line-format observations, but three wrong bullet
+outputs passed the deterministic shape contract and were returned. The
+`label_format` gate rejected all 12 local outputs and escalated them.
+
+Structural JSON was the only measured local-first cohort that saved remote
+calls without losing correctness: 18 of 36 outputs were accepted locally and
+all 36 final results were correct. This does not establish semantic JSON
+correctness generally; the contracts can still accept wrong values that have
+the declared keys and types.
+
+Classification routed directly remote and was correct on all 30 observations.
+Although the paired local control happened to be correct on 18, label
+membership cannot determine which permitted label is semantically correct, so
+the runtime did not use those local outputs.
+
+### Preserved artifacts
+
+| Artifact | SHA-256 |
+|---|---|
+| `runtime_v0_2_prospective_v1_runs.jsonl` | `a4554f6df094f05a7a4dbd19e260f60a09d6a725405117f8585343b1e6a9f3c5` |
+| `runtime_v0_2_prospective_v1_router_telemetry.jsonl` | `ff8088c218ec261c3d51789207b9ec2ab70415384533ae8dee93c23f3c6fe6e6` |
+| `runtime_v0_2_prospective_v1_summary.json` | `4157d30e5e92cc495d4aa6309565a06c50d4e2d1cbf1f3435fac8d49f4e979db` |
+| `runtime_v0_2_prospective_v1_analysis.json` | `b901a005e0e6e760e41648a194f8c8be659de218b9caef8a51ba114e83b5b848` |
+| `runtime_v0_2_prospective_v1_analysis.csv` | `7d5504530d2f2840544f351458b162fb004d59a39d065f8c468fd7f052ce87b9` |
+
+These outputs are sealed and must not be modified, regenerated or used to tune
+a claim about this same prospective suite.
+
+### Procedural disclosures
+
+Before the first provider request, an accidental command-output footer was
+removed from the plan, an incorrect frozen config hash caused a fail-closed
+test and was corrected, and metadata preflight environment loading was fixed.
+Focused regression tests were added. None of these pre-execution incidents
+created canonical output or called a provider.
+
+After evidence was sealed, the analysis program was invoked without
+`--write` under the mistaken assumption that this was a dry run. That
+invocation actually created the two canonical analysis files. A subsequent
+`--write` invocation correctly refused to overwrite them with
+`ANALYSIS_ALREADY_EXISTS`. The files from the first successful invocation
+were retained, hashed and committed without regeneration.
+
+After the canonical outputs were committed, the full repository suite exposed
+a lifecycle regression in
+`test_metadata_preflight_makes_no_generation_request`. The test still required
+the execution preflight to report `EMPTY`, although the now-sealed evidence
+correctly makes that state impossible. PR #10 had already been opened when the
+failure was observed. The test was split into a mocked-empty positive report
+test and a repository-state regression test proving that sealed evidence raises
+`OUTPUT_STATE_NOT_EMPTY` before model metadata lookup or either provider
+generation function. The runner and all canonical artifacts remained
+unchanged.
+
+### Decision and next boundary
+
+Runtime v0.2 is functioning software, but this prospective result does not
+validate its local-first policy as a generally preferable default. In this
+suite it exchanged three correct answers and higher median latency for 21
+avoided remote calls and about USD 0.00084 in reported API cost.
+
+No v0.2 thresholds, prompts or contracts are changed from these same outcomes.
+A successor v0.3 should preserve deterministic bypass, retain direct remote
+routing for semantic classification, and prevent unproven local acceptances
+from reaching users. Candidate local paths should begin in shadow mode and
+earn task-specific authority prospectively. The first concrete safety change
+is to remove `bullet_format` from user-visible local acceptance; all measured
+local bullet outputs were wrong despite three passing the shape contract.
+
+Structural JSON remains a candidate for narrowly bounded local use because it
+saved 18 remote calls without an observed final error here, but its contracts
+establish shape and declared types rather than semantic truth. It requires
+additional prospective evidence before a broader deployment claim.
+

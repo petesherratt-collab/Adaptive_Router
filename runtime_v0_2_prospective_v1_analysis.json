@@ -1,0 +1,305 @@
+{
+  "benchmark_sha256": "384a64905d6bee062a51444442752737911d2c5c5b96a14eba0164a35c7c8acb",
+  "config_sha256": "0ca3fb1cae7ae78798ff9566f72fe3a70bf45c0d5f184acc1360ee96c0d44522",
+  "deterministic": {
+    "observation_count": 30,
+    "provider_call_count": 0,
+    "runtime_correct_count": 30
+  },
+  "generative": {
+    "bootstrap": {
+      "draw_count": 10000,
+      "namespace": "runtime_v0_2_prospective_v1",
+      "runtime_correct_rate_ci95": [
+        0.9,
+        1.0
+      ],
+      "runtime_minus_remote_rate_ci95": [
+        -0.1,
+        0.0
+      ],
+      "seed": "20260902",
+      "undefined_draw_count": 0
+    },
+    "by_cohort": {
+      "classification": {
+        "accepted_error_count": 0,
+        "actual_reasons": {
+          "CONTRACT_REMOTE_ONLY": 30
+        },
+        "actual_remote_logical_calls": 30,
+        "actual_remote_reported_cost_usd": 0.0006378,
+        "actual_routes": {
+          "remote": 30
+        },
+        "actual_runtime_median_ms": 1962.910081492737,
+        "local_correct_count": 18,
+        "observation_count": 30,
+        "overlap": {
+          "both": 18,
+          "local_only": 0,
+          "neither": 0,
+          "remote_only": 12
+        },
+        "paired_local_median_ms": 105.3621319879312,
+        "paired_remote_median_ms": 1760.8146465208847,
+        "paired_runtime_minus_local": 12,
+        "paired_runtime_minus_remote": 0,
+        "remote_correct_count": 30,
+        "runtime_correct_count": 30,
+        "runtime_correct_rate": 1.0,
+        "withheld_count": 0
+      },
+      "line_format": {
+        "accepted_error_count": 3,
+        "actual_reasons": {
+          "LOCAL_ACCEPTED": 3,
+          "VALIDATOR_FAILED": 21
+        },
+        "actual_remote_logical_calls": 21,
+        "actual_remote_reported_cost_usd": 0.0010962,
+        "actual_routes": {
+          "local": 3,
+          "remote": 21
+        },
+        "actual_runtime_median_ms": 2935.155956482049,
+        "local_correct_count": 0,
+        "observation_count": 24,
+        "overlap": {
+          "both": 0,
+          "local_only": 0,
+          "neither": 0,
+          "remote_only": 24
+        },
+        "paired_local_median_ms": 461.62018200266175,
+        "paired_remote_median_ms": 2325.659171503503,
+        "paired_runtime_minus_local": 21,
+        "paired_runtime_minus_remote": -3,
+        "remote_correct_count": 24,
+        "runtime_correct_count": 21,
+        "runtime_correct_rate": 0.875,
+        "withheld_count": 0
+      },
+      "structural_json": {
+        "accepted_error_count": 0,
+        "actual_reasons": {
+          "LOCAL_ACCEPTED": 18,
+          "VALIDATOR_FAILED": 18
+        },
+        "actual_remote_logical_calls": 18,
+        "actual_remote_reported_cost_usd": 0.0007098,
+        "actual_routes": {
+          "local": 18,
+          "remote": 18
+        },
+        "actual_runtime_median_ms": 2006.071626994526,
+        "local_correct_count": 18,
+        "observation_count": 36,
+        "overlap": {
+          "both": 18,
+          "local_only": 0,
+          "neither": 0,
+          "remote_only": 18
+        },
+        "paired_local_median_ms": 857.4551709752996,
+        "paired_remote_median_ms": 1777.1096185024362,
+        "paired_runtime_minus_local": 18,
+        "paired_runtime_minus_remote": 0,
+        "remote_correct_count": 36,
+        "runtime_correct_count": 36,
+        "runtime_correct_rate": 1.0,
+        "withheld_count": 0
+      }
+    },
+    "by_contract_type": {
+      "bullet_format": {
+        "accepted_error_count": 3,
+        "actual_reasons": {
+          "LOCAL_ACCEPTED": 3,
+          "VALIDATOR_FAILED": 9
+        },
+        "actual_remote_logical_calls": 9,
+        "actual_remote_reported_cost_usd": 0.0004128,
+        "actual_routes": {
+          "local": 3,
+          "remote": 9
+        },
+        "actual_runtime_median_ms": 2395.9203609847464,
+        "local_correct_count": 0,
+        "observation_count": 12,
+        "overlap": {
+          "both": 0,
+          "local_only": 0,
+          "neither": 0,
+          "remote_only": 12
+        },
+        "paired_local_median_ms": 260.43597352690995,
+        "paired_remote_median_ms": 2715.093461476499,
+        "paired_runtime_minus_local": 9,
+        "paired_runtime_minus_remote": -3,
+        "remote_correct_count": 12,
+        "runtime_correct_count": 9,
+        "runtime_correct_rate": 0.75,
+        "withheld_count": 0
+      },
+      "classification_labels": {
+        "accepted_error_count": 0,
+        "actual_reasons": {
+          "CONTRACT_REMOTE_ONLY": 30
+        },
+        "actual_remote_logical_calls": 30,
+        "actual_remote_reported_cost_usd": 0.0006378,
+        "actual_routes": {
+          "remote": 30
+        },
+        "actual_runtime_median_ms": 1962.910081492737,
+        "local_correct_count": 18,
+        "observation_count": 30,
+        "overlap": {
+          "both": 18,
+          "local_only": 0,
+          "neither": 0,
+          "remote_only": 12
+        },
+        "paired_local_median_ms": 105.3621319879312,
+        "paired_remote_median_ms": 1760.8146465208847,
+        "paired_runtime_minus_local": 12,
+        "paired_runtime_minus_remote": 0,
+        "remote_correct_count": 30,
+        "runtime_correct_count": 30,
+        "runtime_correct_rate": 1.0,
+        "withheld_count": 0
+      },
+      "json_format": {
+        "accepted_error_count": 0,
+        "actual_reasons": {
+          "LOCAL_ACCEPTED": 3,
+          "VALIDATOR_FAILED": 9
+        },
+        "actual_remote_logical_calls": 9,
+        "actual_remote_reported_cost_usd": 0.0003096,
+        "actual_routes": {
+          "local": 3,
+          "remote": 9
+        },
+        "actual_runtime_median_ms": 2690.171950496733,
+        "local_correct_count": 3,
+        "observation_count": 12,
+        "overlap": {
+          "both": 3,
+          "local_only": 0,
+          "neither": 0,
+          "remote_only": 9
+        },
+        "paired_local_median_ms": 871.5893294720445,
+        "paired_remote_median_ms": 1819.7641964943614,
+        "paired_runtime_minus_local": 9,
+        "paired_runtime_minus_remote": 0,
+        "remote_correct_count": 12,
+        "runtime_correct_count": 12,
+        "runtime_correct_rate": 1.0,
+        "withheld_count": 0
+      },
+      "label_format": {
+        "accepted_error_count": 0,
+        "actual_reasons": {
+          "VALIDATOR_FAILED": 12
+        },
+        "actual_remote_logical_calls": 12,
+        "actual_remote_reported_cost_usd": 0.0006834,
+        "actual_routes": {
+          "remote": 12
+        },
+        "actual_runtime_median_ms": 3110.6439249997493,
+        "local_correct_count": 0,
+        "observation_count": 12,
+        "overlap": {
+          "both": 0,
+          "local_only": 0,
+          "neither": 0,
+          "remote_only": 12
+        },
+        "paired_local_median_ms": 658.8908830308355,
+        "paired_remote_median_ms": 2235.4918380151503,
+        "paired_runtime_minus_local": 12,
+        "paired_runtime_minus_remote": 0,
+        "remote_correct_count": 12,
+        "runtime_correct_count": 12,
+        "runtime_correct_rate": 1.0,
+        "withheld_count": 0
+      },
+      "structured_json": {
+        "accepted_error_count": 0,
+        "actual_reasons": {
+          "LOCAL_ACCEPTED": 15,
+          "VALIDATOR_FAILED": 9
+        },
+        "actual_remote_logical_calls": 9,
+        "actual_remote_reported_cost_usd": 0.00040019999999999997,
+        "actual_routes": {
+          "local": 15,
+          "remote": 9
+        },
+        "actual_runtime_median_ms": 1342.817669006763,
+        "local_correct_count": 15,
+        "observation_count": 24,
+        "overlap": {
+          "both": 15,
+          "local_only": 0,
+          "neither": 0,
+          "remote_only": 9
+        },
+        "paired_local_median_ms": 807.0148804981727,
+        "paired_remote_median_ms": 1777.1096185024362,
+        "paired_runtime_minus_local": 9,
+        "paired_runtime_minus_remote": 0,
+        "remote_correct_count": 24,
+        "runtime_correct_count": 24,
+        "runtime_correct_rate": 1.0,
+        "withheld_count": 0
+      }
+    },
+    "overall": {
+      "accepted_error_count": 3,
+      "actual_reasons": {
+        "CONTRACT_REMOTE_ONLY": 30,
+        "LOCAL_ACCEPTED": 21,
+        "VALIDATOR_FAILED": 39
+      },
+      "actual_remote_logical_calls": 69,
+      "actual_remote_reported_cost_usd": 0.0024438,
+      "actual_routes": {
+        "local": 21,
+        "remote": 69
+      },
+      "actual_runtime_median_ms": 2316.0952079924755,
+      "local_correct_count": 36,
+      "observation_count": 90,
+      "overlap": {
+        "both": 36,
+        "local_only": 0,
+        "neither": 0,
+        "remote_only": 54
+      },
+      "paired_local_median_ms": 539.2136815062258,
+      "paired_remote_median_ms": 1948.7755825102795,
+      "paired_runtime_minus_local": 51,
+      "paired_runtime_minus_remote": -3,
+      "remote_calls_avoided_vs_always_remote": 21,
+      "remote_correct_count": 90,
+      "runtime_correct_count": 87,
+      "runtime_correct_rate": 0.9666666666666667,
+      "withheld_count": 0
+    }
+  },
+  "implementation_revision": "18b04a27a64dbd8fffa841d36be9394285562610",
+  "paired_provider_totals": {
+    "local_logical_calls": 90,
+    "remote_http_attempts": 90,
+    "remote_logical_calls": 90,
+    "reported_remote_cost_usd": 0.0032856
+  },
+  "plan_sha256": "d051be7261d708d3adef7f807b8899ca02b88c11531e4f9b3e28eb4ef3c3de98",
+  "schema_version": "runtime_v0_2_prospective_analysis_v1",
+  "suite_id": "runtime_v0_2_prospective_v1"
+}
