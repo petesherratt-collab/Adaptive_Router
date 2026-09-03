@@ -1999,6 +1999,17 @@ invocation actually created the two canonical analysis files. A subsequent
 `ANALYSIS_ALREADY_EXISTS`. The files from the first successful invocation
 were retained, hashed and committed without regeneration.
 
+After the canonical outputs were committed, the full repository suite exposed
+a lifecycle regression in
+`test_metadata_preflight_makes_no_generation_request`. The test still required
+the execution preflight to report `EMPTY`, although the now-sealed evidence
+correctly makes that state impossible. PR #10 had already been opened when the
+failure was observed. The test was split into a mocked-empty positive report
+test and a repository-state regression test proving that sealed evidence raises
+`OUTPUT_STATE_NOT_EMPTY` before model metadata lookup or either provider
+generation function. The runner and all canonical artifacts remained
+unchanged.
+
 ### Decision and next boundary
 
 Runtime v0.2 is functioning software, but this prospective result does not
