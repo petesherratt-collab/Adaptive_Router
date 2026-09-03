@@ -19,6 +19,7 @@
     "retry_backoff_seconds": 0.25
   },
   "routing": {
+    "allow_user_visible_local": false,
     "minimum_available_ram_mb": 1500,
     "active_swap_out_pages_threshold": 0,
     "maximum_ttft_ms": 8000,
