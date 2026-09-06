@@ -45,9 +45,14 @@ def fetch_installed_model_metadata(model, base_url, session=requests):
 
 
 def _config(root=pv.ROOT):
-    return pv.strict_json_loads(
+    config = pv.strict_json_loads(
         (Path(root) / pv.CONFIG_NAME).read_text(encoding="utf-8")
     )
+    # v0.2 predates the v0.3 fail-safe flag and routed eligible requests
+    # local-first. Reproduce that released behavior in memory without changing
+    # the authenticated frozen configuration bytes.
+    config["routing"]["allow_user_visible_local"] = True
+    return config
 
 
 class CapturingProviders:

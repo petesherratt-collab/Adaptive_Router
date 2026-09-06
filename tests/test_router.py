@@ -13,13 +13,19 @@ CONFIG = {
     "local": {"model": "x"},
     "remote": {"model": "y"},
     "routing": {
+        "allow_user_visible_local": True,
         "minimum_available_ram_mb": 2500,
         "active_swap_out_pages_threshold": 0,
         "maximum_ttft_ms": 8000,
         "minimum_generation_rate": 1.5,
         "summarise_max_input_chars": 12000,
     },
-    "shadow": {"enabled": False, "sample_rate": 0.05, "salt": "s"},
+    "shadow": {
+        "enabled": False,
+        "execute": False,
+        "sample_rate": 0.05,
+        "salt": "s",
+    },
     "probe": {"enabled": False, "iterations": 1},
 }
 
@@ -35,6 +41,10 @@ class RouterTests(unittest.TestCase):
         swap_out_pages=0,
         resident=False,
         minimum_ram=2500,
+        allow_user_visible_local=True,
+        shadow_enabled=False,
+        shadow_execute=False,
+        shadow_rate=0.05,
     ):
         calls = {"local": 0, "remote": 0}
 
@@ -71,6 +81,14 @@ class RouterTests(unittest.TestCase):
         log_path = Path(temp.name) / "runs.jsonl"
         config = deepcopy(CONFIG)
         config["routing"]["minimum_available_ram_mb"] = minimum_ram
+        config["routing"]["allow_user_visible_local"] = allow_user_visible_local
+        config["shadow"].update(
+            {
+                "enabled": shadow_enabled,
+                "execute": shadow_execute,
+                "sample_rate": shadow_rate,
+            }
+        )
         router = Router(
             config,
             log_path,
@@ -232,6 +250,99 @@ class RouterTests(unittest.TestCase):
         self.assertEqual(result["reason"], "VALIDATOR_NOT_APPLICABLE")
         self.assertEqual(calls, {"local": 1, "remote": 1})
         self.assertEqual(record["validator"]["status"], "NOT_APPLICABLE")
+
+    def test_safe_policy_routes_legacy_local_candidate_remote(self):
+        result, calls, record = self.run_route(
+            "rewrite this sentence please",
+            allow_user_visible_local=False,
+        )
+        self.assertEqual(result["route"], "remote")
+        self.assertEqual(result["trigger"], "SAFE_REMOTE_POLICY")
+        self.assertEqual(calls, {"local": 0, "remote": 1})
+        self.assertFalse(record["local"]["attempted"])
+
+    def test_safe_policy_routes_structured_contract_remote(self):
+        request = {
+            "schema_version": "runtime_request_v1",
+            "task_class": "extract_structured",
+            "prompt": "Extract the name and count.",
+            "contract": {
+                "contract_type": "structured_json",
+                "exact_keys": ["name", "count"],
+                "explicit_types": {"name": "string", "count": "number"},
+            },
+        }
+        result, calls, record = self.run_request(
+            request,
+            allow_user_visible_local=False,
+            remote_result=RemoteResult(
+                True, '{"name":"Ada","count":2}', 100, "y"
+            ),
+        )
+        self.assertEqual(result["route"], "remote")
+        self.assertEqual(result["trigger"], "SAFE_REMOTE_POLICY")
+        self.assertEqual(calls, {"local": 0, "remote": 1})
+        self.assertEqual(record["remote_validator"]["status"], "PASS")
+
+    def test_opt_in_shadow_is_measured_but_never_authoritative(self):
+        request = {
+            "schema_version": "runtime_request_v1",
+            "task_class": "extract_structured",
+            "prompt": "Extract the name and count.",
+            "contract": {
+                "contract_type": "structured_json",
+                "exact_keys": ["name", "count"],
+                "explicit_types": {"name": "string", "count": "number"},
+            },
+        }
+        remote_text = '{"name":"Ada","count":2}'
+        result, calls, record = self.run_request(
+            request,
+            allow_user_visible_local=False,
+            shadow_enabled=True,
+            shadow_execute=True,
+            shadow_rate=1.0,
+            local_result=LocalResult(
+                True, '{"name":"Shadow","count":99}', 100, 1000, 5
+            ),
+            remote_result=RemoteResult(True, remote_text, 100, "y"),
+        )
+        self.assertEqual(result["text"], remote_text)
+        self.assertEqual(result["route"], "remote")
+        self.assertEqual(calls, {"local": 1, "remote": 1})
+        self.assertFalse(record["local"]["attempted"])
+        self.assertTrue(record["shadow"]["selected"])
+        self.assertTrue(record["shadow"]["executed"])
+        self.assertEqual(record["shadow"]["reason"], "MEASURED")
+        self.assertEqual(record["shadow"]["validator"]["status"], "PASS")
+        self.assertNotIn("text", record["shadow"])
+
+    def test_shadow_contract_failure_cannot_withhold_remote_result(self):
+        request = {
+            "schema_version": "runtime_request_v1",
+            "task_class": "format",
+            "prompt": "Return one bullet.",
+            "contract": {
+                "contract_type": "bullet_format",
+                "line_count": 1,
+                "marker": "-",
+                "separator": " ",
+            },
+        }
+        result, calls, record = self.run_request(
+            request,
+            allow_user_visible_local=False,
+            shadow_enabled=True,
+            shadow_execute=True,
+            shadow_rate=1.0,
+            local_result=LocalResult(True, "not a bullet", 100, 1000, 5),
+            remote_result=RemoteResult(True, "- authoritative", 100, "y"),
+        )
+        self.assertEqual(result["text"], "- authoritative")
+        self.assertEqual(result["reason"], "SAFE_REMOTE_POLICY")
+        self.assertEqual(calls, {"local": 1, "remote": 1})
+        self.assertEqual(record["shadow"]["validator"]["status"], "FAIL")
+        self.assertEqual(record["remote_validator"]["status"], "PASS")
 
     def test_explicit_json_contract_accepts_matching_local_output(self):
         request = {

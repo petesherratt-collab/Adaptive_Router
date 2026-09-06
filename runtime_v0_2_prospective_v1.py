@@ -18,7 +18,7 @@ from runtime_contracts import RuntimeRequest, execute_deterministic, validate_ru
 ROOT = Path(__file__).resolve().parent
 PLAN_NAME = "RUNTIME_V0_2_PROSPECTIVE_V1_PLAN.md"
 BENCHMARK_NAME = "benchmark_runtime_v0_2_prospective_v1.json"
-CONFIG_NAME = "config.json"
+CONFIG_NAME = "config_runtime_v0_2_prospective_v1.json"
 PLAN_SHA256 = "d051be7261d708d3adef7f807b8899ca02b88c11531e4f9b3e28eb4ef3c3de98"
 BENCHMARK_SHA256 = "384a64905d6bee062a51444442752737911d2c5c5b96a14eba0164a35c7c8acb"
 CONFIG_SHA256 = "0ca3fb1cae7ae78798ff9566f72fe3a70bf45c0d5f184acc1360ee96c0d44522"

@@ -134,7 +134,7 @@ def main():
         return
 
     print(
-        "Adaptive Router v0.2\n"
+        "Adaptive Router v0.3\n"
         f"Local: {config['local']['model']} via Ollama\n"
         f"Remote: {config['remote']['model']} via OpenRouter\n"
     )

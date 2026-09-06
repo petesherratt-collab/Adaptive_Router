@@ -31,6 +31,24 @@ class DesignTests(unittest.TestCase):
             pv.expected_keys(self.tasks),
         )
 
+    def test_frozen_replay_preserves_released_local_first_semantics(self):
+        raw_config = pv.strict_json_loads(
+            (pv.ROOT / pv.CONFIG_NAME).read_text(encoding="utf-8")
+        )
+        self.assertNotIn(
+            "allow_user_visible_local",
+            raw_config["routing"],
+        )
+        replay_config = runner._config()
+        self.assertIs(
+            replay_config["routing"]["allow_user_visible_local"],
+            True,
+        )
+        self.assertEqual(
+            pv.file_sha256(pv.ROOT / pv.CONFIG_NAME),
+            pv.CONFIG_SHA256,
+        )
+
     def test_every_request_revalidates_without_oracle(self):
         for task in self.tasks:
             mapping = task["runtime_request"]
