@@ -2113,6 +2113,19 @@ Both outputs visibly matched the example answer. The validators established
 only exact JSON keys and declared value types; they did not establish semantic
 truth.
 
+### Final pre-PR verification
+
+```text
+24 focused v0.2 prospective compatibility tests passed
+324 full repository tests passed
+suite_exit=0
+```
+
+The preserved v0.2 configuration retained SHA-256
+`0ca3fb1cae7ae78798ff9566f72fe3a70bf45c0d5f184acc1360ee96c0d44522`.
+`git diff --check` passed. The seven pre-existing untracked audit and review
+artifacts were not staged, modified or deleted.
+
 ### Decision and next boundary
 
 v0.3 is a safety correction, not evidence that adaptive routing is solved.
