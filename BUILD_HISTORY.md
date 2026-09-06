@@ -2084,6 +2084,16 @@ authenticates that immutable snapshot under the original SHA-256
 `0ca3fb1cae7ae78798ff9566f72fe3a70bf45c0d5f184acc1360ee96c0d44522`.
 No plan, benchmark, evidence, summary, or analysis artifact was modified.
 
+The first full v0.3 suite then exposed a second compatibility boundary:
+the preserved v0.2 file correctly omitted the new flag, while the v0.3 router
+correctly interprets an absent flag as fail-safe remote-only. The historical
+synthetic replay consequently made 90 remote calls instead of reproducing
+v0.2's expected 30. The v0.2 runner now adds
+`allow_user_visible_local=true` only to its in-memory replay configuration
+after reading the authenticated bytes. A focused regression test requires both
+the absent field in the frozen file and the explicit compatibility value in
+memory. This changes neither the frozen hash nor production v0.3 policy.
+
 ### Bounded live smoke observations
 
 These checks used the development branch and are not canonical benchmark
