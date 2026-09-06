@@ -2030,3 +2030,88 @@ saved 18 remote calls without an observed final error here, but its contracts
 establish shape and declared types rather than semantic truth. It requires
 additional prospective evidence before a broader deployment claim.
 
+---
+
+## 2026-09-03 – 2026-09-06 — Runtime v0.3 safe-routing product boundary
+
+### Objective
+
+Convert the prospective v0.2 result into a safer default product policy. The
+v0.2 runtime avoided 21 of 90 generative remote calls but returned three local
+bullet-content errors that the shape contract accepted. The paired remote arm
+was correct on all 90 generative observations. v0.3 therefore treats contract
+conformance as a necessary output check, not sufficient authority to expose an
+unproven local generation.
+
+Branch: `feature/runtime-v0.3-safe-routing`
+
+Base commit: `21d4b9f`
+
+### Implemented boundary
+
+- Generative runtime contracts now route to OpenRouter by default.
+- Legacy tasks that were formerly local eligible also route remote under the
+  checked-in policy.
+- Deterministic executor requests continue to bypass both providers.
+- `classification_labels` remains explicitly remote-only.
+- Added stable reason `SAFE_REMOTE_POLICY` for generative requests retained on
+  the authoritative remote path.
+- Added `routing.allow_user_visible_local`, defaulting to `false`. The old
+  local-first path remains available only as an explicit operator override for
+  controlled comparison and rollback.
+- Implemented actual opt-in shadow execution. A request must be selected by the
+  deterministic sampler and both `shadow.enabled` and `shadow.execute` must
+  be true.
+- The remote result is fixed before shadow execution. Shadow output is never
+  returned, supplied to OpenRouter, or written to telemetry. Only provider
+  metadata and contract-conformance status are retained.
+- Shadow failure or nonconformance cannot change or withhold the authoritative
+  remote result.
+- Local health and residency gates still apply before an enabled shadow model
+  call. Shadow execution is synchronous and therefore adds measurement latency
+  when enabled; it remains disabled in the checked-in configuration.
+
+### Frozen-config lifecycle repair
+
+The released v0.2 prospective instrument authenticated the mutable live
+`config.json` directly. Adding the v0.3 policy field would therefore have made
+the historical full-suite hash test fail even though the sealed evidence was
+unchanged.
+
+The exact v0.2 configuration bytes were preserved as
+`config_runtime_v0_2_prospective_v1.json`. The historical instrument now
+authenticates that immutable snapshot under the original SHA-256
+`0ca3fb1cae7ae78798ff9566f72fe3a70bf45c0d5f184acc1360ee96c0d44522`.
+No plan, benchmark, evidence, summary, or analysis artifact was modified.
+
+### Bounded live smoke observations
+
+These checks used the development branch and are not canonical benchmark
+evidence.
+
+| Path | Outcome | Provider behavior | End-to-end time |
+|---|---|---|---:|
+| Structured JSON, shipped configuration | Remote JSON passed exact-key/type contract | Remote authoritative; local not attempted; shadow not selected | 2,395.695 ms |
+| Structured JSON, temporary forced shadow sample | Remote JSON remained authoritative; local shadow also passed shape/type contract | One remote call and one local shadow call; no shadow text logged | 3,591.143 ms |
+
+The forced shadow observation recorded a resident 325,666,733-byte local model,
+228.110 ms TTFT, 674.402 ms local total time and 53.509 tokens/second. Those
+figures describe one warm live observation and establish no latency or
+correctness distribution.
+
+Both outputs visibly matched the example answer. The validators established
+only exact JSON keys and declared value types; they did not establish semantic
+truth.
+
+### Decision and next boundary
+
+v0.3 is a safety correction, not evidence that adaptive routing is solved.
+The shipped runtime now provides useful deterministic execution and
+contract-checked remote generation without exposing local candidates that have
+not earned authority.
+
+The next experimental step is prospective shadow collection on explicitly
+defined task families. Any future user-visible local route must be justified by
+fresh, paired evidence with task-specific correctness oracles, false-accept
+limits, latency and cost accounting, and a precommitted promotion rule. Shape
+contracts alone cannot promote a capability.
