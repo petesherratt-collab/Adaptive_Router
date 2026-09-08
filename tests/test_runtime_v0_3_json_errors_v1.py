@@ -98,6 +98,10 @@ class AuthenticatedAnalysisTests(unittest.TestCase):
         after = {name: path.exists() for name, path in paths.items()}
         self.assertEqual(after, before)
 
+    def test_markdown_output_has_no_trailing_whitespace(self):
+        markdown = analysis.markdown_report(self.report)
+        self.assertFalse(any(line != line.rstrip() for line in markdown.splitlines()))
+
 
 class DifferenceClassificationTests(unittest.TestCase):
     def test_recursive_diff_reports_every_leaf_class_without_values(self):
