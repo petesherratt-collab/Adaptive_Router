@@ -1,7 +1,7 @@
 # Runtime v0.3 structural-JSON error analysis V1
 
-**Status:** RETROSPECTIVE ONLY  
-**Candidate screen:** NO_RULE_CANDIDATE  
+**Status:** RETROSPECTIVE ONLY
+**Candidate screen:** NO_RULE_CANDIDATE
 **Sealed V2 decision:** DO_NOT_PROMOTE
 
 ## Observations
