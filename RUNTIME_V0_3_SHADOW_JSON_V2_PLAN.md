@@ -120,7 +120,8 @@ Report, overall and by stratum:
 - paired both/local-only/remote-only/neither task outcomes;
 - counterfactual task success if a local contract PASS replaced a successful or
   failed remote result;
-- actual remote, paired local, and counterfactual selected-path median latency;
+- authoritative remote-provider, paired local-provider, actual end-to-end
+  runtime, and counterfactual selected-path median latency;
 - avoided remote calls, remote attempts, and reported remote cost; and
 - attempted-arm, telemetry, row, and task/repetition reconciliation.
 
@@ -146,7 +147,8 @@ Report `PROMOTION_CANDIDATE` only if:
 4. the accepted-error upper bound ≤ 0.05;
 5. counterfactual end-to-end task success ≥ actual runtime task success;
 6. counterfactual avoids ≥ 60 remote logical calls;
-7. counterfactual selected-path median latency ≤ actual runtime median latency;
+7. counterfactual selected-path median latency ≤ authoritative remote-provider
+   median latency;
 8. no instrumentation, identity, budget, execution, or analysis failure
    occurred.
 
