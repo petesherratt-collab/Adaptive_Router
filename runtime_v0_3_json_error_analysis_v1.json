@@ -1,0 +1,4951 @@
+{
+  "analysis_status": "RETROSPECTIVE_ONLY",
+  "authenticated_inputs": {
+    "benchmark_runtime_v0_3_shadow_json_v2.json": "b160537b15f25941227d9381c0bee625f2af8ed385463b1608a6568f1079e278",
+    "runtime_v0_3_shadow_json_v2_analysis.json": "b4a93b8ecee9dc45d17dc281c903cd5a1629ef7f95edc42433562438e0393160",
+    "runtime_v0_3_shadow_json_v2_router_telemetry.jsonl": "333a073ab9c50aaa4aafed2f1bc09e65bff49fa7bf45960db016d50a1ae16ba6",
+    "runtime_v0_3_shadow_json_v2_runs.jsonl": "1b846bb04cbf335d8bce8b37e5d94cb509a4a06f9a476408023ee7cf80060702",
+    "runtime_v0_3_shadow_json_v2_summary.json": "d2a1a1f1d007ebb226f1fadb3df63e7e8248d0ff7514414b35fdec5bfd5c2a6e"
+  },
+  "by_stratum": {
+    "flat_scalar": {
+      "contract_oracle_cross_tab": {
+        "FAIL_CORRECT": 0,
+        "FAIL_INCORRECT": 17,
+        "PASS_CORRECT": 7,
+        "PASS_INCORRECT": 6
+      },
+      "difference_path_counts": {
+        "/bed": 2,
+        "/commissioned": 3,
+        "/held": 3,
+        "/lot": 3,
+        "/sample": 2,
+        "/shoots": 3,
+        "/shots": 3,
+        "/staffed": 2,
+        "/watered": 2,
+        "/work": 3
+      },
+      "differing_path_counts": {
+        "0": 13,
+        "1": 12,
+        "2": 3,
+        "4": 2
+      },
+      "leaf_difference_counts": {
+        "container_type": 2,
+        "missing_member": 6,
+        "scalar_type": 7,
+        "scalar_value": 8,
+        "unexpected_member": 3
+      },
+      "local_accepted_error_count": 6,
+      "local_contract_pass_count": 13,
+      "local_correct_count": 7,
+      "local_provider_success_count": 30,
+      "median_local_total_ms": 1208.8119790005294,
+      "median_tokens_per_second": 43.63352574787554,
+      "observation_count": 30,
+      "primary_class_counts": {
+        "container_type": 2,
+        "exact": 7,
+        "member_set": 6,
+        "scalar_type": 3,
+        "scalar_value": 6,
+        "unparseable_candidate": 6
+      },
+      "task_count": 10
+    },
+    "nested_collection": {
+      "contract_oracle_cross_tab": {
+        "FAIL_CORRECT": 0,
+        "FAIL_INCORRECT": 25,
+        "PASS_CORRECT": 0,
+        "PASS_INCORRECT": 5
+      },
+      "difference_path_counts": {
+        "/calendar": 3,
+        "/details": 3,
+        "/dimensions/unit": 3,
+        "/entry": 3,
+        "/flags": 3,
+        "/grid": 3,
+        "/halts": 3,
+        "/invoice": 1,
+        "/labels": 3,
+        "/line": 3,
+        "/lines": 1,
+        "/lines/0": 3,
+        "/lines/1": 2,
+        "/loop": 3,
+        "/parcel": 3,
+        "/position": 3,
+        "/punctuation": 3,
+        "/rights": 3,
+        "/settings": 3,
+        "/site": 3,
+        "/slots": 3,
+        "/source_spelling": 3,
+        "/trace": 3,
+        "/values": 3
+      },
+      "differing_path_counts": {
+        "1": 3,
+        "2": 20,
+        "3": 4,
+        "4": 3
+      },
+      "leaf_difference_counts": {
+        "array_length": 4,
+        "container_type": 36,
+        "missing_member": 6,
+        "scalar_type": 3,
+        "scalar_value": 12,
+        "unexpected_member": 6
+      },
+      "local_accepted_error_count": 5,
+      "local_contract_pass_count": 5,
+      "local_correct_count": 0,
+      "local_provider_success_count": 30,
+      "median_local_total_ms": 1098.0647850001333,
+      "median_tokens_per_second": 46.89461260660498,
+      "observation_count": 30,
+      "primary_class_counts": {
+        "container_type": 21,
+        "member_set": 9
+      },
+      "task_count": 10
+    },
+    "record_selection": {
+      "contract_oracle_cross_tab": {
+        "FAIL_CORRECT": 0,
+        "FAIL_INCORRECT": 21,
+        "PASS_CORRECT": 0,
+        "PASS_INCORRECT": 9
+      },
+      "difference_path_counts": {
+        "/battery": 3,
+        "/berth": 3,
+        "/cells": 3,
+        "/codename": 3,
+        "/departure": 3,
+        "/depot": 3,
+        "/edition": 3,
+        "/id": 3,
+        "/inventory": 3,
+        "/lead": 3,
+        "/licensed": 3,
+        "/maintained": 3,
+        "/marker": 3,
+        "/mast": 3,
+        "/passenger": 3,
+        "/platform": 3,
+        "/postponed": 3,
+        "/receipt": 3,
+        "/release": 3,
+        "/session": 3,
+        "/settled": 3,
+        "/status": 3,
+        "/suite": 3,
+        "/tier": 3,
+        "/train": 3,
+        "/tray": 3,
+        "/unit": 3,
+        "/value": 3
+      },
+      "differing_path_counts": {
+        "2": 6,
+        "3": 24
+      },
+      "leaf_difference_counts": {
+        "missing_member": 6,
+        "scalar_type": 18,
+        "scalar_value": 60
+      },
+      "local_accepted_error_count": 9,
+      "local_contract_pass_count": 9,
+      "local_correct_count": 0,
+      "local_provider_success_count": 30,
+      "median_local_total_ms": 917.7669464997962,
+      "median_tokens_per_second": 46.62261397969966,
+      "observation_count": 30,
+      "primary_class_counts": {
+        "member_set": 3,
+        "scalar_type": 18,
+        "scalar_value": 9
+      },
+      "task_count": 10
+    },
+    "type_boundary": {
+      "contract_oracle_cross_tab": {
+        "FAIL_CORRECT": 0,
+        "FAIL_INCORRECT": 18,
+        "PASS_CORRECT": 9,
+        "PASS_INCORRECT": 3
+      },
+      "difference_path_counts": {
+        "/attributes": 3,
+        "/codes": 3,
+        "/elevation": 3,
+        "/glyph": 3,
+        "/measurement": 3,
+        "/origin": 3,
+        "/signal": 3,
+        "/term": 2
+      },
+      "differing_path_counts": {
+        "0": 12,
+        "1": 13,
+        "2": 5
+      },
+      "leaf_difference_counts": {
+        "missing_member": 6,
+        "scalar_type": 12,
+        "scalar_value": 5
+      },
+      "local_accepted_error_count": 3,
+      "local_contract_pass_count": 12,
+      "local_correct_count": 9,
+      "local_provider_success_count": 30,
+      "median_local_total_ms": 736.610999500499,
+      "median_tokens_per_second": 49.82642611503505,
+      "observation_count": 30,
+      "primary_class_counts": {
+        "exact": 9,
+        "member_set": 3,
+        "scalar_type": 12,
+        "scalar_value": 3,
+        "unparseable_candidate": 3
+      },
+      "task_count": 10
+    }
+  },
+  "candidate_screen": {
+    "candidate_rule_ids": [],
+    "decision": "NO_RULE_CANDIDATE"
+  },
+  "interpretation": [
+    "MODEL_CHANGE_CANDIDATE"
+  ],
+  "overall": {
+    "contract_oracle_cross_tab": {
+      "FAIL_CORRECT": 0,
+      "FAIL_INCORRECT": 81,
+      "PASS_CORRECT": 16,
+      "PASS_INCORRECT": 23
+    },
+    "difference_path_counts": {
+      "/attributes": 3,
+      "/battery": 3,
+      "/bed": 2,
+      "/berth": 3,
+      "/calendar": 3,
+      "/cells": 3,
+      "/codename": 3,
+      "/codes": 3,
+      "/commissioned": 3,
+      "/departure": 3,
+      "/depot": 3,
+      "/details": 3,
+      "/dimensions/unit": 3,
+      "/edition": 3,
+      "/elevation": 3,
+      "/entry": 3,
+      "/flags": 3,
+      "/glyph": 3,
+      "/grid": 3,
+      "/halts": 3,
+      "/held": 3,
+      "/id": 3,
+      "/inventory": 3,
+      "/invoice": 1,
+      "/labels": 3,
+      "/lead": 3,
+      "/licensed": 3,
+      "/line": 3,
+      "/lines": 1,
+      "/lines/0": 3,
+      "/lines/1": 2,
+      "/loop": 3,
+      "/lot": 3,
+      "/maintained": 3,
+      "/marker": 3,
+      "/mast": 3,
+      "/measurement": 3,
+      "/origin": 3,
+      "/parcel": 3,
+      "/passenger": 3,
+      "/platform": 3,
+      "/position": 3,
+      "/postponed": 3,
+      "/punctuation": 3,
+      "/receipt": 3,
+      "/release": 3,
+      "/rights": 3,
+      "/sample": 2,
+      "/session": 3,
+      "/settings": 3,
+      "/settled": 3,
+      "/shoots": 3,
+      "/shots": 3,
+      "/signal": 3,
+      "/site": 3,
+      "/slots": 3,
+      "/source_spelling": 3,
+      "/staffed": 2,
+      "/status": 3,
+      "/suite": 3,
+      "/term": 2,
+      "/tier": 3,
+      "/trace": 3,
+      "/train": 3,
+      "/tray": 3,
+      "/unit": 3,
+      "/value": 3,
+      "/values": 3,
+      "/watered": 2,
+      "/work": 3
+    },
+    "differing_path_counts": {
+      "0": 25,
+      "1": 28,
+      "2": 34,
+      "3": 28,
+      "4": 5
+    },
+    "leaf_difference_counts": {
+      "array_length": 4,
+      "container_type": 38,
+      "missing_member": 24,
+      "scalar_type": 40,
+      "scalar_value": 85,
+      "unexpected_member": 9
+    },
+    "local_accepted_error_count": 23,
+    "local_contract_pass_count": 39,
+    "local_correct_count": 16,
+    "local_provider_success_count": 120,
+    "median_local_total_ms": 992.9007620003176,
+    "median_tokens_per_second": 46.710531597102474,
+    "observation_count": 120,
+    "primary_class_counts": {
+      "container_type": 23,
+      "exact": 16,
+      "member_set": 21,
+      "scalar_type": 33,
+      "scalar_value": 18,
+      "unparseable_candidate": 9
+    },
+    "task_count": 40
+  },
+  "prohibited_claims": [
+    "V2 validates a successor policy",
+    "contract PASS establishes semantic correctness",
+    "retrospective subgroups authorize local serving"
+  ],
+  "protocol_sha256": "3e0a9475c894469f5a8881b4e6063770628b1f789dd296130af61bfe3687aeef",
+  "row_classifications": [
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/lot"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "scalar_value",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_01"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/lot"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "scalar_value",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_01"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/lot"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "scalar_value",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_01"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "number",
+          "path": "/commissioned"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_02"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "number",
+          "path": "/commissioned"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "boolean",
+          "path": "/staffed"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_02"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "number",
+          "path": "/commissioned"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "boolean",
+          "path": "/staffed"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_02"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": true,
+      "correct": true,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "exact",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_03"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "object",
+          "class": "container_type",
+          "expected_type": "string",
+          "path": "/sample"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_03"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "object",
+          "class": "container_type",
+          "expected_type": "string",
+          "path": "/sample"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_03"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "boolean",
+          "path": "/held"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "member_set",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_04"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "boolean",
+          "path": "/held"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "member_set",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_04"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "boolean",
+          "path": "/held"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "member_set",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_04"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "unparseable_candidate",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_05"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "unparseable_candidate",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_05"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "unparseable_candidate",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_05"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "unparseable_candidate",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_06"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "unparseable_candidate",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_06"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "unparseable_candidate",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_06"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/work"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "scalar_value",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_07"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/work"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "scalar_value",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_07"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/work"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "scalar_value",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_07"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "number",
+          "path": "/shoots"
+        },
+        {
+          "candidate_type": "number",
+          "class": "unexpected_member",
+          "expected_type": "missing",
+          "path": "/shots"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "member_set",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_08"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "number",
+          "path": "/shoots"
+        },
+        {
+          "candidate_type": "number",
+          "class": "unexpected_member",
+          "expected_type": "missing",
+          "path": "/shots"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/bed"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "boolean",
+          "path": "/watered"
+        }
+      ],
+      "differing_path_count": 4,
+      "primary_class": "member_set",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_08"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "number",
+          "path": "/shoots"
+        },
+        {
+          "candidate_type": "number",
+          "class": "unexpected_member",
+          "expected_type": "missing",
+          "path": "/shots"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/bed"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "boolean",
+          "path": "/watered"
+        }
+      ],
+      "differing_path_count": 4,
+      "primary_class": "member_set",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_08"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": true,
+      "correct": true,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "exact",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_09"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": true,
+      "correct": true,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "exact",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_09"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": true,
+      "correct": true,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "exact",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_09"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": true,
+      "correct": true,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "exact",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_10"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": true,
+      "correct": true,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "exact",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_10"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": true,
+      "correct": true,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "exact",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_10"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/id"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/lead"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/status"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "scalar_value",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "record_selection",
+      "task_id": "v2_select_01"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/id"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/lead"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/status"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "scalar_value",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "record_selection",
+      "task_id": "v2_select_01"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/id"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/lead"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/status"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "scalar_value",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "record_selection",
+      "task_id": "v2_select_01"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/codename"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "boolean",
+          "path": "/maintained"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/release"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "record_selection",
+      "task_id": "v2_select_02"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/codename"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "boolean",
+          "path": "/maintained"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/release"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "record_selection",
+      "task_id": "v2_select_02"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/codename"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "boolean",
+          "path": "/maintained"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/release"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "record_selection",
+      "task_id": "v2_select_02"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "boolean",
+          "path": "/settled"
+        },
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "number",
+          "path": "/value"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/receipt"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "member_set",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "record_selection",
+      "task_id": "v2_select_03"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "boolean",
+          "path": "/settled"
+        },
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "number",
+          "path": "/value"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/receipt"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "member_set",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "record_selection",
+      "task_id": "v2_select_03"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "boolean",
+          "path": "/settled"
+        },
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "number",
+          "path": "/value"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/receipt"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "member_set",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "record_selection",
+      "task_id": "v2_select_03"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/depot"
+        },
+        {
+          "candidate_type": "number",
+          "class": "scalar_value",
+          "expected_type": "number",
+          "path": "/inventory"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "scalar_value",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "record_selection",
+      "task_id": "v2_select_04"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/depot"
+        },
+        {
+          "candidate_type": "number",
+          "class": "scalar_value",
+          "expected_type": "number",
+          "path": "/inventory"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "scalar_value",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "record_selection",
+      "task_id": "v2_select_04"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/depot"
+        },
+        {
+          "candidate_type": "number",
+          "class": "scalar_value",
+          "expected_type": "number",
+          "path": "/inventory"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "scalar_value",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "record_selection",
+      "task_id": "v2_select_04"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/departure"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "number",
+          "path": "/platform"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/train"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "record_selection",
+      "task_id": "v2_select_05"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/departure"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "number",
+          "path": "/platform"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/train"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "record_selection",
+      "task_id": "v2_select_05"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/departure"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "number",
+          "path": "/platform"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/train"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "record_selection",
+      "task_id": "v2_select_05"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "boolean",
+          "path": "/postponed"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/session"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/suite"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "record_selection",
+      "task_id": "v2_select_06"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "boolean",
+          "path": "/postponed"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/session"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/suite"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "record_selection",
+      "task_id": "v2_select_06"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "boolean",
+          "path": "/postponed"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/session"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/suite"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "record_selection",
+      "task_id": "v2_select_06"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "number",
+          "path": "/battery"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/unit"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "record_selection",
+      "task_id": "v2_select_07"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "number",
+          "path": "/battery"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/unit"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "record_selection",
+      "task_id": "v2_select_07"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "number",
+          "path": "/battery"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/unit"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "record_selection",
+      "task_id": "v2_select_07"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "number",
+          "class": "scalar_type",
+          "expected_type": "string",
+          "path": "/berth"
+        },
+        {
+          "candidate_type": "number",
+          "class": "scalar_value",
+          "expected_type": "number",
+          "path": "/edition"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/passenger"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "record_selection",
+      "task_id": "v2_select_08"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "number",
+          "class": "scalar_type",
+          "expected_type": "string",
+          "path": "/berth"
+        },
+        {
+          "candidate_type": "number",
+          "class": "scalar_value",
+          "expected_type": "number",
+          "path": "/edition"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/passenger"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "record_selection",
+      "task_id": "v2_select_08"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "number",
+          "class": "scalar_type",
+          "expected_type": "string",
+          "path": "/berth"
+        },
+        {
+          "candidate_type": "number",
+          "class": "scalar_value",
+          "expected_type": "number",
+          "path": "/edition"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/passenger"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "record_selection",
+      "task_id": "v2_select_08"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "number",
+          "class": "scalar_value",
+          "expected_type": "number",
+          "path": "/cells"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/marker"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/tray"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "scalar_value",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "record_selection",
+      "task_id": "v2_select_09"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "number",
+          "class": "scalar_value",
+          "expected_type": "number",
+          "path": "/cells"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/marker"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/tray"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "scalar_value",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "record_selection",
+      "task_id": "v2_select_09"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "number",
+          "class": "scalar_value",
+          "expected_type": "number",
+          "path": "/cells"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/marker"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/tray"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "scalar_value",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "record_selection",
+      "task_id": "v2_select_09"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "boolean",
+          "path": "/licensed"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/mast"
+        },
+        {
+          "candidate_type": "number",
+          "class": "scalar_value",
+          "expected_type": "number",
+          "path": "/tier"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "record_selection",
+      "task_id": "v2_select_10"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "boolean",
+          "path": "/licensed"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/mast"
+        },
+        {
+          "candidate_type": "number",
+          "class": "scalar_value",
+          "expected_type": "number",
+          "path": "/tier"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "record_selection",
+      "task_id": "v2_select_10"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "boolean",
+          "path": "/licensed"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/mast"
+        },
+        {
+          "candidate_type": "number",
+          "class": "scalar_value",
+          "expected_type": "number",
+          "path": "/tier"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "record_selection",
+      "task_id": "v2_select_10"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": true,
+      "correct": true,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "exact",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_01"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": true,
+      "correct": true,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "exact",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_01"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": true,
+      "correct": true,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "exact",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_01"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "number",
+          "class": "scalar_type",
+          "expected_type": "null",
+          "path": "/elevation"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_02"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "null",
+          "path": "/elevation"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_02"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "null",
+          "path": "/elevation"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_02"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "boolean",
+          "path": "/signal"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_03"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "boolean",
+          "path": "/signal"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_03"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "boolean",
+          "path": "/signal"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_03"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": true,
+      "correct": true,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "exact",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_04"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": true,
+      "correct": true,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "exact",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_04"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": true,
+      "correct": true,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "exact",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_04"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "object",
+          "path": "/attributes"
+        },
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "array",
+          "path": "/codes"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "member_set",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_05"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "object",
+          "path": "/attributes"
+        },
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "array",
+          "path": "/codes"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "member_set",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_05"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "object",
+          "path": "/attributes"
+        },
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "array",
+          "path": "/codes"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "member_set",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_05"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "number",
+          "path": "/origin"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_06"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "number",
+          "path": "/origin"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_06"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "number",
+          "path": "/origin"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_06"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/glyph"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "scalar_value",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_07"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/glyph"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/term"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "scalar_value",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_07"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/glyph"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/term"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "scalar_value",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_07"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "unparseable_candidate",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_08"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "unparseable_candidate",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_08"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "unparseable_candidate",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_08"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": true,
+      "correct": true,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "exact",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_09"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": true,
+      "correct": true,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "exact",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_09"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": true,
+      "correct": true,
+      "differences": [],
+      "differing_path_count": 0,
+      "primary_class": "exact",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_09"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "number",
+          "path": "/measurement"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_10"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "number",
+          "path": "/measurement"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_10"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "number",
+          "path": "/measurement"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "scalar_type",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_10"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/entry"
+        },
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "array",
+          "path": "/labels"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_01"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/entry"
+        },
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "array",
+          "path": "/labels"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_01"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/entry"
+        },
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "array",
+          "path": "/labels"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_01"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "string",
+          "path": "/dimensions/unit"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/parcel"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "member_set",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_02"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "string",
+          "path": "/dimensions/unit"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/parcel"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "member_set",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_02"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "string",
+          "path": "/dimensions/unit"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/parcel"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "member_set",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_02"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "array",
+          "path": "/halts"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/line"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "boolean",
+          "path": "/loop"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_03"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "array",
+          "path": "/halts"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/line"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "boolean",
+          "path": "/loop"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_03"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "array",
+          "path": "/halts"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/line"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_type",
+          "expected_type": "boolean",
+          "path": "/loop"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_03"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "object",
+          "path": "/details"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_04"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "object",
+          "path": "/details"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_04"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "object",
+          "path": "/details"
+        }
+      ],
+      "differing_path_count": 1,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_04"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "object",
+          "class": "container_type",
+          "expected_type": "string",
+          "path": "/invoice"
+        },
+        {
+          "candidate_type": "array",
+          "class": "array_length",
+          "expected_type": "array",
+          "path": "/lines"
+        },
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "object",
+          "path": "/lines/0"
+        }
+      ],
+      "differing_path_count": 3,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_05"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "object",
+          "path": "/lines/0"
+        },
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "object",
+          "path": "/lines/1"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_05"
+    },
+    {
+      "accepted_error": true,
+      "contract_pass": true,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "object",
+          "path": "/lines/0"
+        },
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "object",
+          "path": "/lines/1"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_05"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "object",
+          "path": "/position"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/site"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_06"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "object",
+          "path": "/position"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/site"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_06"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "object",
+          "path": "/position"
+        },
+        {
+          "candidate_type": "string",
+          "class": "scalar_value",
+          "expected_type": "string",
+          "path": "/site"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_06"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "unexpected_member",
+          "expected_type": "missing",
+          "path": "/punctuation"
+        },
+        {
+          "candidate_type": "string",
+          "class": "unexpected_member",
+          "expected_type": "missing",
+          "path": "/source_spelling"
+        },
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "array",
+          "path": "/rights"
+        },
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "object",
+          "path": "/settings"
+        }
+      ],
+      "differing_path_count": 4,
+      "primary_class": "member_set",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_07"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "unexpected_member",
+          "expected_type": "missing",
+          "path": "/punctuation"
+        },
+        {
+          "candidate_type": "string",
+          "class": "unexpected_member",
+          "expected_type": "missing",
+          "path": "/source_spelling"
+        },
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "array",
+          "path": "/rights"
+        },
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "object",
+          "path": "/settings"
+        }
+      ],
+      "differing_path_count": 4,
+      "primary_class": "member_set",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_07"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "string",
+          "class": "unexpected_member",
+          "expected_type": "missing",
+          "path": "/punctuation"
+        },
+        {
+          "candidate_type": "string",
+          "class": "unexpected_member",
+          "expected_type": "missing",
+          "path": "/source_spelling"
+        },
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "array",
+          "path": "/rights"
+        },
+        {
+          "candidate_type": "string",
+          "class": "container_type",
+          "expected_type": "object",
+          "path": "/settings"
+        }
+      ],
+      "differing_path_count": 4,
+      "primary_class": "member_set",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_07"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "number",
+          "path": "/trace"
+        },
+        {
+          "candidate_type": "object",
+          "class": "container_type",
+          "expected_type": "array",
+          "path": "/grid"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "member_set",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_08"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "number",
+          "path": "/trace"
+        },
+        {
+          "candidate_type": "object",
+          "class": "container_type",
+          "expected_type": "array",
+          "path": "/grid"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "member_set",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_08"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "missing",
+          "class": "missing_member",
+          "expected_type": "number",
+          "path": "/trace"
+        },
+        {
+          "candidate_type": "object",
+          "class": "container_type",
+          "expected_type": "array",
+          "path": "/grid"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "member_set",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_08"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "object",
+          "class": "container_type",
+          "expected_type": "string",
+          "path": "/calendar"
+        },
+        {
+          "candidate_type": "array",
+          "class": "container_type",
+          "expected_type": "object",
+          "path": "/slots"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_09"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "object",
+          "class": "container_type",
+          "expected_type": "string",
+          "path": "/calendar"
+        },
+        {
+          "candidate_type": "array",
+          "class": "container_type",
+          "expected_type": "object",
+          "path": "/slots"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_09"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "object",
+          "class": "container_type",
+          "expected_type": "string",
+          "path": "/calendar"
+        },
+        {
+          "candidate_type": "array",
+          "class": "container_type",
+          "expected_type": "object",
+          "path": "/slots"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_09"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "array",
+          "class": "container_type",
+          "expected_type": "object",
+          "path": "/flags"
+        },
+        {
+          "candidate_type": "array",
+          "class": "array_length",
+          "expected_type": "array",
+          "path": "/values"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 1,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_10"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "array",
+          "class": "container_type",
+          "expected_type": "object",
+          "path": "/flags"
+        },
+        {
+          "candidate_type": "array",
+          "class": "array_length",
+          "expected_type": "array",
+          "path": "/values"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 2,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_10"
+    },
+    {
+      "accepted_error": false,
+      "contract_pass": false,
+      "correct": false,
+      "differences": [
+        {
+          "candidate_type": "array",
+          "class": "container_type",
+          "expected_type": "object",
+          "path": "/flags"
+        },
+        {
+          "candidate_type": "array",
+          "class": "array_length",
+          "expected_type": "array",
+          "path": "/values"
+        }
+      ],
+      "differing_path_count": 2,
+      "primary_class": "container_type",
+      "provider_success": true,
+      "repetition": 3,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_10"
+    }
+  ],
+  "schema_version": "runtime_v0_3_json_error_analysis_v1",
+  "sealed_v2_correctness_overlap": {
+    "by_stratum": {
+      "flat_scalar": {
+        "both": 7,
+        "local_only": 0,
+        "neither": 0,
+        "remote_only": 23
+      },
+      "nested_collection": {
+        "both": 0,
+        "local_only": 0,
+        "neither": 11,
+        "remote_only": 19
+      },
+      "record_selection": {
+        "both": 0,
+        "local_only": 0,
+        "neither": 3,
+        "remote_only": 27
+      },
+      "type_boundary": {
+        "both": 9,
+        "local_only": 0,
+        "neither": 1,
+        "remote_only": 20
+      }
+    },
+    "overall": {
+      "both": 16,
+      "local_only": 0,
+      "neither": 15,
+      "remote_only": 89
+    }
+  },
+  "sealed_v2_decision": "DO_NOT_PROMOTE",
+  "subgroup_family_counts": {
+    "contract_pass": 1,
+    "contract_pass_single_stratum": 4,
+    "contract_pass_stratum_allowlist": 15,
+    "contract_signature": 17,
+    "preoutput_stratum": 4,
+    "three_repetition_unanimity": 1
+  },
+  "subgroup_inventory": [
+    {
+      "accepted_error_rate": 0.5897435897435898,
+      "accepted_error_upper_95": 0.7230985087401105,
+      "accepted_row_count": 39,
+      "accepted_task_cluster_count": 14,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 16,
+      "counterfactual_correct_count": 83,
+      "deployable": true,
+      "family": "contract_pass",
+      "features": [
+        "contract_status"
+      ],
+      "incorrect_accepted_rows": 23,
+      "label": "contract PASS",
+      "remote_logical_calls_avoided": 39,
+      "retrospective_only": true,
+      "rule_id": "contract_pass",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 8
+    },
+    {
+      "accepted_error_rate": 0.46153846153846156,
+      "accepted_error_upper_95": 0.7129509972056112,
+      "accepted_row_count": 13,
+      "accepted_task_cluster_count": 5,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 7,
+      "counterfactual_correct_count": 99,
+      "deployable": true,
+      "family": "contract_pass_single_stratum",
+      "features": [
+        "contract_status",
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 6,
+      "label": "contract PASS and stratum=flat_scalar",
+      "remote_logical_calls_avoided": 13,
+      "retrospective_only": true,
+      "rule_id": "contract_pass_single_stratum:flat_scalar",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 2
+    },
+    {
+      "accepted_error_rate": 1.0,
+      "accepted_error_upper_95": 1.0,
+      "accepted_row_count": 9,
+      "accepted_task_cluster_count": 3,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 0,
+      "counterfactual_correct_count": 96,
+      "deployable": true,
+      "family": "contract_pass_single_stratum",
+      "features": [
+        "contract_status",
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 9,
+      "label": "contract PASS and stratum=record_selection",
+      "remote_logical_calls_avoided": 9,
+      "retrospective_only": true,
+      "rule_id": "contract_pass_single_stratum:record_selection",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 3
+    },
+    {
+      "accepted_error_rate": 0.25,
+      "accepted_error_upper_95": 0.5273266035603439,
+      "accepted_row_count": 12,
+      "accepted_task_cluster_count": 4,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 9,
+      "counterfactual_correct_count": 102,
+      "deployable": true,
+      "family": "contract_pass_single_stratum",
+      "features": [
+        "contract_status",
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 3,
+      "label": "contract PASS and stratum=type_boundary",
+      "remote_logical_calls_avoided": 12,
+      "retrospective_only": true,
+      "rule_id": "contract_pass_single_stratum:type_boundary",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 1
+    },
+    {
+      "accepted_error_rate": 1.0,
+      "accepted_error_upper_95": 1.0,
+      "accepted_row_count": 5,
+      "accepted_task_cluster_count": 2,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 0,
+      "counterfactual_correct_count": 101,
+      "deployable": true,
+      "family": "contract_pass_single_stratum",
+      "features": [
+        "contract_status",
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 5,
+      "label": "contract PASS and stratum=nested_collection",
+      "remote_logical_calls_avoided": 5,
+      "retrospective_only": true,
+      "rule_id": "contract_pass_single_stratum:nested_collection",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 2
+    },
+    {
+      "accepted_error_rate": 0.46153846153846156,
+      "accepted_error_upper_95": 0.7129509972056112,
+      "accepted_row_count": 13,
+      "accepted_task_cluster_count": 5,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 7,
+      "counterfactual_correct_count": 99,
+      "deployable": true,
+      "family": "contract_pass_stratum_allowlist",
+      "features": [
+        "contract_status",
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 6,
+      "label": "contract PASS and stratum in flat_scalar",
+      "remote_logical_calls_avoided": 13,
+      "retrospective_only": true,
+      "rule_id": "contract_pass_allowlist:flat_scalar",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 2
+    },
+    {
+      "accepted_error_rate": 1.0,
+      "accepted_error_upper_95": 1.0,
+      "accepted_row_count": 9,
+      "accepted_task_cluster_count": 3,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 0,
+      "counterfactual_correct_count": 96,
+      "deployable": true,
+      "family": "contract_pass_stratum_allowlist",
+      "features": [
+        "contract_status",
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 9,
+      "label": "contract PASS and stratum in record_selection",
+      "remote_logical_calls_avoided": 9,
+      "retrospective_only": true,
+      "rule_id": "contract_pass_allowlist:record_selection",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 3
+    },
+    {
+      "accepted_error_rate": 0.6818181818181818,
+      "accepted_error_upper_95": 0.8400586961448866,
+      "accepted_row_count": 22,
+      "accepted_task_cluster_count": 8,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 7,
+      "counterfactual_correct_count": 90,
+      "deployable": true,
+      "family": "contract_pass_stratum_allowlist",
+      "features": [
+        "contract_status",
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 15,
+      "label": "contract PASS and stratum in flat_scalar+record_selection",
+      "remote_logical_calls_avoided": 22,
+      "retrospective_only": true,
+      "rule_id": "contract_pass_allowlist:flat_scalar+record_selection",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 5
+    },
+    {
+      "accepted_error_rate": 0.25,
+      "accepted_error_upper_95": 0.5273266035603439,
+      "accepted_row_count": 12,
+      "accepted_task_cluster_count": 4,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 9,
+      "counterfactual_correct_count": 102,
+      "deployable": true,
+      "family": "contract_pass_stratum_allowlist",
+      "features": [
+        "contract_status",
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 3,
+      "label": "contract PASS and stratum in type_boundary",
+      "remote_logical_calls_avoided": 12,
+      "retrospective_only": true,
+      "rule_id": "contract_pass_allowlist:type_boundary",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 1
+    },
+    {
+      "accepted_error_rate": 0.36,
+      "accepted_error_upper_95": 0.5439332139229074,
+      "accepted_row_count": 25,
+      "accepted_task_cluster_count": 9,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 16,
+      "counterfactual_correct_count": 96,
+      "deployable": true,
+      "family": "contract_pass_stratum_allowlist",
+      "features": [
+        "contract_status",
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 9,
+      "label": "contract PASS and stratum in flat_scalar+type_boundary",
+      "remote_logical_calls_avoided": 25,
+      "retrospective_only": true,
+      "rule_id": "contract_pass_allowlist:flat_scalar+type_boundary",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 3
+    },
+    {
+      "accepted_error_rate": 0.5714285714285714,
+      "accepted_error_upper_95": 0.7550055616916571,
+      "accepted_row_count": 21,
+      "accepted_task_cluster_count": 7,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 9,
+      "counterfactual_correct_count": 93,
+      "deployable": true,
+      "family": "contract_pass_stratum_allowlist",
+      "features": [
+        "contract_status",
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 12,
+      "label": "contract PASS and stratum in record_selection+type_boundary",
+      "remote_logical_calls_avoided": 21,
+      "retrospective_only": true,
+      "rule_id": "contract_pass_allowlist:record_selection+type_boundary",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 4
+    },
+    {
+      "accepted_error_rate": 0.5294117647058824,
+      "accepted_error_upper_95": 0.6782303006034112,
+      "accepted_row_count": 34,
+      "accepted_task_cluster_count": 12,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 16,
+      "counterfactual_correct_count": 87,
+      "deployable": true,
+      "family": "contract_pass_stratum_allowlist",
+      "features": [
+        "contract_status",
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 18,
+      "label": "contract PASS and stratum in flat_scalar+record_selection+type_boundary",
+      "remote_logical_calls_avoided": 34,
+      "retrospective_only": true,
+      "rule_id": "contract_pass_allowlist:flat_scalar+record_selection+type_boundary",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 6
+    },
+    {
+      "accepted_error_rate": 1.0,
+      "accepted_error_upper_95": 1.0,
+      "accepted_row_count": 5,
+      "accepted_task_cluster_count": 2,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 0,
+      "counterfactual_correct_count": 101,
+      "deployable": true,
+      "family": "contract_pass_stratum_allowlist",
+      "features": [
+        "contract_status",
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 5,
+      "label": "contract PASS and stratum in nested_collection",
+      "remote_logical_calls_avoided": 5,
+      "retrospective_only": true,
+      "rule_id": "contract_pass_allowlist:nested_collection",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 2
+    },
+    {
+      "accepted_error_rate": 0.6111111111111112,
+      "accepted_error_upper_95": 0.8010467041575084,
+      "accepted_row_count": 18,
+      "accepted_task_cluster_count": 7,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 7,
+      "counterfactual_correct_count": 95,
+      "deployable": true,
+      "family": "contract_pass_stratum_allowlist",
+      "features": [
+        "contract_status",
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 11,
+      "label": "contract PASS and stratum in flat_scalar+nested_collection",
+      "remote_logical_calls_avoided": 18,
+      "retrospective_only": true,
+      "rule_id": "contract_pass_allowlist:flat_scalar+nested_collection",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 4
+    },
+    {
+      "accepted_error_rate": 1.0,
+      "accepted_error_upper_95": 1.0,
+      "accepted_row_count": 14,
+      "accepted_task_cluster_count": 5,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 0,
+      "counterfactual_correct_count": 92,
+      "deployable": true,
+      "family": "contract_pass_stratum_allowlist",
+      "features": [
+        "contract_status",
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 14,
+      "label": "contract PASS and stratum in record_selection+nested_collection",
+      "remote_logical_calls_avoided": 14,
+      "retrospective_only": true,
+      "rule_id": "contract_pass_allowlist:record_selection+nested_collection",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 5
+    },
+    {
+      "accepted_error_rate": 0.7407407407407407,
+      "accepted_error_upper_95": 0.8714776365150805,
+      "accepted_row_count": 27,
+      "accepted_task_cluster_count": 10,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 7,
+      "counterfactual_correct_count": 86,
+      "deployable": true,
+      "family": "contract_pass_stratum_allowlist",
+      "features": [
+        "contract_status",
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 20,
+      "label": "contract PASS and stratum in flat_scalar+record_selection+nested_collection",
+      "remote_logical_calls_avoided": 27,
+      "retrospective_only": true,
+      "rule_id": "contract_pass_allowlist:flat_scalar+record_selection+nested_collection",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 7
+    },
+    {
+      "accepted_error_rate": 0.47058823529411764,
+      "accepted_error_upper_95": 0.6891704305217596,
+      "accepted_row_count": 17,
+      "accepted_task_cluster_count": 6,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 9,
+      "counterfactual_correct_count": 98,
+      "deployable": true,
+      "family": "contract_pass_stratum_allowlist",
+      "features": [
+        "contract_status",
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 8,
+      "label": "contract PASS and stratum in type_boundary+nested_collection",
+      "remote_logical_calls_avoided": 17,
+      "retrospective_only": true,
+      "rule_id": "contract_pass_allowlist:type_boundary+nested_collection",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 3
+    },
+    {
+      "accepted_error_rate": 0.4666666666666667,
+      "accepted_error_upper_95": 0.6300524448838063,
+      "accepted_row_count": 30,
+      "accepted_task_cluster_count": 11,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 16,
+      "counterfactual_correct_count": 92,
+      "deployable": true,
+      "family": "contract_pass_stratum_allowlist",
+      "features": [
+        "contract_status",
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 14,
+      "label": "contract PASS and stratum in flat_scalar+type_boundary+nested_collection",
+      "remote_logical_calls_avoided": 30,
+      "retrospective_only": true,
+      "rule_id": "contract_pass_allowlist:flat_scalar+type_boundary+nested_collection",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 5
+    },
+    {
+      "accepted_error_rate": 0.6538461538461539,
+      "accepted_error_upper_95": 0.8060395506613174,
+      "accepted_row_count": 26,
+      "accepted_task_cluster_count": 9,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 9,
+      "counterfactual_correct_count": 89,
+      "deployable": true,
+      "family": "contract_pass_stratum_allowlist",
+      "features": [
+        "contract_status",
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 17,
+      "label": "contract PASS and stratum in record_selection+type_boundary+nested_collection",
+      "remote_logical_calls_avoided": 26,
+      "retrospective_only": true,
+      "rule_id": "contract_pass_allowlist:record_selection+type_boundary+nested_collection",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 6
+    },
+    {
+      "accepted_error_rate": 0.5897435897435898,
+      "accepted_error_upper_95": 0.7230985087401105,
+      "accepted_row_count": 39,
+      "accepted_task_cluster_count": 14,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 16,
+      "counterfactual_correct_count": 83,
+      "deployable": true,
+      "family": "contract_pass_stratum_allowlist",
+      "features": [
+        "contract_status",
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 23,
+      "label": "contract PASS and stratum in flat_scalar+record_selection+type_boundary+nested_collection",
+      "remote_logical_calls_avoided": 39,
+      "retrospective_only": true,
+      "rule_id": "contract_pass_allowlist:flat_scalar+record_selection+type_boundary+nested_collection",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 8
+    },
+    {
+      "accepted_error_rate": 0.7666666666666667,
+      "accepted_error_upper_95": 0.8850131044302612,
+      "accepted_row_count": 30,
+      "accepted_task_cluster_count": 10,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 7,
+      "counterfactual_correct_count": 82,
+      "deployable": true,
+      "family": "preoutput_stratum",
+      "features": [
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 23,
+      "label": "stratum=flat_scalar",
+      "remote_logical_calls_avoided": 30,
+      "retrospective_only": true,
+      "rule_id": "preoutput_stratum:flat_scalar",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 8
+    },
+    {
+      "accepted_error_rate": 1.0,
+      "accepted_error_upper_95": 1.0,
+      "accepted_row_count": 30,
+      "accepted_task_cluster_count": 10,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 0,
+      "counterfactual_correct_count": 78,
+      "deployable": true,
+      "family": "preoutput_stratum",
+      "features": [
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 30,
+      "label": "stratum=record_selection",
+      "remote_logical_calls_avoided": 30,
+      "retrospective_only": true,
+      "rule_id": "preoutput_stratum:record_selection",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 10
+    },
+    {
+      "accepted_error_rate": 0.7,
+      "accepted_error_upper_95": 0.8336740443867883,
+      "accepted_row_count": 30,
+      "accepted_task_cluster_count": 10,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 9,
+      "counterfactual_correct_count": 85,
+      "deployable": true,
+      "family": "preoutput_stratum",
+      "features": [
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 21,
+      "label": "stratum=type_boundary",
+      "remote_logical_calls_avoided": 30,
+      "retrospective_only": true,
+      "rule_id": "preoutput_stratum:type_boundary",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 7
+    },
+    {
+      "accepted_error_rate": 1.0,
+      "accepted_error_upper_95": 1.0,
+      "accepted_row_count": 30,
+      "accepted_task_cluster_count": 10,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 0,
+      "counterfactual_correct_count": 86,
+      "deployable": true,
+      "family": "preoutput_stratum",
+      "features": [
+        "stratum"
+      ],
+      "incorrect_accepted_rows": 30,
+      "label": "stratum=nested_collection",
+      "remote_logical_calls_avoided": 30,
+      "retrospective_only": true,
+      "rule_id": "preoutput_stratum:nested_collection",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 10
+    },
+    {
+      "accepted_error_rate": 1.0,
+      "accepted_error_upper_95": 1.0,
+      "accepted_row_count": 3,
+      "accepted_task_cluster_count": 1,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 0,
+      "counterfactual_correct_count": 103,
+      "deployable": true,
+      "family": "contract_signature",
+      "features": [
+        "contract_signature"
+      ],
+      "incorrect_accepted_rows": 3,
+      "label": "{\"declared_type_counts\":{\"array\":1,\"boolean\":1,\"string\":1},\"maximum_declared_nesting_depth\":2,\"top_level_key_count\":3}",
+      "remote_logical_calls_avoided": 3,
+      "retrospective_only": true,
+      "rule_id": "contract_signature:01",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 1
+    },
+    {
+      "accepted_error_rate": 1.0,
+      "accepted_error_upper_95": 1.0,
+      "accepted_row_count": 3,
+      "accepted_task_cluster_count": 1,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 0,
+      "counterfactual_correct_count": 102,
+      "deployable": true,
+      "family": "contract_signature",
+      "features": [
+        "contract_signature"
+      ],
+      "incorrect_accepted_rows": 3,
+      "label": "{\"declared_type_counts\":{\"array\":1,\"number\":1,\"string\":1},\"maximum_declared_nesting_depth\":2,\"top_level_key_count\":3}",
+      "remote_logical_calls_avoided": 3,
+      "retrospective_only": true,
+      "rule_id": "contract_signature:02",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 1
+    },
+    {
+      "accepted_error_rate": 1.0,
+      "accepted_error_upper_95": 1.0,
+      "accepted_row_count": 3,
+      "accepted_task_cluster_count": 1,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 0,
+      "counterfactual_correct_count": 102,
+      "deployable": true,
+      "family": "contract_signature",
+      "features": [
+        "contract_signature"
+      ],
+      "incorrect_accepted_rows": 3,
+      "label": "{\"declared_type_counts\":{\"array\":1,\"number\":1},\"maximum_declared_nesting_depth\":2,\"top_level_key_count\":2}",
+      "remote_logical_calls_avoided": 3,
+      "retrospective_only": true,
+      "rule_id": "contract_signature:03",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 1
+    },
+    {
+      "accepted_error_rate": 1.0,
+      "accepted_error_upper_95": 1.0,
+      "accepted_row_count": 9,
+      "accepted_task_cluster_count": 3,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 0,
+      "counterfactual_correct_count": 96,
+      "deployable": true,
+      "family": "contract_signature",
+      "features": [
+        "contract_signature"
+      ],
+      "incorrect_accepted_rows": 9,
+      "label": "{\"declared_type_counts\":{\"array\":1,\"object\":1,\"string\":1},\"maximum_declared_nesting_depth\":2,\"top_level_key_count\":3}",
+      "remote_logical_calls_avoided": 9,
+      "retrospective_only": true,
+      "rule_id": "contract_signature:04",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 3
+    },
+    {
+      "accepted_error_rate": 1.0,
+      "accepted_error_upper_95": 1.0,
+      "accepted_row_count": 3,
+      "accepted_task_cluster_count": 1,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 0,
+      "counterfactual_correct_count": 103,
+      "deployable": true,
+      "family": "contract_signature",
+      "features": [
+        "contract_signature"
+      ],
+      "incorrect_accepted_rows": 3,
+      "label": "{\"declared_type_counts\":{\"array\":1,\"string\":1},\"maximum_declared_nesting_depth\":2,\"top_level_key_count\":2}",
+      "remote_logical_calls_avoided": 3,
+      "retrospective_only": true,
+      "rule_id": "contract_signature:05",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 1
+    },
+    {
+      "accepted_error_rate": 1.0,
+      "accepted_error_upper_95": 1.0,
+      "accepted_row_count": 3,
+      "accepted_task_cluster_count": 1,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 0,
+      "counterfactual_correct_count": 102,
+      "deployable": true,
+      "family": "contract_signature",
+      "features": [
+        "contract_signature"
+      ],
+      "incorrect_accepted_rows": 3,
+      "label": "{\"declared_type_counts\":{\"boolean\":1,\"null\":1,\"string\":1},\"maximum_declared_nesting_depth\":1,\"top_level_key_count\":3}",
+      "remote_logical_calls_avoided": 3,
+      "retrospective_only": true,
+      "rule_id": "contract_signature:06",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 1
+    },
+    {
+      "accepted_error_rate": 0.5,
+      "accepted_error_upper_95": 0.7547001987258748,
+      "accepted_row_count": 12,
+      "accepted_task_cluster_count": 4,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 6,
+      "counterfactual_correct_count": 100,
+      "deployable": true,
+      "family": "contract_signature",
+      "features": [
+        "contract_signature"
+      ],
+      "incorrect_accepted_rows": 6,
+      "label": "{\"declared_type_counts\":{\"boolean\":1,\"number\":1,\"string\":1},\"maximum_declared_nesting_depth\":1,\"top_level_key_count\":3}",
+      "remote_logical_calls_avoided": 12,
+      "retrospective_only": true,
+      "rule_id": "contract_signature:07",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 2
+    },
+    {
+      "accepted_error_rate": 0.9444444444444444,
+      "accepted_error_upper_95": 0.9971544288684435,
+      "accepted_row_count": 18,
+      "accepted_task_cluster_count": 6,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 1,
+      "counterfactual_correct_count": 88,
+      "deployable": true,
+      "family": "contract_signature",
+      "features": [
+        "contract_signature"
+      ],
+      "incorrect_accepted_rows": 17,
+      "label": "{\"declared_type_counts\":{\"boolean\":1,\"number\":1,\"string\":2},\"maximum_declared_nesting_depth\":1,\"top_level_key_count\":4}",
+      "remote_logical_calls_avoided": 18,
+      "retrospective_only": true,
+      "rule_id": "contract_signature:08",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 6
+    },
+    {
+      "accepted_error_rate": 0.6666666666666666,
+      "accepted_error_upper_95": 0.9022531865607242,
+      "accepted_row_count": 9,
+      "accepted_task_cluster_count": 3,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 3,
+      "counterfactual_correct_count": 99,
+      "deployable": true,
+      "family": "contract_signature",
+      "features": [
+        "contract_signature"
+      ],
+      "incorrect_accepted_rows": 6,
+      "label": "{\"declared_type_counts\":{\"boolean\":1,\"number\":2,\"string\":1},\"maximum_declared_nesting_depth\":1,\"top_level_key_count\":4}",
+      "remote_logical_calls_avoided": 9,
+      "retrospective_only": true,
+      "rule_id": "contract_signature:09",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 2
+    },
+    {
+      "accepted_error_rate": 1.0,
+      "accepted_error_upper_95": 1.0,
+      "accepted_row_count": 3,
+      "accepted_task_cluster_count": 1,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 0,
+      "counterfactual_correct_count": 102,
+      "deployable": true,
+      "family": "contract_signature",
+      "features": [
+        "contract_signature"
+      ],
+      "incorrect_accepted_rows": 3,
+      "label": "{\"declared_type_counts\":{\"boolean\":1,\"number\":2},\"maximum_declared_nesting_depth\":1,\"top_level_key_count\":3}",
+      "remote_logical_calls_avoided": 3,
+      "retrospective_only": true,
+      "rule_id": "contract_signature:10",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 1
+    },
+    {
+      "accepted_error_rate": 1.0,
+      "accepted_error_upper_95": 1.0,
+      "accepted_row_count": 3,
+      "accepted_task_cluster_count": 1,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 0,
+      "counterfactual_correct_count": 105,
+      "deployable": true,
+      "family": "contract_signature",
+      "features": [
+        "contract_signature"
+      ],
+      "incorrect_accepted_rows": 3,
+      "label": "{\"declared_type_counts\":{\"boolean\":1,\"object\":1,\"string\":1},\"maximum_declared_nesting_depth\":2,\"top_level_key_count\":3}",
+      "remote_logical_calls_avoided": 3,
+      "retrospective_only": true,
+      "rule_id": "contract_signature:11",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 1
+    },
+    {
+      "accepted_error_rate": 0.5,
+      "accepted_error_upper_95": 0.8468388820247768,
+      "accepted_row_count": 6,
+      "accepted_task_cluster_count": 2,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 3,
+      "counterfactual_correct_count": 103,
+      "deployable": true,
+      "family": "contract_signature",
+      "features": [
+        "contract_signature"
+      ],
+      "incorrect_accepted_rows": 3,
+      "label": "{\"declared_type_counts\":{\"boolean\":1,\"string\":1},\"maximum_declared_nesting_depth\":1,\"top_level_key_count\":2}",
+      "remote_logical_calls_avoided": 6,
+      "retrospective_only": true,
+      "rule_id": "contract_signature:12",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 1
+    },
+    {
+      "accepted_error_rate": 1.0,
+      "accepted_error_upper_95": 1.0,
+      "accepted_row_count": 6,
+      "accepted_task_cluster_count": 2,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 0,
+      "counterfactual_correct_count": 100,
+      "deployable": true,
+      "family": "contract_signature",
+      "features": [
+        "contract_signature"
+      ],
+      "incorrect_accepted_rows": 6,
+      "label": "{\"declared_type_counts\":{\"boolean\":1,\"string\":2},\"maximum_declared_nesting_depth\":1,\"top_level_key_count\":3}",
+      "remote_logical_calls_avoided": 6,
+      "retrospective_only": true,
+      "rule_id": "contract_signature:13",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 2
+    },
+    {
+      "accepted_error_rate": 0.8,
+      "accepted_error_upper_95": 0.9431531324097533,
+      "accepted_row_count": 15,
+      "accepted_task_cluster_count": 5,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 3,
+      "counterfactual_correct_count": 93,
+      "deployable": true,
+      "family": "contract_signature",
+      "features": [
+        "contract_signature"
+      ],
+      "incorrect_accepted_rows": 12,
+      "label": "{\"declared_type_counts\":{\"number\":1,\"string\":1},\"maximum_declared_nesting_depth\":1,\"top_level_key_count\":2}",
+      "remote_logical_calls_avoided": 15,
+      "retrospective_only": true,
+      "rule_id": "contract_signature:14",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 4
+    },
+    {
+      "accepted_error_rate": 1.0,
+      "accepted_error_upper_95": 1.0,
+      "accepted_row_count": 12,
+      "accepted_task_cluster_count": 4,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 0,
+      "counterfactual_correct_count": 94,
+      "deployable": true,
+      "family": "contract_signature",
+      "features": [
+        "contract_signature"
+      ],
+      "incorrect_accepted_rows": 12,
+      "label": "{\"declared_type_counts\":{\"number\":1,\"string\":2},\"maximum_declared_nesting_depth\":1,\"top_level_key_count\":3}",
+      "remote_logical_calls_avoided": 12,
+      "retrospective_only": true,
+      "rule_id": "contract_signature:15",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 4
+    },
+    {
+      "accepted_error_rate": 1.0,
+      "accepted_error_upper_95": 1.0,
+      "accepted_row_count": 9,
+      "accepted_task_cluster_count": 3,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 0,
+      "counterfactual_correct_count": 102,
+      "deployable": true,
+      "family": "contract_signature",
+      "features": [
+        "contract_signature"
+      ],
+      "incorrect_accepted_rows": 9,
+      "label": "{\"declared_type_counts\":{\"object\":1,\"string\":1},\"maximum_declared_nesting_depth\":2,\"top_level_key_count\":2}",
+      "remote_logical_calls_avoided": 9,
+      "retrospective_only": true,
+      "rule_id": "contract_signature:16",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 3
+    },
+    {
+      "accepted_error_rate": 1.0,
+      "accepted_error_upper_95": 1.0,
+      "accepted_row_count": 3,
+      "accepted_task_cluster_count": 1,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 0,
+      "counterfactual_correct_count": 102,
+      "deployable": true,
+      "family": "contract_signature",
+      "features": [
+        "contract_signature"
+      ],
+      "incorrect_accepted_rows": 3,
+      "label": "{\"declared_type_counts\":{\"string\":3},\"maximum_declared_nesting_depth\":1,\"top_level_key_count\":3}",
+      "remote_logical_calls_avoided": 3,
+      "retrospective_only": true,
+      "rule_id": "contract_signature:17",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 1
+    },
+    {
+      "accepted_error_rate": 0.5454545454545454,
+      "accepted_error_upper_95": 0.6950904202712693,
+      "accepted_row_count": 33,
+      "accepted_task_cluster_count": 11,
+      "candidate_screen": "NOT_A_CANDIDATE",
+      "correct_accepted_rows": 15,
+      "counterfactual_correct_count": 87,
+      "deployable": false,
+      "family": "three_repetition_unanimity",
+      "features": [
+        "candidate_replication",
+        "contract_status"
+      ],
+      "incorrect_accepted_rows": 18,
+      "label": "three local calls all PASS with identical canonical candidate",
+      "remote_logical_calls_avoided": 33,
+      "retrospective_only": true,
+      "rule_id": "three_rep_unanimous_pass_and_value",
+      "runtime_correct_count": 105,
+      "tasks_with_accepted_error": 6
+    }
+  ],
+  "task_pattern_summary": {
+    "candidate_uniqueness": {
+      "1": 33,
+      "2": 7
+    },
+    "contract_patterns": {
+      "mixed_contract_status": 2,
+      "unanimous_fail": 26,
+      "unanimous_pass": 12
+    },
+    "correctness_patterns": {
+      "mixed_correctness": 1,
+      "unanimous_correct": 5,
+      "unanimous_error": 34
+    }
+  },
+  "tasks": [
+    {
+      "accepted_error_repetitions": 3,
+      "contract_pass_repetitions": 3,
+      "contract_pattern": "unanimous_pass",
+      "contract_signature": {
+        "declared_type_counts": {
+          "boolean": 1,
+          "number": 1,
+          "string": 2
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 4
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "scalar_value": 3
+      },
+      "retrospective_only": true,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_01",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "boolean": 1,
+          "number": 1,
+          "string": 2
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 4
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "scalar_type": 3
+      },
+      "retrospective_only": true,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_02",
+      "unique_candidate_count": 2
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 1,
+      "contract_pattern": "mixed_contract_status",
+      "contract_signature": {
+        "declared_type_counts": {
+          "boolean": 1,
+          "number": 1,
+          "string": 2
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 4
+      },
+      "correct_repetitions": 1,
+      "correctness_pattern": "mixed_correctness",
+      "primary_classes": {
+        "container_type": 2,
+        "exact": 1
+      },
+      "retrospective_only": true,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_03",
+      "unique_candidate_count": 2
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "boolean": 1,
+          "number": 2,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 4
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "member_set": 3
+      },
+      "retrospective_only": true,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_04",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "boolean": 1,
+          "number": 1,
+          "string": 2
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 4
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "unparseable_candidate": 3
+      },
+      "retrospective_only": true,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_05",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "boolean": 1,
+          "number": 2,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 4
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "unparseable_candidate": 3
+      },
+      "retrospective_only": true,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_06",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 3,
+      "contract_pass_repetitions": 3,
+      "contract_pattern": "unanimous_pass",
+      "contract_signature": {
+        "declared_type_counts": {
+          "boolean": 1,
+          "number": 1,
+          "string": 2
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 4
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "scalar_value": 3
+      },
+      "retrospective_only": true,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_07",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "boolean": 1,
+          "number": 1,
+          "string": 2
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 4
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "member_set": 3
+      },
+      "retrospective_only": true,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_08",
+      "unique_candidate_count": 2
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 3,
+      "contract_pattern": "unanimous_pass",
+      "contract_signature": {
+        "declared_type_counts": {
+          "boolean": 1,
+          "number": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 3
+      },
+      "correct_repetitions": 3,
+      "correctness_pattern": "unanimous_correct",
+      "primary_classes": {
+        "exact": 3
+      },
+      "retrospective_only": true,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_09",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 3,
+      "contract_pattern": "unanimous_pass",
+      "contract_signature": {
+        "declared_type_counts": {
+          "boolean": 1,
+          "number": 2,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 4
+      },
+      "correct_repetitions": 3,
+      "correctness_pattern": "unanimous_correct",
+      "primary_classes": {
+        "exact": 3
+      },
+      "retrospective_only": true,
+      "stratum": "flat_scalar",
+      "task_id": "v2_flat_10",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 3,
+      "contract_pass_repetitions": 3,
+      "contract_pattern": "unanimous_pass",
+      "contract_signature": {
+        "declared_type_counts": {
+          "string": 3
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 3
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "scalar_value": 3
+      },
+      "retrospective_only": true,
+      "stratum": "record_selection",
+      "task_id": "v2_select_01",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "boolean": 1,
+          "string": 2
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 3
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "scalar_type": 3
+      },
+      "retrospective_only": true,
+      "stratum": "record_selection",
+      "task_id": "v2_select_02",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "boolean": 1,
+          "number": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 3
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "member_set": 3
+      },
+      "retrospective_only": true,
+      "stratum": "record_selection",
+      "task_id": "v2_select_03",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 3,
+      "contract_pass_repetitions": 3,
+      "contract_pattern": "unanimous_pass",
+      "contract_signature": {
+        "declared_type_counts": {
+          "number": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 2
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "scalar_value": 3
+      },
+      "retrospective_only": true,
+      "stratum": "record_selection",
+      "task_id": "v2_select_04",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "number": 1,
+          "string": 2
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 3
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "scalar_type": 3
+      },
+      "retrospective_only": true,
+      "stratum": "record_selection",
+      "task_id": "v2_select_05",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "boolean": 1,
+          "string": 2
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 3
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "scalar_type": 3
+      },
+      "retrospective_only": true,
+      "stratum": "record_selection",
+      "task_id": "v2_select_06",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "number": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 2
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "scalar_type": 3
+      },
+      "retrospective_only": true,
+      "stratum": "record_selection",
+      "task_id": "v2_select_07",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "number": 1,
+          "string": 2
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 3
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "scalar_type": 3
+      },
+      "retrospective_only": true,
+      "stratum": "record_selection",
+      "task_id": "v2_select_08",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 3,
+      "contract_pass_repetitions": 3,
+      "contract_pattern": "unanimous_pass",
+      "contract_signature": {
+        "declared_type_counts": {
+          "number": 1,
+          "string": 2
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 3
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "scalar_value": 3
+      },
+      "retrospective_only": true,
+      "stratum": "record_selection",
+      "task_id": "v2_select_09",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "boolean": 1,
+          "number": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 3
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "scalar_type": 3
+      },
+      "retrospective_only": true,
+      "stratum": "record_selection",
+      "task_id": "v2_select_10",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 3,
+      "contract_pattern": "unanimous_pass",
+      "contract_signature": {
+        "declared_type_counts": {
+          "boolean": 1,
+          "number": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 3
+      },
+      "correct_repetitions": 3,
+      "correctness_pattern": "unanimous_correct",
+      "primary_classes": {
+        "exact": 3
+      },
+      "retrospective_only": true,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_01",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "boolean": 1,
+          "null": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 3
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "scalar_type": 3
+      },
+      "retrospective_only": true,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_02",
+      "unique_candidate_count": 2
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "boolean": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 2
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "scalar_type": 3
+      },
+      "retrospective_only": true,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_03",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 3,
+      "contract_pattern": "unanimous_pass",
+      "contract_signature": {
+        "declared_type_counts": {
+          "number": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 2
+      },
+      "correct_repetitions": 3,
+      "correctness_pattern": "unanimous_correct",
+      "primary_classes": {
+        "exact": 3
+      },
+      "retrospective_only": true,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_04",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "array": 1,
+          "object": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 2,
+        "top_level_key_count": 3
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "member_set": 3
+      },
+      "retrospective_only": true,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_05",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "boolean": 1,
+          "number": 2
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 3
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "scalar_type": 3
+      },
+      "retrospective_only": true,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_06",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 3,
+      "contract_pass_repetitions": 3,
+      "contract_pattern": "unanimous_pass",
+      "contract_signature": {
+        "declared_type_counts": {
+          "number": 1,
+          "string": 2
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 3
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "scalar_value": 3
+      },
+      "retrospective_only": true,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_07",
+      "unique_candidate_count": 2
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "number": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 2
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "unparseable_candidate": 3
+      },
+      "retrospective_only": true,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_08",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 3,
+      "contract_pattern": "unanimous_pass",
+      "contract_signature": {
+        "declared_type_counts": {
+          "boolean": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 2
+      },
+      "correct_repetitions": 3,
+      "correctness_pattern": "unanimous_correct",
+      "primary_classes": {
+        "exact": 3
+      },
+      "retrospective_only": true,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_09",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "number": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 1,
+        "top_level_key_count": 2
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "scalar_type": 3
+      },
+      "retrospective_only": true,
+      "stratum": "type_boundary",
+      "task_id": "v2_type_10",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "array": 1,
+          "number": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 2,
+        "top_level_key_count": 3
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "container_type": 3
+      },
+      "retrospective_only": true,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_01",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 3,
+      "contract_pass_repetitions": 3,
+      "contract_pattern": "unanimous_pass",
+      "contract_signature": {
+        "declared_type_counts": {
+          "object": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 2,
+        "top_level_key_count": 2
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "member_set": 3
+      },
+      "retrospective_only": true,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_02",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "array": 1,
+          "boolean": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 2,
+        "top_level_key_count": 3
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "container_type": 3
+      },
+      "retrospective_only": true,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_03",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "object": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 2,
+        "top_level_key_count": 2
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "container_type": 3
+      },
+      "retrospective_only": true,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_04",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 2,
+      "contract_pass_repetitions": 2,
+      "contract_pattern": "mixed_contract_status",
+      "contract_signature": {
+        "declared_type_counts": {
+          "array": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 2,
+        "top_level_key_count": 2
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "container_type": 3
+      },
+      "retrospective_only": true,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_05",
+      "unique_candidate_count": 2
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "object": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 2,
+        "top_level_key_count": 2
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "container_type": 3
+      },
+      "retrospective_only": true,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_06",
+      "unique_candidate_count": 2
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "array": 1,
+          "object": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 2,
+        "top_level_key_count": 3
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "member_set": 3
+      },
+      "retrospective_only": true,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_07",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "array": 1,
+          "number": 1
+        },
+        "maximum_declared_nesting_depth": 2,
+        "top_level_key_count": 2
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "member_set": 3
+      },
+      "retrospective_only": true,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_08",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "boolean": 1,
+          "object": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 2,
+        "top_level_key_count": 3
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "container_type": 3
+      },
+      "retrospective_only": true,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_09",
+      "unique_candidate_count": 1
+    },
+    {
+      "accepted_error_repetitions": 0,
+      "contract_pass_repetitions": 0,
+      "contract_pattern": "unanimous_fail",
+      "contract_signature": {
+        "declared_type_counts": {
+          "array": 1,
+          "object": 1,
+          "string": 1
+        },
+        "maximum_declared_nesting_depth": 2,
+        "top_level_key_count": 3
+      },
+      "correct_repetitions": 0,
+      "correctness_pattern": "unanimous_error",
+      "primary_classes": {
+        "container_type": 3
+      },
+      "retrospective_only": true,
+      "stratum": "nested_collection",
+      "task_id": "v2_nested_10",
+      "unique_candidate_count": 1
+    }
+  ]
+}
