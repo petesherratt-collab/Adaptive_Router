@@ -61,12 +61,14 @@ def clopper_pearson_upper(k, n, alpha=0.05):
 
 def _counterfactual(row):
     use_local = row["local_contract"]["status"] == "PASS"
-    selected = row["local"] if use_local else row["remote"]
     correct = (
         row["local_oracle"]["correct"] if use_local
         else row["remote_oracle"]["correct"]
     )
-    return use_local, bool(correct), selected.get("total_ms")
+    latency = row["local"]["total_ms"]
+    if not use_local:
+        latency += row["remote"]["total_ms"]
+    return use_local, bool(correct), latency
 
 
 def _scope(rows):
@@ -145,6 +147,14 @@ def _scope(rows):
         "remote_reported_cost_usd": sum(
             float(row["remote"].get("cost") or 0.0) for row in rows
         ),
+        "remote_unreported_failure_cost_count": sum(
+            row["remote"].get("cost") is None for row in rows
+        ),
+        "remote_reserved_failure_cost_usd": sum(
+            pv.UNREPORTED_FAILURE_COST_RESERVE_USD
+            for row in rows
+            if row["remote"].get("cost") is None
+        ),
         "remote_http_attempts": sum(
             int(row["remote"].get("attempt_count") or 0) for row in rows
         ),
@@ -153,7 +163,7 @@ def _scope(rows):
         "actual_runtime_median_ms": _median(
             row["router_decision"].get("total_ms") for row in rows
         ),
-        "counterfactual_selected_path_median_ms": _median(
+        "counterfactual_request_median_ms": _median(
             item[2] for item in selections
         ),
     }
@@ -226,7 +236,7 @@ def analyze_rows(rows, tasks, revision):
         ),
         "at_least_60_remote_calls_avoided": overall["remote_calls_avoided"] >= 60,
         "counterfactual_median_at_most_remote_provider": (
-            overall["counterfactual_selected_path_median_ms"]
+            overall["counterfactual_request_median_ms"]
             <= overall["remote_median_ms"]
         ),
         "no_instrumentation_or_execution_failure": True,
@@ -295,6 +305,8 @@ def authenticate_complete(root=pv.ROOT, frozen_root=None):
         "remote_logical_calls",
         "remote_http_attempts",
         "reported_remote_cost_usd",
+        "unreported_remote_failure_count",
+        "reserved_unreported_failure_cost_usd",
     }:
         raise pv.FrozenDesignError("COMPLETE_AUTHENTICATION_FAILED")
     expected_summary = pv.summary(rows, revision, pv.EvidenceBudget(**budget))
@@ -315,11 +327,28 @@ def authenticate_complete(root=pv.ROOT, frozen_root=None):
         or budget.get("local_logical_calls") != pv.OBSERVATION_COUNT
         or budget.get("remote_logical_calls") != pv.OBSERVATION_COUNT
         or type(budget.get("remote_http_attempts")) is not int
-        or not 0 <= budget["remote_http_attempts"] <= pv.MAX_REMOTE_HTTP_ATTEMPTS
+        or not pv.OBSERVATION_COUNT
+        <= budget["remote_http_attempts"]
+        <= pv.MAX_REMOTE_HTTP_ATTEMPTS
         or type(budget.get("reported_remote_cost_usd")) not in (int, float)
         or isinstance(budget.get("reported_remote_cost_usd"), bool)
         or not math.isfinite(budget["reported_remote_cost_usd"])
         or budget["reported_remote_cost_usd"] < 0
+        or type(budget.get("unreported_remote_failure_count")) is not int
+        or not 0
+        <= budget["unreported_remote_failure_count"]
+        <= pv.OBSERVATION_COUNT
+        or type(budget.get("reserved_unreported_failure_cost_usd"))
+        not in (int, float)
+        or isinstance(budget.get("reserved_unreported_failure_cost_usd"), bool)
+        or not math.isfinite(budget["reserved_unreported_failure_cost_usd"])
+        or not math.isclose(
+            budget["reserved_unreported_failure_cost_usd"],
+            budget["unreported_remote_failure_count"]
+            * pv.UNREPORTED_FAILURE_COST_RESERVE_USD,
+            rel_tol=0.0,
+            abs_tol=1e-15,
+        )
         or any(
             summary.get(key) != value
             for key, value in expected_summary.items()
