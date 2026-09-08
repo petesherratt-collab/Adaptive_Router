@@ -2204,3 +2204,188 @@ A successor must be a separately frozen V2 with fresh tasks. Its plan must
 decide prospectively how malformed HTTP-200 remote responses are handled and
 should consider a canonical failure manifest. V1 must not be rerun or resumed.
 See `RUNTIME_V0_3_SHADOW_JSON_V1_EXECUTION_INCIDENT.md`.
+
+
+## 2026-09-08 — Runtime v0.3 structural-JSON shadow V2 framing reconciliation
+
+### Scope
+
+After the V2 runner and analyzer were implemented but before any provider
+generation request, a second framing review identified useful clarifications
+around logical calls, HTTP attempts, fallback latency, and missing cost
+metadata. Two attempted executions stopped at frozen-plan authentication after
+the plan had been modified locally; both stopped before model or provider
+generation. The uncommitted review was preserved at SHA-256
+`16ce80fe9cc12b25f8cc38046238f462ef4d39fba77f27e2fac60fd097455256`
+before the tracked files were restored.
+
+### Reconciliation
+
+- Completed evidence now requires exactly 120 local and 120 remote logical
+  calls. Remote HTTP attempts are separately reconciled from `attempt_count`
+  and must total 120..240; `retry_count` must equal `attempt_count - 1`.
+- Counterfactual local-first latency is calculated per observation. A local
+  contract pass uses local latency; a local failure or rejection uses local plus
+  remote latency to represent sequential fallback.
+- Promotion retains the authoritative remote-provider median as its latency
+  comparator. Actual runtime latency includes synchronous shadow measurement
+  overhead and is reported descriptively rather than used as the baseline.
+- Successful remote results require finite reported cost. A failed provider
+  result may have unavailable cost, as occurred in V1; it remains a measured
+  outcome but consumes a frozen conservative USD 0.001 reserve. Reported and
+  reserved costs remain separate, and their sum governs the USD 0.03 stop rule.
+- Provider and decision latencies must be finite, non-negative, non-Boolean
+  numbers. Primary denominators, logical calls, HTTP attempts, and analysis
+  input artifacts are explicit.
+
+### Gotchas
+
+Making null cost fatal would have recreated the V1 failure mode for an
+`OPENROUTER_RESPONSE_INVALID` result. Treating it as zero would instead make
+the spending limit unenforceable. The conservative reserve preserves the
+service outcome without granting free budget. Comparing local-first fallback
+against end-to-end shadow runtime would also favor promotion because that
+runtime deliberately pays for both arms; the remote-provider arm is the cleaner
+deployable baseline.
+
+The reconciled plan SHA-256 is
+`d33b1c4c611b815313d8b27fcd04ec29a4fbc62465e7ed80f30564c12af441a3`.
+Focused compilation, 27 V2 tests, and the synthetic 120-observation dry run
+passed without network requests or repository outputs. Full-suite and live
+preflight verification remain required before execution.
+
+## 2026-09-08 — Runtime v0.3 structural-JSON shadow V2 result
+
+### Scope and execution
+
+V2 was a separately frozen, one-shot prospective evaluation of the released
+remote-authoritative v0.3 runtime and a non-authoritative local shadow. It used
+40 fresh structural-JSON tasks across four predeclared strata, with three
+repetitions each: 120 ordered observations and one paired local and remote
+logical call per observation.
+
+Before execution, 27 focused V2 tests and all 370 repository tests passed. The
+synthetic dry run completed 120 observations with 10,000 bootstrap draws,
+made zero provider network requests, and created no repository outputs.
+Metadata preflight authenticated the plan, benchmark, config, implementation
+revision, both model identities, and an empty output state.
+
+The single sealed provider execution completed successfully. It captured 120
+runs and 120 router telemetry rows, exactly 120 local logical calls, exactly 120
+remote logical calls, and 120 remote HTTP attempts. All local calls completed.
+The remote arm completed 118 calls successfully and retained two
+`OPENROUTER_RESPONSE_INVALID` outcomes rather than aborting the experiment.
+Both unreported failed-call costs consumed the frozen USD 0.001 reserve.
+
+Execution evidence was committed at
+`803d71d`:
+
+| Artifact | Rows | SHA-256 |
+|---|---:|---|
+| `runtime_v0_3_shadow_json_v2_runs.jsonl` | 120 | `1b846bb04cbf335d8bce8b37e5d94cb509a4a06f9a476408023ee7cf80060702` |
+| `runtime_v0_3_shadow_json_v2_router_telemetry.jsonl` | 120 | `333a073ab9c50aaa4aafed2f1bc09e65bff49fa7bf45960db016d50a1ae16ba6` |
+| `runtime_v0_3_shadow_json_v2_summary.json` | — | `d2a1a1f1d007ebb226f1fadb3df63e7e8248d0ff7514414b35fdec5bfd5c2a6e` |
+
+The authenticated analysis was committed at
+`9929c39`:
+
+| Artifact | Rows | SHA-256 |
+|---|---:|---|
+| `runtime_v0_3_shadow_json_v2_analysis.json` | — | `b4a93b8ecee9dc45d17dc281c903cd5a1629ef7f95edc42433562438e0393160` |
+| `runtime_v0_3_shadow_json_v2_analysis.csv` | 6 | `196d9d7f31192dd150c77e244e22e3beda32e104021b10421e4e58573cd2b09b` |
+
+Frozen identities:
+
+| Input | SHA-256 |
+|---|---|
+| Plan | `d33b1c4c611b815313d8b27fcd04ec29a4fbc62465e7ed80f30564c12af441a3` |
+| Benchmark | `b160537b15f25941227d9381c0bee625f2af8ed385463b1608a6568f1079e278` |
+| Config | `36df214e322b8148614e0ac8289ddb77779e326e06d91e3780ea39b87bd01657` |
+| Implementation | `ca9f915d4f25b25113faa11ef33d8b2db903a679` |
+
+### Primary result
+
+The precommitted decision is **`DO_NOT_PROMOTE`**.
+
+The authoritative runtime was correct on 105/120 observations (87.5%). The
+local arm was correct on 16/120 (13.3%). A local-first counterfactual that
+accepted every local contract PASS and otherwise fell back to remote was
+correct on 83/120 (69.2%), 22 fewer correct observations than the released
+runtime.
+
+The local contract passed 39 outputs, but 23 of those accepted outputs were
+wrong: an accepted-error rate of 23/39 (59.0%). Its exact one-sided 95%
+Clopper-Pearson upper bound was 72.3%, far above the precommitted 5% ceiling.
+The counterfactual avoided 39 remote logical calls; the task-cluster bootstrap
+95% interval was 23..57, and the point estimate did not reach the required 60.
+The bootstrap 95% interval for counterfactual-minus-runtime correctness rate
+was -30.8 to -7.5 percentage points.
+
+Median measured latencies were 992.9 ms for the paired local arm, 2916.0 ms
+for the remote provider arm, 3610.4 ms for deployable sequential local-first
+fallback, and 4202.3 ms for the actual synchronous-shadow runtime. The
+counterfactual therefore failed its deployable comparison with direct remote
+service even though it was faster than the deliberately two-arm shadow
+runtime.
+
+Reported remote cost was USD 0.0109828. Two remote failures had no reported
+cost and consumed USD 0.002 of frozen conservative reserve, for USD 0.0129828
+total budget accounting, below the USD 0.03 ceiling.
+
+### Stratum results
+
+| Stratum | Remote correct | Local correct | Local PASS | Accepted errors | Counterfactual correct |
+|---|---:|---:|---:|---:|---:|
+| Flat scalar | 30/30 | 7/30 | 13/30 | 6 | 24/30 |
+| Nested collection | 19/30 | 0/30 | 5/30 | 5 | 15/30 |
+| Record selection | 27/30 | 0/30 | 9/30 | 9 | 18/30 |
+| Type boundary | 29/30 | 9/30 | 12/30 | 3 | 26/30 |
+| **Overall** | **105/120** | **16/120** | **39/120** | **23** | **83/120** |
+
+The local model produced no correct answer in either nested collection or
+record selection. Every locally correct result was also remotely correct:
+overlap was 16 both-correct, zero local-only, 89 remote-only, and 15 neither.
+There is no measured correctness niche in this suite where local rescued a
+remote error.
+
+### Promotion criteria
+
+Only evidence completeness and absence of instrumentation/execution failure
+passed. Six substantive criteria failed:
+
+- local accepted errors were 23 rather than zero;
+- local contract passes were 39 rather than at least 60;
+- the accepted-error upper bound was 72.3% rather than at most 5%;
+- counterfactual correctness was 83 rather than at least the runtime's 105;
+- avoided remote calls were 39 rather than at least 60; and
+- counterfactual median request latency was 3610.4 ms rather than at most the
+  2916.0 ms remote-provider median.
+
+### Decision and runtime boundary
+
+Structural-JSON local authority remains disabled. The released v0.3
+remote-authoritative policy is retained for these generative contracts. Local
+shadow measurement may continue for research, but local contract conformance
+must not be treated as evidence of semantic correctness or as authorization to
+serve the local result.
+
+This does not establish that local routing is impossible. It establishes that
+this model, validator, task distribution, and local-PASS policy do not meet the
+frozen promotion standard. A successor must change and freeze a substantive
+candidate before collecting fresh evidence; it must not tune a decision rule on
+these V2 outcomes and present that reuse as prospective validation.
+
+### Gotchas
+
+V2's most important success is methodological rather than promotional. The V1
+malformed HTTP-200 condition recurred twice, but the prospectively defined V2
+failure representation retained both outcomes and allowed the sealed suite to
+complete without treating unknown cost as zero.
+
+The superficially attractive 992.9 ms local-arm median is not a deployable
+request-latency result. Because 81 observations would reject or fail local,
+real local-first fallback waits for local before remote; its median was 3610.4
+ms, slower than direct remote. Likewise, 39 contract passes are not 39 safe
+savings: 23 were semantic errors. The experiment again demonstrates that
+structural validity and semantic correctness are different quantities.
+

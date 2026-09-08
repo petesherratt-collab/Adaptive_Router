@@ -1,0 +1,1261 @@
+{
+  "schema_version": "runtime_v0_3_shadow_json_benchmark_v2",
+  "suite_id": "runtime_v0_3_shadow_json_v2",
+  "created_date": "2026-09-08",
+  "task_count": 40,
+  "repetitions": 3,
+  "observation_count": 120,
+  "strata": {
+    "flat_scalar": 10,
+    "record_selection": 10,
+    "type_boundary": 10,
+    "nested_collection": 10
+  },
+  "tasks": [
+    {
+      "task_id": "v2_flat_01",
+      "stratum": "flat_scalar",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: lot, custodian, pieces, sealed. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Lot Violet-29 is held by Mara Quill. It contains 37 pieces and is sealed.\n\nRequest: Extract lot, custodian, pieces, sealed.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "lot",
+            "custodian",
+            "pieces",
+            "sealed"
+          ],
+          "explicit_types": {
+            "lot": "string",
+            "custodian": "string",
+            "pieces": "number",
+            "sealed": "boolean"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "lot": "Violet-29",
+          "custodian": "Mara Quill",
+          "pieces": 37,
+          "sealed": true
+        }
+      }
+    },
+    {
+      "task_id": "v2_flat_02",
+      "stratum": "flat_scalar",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: terminal, commissioned, district, staffed. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Terminal Ash-12 was commissioned in 2007 in Northmere. It is not staffed.\n\nRequest: Extract terminal, commissioned, district, staffed.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "terminal",
+            "commissioned",
+            "district",
+            "staffed"
+          ],
+          "explicit_types": {
+            "terminal": "string",
+            "commissioned": "number",
+            "district": "string",
+            "staffed": "boolean"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "terminal": "Ash-12",
+          "commissioned": 2007,
+          "district": "Northmere",
+          "staffed": false
+        }
+      }
+    },
+    {
+      "task_id": "v2_flat_03",
+      "stratum": "flat_scalar",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: sample, volume_ml, shade, sterile. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Sample Q-718 has volume 13.6 ml, shade cobalt, and is sterile.\n\nRequest: Extract sample, volume_ml, shade, sterile.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "sample",
+            "volume_ml",
+            "shade",
+            "sterile"
+          ],
+          "explicit_types": {
+            "sample": "string",
+            "volume_ml": "number",
+            "shade": "string",
+            "sterile": "boolean"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "sample": "Q-718",
+          "volume_ml": 13.6,
+          "shade": "cobalt",
+          "sterile": true
+        }
+      }
+    },
+    {
+      "task_id": "v2_flat_04",
+      "stratum": "flat_scalar",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: consignment, bay, pallets, held. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Consignment Heron-44 is assigned to bay 9 with 23 pallets. It is not held.\n\nRequest: Extract consignment, bay, pallets, held.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "consignment",
+            "bay",
+            "pallets",
+            "held"
+          ],
+          "explicit_types": {
+            "consignment": "string",
+            "bay": "number",
+            "pallets": "number",
+            "held": "boolean"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "consignment": "Heron-44",
+          "bay": 9,
+          "pallets": 23,
+          "held": false
+        }
+      }
+    },
+    {
+      "task_id": "v2_flat_05",
+      "stratum": "flat_scalar",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: ledger, currency, amount, open. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Ledger L-63 uses EUR, has amount -27.4, and is open.\n\nRequest: Extract ledger, currency, amount, open.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "ledger",
+            "currency",
+            "amount",
+            "open"
+          ],
+          "explicit_types": {
+            "ledger": "string",
+            "currency": "string",
+            "amount": "number",
+            "open": "boolean"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "ledger": "L-63",
+          "currency": "EUR",
+          "amount": -27.4,
+          "open": true
+        }
+      }
+    },
+    {
+      "task_id": "v2_flat_06",
+      "stratum": "flat_scalar",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: monitor, pressure, flow, active. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Monitor Opal reads pressure 0 and flow 48.9. It is inactive.\n\nRequest: Extract monitor, pressure, flow, active.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "monitor",
+            "pressure",
+            "flow",
+            "active"
+          ],
+          "explicit_types": {
+            "monitor": "string",
+            "pressure": "number",
+            "flow": "number",
+            "active": "boolean"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "monitor": "Opal",
+          "pressure": 0,
+          "flow": 48.9,
+          "active": false
+        }
+      }
+    },
+    {
+      "task_id": "v2_flat_07",
+      "stratum": "flat_scalar",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: catalogue, work, leaves, annotated. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Catalogue CR-7 lists Lanterns at Noon with 216 leaves. It is not annotated.\n\nRequest: Extract catalogue, work, leaves, annotated.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "catalogue",
+            "work",
+            "leaves",
+            "annotated"
+          ],
+          "explicit_types": {
+            "catalogue": "string",
+            "work": "string",
+            "leaves": "number",
+            "annotated": "boolean"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "catalogue": "CR-7",
+          "work": "Lanterns at Noon",
+          "leaves": 216,
+          "annotated": false
+        }
+      }
+    },
+    {
+      "task_id": "v2_flat_08",
+      "stratum": "flat_scalar",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: bed, plant, shoots, watered. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Bed Kestrel contains silver thyme with 11 shoots and is watered.\n\nRequest: Extract bed, plant, shoots, watered.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "bed",
+            "plant",
+            "shoots",
+            "watered"
+          ],
+          "explicit_types": {
+            "bed": "string",
+            "plant": "string",
+            "shoots": "number",
+            "watered": "boolean"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "bed": "Kestrel",
+          "plant": "silver thyme",
+          "shoots": 11,
+          "watered": true
+        }
+      }
+    },
+    {
+      "task_id": "v2_flat_09",
+      "stratum": "flat_scalar",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: case, severity, closed. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Case 0062 has severity 4 and is not closed.\n\nRequest: Extract case, severity, closed.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "case",
+            "severity",
+            "closed"
+          ],
+          "explicit_types": {
+            "case": "string",
+            "severity": "number",
+            "closed": "boolean"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "case": "0062",
+          "severity": 4,
+          "closed": false
+        }
+      }
+    },
+    {
+      "task_id": "v2_flat_10",
+      "stratum": "flat_scalar",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: craft, depth_m, persons, cleared. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Craft Marlin has depth 4.6 m, carries 8 persons, and is cleared.\n\nRequest: Extract craft, depth_m, persons, cleared.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "craft",
+            "depth_m",
+            "persons",
+            "cleared"
+          ],
+          "explicit_types": {
+            "craft": "string",
+            "depth_m": "number",
+            "persons": "number",
+            "cleared": "boolean"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "craft": "Marlin",
+          "depth_m": 4.6,
+          "persons": 8,
+          "cleared": true
+        }
+      }
+    },
+    {
+      "task_id": "v2_select_01",
+      "stratum": "record_selection",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: id, lead, status. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Tickets: M31 lead Hana status done; N84 lead Ivo Renn status queued; P05 lead Sol status blocked. Select the queued ticket.\n\nRequest: Extract id, lead, status.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "id",
+            "lead",
+            "status"
+          ],
+          "explicit_types": {
+            "id": "string",
+            "lead": "string",
+            "status": "string"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "id": "N84",
+          "lead": "Ivo Renn",
+          "status": "queued"
+        }
+      }
+    },
+    {
+      "task_id": "v2_select_02",
+      "stratum": "record_selection",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: release, codename, maintained. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Releases: r3 Elm maintained no; r4 Hazel maintained no; r5 Willow maintained yes. The newest release is r5.\n\nRequest: Extract release, codename, maintained.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "release",
+            "codename",
+            "maintained"
+          ],
+          "explicit_types": {
+            "release": "string",
+            "codename": "string",
+            "maintained": "boolean"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "release": "r5",
+          "codename": "Willow",
+          "maintained": true
+        }
+      }
+    },
+    {
+      "task_id": "v2_select_03",
+      "stratum": "record_selection",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: receipt, value, settled. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Receipts: R-25 value 18.00 settled yes; R-26 value 73.25 settled no; R-27 value 6.40 settled yes. Select the unsettled receipt.\n\nRequest: Extract receipt, value, settled.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "receipt",
+            "value",
+            "settled"
+          ],
+          "explicit_types": {
+            "receipt": "string",
+            "value": "number",
+            "settled": "boolean"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "receipt": "R-26",
+          "value": 73.25,
+          "settled": false
+        }
+      }
+    },
+    {
+      "task_id": "v2_select_04",
+      "stratum": "record_selection",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: depot, inventory. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Depots: West inventory 15; East Amber inventory 34; Central inventory 9. Select East Amber.\n\nRequest: Extract depot, inventory.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "depot",
+            "inventory"
+          ],
+          "explicit_types": {
+            "depot": "string",
+            "inventory": "number"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "depot": "East Amber",
+          "inventory": 34
+        }
+      }
+    },
+    {
+      "task_id": "v2_select_05",
+      "stratum": "record_selection",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: train, departure, platform. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Services: Z7 departs 15:10 from platform 3; Z8 departs 16:35 from platform 7. Select the later service.\n\nRequest: Extract train, departure, platform.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "train",
+            "departure",
+            "platform"
+          ],
+          "explicit_types": {
+            "train": "string",
+            "departure": "string",
+            "platform": "number"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "train": "Z8",
+          "departure": "16:35",
+          "platform": 7
+        }
+      }
+    },
+    {
+      "task_id": "v2_select_06",
+      "stratum": "record_selection",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: session, suite, postponed. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Sessions: Alder suite C postponed yes; Birch suite F postponed no; Cedar suite A postponed yes. Select the session proceeding as planned.\n\nRequest: Extract session, suite, postponed.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "session",
+            "suite",
+            "postponed"
+          ],
+          "explicit_types": {
+            "session": "string",
+            "suite": "string",
+            "postponed": "boolean"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "session": "Birch",
+          "suite": "F",
+          "postponed": false
+        }
+      }
+    },
+    {
+      "task_id": "v2_select_07",
+      "stratum": "record_selection",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: unit, battery. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Units: U-13 battery 88 dormant; U-14 battery 46 operational; U-15 battery 69 dormant. Select the operational unit.\n\nRequest: Extract unit, battery.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "unit",
+            "battery"
+          ],
+          "explicit_types": {
+            "unit": "string",
+            "battery": "number"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "unit": "U-14",
+          "battery": 46
+        }
+      }
+    },
+    {
+      "task_id": "v2_select_08",
+      "stratum": "record_selection",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: edition, berth, passenger. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Reservations: edition 5 berth B2 passenger Esme; edition 6 berth K3 passenger Tavi; edition 4 berth G1 passenger Noor. Select the highest edition.\n\nRequest: Extract edition, berth, passenger.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "edition",
+            "berth",
+            "passenger"
+          ],
+          "explicit_types": {
+            "edition": "number",
+            "berth": "string",
+            "passenger": "string"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "edition": 6,
+          "berth": "K3",
+          "passenger": "Tavi"
+        }
+      }
+    },
+    {
+      "task_id": "v2_select_09",
+      "stratum": "record_selection",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: tray, cells, marker. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Trays: Y3 cells 8 marker violet; Y4 cells 21 marker orange; Y5 cells 3 marker white. Select Y4.\n\nRequest: Extract tray, cells, marker.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "tray",
+            "cells",
+            "marker"
+          ],
+          "explicit_types": {
+            "tray": "string",
+            "cells": "number",
+            "marker": "string"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "tray": "Y4",
+          "cells": 21,
+          "marker": "orange"
+        }
+      }
+    },
+    {
+      "task_id": "v2_select_10",
+      "stratum": "record_selection",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: mast, tier, licensed. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Masts: Petrel tier 2 licensed no; Gannet tier 5 licensed yes; Auk tier 4 licensed no. Select the licensed mast.\n\nRequest: Extract mast, tier, licensed.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "mast",
+            "tier",
+            "licensed"
+          ],
+          "explicit_types": {
+            "mast": "string",
+            "tier": "number",
+            "licensed": "boolean"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "mast": "Gannet",
+          "tier": 5,
+          "licensed": true
+        }
+      }
+    },
+    {
+      "task_id": "v2_type_01",
+      "stratum": "type_boundary",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: serial, count, enabled. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Serial 00073 has count 73 and is enabled. Serial remains a string.\n\nRequest: Extract serial, count, enabled.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "serial",
+            "count",
+            "enabled"
+          ],
+          "explicit_types": {
+            "serial": "string",
+            "count": "number",
+            "enabled": "boolean"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "serial": "00073",
+          "count": 73,
+          "enabled": true
+        }
+      }
+    },
+    {
+      "task_id": "v2_type_02",
+      "stratum": "type_boundary",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: marker, elevation, confirmed. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Marker Dim Moon has no elevation reading and is unconfirmed. Use JSON null for elevation.\n\nRequest: Extract marker, elevation, confirmed.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "marker",
+            "elevation",
+            "confirmed"
+          ],
+          "explicit_types": {
+            "marker": "string",
+            "elevation": "null",
+            "confirmed": "boolean"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "marker": "Dim Moon",
+          "elevation": null,
+          "confirmed": false
+        }
+      }
+    },
+    {
+      "task_id": "v2_type_03",
+      "stratum": "type_boundary",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: screen_text, signal. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: The screen text is true. The signal flag is true. Screen text is a string.\n\nRequest: Extract screen_text, signal.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "screen_text",
+            "signal"
+          ],
+          "explicit_types": {
+            "screen_text": "string",
+            "signal": "boolean"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "screen_text": "true",
+          "signal": true
+        }
+      }
+    },
+    {
+      "task_id": "v2_type_04",
+      "stratum": "type_boundary",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: token, rating. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Token 9.00 is literal text. Rating is numeric 9.\n\nRequest: Extract token, rating.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "token",
+            "rating"
+          ],
+          "explicit_types": {
+            "token": "string",
+            "rating": "number"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "token": "9.00",
+          "rating": 9
+        }
+      }
+    },
+    {
+      "task_id": "v2_type_05",
+      "stratum": "type_boundary",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: caption, codes, attributes. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: The caption is an empty string. The codes array is empty. The attributes object is empty.\n\nRequest: Extract caption, codes, attributes.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "caption",
+            "codes",
+            "attributes"
+          ],
+          "explicit_types": {
+            "caption": "string",
+            "codes": "array",
+            "attributes": "object"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "caption": "",
+          "codes": [],
+          "attributes": {}
+        }
+      }
+    },
+    {
+      "task_id": "v2_type_06",
+      "stratum": "type_boundary",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: variance, origin, authorised. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Variance is -8.125, origin is 0, and authorised is false.\n\nRequest: Extract variance, origin, authorised.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "variance",
+            "origin",
+            "authorised"
+          ],
+          "explicit_types": {
+            "variance": "number",
+            "origin": "number",
+            "authorised": "boolean"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "variance": -8.125,
+          "origin": 0,
+          "authorised": false
+        }
+      }
+    },
+    {
+      "task_id": "v2_type_07",
+      "stratum": "type_boundary",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: term, glyph, weight. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: The term is naïve, its glyph is ï, and its weight is 1.75. Preserve spelling exactly.\n\nRequest: Extract term, glyph, weight.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "term",
+            "glyph",
+            "weight"
+          ],
+          "explicit_types": {
+            "term": "string",
+            "glyph": "string",
+            "weight": "number"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "term": "naïve",
+          "glyph": "ï",
+          "weight": 1.75
+        }
+      }
+    },
+    {
+      "task_id": "v2_type_08",
+      "stratum": "type_boundary",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: path, attempts. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: The path is D:\\archive\\moss and attempts is 4. Preserve the backslashes.\n\nRequest: Extract path, attempts.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "path",
+            "attempts"
+          ],
+          "explicit_types": {
+            "path": "string",
+            "attempts": "number"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "path": "D:\\archive\\moss",
+          "attempts": 4
+        }
+      }
+    },
+    {
+      "task_id": "v2_type_09",
+      "stratum": "type_boundary",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: timestamp, expired. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Timestamp 2042-11-06 is a string. Expired is false.\n\nRequest: Extract timestamp, expired.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "timestamp",
+            "expired"
+          ],
+          "explicit_types": {
+            "timestamp": "string",
+            "expired": "boolean"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "timestamp": "2042-11-06",
+          "expired": false
+        }
+      }
+    },
+    {
+      "task_id": "v2_type_10",
+      "stratum": "type_boundary",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: literal, measurement. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Literal is 4e3 as text; numeric measurement is 4000.\n\nRequest: Extract literal, measurement.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "literal",
+            "measurement"
+          ],
+          "explicit_types": {
+            "literal": "string",
+            "measurement": "number"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "literal": "4e3",
+          "measurement": 4000
+        }
+      }
+    },
+    {
+      "task_id": "v2_nested_01",
+      "stratum": "nested_collection",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: entry, labels, grade. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Entry Sorrel has labels inland, silent, checked in that order, and grade 6.\n\nRequest: Extract entry, labels, grade.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "entry",
+            "labels",
+            "grade"
+          ],
+          "explicit_types": {
+            "entry": "string",
+            "labels": "array",
+            "grade": "number"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "entry": "Sorrel",
+          "labels": [
+            "inland",
+            "silent",
+            "checked"
+          ],
+          "grade": 6
+        }
+      }
+    },
+    {
+      "task_id": "v2_nested_02",
+      "stratum": "nested_collection",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: parcel, dimensions. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Parcel Finch measures length 22 and depth 9 in cm.\n\nRequest: Extract parcel, dimensions.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "parcel",
+            "dimensions"
+          ],
+          "explicit_types": {
+            "parcel": "string",
+            "dimensions": "object"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "parcel": "Finch",
+          "dimensions": {
+            "length": 22,
+            "depth": 9,
+            "unit": "cm"
+          }
+        }
+      }
+    },
+    {
+      "task_id": "v2_nested_03",
+      "stratum": "nested_collection",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: line, halts, loop. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Line Otter halts at J, R, B in that order and is not a loop.\n\nRequest: Extract line, halts, loop.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "line",
+            "halts",
+            "loop"
+          ],
+          "explicit_types": {
+            "line": "string",
+            "halts": "array",
+            "loop": "boolean"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "line": "Otter",
+          "halts": [
+            "J",
+            "R",
+            "B"
+          ],
+          "loop": false
+        }
+      }
+    },
+    {
+      "task_id": "v2_nested_04",
+      "stratum": "nested_collection",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: object, details. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Object Celadon was created by Pavo in 1974 and is repaired.\n\nRequest: Extract object, details.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "object",
+            "details"
+          ],
+          "explicit_types": {
+            "object": "string",
+            "details": "object"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "object": "Celadon",
+          "details": {
+            "creator": "Pavo",
+            "year": 1974,
+            "repaired": true
+          }
+        }
+      }
+    },
+    {
+      "task_id": "v2_nested_05",
+      "stratum": "nested_collection",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: invoice, lines. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Invoice V-68 contains twine quantity 3, then wax quantity 2.\n\nRequest: Extract invoice, lines.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "invoice",
+            "lines"
+          ],
+          "explicit_types": {
+            "invoice": "string",
+            "lines": "array"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "invoice": "V-68",
+          "lines": [
+            {
+              "item": "twine",
+              "quantity": 3
+            },
+            {
+              "item": "wax",
+              "quantity": 2
+            }
+          ]
+        }
+      }
+    },
+    {
+      "task_id": "v2_nested_06",
+      "stratum": "nested_collection",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: site, position. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Site Reed is at latitude 52.17, longitude -1.24, with precision 5.\n\nRequest: Extract site, position.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "site",
+            "position"
+          ],
+          "explicit_types": {
+            "site": "string",
+            "position": "object"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "site": "Reed",
+          "position": {
+            "lat": 52.17,
+            "lon": -1.24,
+            "precision": 5
+          }
+        }
+      }
+    },
+    {
+      "task_id": "v2_nested_07",
+      "stratum": "nested_collection",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: profile, rights, settings. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Profile reviewer has rights view then comment. Settings are palette ember and notices false.\n\nRequest: Extract profile, rights, settings.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "profile",
+            "rights",
+            "settings"
+          ],
+          "explicit_types": {
+            "profile": "string",
+            "rights": "array",
+            "settings": "object"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "profile": "reviewer",
+          "rights": [
+            "view",
+            "comment"
+          ],
+          "settings": {
+            "palette": "ember",
+            "notices": false
+          }
+        }
+      }
+    },
+    {
+      "task_id": "v2_nested_08",
+      "stratum": "nested_collection",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: grid, trace. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Grid row one is 2,1 and row two is 0,3. Its trace is 5.\n\nRequest: Extract grid, trace.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "grid",
+            "trace"
+          ],
+          "explicit_types": {
+            "grid": "array",
+            "trace": "number"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "grid": [
+            [
+              2,
+              1
+            ],
+            [
+              0,
+              3
+            ]
+          ],
+          "trace": 5
+        }
+      }
+    },
+    {
+      "task_id": "v2_nested_09",
+      "stratum": "nested_collection",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: calendar, slots, active. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Calendar Dusk has Tuesday 07:45 and Saturday 12:20, and is active.\n\nRequest: Extract calendar, slots, active.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "calendar",
+            "slots",
+            "active"
+          ],
+          "explicit_types": {
+            "calendar": "string",
+            "slots": "object",
+            "active": "boolean"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "calendar": "Dusk",
+          "slots": {
+            "tuesday": "07:45",
+            "saturday": "12:20"
+          },
+          "active": true
+        }
+      }
+    },
+    {
+      "task_id": "v2_nested_10",
+      "stratum": "nested_collection",
+      "runtime_request": {
+        "schema_version": "runtime_request_v1",
+        "task_class": "extract_structured",
+        "prompt": "Return only one valid JSON object with exactly these keys: bundle, values, flags. Preserve source spelling, punctuation, and array order. Use JSON value types exactly as requested.\n\nSource: Bundle B-11 values are beta, numeric 5, and null in that order. Flags are priority true and audited false.\n\nRequest: Extract bundle, values, flags.",
+        "contract": {
+          "contract_type": "structured_json",
+          "exact_keys": [
+            "bundle",
+            "values",
+            "flags"
+          ],
+          "explicit_types": {
+            "bundle": "string",
+            "values": "array",
+            "flags": "object"
+          }
+        }
+      },
+      "oracle": {
+        "oracle_type": "exact_json_value_v1",
+        "expected_json": {
+          "bundle": "B-11",
+          "values": [
+            "beta",
+            5,
+            null
+          ],
+          "flags": {
+            "priority": true,
+            "audited": false
+          }
+        }
+      }
+    }
+  ]
+}
