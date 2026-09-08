@@ -2138,3 +2138,69 @@ defined task families. Any future user-visible local route must be justified by
 fresh, paired evidence with task-specific correctness oracles, false-accept
 limits, latency and cost accounting, and a precommitted promotion rule. Shape
 contracts alone cannot promote a capability.
+
+---
+
+## 2026-09-08 — Runtime v0.3 structural-JSON shadow evaluation V1 halted
+
+### Objective
+
+Prospectively test whether `gemma3:270m` could earn narrowly bounded
+user-visible authority for structural JSON while released runtime v0.3
+continued to return the OpenRouter result. The frozen suite specified 40 fresh
+tasks, three repetitions, paired remote and local-shadow arms, exact recursive
+JSON oracles, and a zero-local-accepted-error promotion rule.
+
+Branch: `experiment/runtime-v0.3-shadow-json-v1`
+
+Design freeze: `2ad263e249b06127267e041fe51cd1a73250bf1d`
+
+Execution implementation: `560be38853aeae60b1fdc4e04bf8d5c3436dfde6`
+
+### Pre-execution verification
+
+Nineteen focused tests and all 343 repository tests passed. The synthetic dry
+run completed all 120 observations with 10,000 bootstrap draws, made zero
+provider network requests, and created no repository output. Metadata preflight
+authenticated the frozen plan, benchmark, config, implementation revision,
+local model, remote model, and empty output state.
+
+### Execution incident
+
+The one-shot provider execution halted at observation 48 with
+`PROVIDER_ARM_FAILURE`. It retained 47 completed paired rows and 48 router
+telemetry rows. The failed observation was `select_06`, repetition 3.
+
+The authoritative remote arm received HTTP 200 but recorded
+`OPENROUTER_RESPONSE_INVALID`, with one attempt and no retry. The response ID,
+finish reasons, usage, cost, and router metadata were absent. This establishes a
+runtime response-schema failure but does not identify whether OpenRouter, an
+upstream provider, an intermediary, or an unhandled legitimate response variant
+was responsible.
+
+The local shadow arm completed successfully and passed its structural contract.
+The router nevertheless recorded `REMOTE_ERROR` and did not substitute the
+shadow output. This is the intended remote-authoritative safety behavior.
+
+Partial evidence was preserved at
+`9dd9952ca9498f82d2e380b5e256bada6aafa3e9`:
+
+| Artifact | Rows | SHA-256 |
+|---|---:|---|
+| `runtime_v0_3_shadow_json_v1_runs.jsonl.partial` | 47 | `a0611b82b1e28ccb992158631c7a15a5877b6b46dfa8b6323a0f8e3ab038ecf5` |
+| `runtime_v0_3_shadow_json_v1_router_telemetry.jsonl.partial` | 48 | `0a087031de14ea823ba8f5ccd33e4be48fb8c388a0485a319df7a5871da4b289` |
+
+No canonical result or analysis files were created. The partials were not
+deleted, repaired, resumed, or promoted to canonical evidence.
+
+### Decision and next boundary
+
+V1 is **incomplete and promotion is blocked** under its precommitted stop rule.
+The 47 completed rows are diagnostic evidence, not the planned 120-observation
+effectiveness estimate. No local-model promotion or rejection claim is made
+from them.
+
+A successor must be a separately frozen V2 with fresh tasks. Its plan must
+decide prospectively how malformed HTTP-200 remote responses are handled and
+should consider a canonical failure manifest. V1 must not be rerun or resumed.
+See `RUNTIME_V0_3_SHADOW_JSON_V1_EXECUTION_INCIDENT.md`.
