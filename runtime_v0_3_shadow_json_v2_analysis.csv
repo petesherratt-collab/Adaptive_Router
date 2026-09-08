@@ -1,0 +1,6 @@
+scope_type,scope_name,observation_count,local_correct_count,remote_correct_count,local_provider_success_count,remote_provider_success_count,local_provider_error_count,remote_provider_error_count,local_contract_pass_count,local_accepted_error_count,counterfactual_correct_count,remote_calls_avoided
+overall,all,120,16,105,120,118,0,2,39,23,83,39
+stratum,flat_scalar,30,7,30,30,30,0,0,13,6,24,13
+stratum,record_selection,30,0,27,30,30,0,0,9,9,18,9
+stratum,type_boundary,30,9,29,30,30,0,0,12,3,26,12
+stratum,nested_collection,30,0,19,30,28,0,2,5,5,15,5

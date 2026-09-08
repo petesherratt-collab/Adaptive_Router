@@ -1,0 +1,272 @@
+{
+  "accepted_error_bound": {
+    "denominator": 39,
+    "errors": 23,
+    "method": "exact_one_sided_95_clopper_pearson",
+    "upper": 0.7230985087401105
+  },
+  "benchmark_sha256": "b160537b15f25941227d9381c0bee625f2af8ed385463b1608a6568f1079e278",
+  "bootstrap": {
+    "counterfactual_minus_runtime_rate_ci95": [
+      -0.30833333333333335,
+      -0.075
+    ],
+    "draw_count": 10000,
+    "namespace": "runtime_v0_3_shadow_json_v2",
+    "remote_calls_avoided_ci95": [
+      23.0,
+      57.0
+    ],
+    "seed": "20260908-runtime-v0.3-shadow-json-v2",
+    "undefined_draw_count": 0
+  },
+  "by_stratum": {
+    "flat_scalar": {
+      "actual_reasons": {
+        "SAFE_REMOTE_POLICY": 30
+      },
+      "actual_routes": {
+        "remote": 30
+      },
+      "actual_runtime_median_ms": 3738.7015980002616,
+      "counterfactual_correct_count": 24,
+      "counterfactual_minus_remote_count": -6,
+      "counterfactual_minus_runtime_count": -6,
+      "counterfactual_request_median_ms": 3243.5394945000553,
+      "local_accepted_error_count": 6,
+      "local_contract_pass_count": 13,
+      "local_correct_count": 7,
+      "local_correct_given_provider_success_count": 7,
+      "local_correct_given_provider_success_rate": 0.23333333333333334,
+      "local_correct_rejection_count": 0,
+      "local_median_ms": 1208.8119790005294,
+      "local_provider_error_count": 0,
+      "local_provider_errors": {},
+      "local_provider_success_count": 30,
+      "observation_count": 30,
+      "overlap": {
+        "both": 7,
+        "local_only": 0,
+        "neither": 0,
+        "remote_only": 23
+      },
+      "remote_calls_avoided": 13,
+      "remote_contract_pass_count": 30,
+      "remote_correct_count": 30,
+      "remote_correct_given_provider_success_count": 30,
+      "remote_correct_given_provider_success_rate": 1.0,
+      "remote_http_attempts": 30,
+      "remote_median_ms": 2504.3673535005837,
+      "remote_provider_error_count": 0,
+      "remote_provider_errors": {},
+      "remote_provider_success_count": 30,
+      "remote_reported_cost_usd": 0.0023046,
+      "remote_reserved_failure_cost_usd": 0,
+      "remote_unreported_failure_cost_count": 0,
+      "runtime_correct_count": 30
+    },
+    "nested_collection": {
+      "actual_reasons": {
+        "REMOTE_CONTRACT_FAILED": 5,
+        "REMOTE_ERROR": 2,
+        "SAFE_REMOTE_POLICY": 23
+      },
+      "actual_routes": {
+        "remote": 30
+      },
+      "actual_runtime_median_ms": 5315.577875000145,
+      "counterfactual_correct_count": 15,
+      "counterfactual_minus_remote_count": -4,
+      "counterfactual_minus_runtime_count": -4,
+      "counterfactual_request_median_ms": 4841.43290350039,
+      "local_accepted_error_count": 5,
+      "local_contract_pass_count": 5,
+      "local_correct_count": 0,
+      "local_correct_given_provider_success_count": 0,
+      "local_correct_given_provider_success_rate": 0.0,
+      "local_correct_rejection_count": 0,
+      "local_median_ms": 1098.0647850001333,
+      "local_provider_error_count": 0,
+      "local_provider_errors": {},
+      "local_provider_success_count": 30,
+      "observation_count": 30,
+      "overlap": {
+        "both": 0,
+        "local_only": 0,
+        "neither": 11,
+        "remote_only": 19
+      },
+      "remote_calls_avoided": 5,
+      "remote_contract_pass_count": 23,
+      "remote_correct_count": 19,
+      "remote_correct_given_provider_success_count": 19,
+      "remote_correct_given_provider_success_rate": 0.6785714285714286,
+      "remote_http_attempts": 30,
+      "remote_median_ms": 3940.3828174999944,
+      "remote_provider_error_count": 2,
+      "remote_provider_errors": {
+        "OPENROUTER_RESPONSE_INVALID": 2
+      },
+      "remote_provider_success_count": 28,
+      "remote_reported_cost_usd": 0.0040192,
+      "remote_reserved_failure_cost_usd": 0.002,
+      "remote_unreported_failure_cost_count": 2,
+      "runtime_correct_count": 19
+    },
+    "record_selection": {
+      "actual_reasons": {
+        "REMOTE_CONTRACT_FAILED": 3,
+        "SAFE_REMOTE_POLICY": 27
+      },
+      "actual_routes": {
+        "remote": 30
+      },
+      "actual_runtime_median_ms": 4123.489736499778,
+      "counterfactual_correct_count": 18,
+      "counterfactual_minus_remote_count": -9,
+      "counterfactual_minus_runtime_count": -9,
+      "counterfactual_request_median_ms": 3689.898566500233,
+      "local_accepted_error_count": 9,
+      "local_contract_pass_count": 9,
+      "local_correct_count": 0,
+      "local_correct_given_provider_success_count": 0,
+      "local_correct_given_provider_success_rate": 0.0,
+      "local_correct_rejection_count": 0,
+      "local_median_ms": 917.7669464997962,
+      "local_provider_error_count": 0,
+      "local_provider_errors": {},
+      "local_provider_success_count": 30,
+      "observation_count": 30,
+      "overlap": {
+        "both": 0,
+        "local_only": 0,
+        "neither": 3,
+        "remote_only": 27
+      },
+      "remote_calls_avoided": 9,
+      "remote_contract_pass_count": 27,
+      "remote_correct_count": 27,
+      "remote_correct_given_provider_success_count": 27,
+      "remote_correct_given_provider_success_rate": 0.9,
+      "remote_http_attempts": 30,
+      "remote_median_ms": 2860.0470500000483,
+      "remote_provider_error_count": 0,
+      "remote_provider_errors": {},
+      "remote_provider_success_count": 30,
+      "remote_reported_cost_usd": 0.0026934,
+      "remote_reserved_failure_cost_usd": 0,
+      "remote_unreported_failure_cost_count": 0,
+      "runtime_correct_count": 27
+    },
+    "type_boundary": {
+      "actual_reasons": {
+        "SAFE_REMOTE_POLICY": 30
+      },
+      "actual_routes": {
+        "remote": 30
+      },
+      "actual_runtime_median_ms": 3621.9134104999284,
+      "counterfactual_correct_count": 26,
+      "counterfactual_minus_remote_count": -3,
+      "counterfactual_minus_runtime_count": -3,
+      "counterfactual_request_median_ms": 2453.3603724994464,
+      "local_accepted_error_count": 3,
+      "local_contract_pass_count": 12,
+      "local_correct_count": 9,
+      "local_correct_given_provider_success_count": 9,
+      "local_correct_given_provider_success_rate": 0.3,
+      "local_correct_rejection_count": 0,
+      "local_median_ms": 736.610999500499,
+      "local_provider_error_count": 0,
+      "local_provider_errors": {},
+      "local_provider_success_count": 30,
+      "observation_count": 30,
+      "overlap": {
+        "both": 9,
+        "local_only": 0,
+        "neither": 1,
+        "remote_only": 20
+      },
+      "remote_calls_avoided": 12,
+      "remote_contract_pass_count": 30,
+      "remote_correct_count": 29,
+      "remote_correct_given_provider_success_count": 29,
+      "remote_correct_given_provider_success_rate": 0.9666666666666667,
+      "remote_http_attempts": 30,
+      "remote_median_ms": 2740.579606999745,
+      "remote_provider_error_count": 0,
+      "remote_provider_errors": {},
+      "remote_provider_success_count": 30,
+      "remote_reported_cost_usd": 0.0019656,
+      "remote_reserved_failure_cost_usd": 0,
+      "remote_unreported_failure_cost_count": 0,
+      "runtime_correct_count": 29
+    }
+  },
+  "config_sha256": "36df214e322b8148614e0ac8289ddb77779e326e06d91e3780ea39b87bd01657",
+  "implementation_revision": "ca9f915d4f25b25113faa11ef33d8b2db903a679",
+  "overall": {
+    "actual_reasons": {
+      "REMOTE_CONTRACT_FAILED": 8,
+      "REMOTE_ERROR": 2,
+      "SAFE_REMOTE_POLICY": 110
+    },
+    "actual_routes": {
+      "remote": 120
+    },
+    "actual_runtime_median_ms": 4202.3313350000535,
+    "counterfactual_correct_count": 83,
+    "counterfactual_minus_remote_count": -22,
+    "counterfactual_minus_runtime_count": -22,
+    "counterfactual_request_median_ms": 3610.4280445001677,
+    "local_accepted_error_count": 23,
+    "local_contract_pass_count": 39,
+    "local_correct_count": 16,
+    "local_correct_given_provider_success_count": 16,
+    "local_correct_given_provider_success_rate": 0.13333333333333333,
+    "local_correct_rejection_count": 0,
+    "local_median_ms": 992.9007620003176,
+    "local_provider_error_count": 0,
+    "local_provider_errors": {},
+    "local_provider_success_count": 120,
+    "observation_count": 120,
+    "overlap": {
+      "both": 16,
+      "local_only": 0,
+      "neither": 15,
+      "remote_only": 89
+    },
+    "remote_calls_avoided": 39,
+    "remote_contract_pass_count": 110,
+    "remote_correct_count": 105,
+    "remote_correct_given_provider_success_count": 105,
+    "remote_correct_given_provider_success_rate": 0.8898305084745762,
+    "remote_http_attempts": 120,
+    "remote_median_ms": 2916.032429000097,
+    "remote_provider_error_count": 2,
+    "remote_provider_errors": {
+      "OPENROUTER_RESPONSE_INVALID": 2
+    },
+    "remote_provider_success_count": 118,
+    "remote_reported_cost_usd": 0.0109828,
+    "remote_reserved_failure_cost_usd": 0.002,
+    "remote_unreported_failure_cost_count": 2,
+    "runtime_correct_count": 105
+  },
+  "plan_sha256": "d33b1c4c611b815313d8b27fcd04ec29a4fbc62465e7ed80f30564c12af441a3",
+  "promotion": {
+    "conditions": {
+      "accepted_error_upper_at_most_0_05": false,
+      "at_least_60_local_contract_passes": false,
+      "at_least_60_remote_calls_avoided": false,
+      "complete_authenticated_arms": true,
+      "counterfactual_median_at_most_remote_provider": false,
+      "counterfactual_success_at_least_runtime": false,
+      "no_instrumentation_or_execution_failure": true,
+      "zero_local_accepted_errors": false
+    },
+    "decision": "DO_NOT_PROMOTE"
+  },
+  "schema_version": "runtime_v0_3_shadow_json_analysis_v2",
+  "suite_id": "runtime_v0_3_shadow_json_v2"
+}
