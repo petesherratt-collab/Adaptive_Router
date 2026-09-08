@@ -2204,3 +2204,52 @@ A successor must be a separately frozen V2 with fresh tasks. Its plan must
 decide prospectively how malformed HTTP-200 remote responses are handled and
 should consider a canonical failure manifest. V1 must not be rerun or resumed.
 See `RUNTIME_V0_3_SHADOW_JSON_V1_EXECUTION_INCIDENT.md`.
+
+
+## 2026-09-08 — Runtime v0.3 structural-JSON shadow V2 framing reconciliation
+
+### Scope
+
+After the V2 runner and analyzer were implemented but before any provider
+generation request, a second framing review identified useful clarifications
+around logical calls, HTTP attempts, fallback latency, and missing cost
+metadata. Two attempted executions stopped at frozen-plan authentication after
+the plan had been modified locally; both stopped before model or provider
+generation. The uncommitted review was preserved at SHA-256
+`16ce80fe9cc12b25f8cc38046238f462ef4d39fba77f27e2fac60fd097455256`
+before the tracked files were restored.
+
+### Reconciliation
+
+- Completed evidence now requires exactly 120 local and 120 remote logical
+  calls. Remote HTTP attempts are separately reconciled from `attempt_count`
+  and must total 120..240; `retry_count` must equal `attempt_count - 1`.
+- Counterfactual local-first latency is calculated per observation. A local
+  contract pass uses local latency; a local failure or rejection uses local plus
+  remote latency to represent sequential fallback.
+- Promotion retains the authoritative remote-provider median as its latency
+  comparator. Actual runtime latency includes synchronous shadow measurement
+  overhead and is reported descriptively rather than used as the baseline.
+- Successful remote results require finite reported cost. A failed provider
+  result may have unavailable cost, as occurred in V1; it remains a measured
+  outcome but consumes a frozen conservative USD 0.001 reserve. Reported and
+  reserved costs remain separate, and their sum governs the USD 0.03 stop rule.
+- Provider and decision latencies must be finite, non-negative, non-Boolean
+  numbers. Primary denominators, logical calls, HTTP attempts, and analysis
+  input artifacts are explicit.
+
+### Gotchas
+
+Making null cost fatal would have recreated the V1 failure mode for an
+`OPENROUTER_RESPONSE_INVALID` result. Treating it as zero would instead make
+the spending limit unenforceable. The conservative reserve preserves the
+service outcome without granting free budget. Comparing local-first fallback
+against end-to-end shadow runtime would also favor promotion because that
+runtime deliberately pays for both arms; the remote-provider arm is the cleaner
+deployable baseline.
+
+The reconciled plan SHA-256 is
+`d33b1c4c611b815313d8b27fcd04ec29a4fbc62465e7ed80f30564c12af441a3`.
+Focused compilation, 27 V2 tests, and the synthetic 120-observation dry run
+passed without network requests or repository outputs. Full-suite and live
+preflight verification remain required before execution.
