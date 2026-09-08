@@ -121,6 +121,62 @@ class BudgetAndStateTests(unittest.TestCase):
                 RemoteResult(True, "{}", 1.0, "model", attempt_count=3)
             )
 
+    def test_failed_remote_without_reported_cost_uses_frozen_reserve(self):
+        budget = pv.EvidenceBudget()
+        result = RemoteResult(
+            False,
+            total_ms=1.0,
+            model="model",
+            error="OPENROUTER_RESPONSE_INVALID",
+            attempt_count=1,
+            retry_count=0,
+        )
+        budget.after_remote(result)
+        self.assertEqual(budget.unreported_remote_failure_count, 1)
+        self.assertEqual(
+            budget.reserved_unreported_failure_cost_usd,
+            pv.UNREPORTED_FAILURE_COST_RESERVE_USD,
+        )
+
+    def test_successful_remote_requires_reported_cost(self):
+        with self.assertRaisesRegex(
+            pv.FrozenDesignError, "MISSING_SUCCESSFUL_REMOTE_COST"
+        ):
+            pv.EvidenceBudget().after_remote(
+                RemoteResult(
+                    True,
+                    "{}",
+                    1.0,
+                    "model",
+                    attempt_count=1,
+                    retry_count=0,
+                )
+            )
+
+    def test_remote_retry_count_must_match_attempt_count(self):
+        with self.assertRaisesRegex(
+            pv.FrozenDesignError, "INVALID_REMOTE_ATTEMPT_COUNT"
+        ):
+            pv.EvidenceBudget().after_remote(
+                RemoteResult(
+                    True,
+                    "{}",
+                    1.0,
+                    "model",
+                    cost=0.0,
+                    attempt_count=2,
+                    retry_count=0,
+                )
+            )
+
+    def test_provider_latency_is_required(self):
+        with self.assertRaisesRegex(
+            pv.FrozenDesignError, "INVALID_PROVIDER_LATENCY"
+        ):
+            pv.validate_provider_result(
+                LocalResult(True, "{}", total_ms=None), "local"
+            )
+
     def test_atomic_writer_refuses_overwrite(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "result.json"
@@ -252,6 +308,11 @@ class ProviderOutcomeTests(unittest.TestCase):
                 report["remote_provider_errors"],
                 {"OPENROUTER_RESPONSE_INVALID": 1},
             )
+            self.assertEqual(report["budget"]["unreported_remote_failure_count"], 1)
+            self.assertEqual(
+                report["budget"]["reserved_unreported_failure_cost_usd"],
+                pv.UNREPORTED_FAILURE_COST_RESERVE_USD,
+            )
             self.assertEqual(calls, {"local": 120, "remote": 120})
             rows = analyzer._read_jsonl(pv.output_paths(directory)["runs"])
             failed = rows[1]
@@ -347,7 +408,7 @@ class AnalysisTests(unittest.TestCase):
         rejected = copy.deepcopy(passing)
         rejected["local_contract"]["status"] = "FAIL"
         self.assertEqual(analyzer._counterfactual(passing), (True, False, 2))
-        self.assertEqual(analyzer._counterfactual(rejected), (False, True, 8))
+        self.assertEqual(analyzer._counterfactual(rejected), (False, True, 10))
 
     def test_synthetic_analysis_reconciles_and_promotes(self):
         result = runner.dry_run(ROOT)
