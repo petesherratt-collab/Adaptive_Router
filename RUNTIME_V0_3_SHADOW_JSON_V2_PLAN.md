@@ -72,6 +72,22 @@ task outcome as incorrect, retain its stable error code and attempt count, and
 continue to the next observation. Do not substitute the local shadow for a
 failed authoritative remote result.
 
+A successful or measured failed remote result must have `attempt_count` in
+`1..2` and `retry_count == attempt_count - 1`. Zero attempts indicate a
+preflight or instrumentation defect rather than an authenticated provider arm.
+A successful result must report finite, non-negative, non-Boolean numeric cost.
+A failed result may report either the same valid cost metadata or `null` when
+the provider response cannot expose billing. Each such null is reported
+separately and charged a frozen conservative USD 0.001 budget reserve. This
+keeps the service outcome measurable without silently treating unknown cost as
+zero. Reported and reserved cost remain separate in evidence and analysis.
+
+The completed suite requires exactly 120 captured remote logical calls and 120
+captured local logical calls. Reconciled remote HTTP attempts are the sum of
+validated `attempt_count` values, including measured failures, and must be in
+120..240. A retry increases HTTP attempts but does not create another logical
+observation.
+
 The following remain fatal instrumentation failures: zero or multiple calls for
 an expected arm; missing or multiple telemetry records; malformed result or
 telemetry fields; request, task, decision, identity, hash, order, or budget
@@ -94,7 +110,8 @@ the conditional measure for promotion.
 Reserve maximum-attempt headroom before each observation. Retain a completed
 cost-crossing observation, then halt before the next call. Provider failures
 consume logical-call, attempt, latency, and reported-cost budgets exactly as
-recorded.
+recorded. The cost ceiling applies to known reported cost plus the USD 0.001
+reserve for each failed result whose cost is unavailable.
 
 ## Oracle separation
 
@@ -109,6 +126,16 @@ significant. Numbers compare by numeric value; booleans never satisfy numbers.
 Validator PASS means conformance, not correctness. An unsuccessful provider arm
 has no candidate text and is task-incorrect.
 
+## Latency definitions
+
+Report paired local-provider, authoritative remote-provider, actual end-to-end
+runtime, and counterfactual request latency. The first three are directly
+measured. Counterfactual latency is calculated per observation: use local
+provider latency when local succeeds and its contract passes; otherwise use
+local plus remote provider latency because a deployable local-first fallback
+must await local completion before invoking remote. All required latencies must
+be finite, non-negative, non-Boolean numeric values.
+
 ## Frozen measures
 
 Report, overall and by stratum:
@@ -121,7 +148,7 @@ Report, overall and by stratum:
 - counterfactual task success if a local contract PASS replaced a successful or
   failed remote result;
 - authoritative remote-provider, paired local-provider, actual end-to-end
-  runtime, and counterfactual selected-path median latency;
+  runtime, and counterfactual request median latency;
 - avoided remote calls, remote attempts, and reported remote cost; and
 - attempted-arm, telemetry, row, and task/repetition reconciliation.
 
@@ -140,14 +167,15 @@ accepted-error rate, denominator local contract passes.
 
 Report `PROMOTION_CANDIDATE` only if:
 
-1. all 120 ordered observations, 120 remote attempts, 120 local attempts, and
-   120 telemetry records authenticate;
+1. all 120 ordered observations, 120 remote logical calls, 120 local logical
+   calls, 120 telemetry records, and 120..240 reconciled remote HTTP attempts
+   authenticate;
 2. local accepted errors = 0;
 3. local contract passes ≥ 60;
 4. the accepted-error upper bound ≤ 0.05;
 5. counterfactual end-to-end task success ≥ actual runtime task success;
 6. counterfactual avoids ≥ 60 remote logical calls;
-7. counterfactual selected-path median latency ≤ authoritative remote-provider
+7. counterfactual request median latency ≤ authoritative remote-provider
    median latency;
 8. no instrumentation, identity, budget, execution, or analysis failure
    occurred.
