@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parent
 PLAN_NAME = "RUNTIME_V0_3_SHADOW_JSON_V2_PLAN.md"
 BENCHMARK_NAME = "benchmark_runtime_v0_3_shadow_json_v2.json"
 CONFIG_NAME = "config.json"
-PLAN_SHA256 = "350f97b44aca965ab963d171fe34fd6188b13535d3d3d5fa83ec9109e0e049a4"
+PLAN_SHA256 = "d33b1c4c611b815313d8b27fcd04ec29a4fbc62465e7ed80f30564c12af441a3"
 BENCHMARK_SHA256 = "b160537b15f25941227d9381c0bee625f2af8ed385463b1608a6568f1079e278"
 CONFIG_SHA256 = "36df214e322b8148614e0ac8289ddb77779e326e06d91e3780ea39b87bd01657"
 SUITE_ID = "runtime_v0_3_shadow_json_v2"
@@ -32,6 +32,7 @@ MAX_REMOTE_LOGICAL_CALLS = 120
 MAX_REMOTE_HTTP_ATTEMPTS = 240
 MAX_LOCAL_LOGICAL_CALLS = 120
 MAX_REPORTED_REMOTE_COST_USD = 0.03
+UNREPORTED_FAILURE_COST_RESERVE_USD = 0.001
 STRATUM_COUNTS = {
     "flat_scalar": 10,
     "record_selection": 10,
@@ -73,6 +74,8 @@ class EvidenceBudget:
     remote_logical_calls: int = 0
     remote_http_attempts: int = 0
     reported_remote_cost_usd: float = 0.0
+    unreported_remote_failure_count: int = 0
+    reserved_unreported_failure_cost_usd: float = 0.0
 
     def before_remote(self):
         if self.remote_logical_calls >= MAX_REMOTE_LOGICAL_CALLS:
@@ -81,24 +84,44 @@ class EvidenceBudget:
             raise BudgetExceeded("LOCAL_HEADROOM_UNAVAILABLE")
         if self.remote_http_attempts > MAX_REMOTE_HTTP_ATTEMPTS - 2:
             raise BudgetExceeded("REMOTE_HTTP_ATTEMPT_LIMIT")
-        if self.reported_remote_cost_usd > MAX_REPORTED_REMOTE_COST_USD:
+        accounted_cost = (
+            self.reported_remote_cost_usd
+            + self.reserved_unreported_failure_cost_usd
+        )
+        if accounted_cost > MAX_REPORTED_REMOTE_COST_USD:
             raise BudgetExceeded("REMOTE_REPORTED_COST_LIMIT")
 
     def after_remote(self, result):
         attempts = getattr(result, "attempt_count", 0)
+        retries = getattr(result, "retry_count", None)
         cost = getattr(result, "cost", None)
-        if type(attempts) is not int or not 0 <= attempts <= 2:
-            raise FrozenDesignError("INVALID_REMOTE_ATTEMPT_COUNT")
-        if cost is not None and (
-            type(cost) not in (int, float)
-            or isinstance(cost, bool)
-            or not math.isfinite(cost)
-            or cost < 0
+        success = getattr(result, "success", None)
+        if (
+            type(success) is not bool
+            or type(attempts) is not int
+            or not 1 <= attempts <= 2
+            or type(retries) is not int
+            or retries != attempts - 1
         ):
-            raise FrozenDesignError("INVALID_REMOTE_COST")
+            raise FrozenDesignError("INVALID_REMOTE_ATTEMPT_COUNT")
+        if cost is None:
+            if success:
+                raise FrozenDesignError("MISSING_SUCCESSFUL_REMOTE_COST")
+            self.unreported_remote_failure_count += 1
+            self.reserved_unreported_failure_cost_usd += (
+                UNREPORTED_FAILURE_COST_RESERVE_USD
+            )
+        else:
+            if (
+                type(cost) not in (int, float)
+                or isinstance(cost, bool)
+                or not math.isfinite(cost)
+                or cost < 0
+            ):
+                raise FrozenDesignError("INVALID_REMOTE_COST")
+            self.reported_remote_cost_usd += float(cost)
         self.remote_logical_calls += 1
         self.remote_http_attempts += attempts
-        self.reported_remote_cost_usd += float(cost or 0.0)
         if self.remote_http_attempts > MAX_REMOTE_HTTP_ATTEMPTS:
             raise BudgetExceeded("REMOTE_HTTP_ATTEMPT_LIMIT")
 
@@ -303,7 +326,7 @@ def validate_provider_result(result, arm):
         raise FrozenDesignError("PROVIDER_FAILURE_WITHOUT_ERROR=" + arm)
     if not result.success and text != "":
         raise FrozenDesignError("PROVIDER_FAILURE_WITH_OUTPUT=" + arm)
-    if total_ms is not None and (
+    if (
         type(total_ms) not in (int, float)
         or isinstance(total_ms, bool)
         or not math.isfinite(total_ms)
@@ -444,7 +467,8 @@ def validate_rows(rows, tasks, revision):
         raise FrozenDesignError("OBSERVATION_ORDER_MISMATCH")
     inventory = {task["task_id"]: task for task in tasks}
     remote_attempts = 0
-    remote_cost = 0.0
+    reported_remote_cost = 0.0
+    unreported_failure_count = 0
     for observation_number, row in enumerate(rows, start=1):
         task = inventory.get(row.get("task_id"))
         decision, telemetry = row.get("router_decision"), row.get("router_telemetry")
@@ -485,6 +509,17 @@ def validate_rows(rows, tasks, revision):
             raise FrozenDesignError("PROVIDER_SUCCESS_TYPE_MISMATCH")
         local_success = row["local"].get("success") is True
         remote_success = row["remote"].get("success") is True
+        if any(
+            type(latency) not in (int, float)
+            or isinstance(latency, bool)
+            or not math.isfinite(latency)
+            or latency < 0
+            for latency in (
+                row["local"].get("total_ms"),
+                row["remote"].get("total_ms"),
+            )
+        ):
+            raise FrozenDesignError("PROVIDER_LATENCY_MISMATCH")
         local_raw = row["local"].get("raw_output")
         remote_raw = row["remote"].get("raw_output")
         final_raw = row.get("final_visible_output")
@@ -560,11 +595,16 @@ def validate_rows(rows, tasks, revision):
         elif "remote_validator" in telemetry:
             raise FrozenDesignError("REMOTE_FAILURE_TELEMETRY_MISMATCH")
         attempts = row["remote"].get("attempt_count")
+        retries = row["remote"].get("retry_count")
         cost = row["remote"].get("cost")
         budget = row.get("budget_after_observation")
         if (
             type(attempts) is not int
-            or not 0 <= attempts <= 2
+            or not 1 <= attempts <= 2
+            or type(retries) is not int
+            or retries != attempts - 1
+            or remote_success
+            and cost is None
             or cost is not None
             and (
                 type(cost) not in (int, float)
@@ -578,18 +618,34 @@ def validate_rows(rows, tasks, revision):
                 "remote_logical_calls",
                 "remote_http_attempts",
                 "reported_remote_cost_usd",
+                "unreported_remote_failure_count",
+                "reserved_unreported_failure_cost_usd",
             }
         ):
             raise FrozenDesignError("OBSERVATION_BUDGET_MISMATCH")
         remote_attempts += attempts
-        remote_cost += float(cost or 0.0)
+        if cost is None:
+            unreported_failure_count += 1
+        else:
+            reported_remote_cost += float(cost)
+        reserved_cost = (
+            unreported_failure_count * UNREPORTED_FAILURE_COST_RESERVE_USD
+        )
         if (
             budget["local_logical_calls"] != observation_number
             or budget["remote_logical_calls"] != observation_number
             or budget["remote_http_attempts"] != remote_attempts
             or not math.isclose(
                 budget["reported_remote_cost_usd"],
-                remote_cost,
+                reported_remote_cost,
+                rel_tol=0.0,
+                abs_tol=1e-15,
+            )
+            or budget["unreported_remote_failure_count"]
+            != unreported_failure_count
+            or not math.isclose(
+                budget["reserved_unreported_failure_cost_usd"],
+                reserved_cost,
                 rel_tol=0.0,
                 abs_tol=1e-15,
             )
