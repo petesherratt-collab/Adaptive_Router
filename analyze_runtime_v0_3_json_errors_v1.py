@@ -658,8 +658,8 @@ def markdown_report(report):
     lines = [
         "# Runtime v0.3 structural-JSON error analysis V1",
         "",
-        "**Status:** RETROSPECTIVE ONLY  ",
-        f"**Candidate screen:** {report['candidate_screen']['decision']}  ",
+        "**Status:** RETROSPECTIVE ONLY",
+        f"**Candidate screen:** {report['candidate_screen']['decision']}",
         f"**Sealed V2 decision:** {report['sealed_v2_decision']}",
         "",
         "## Observations",
