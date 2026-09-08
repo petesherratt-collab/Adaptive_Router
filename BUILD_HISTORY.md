@@ -1,7 +1,7 @@
 # Adaptive Router build history
 
 **Project path:** `/home/peter/adaptive-router`
-**Updated:** 2026-09-03
+**Updated:** 2026-09-08
 
 This is the single history for Adaptive Router. It combines the narrative
 project history (motivation, lessons, standing rules) with the dated engineering
@@ -2389,3 +2389,119 @@ ms, slower than direct remote. Likewise, 39 contract passes are not 39 safe
 savings: 23 were semantic errors. The experiment again demonstrates that
 structural validity and semantic correctness are different quantities.
 
+## 2026-09-08 — Runtime v0.3 structural-JSON retrospective error analysis V1
+
+### Scope and authentication
+
+After V2 rejected local authority, a separate retrospective protocol examined
+why the local model failed and whether any deployable, oracle-free subgroup
+deserved a fresh prospective test. The protocol had no promotion authority,
+forbade provider generation requests and runtime-policy changes, and fixed the
+input hashes, recursive error taxonomy, task-cluster treatment, exhaustive
+subgroup inventory, and candidate screen before implementation.
+
+The analyzer authenticated the frozen protocol and all five committed V2
+inputs, then re-ran the sealed V2 analysis and required exact agreement. It
+reconciled all 120 observations, 40 task IDs, three repetitions per task,
+contracts, strata, telemetry, model identity, ordering, and published totals.
+The analysis made zero provider network requests and did not mutate the sealed
+V2 evidence.
+
+Implementation and tests were committed at `b1073b2` and `33ce24d`. Fourteen
+focused tests initially covered hash failure, duplicate JSON keys, recursive
+JSON Pointer classification, primary-class precedence, task clustering,
+subgroup exhaustiveness, candidate-screen success and failure fixtures,
+oracle-feature exclusion, dry-run immutability, and output non-overwrite. All
+384 repository tests then passed on the execution host.
+
+### Error structure
+
+The local provider completed all 120 calls, but only 16 outputs were
+oracle-correct. The structural contract passed 39 outputs: 16 correct and 23
+incorrect. It rejected 81 outputs, all of which were incorrect. Contract PASS
+therefore preserved every correct local result in this suite but did not
+separate safe from unsafe accepted outputs.
+
+Mutually exclusive primary row classes were:
+
+| Primary class | Rows |
+|---|---:|
+| Exact | 16 |
+| Scalar type | 33 |
+| Container type | 23 |
+| Member set | 21 |
+| Scalar value | 18 |
+| Unparseable candidate | 9 |
+
+Recursive comparison recorded every value-free JSON Pointer difference. Leaf
+counts were 85 scalar-value differences, 40 scalar-type differences, 38
+container-type differences, 24 missing members, 9 unexpected members, and 4
+array-length differences. Leaf totals exceed erroneous rows because one output
+may differ at several paths.
+
+Failure was predominantly stable rather than repetition noise. Of the 40 task
+clusters, 34 were wrong in all three repetitions, five were correct in all
+three, and one had mixed correctness. Canonical local output was identical
+across all three repetitions for 33 tasks and had two variants for seven.
+
+### Exhaustive subgroup screen
+
+The analyzer printed all 42 predeclared subgroup rules:
+
+- contract PASS alone;
+- four contract-PASS single-stratum rules;
+- all 15 non-empty contract-PASS stratum allowlists;
+- four pre-output stratum rules;
+- 17 declared contract-signature groups; and
+- one explicitly non-deployable three-repetition unanimity rule.
+
+Every subgroup was labelled retrospective and reported accepted rows, distinct
+task clusters, accepted errors, exact one-sided uncertainty, avoided calls, and
+counterfactual correctness. None had zero accepted errors, so no subgroup could
+pass even the first substantive safety boundary. The frozen result was
+**`NO_RULE_CANDIDATE`**.
+
+The permitted interpretation is **`MODEL_CHANGE_CANDIDATE`**: Gemma 3 270M is
+inadequate on this distribution, without evidence that any particular
+replacement will succeed. No validator-change candidate was claimed because no
+specified oracle-free deterministic check was tested that both rejected an
+accepted error and retained a correct PASS. No deterministic-executor claim was
+generalized from the templated benchmark.
+
+### Canonical artifacts
+
+The canonical offline outputs were committed at `a439e61`:
+
+| Artifact | Rows | SHA-256 |
+|---|---:|---|
+| `runtime_v0_3_json_error_analysis_v1.json` | — | `2201a4eab785393754f0ca768566eba060c7ccab3f8d72d28c932b87b3dcd973` |
+| `runtime_v0_3_json_error_analysis_v1.csv` | 83 | `fa672ca460adc0b58053f5c66a4734065c3df99f41c26afb2be4b8406df7f241` |
+| `RUNTIME_V0_3_JSON_ERROR_ANALYSIS_V1.md` | 78 | `e7e8680742479cc49ba27ccb5fe547eae2852aec1297abaf37b20987b0b953c2` |
+
+The JSON contains all 120 value-free row classifications, task summaries,
+authenticated overlap totals, and the complete subgroup inventory. The CSV
+contains 40 task rows and 42 subgroup rows plus its header. The Markdown report
+separates observations, deterministic derivations, candidate hypotheses, and
+prohibited claims.
+
+### Decision and next boundary
+
+This analysis closes the current 270M structural-JSON local-authority line. It
+does not rescue V2, alter v0.3, or authorize a tuned routing rule. A successor
+experiment must freeze a substantively changed candidate—most plausibly a
+different local model—against fresh tasks before collecting outcomes.
+
+### Gotchas
+
+The 120 rows represent only 40 independent task clusters. Treating repetitions
+as independent tasks would exaggerate the apparent evidence. Exhaustively
+reporting subgroup combinations prevents selective omission but cannot remove
+the post-selection bias of a retrospective search.
+
+The first artifact commit followed a `git diff --cached --check` warning about
+two Markdown hard-break spaces because the shell sequence did not stop on the
+non-zero check. The generator, regression test, and committed report were
+corrected in `8baa252`, `b97b7be`, and `6cd8716`. Fifteen focused tests then
+passed, `git diff --check` was silent, and the corrected Markdown hash above was
+verified. Future multi-command release sequences should stop explicitly when a
+verification command fails rather than relying on visual inspection of output.
