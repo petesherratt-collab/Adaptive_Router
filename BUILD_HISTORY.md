@@ -1,7 +1,7 @@
 # Adaptive Router build history
 
 **Project path:** `/home/peter/adaptive-router`
-**Updated:** 2026-09-08
+**Updated:** 2026-09-09
 
 This is the single history for Adaptive Router. It combines the narrative
 project history (motivation, lessons, standing rules) with the dated engineering
@@ -2505,3 +2505,140 @@ corrected in `8baa252`, `b97b7be`, and `6cd8716`. Fifteen focused tests then
 passed, `git diff --check` was silent, and the corrected Markdown hash above was
 verified. Future multi-command release sequences should stop explicitly when a
 verification command fails rather than relying on visual inspection of output.
+
+## 2026-09-09 — Runtime v0.3 structural-JSON 1B shadow V1 frozen
+
+### Scope
+
+The sealed 270M V2 result and retrospective error review supported a model-change hypothesis but no deployable rule. A successor prospective experiment was therefore frozen for `gemma3:1b` while leaving runtime v0.3 remote-authoritative and live `config.json` unchanged.
+
+The model identity was captured from Ollama's local metadata API: digest `8648f39daa8fbf5b18c7b4e6a8fb4990c692751d49917417b8842ca5758e7ffc`, 999.89M parameters, Q4_K_M, and package size 815319791 bytes. Metadata collection made no generation request.
+
+### Frozen artifacts
+
+- `benchmark_runtime_v0_3_shadow_json_1b_v1.json`: 40 fresh tasks, three repetitions, 120 observations, with ten tasks in each of the four established structural-JSON strata. Exact task identifiers, prompts, and complete expected JSON objects were checked against shadow V1 and V2. SHA-256: `54fd3f5c253dbe0bf7b558c8cba807bfc341c48187df04a2815ec5153b1a60d1`.
+- `config_runtime_v0_3_shadow_json_1b_v1.json`: experiment-only remote-authoritative configuration with 1B shadow execution at sample rate 1.0. SHA-256: `0285d0b79dba88c2f6714b1c9742910fd9508b24115e4defa3ee65df87a4192c`.
+- `RUNTIME_V0_3_SHADOW_JSON_1B_V1_PLAN.md`: prospective protocol frozen before implementation or provider execution. SHA-256: `a608ac5b5a5d77061992c75a44425428aa05dbce90b1e1e6a2467da050ec0ee1`.
+
+### Decision boundary
+
+Promotion requires zero local accepted errors, at least 60 local contract passes, an exact one-sided 95% accepted-error upper bound no greater than 0.05, counterfactual correctness no worse than actual runtime, at least 60 avoided remote logical calls, and counterfactual request median latency no worse than actual runtime request latency. All 120 paired observations and their budgets, identities, and telemetry must authenticate.
+
+The experiment screens 1B independently. Because it does not pair 1B and 270M on the same fresh tasks, it cannot support a causal model-size comparison. It does not validate retrospective V2 subgroups or alter the shipped policy.
+
+### Gotchas
+
+The 1B model's larger package and slower likely inference do not count against it until measured under the frozen latency rule; assumed performance must not leak into implementation or task replacement. Conversely, improved conformance would not be enough: contract PASS remains distinct from recursive semantic correctness.
+
+## 2026-09-09 — Runtime v0.3 structural-JSON 1B shadow V1 result
+
+### Execution and authentication
+
+The prospective 1B shadow experiment completed all 120 ordered observations
+against the frozen 40-task benchmark with three repetitions per task. The
+released runtime remained remote-authoritative while `gemma3:1b` executed as
+a non-serving shadow arm. All 120 remote logical calls and all 120 local logical
+calls completed successfully. The remote arm used 120 HTTP attempts with no
+retries or provider failures.
+
+Before execution, 28 focused tests and all 413 repository tests passed. Dry-run
+and preflight made zero provider generation requests, reported empty output
+state, and authenticated the frozen benchmark, config, plan, implementation,
+and local model identity. A copied benchmark-date check initially caused
+`BENCHMARK_IDENTITY_MISMATCH`; commit `7beda34` corrected the adapter from
+the inherited 2026-09-08 date to the frozen 2026-09-09 date without changing
+the plan, benchmark, config, or collected evidence.
+
+Execution evidence was committed at `f06cc46`:
+
+| Artifact | Rows | SHA-256 |
+|---|---:|---|
+| `runtime_v0_3_shadow_json_1b_v1_runs.jsonl` | 120 | `6fc99afd2ee7be1f3ecabef728dd561d6280dc441860db0560f0e27c731d2e52` |
+| `runtime_v0_3_shadow_json_1b_v1_router_telemetry.jsonl` | 120 | `28192c78b1fba0979478b0281e8e20f8e7085dac413cbb11bdd66e995d3cf03a` |
+| `runtime_v0_3_shadow_json_1b_v1_summary.json` | — | `973fddf899148b059c4cebc243ec38f457b30fbd3bde0a7e93dd1c42f5e70b87` |
+
+The authenticated analysis was committed at `503adea`:
+
+| Artifact | Rows | SHA-256 |
+|---|---:|---|
+| `runtime_v0_3_shadow_json_1b_v1_analysis.json` | — | `55a0f7bfae13cc3990193fe9e3d1a5ffa34dbdd7d936ac3831c1e78d31fa0966` |
+| `runtime_v0_3_shadow_json_1b_v1_analysis.csv` | 6 | `025f402bf18e0acad2f93061e0845314ead53db231dd46db4f9ae3987072161d` |
+
+Frozen identities were plan
+`a608ac5b5a5d77061992c75a44425428aa05dbce90b1e1e6a2467da050ec0ee1`,
+benchmark
+`54fd3f5c253dbe0bf7b558c8cba807bfc341c48187df04a2815ec5153b1a60d1`,
+config
+`0285d0b79dba88c2f6714b1c9742910fd9508b24115e4defa3ee65df87a4192c`,
+and implementation
+`7beda3493e70a5b3719a67d6ae06be06a794174c`.
+
+### Primary result
+
+The precommitted decision is **`DO_NOT_PROMOTE`**.
+
+The authoritative runtime was correct on 105/120 observations (87.5%). The
+local 1B arm was correct on 43/120 (35.8%). A local-first counterfactual that
+served every local contract PASS and otherwise fell back to remote was correct
+on 88/120 (73.3%), 17 fewer correct observations than the released runtime.
+
+The local contract passed exactly 60 outputs, meeting the minimum volume
+threshold, but 17 of those accepted outputs were wrong. The accepted-error rate
+was 17/60 (28.3%), and its exact one-sided 95% Clopper-Pearson upper bound was
+39.4%, far above the precommitted 5% ceiling. The counterfactual avoided exactly
+60 remote logical calls; its task-cluster bootstrap 95% interval was 42..78.
+The bootstrap 95% interval for counterfactual-minus-runtime correctness rate
+was -25.0 to -5.0 percentage points.
+
+Median measured latencies were 3173.0 ms for the paired local arm, 2509.0 ms
+for the remote provider arm, 4874.6 ms for deployable sequential local-first
+fallback, and 5855.8 ms for the actual synchronous-shadow runtime. The frozen
+comparison with actual runtime request latency therefore passed, but it did not
+offset the safety and correctness failures.
+
+Reported remote cost was USD 0.0117774. No remote result required reserved
+failure cost, and total accounting remained below the USD 0.03 ceiling.
+
+### Stratum results
+
+| Stratum | Remote correct | Local correct | Local PASS | Accepted errors | Counterfactual correct |
+|---|---:|---:|---:|---:|---:|
+| Flat scalar | 30/30 | 12/30 | 19/30 | 7 | 23/30 |
+| Nested collection | 18/30 | 3/30 | 9/30 | 6 | 12/30 |
+| Record selection | 27/30 | 12/30 | 15/30 | 3 | 24/30 |
+| Type boundary | 30/30 | 16/30 | 17/30 | 1 | 29/30 |
+| **Overall** | **105/120** | **43/120** | **60/120** | **17** | **88/120** |
+
+Every locally correct result was also remotely correct. Overlap was 43
+both-correct, zero local-only, 62 remote-only, and 15 neither. The experiment
+therefore found no measured observation where local authority rescued a remote
+error.
+
+### Promotion criteria and decision
+
+Evidence completeness, absence of instrumentation or execution failure, at
+least 60 local contract passes, at least 60 avoided remote calls, and the
+frozen request-latency comparison passed. Three substantive criteria failed:
+
+- local accepted errors were 17 rather than zero;
+- the accepted-error upper bound was 39.4% rather than at most 5%; and
+- counterfactual correctness was 88 rather than at least the runtime's 105.
+
+Structural-JSON local authority remains disabled. Runtime v0.3 remains
+remote-authoritative for these contracts. The 1B model improved the independent
+screen enough to reach the volume thresholds, but structural conformance still
+did not provide a safe semantic routing boundary.
+
+### Gotchas
+
+The 1B and 270M experiments used different fresh task sets. The higher 1B local
+correct count and contract-PASS count are descriptively encouraging, but they
+cannot be attributed causally to model size. A direct model comparison would
+require a separately frozen paired design.
+
+The lower counterfactual median than the synchronous-shadow runtime does not
+mean local-first was faster than direct remote service: the remote provider-arm
+median was 2509.0 ms. More importantly, 17 of the 60 apparent remote-call
+savings would have served semantically wrong local outputs. Meeting the savings
+count exactly did not make those savings safe.
+
