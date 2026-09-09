@@ -2642,3 +2642,76 @@ median was 2509.0 ms. More importantly, 17 of the 60 apparent remote-call
 savings would have served semantically wrong local outputs. Meeting the savings
 count exactly did not make those savings safe.
 
+## 2026-09-09 — Source-aware JSON verifier V1 developmental candidate
+
+### Research decision
+
+The structural-JSON local-authority line based only on exact keys and declared
+types is closed for now. Runtime v0.3 remains remote-authoritative, and a 4B
+prospective shadow run is deferred. The 1B result showed that increased
+contract-PASS volume did not provide a safe semantic boundary: 17 of 60
+contract-accepted outputs were wrong, and no local-only correct observation was
+measured.
+
+The next candidate changes the acceptance mechanism rather than merely the
+model size. `source_aware_json.py` is an offline proof-carrying extraction
+prototype. In its deliberately narrow V1 scope, the caller authenticates UTF-8
+source bytes, declares ordered record boundaries, supplies a selector literal
+that must identify exactly one record, and declares flat scalar output keys and
+types. An untrusted candidate supplies field byte spans. Deterministic code
+checks that every span lies in the selected record and reconstructs the output
+from the source bytes.
+
+### Boundary
+
+This component is not integrated into `runtime_contracts.py`, `router.py` or
+`config.json`. It has no promotion authority, makes no provider request, and
+does not alter or rerun sealed evidence. A PASS establishes bounded source
+grounding and record consistency, not arbitrary semantic correctness.
+
+The full protocol and limitations are recorded in
+`SOURCE_AWARE_JSON_VERIFIER_V1_PLAN.md`. Synthetic adversarial tests cover
+fabrication, wrong-record selection, cross-record splicing, proof-set drift,
+type substitution, selector ambiguity, malformed spans, UTF-8 boundaries,
+nested values, duplicate JSON keys and source authentication.
+
+Developmental review also preserves an executable negative boundary. When two
+same-typed values are swapped between output fields but both cited spans are
+authentic and inside the selected record, V1 accepts them. Source occurrence is
+therefore stronger than shape/type conformance but is still not field-role
+correctness. V1 does not justify a prospective model experiment or a runtime
+integration.
+
+### Verification
+
+- `python -m unittest tests.test_source_aware_json -v` — 20 tests passed.
+- `python -m unittest discover -s tests` — 433 tests passed.
+- `python -m py_compile source_aware_json.py tests/test_source_aware_json.py`
+  passed.
+- `git diff --check` passed.
+- No provider generation request was made.
+
+| Artifact | SHA-256 |
+|---|---|
+| `SOURCE_AWARE_JSON_VERIFIER_V1_PLAN.md` | `a25c0bbc1cb546a280d0036fced154088dec090d29f423e782408fb9fd82d492` |
+| `source_aware_json.py` | `4e747b30d769837d70043636726ddddb045953bc7f2121e5f3d4ac8006b05dbd` |
+| `tests/test_source_aware_json.py` | `fccb7d1b4309d60cec40f7476fec99e872a6573b028d84c78b3e111f746bc23e` |
+
+The first local commit command followed a successful hash check with
+`git diff --cached --check`, which correctly reported four Markdown hard-break
+spaces. Because the shell sequence did not stop on that non-zero exit, it
+created an unpushed commit. The whitespace and plan hash were corrected, the
+checks were rerun with explicit stop-on-error behavior, and the unpushed commit
+was amended before publication. No provider call, sealed-artifact change or
+runtime-policy change occurred.
+
+### Next boundary
+
+Before any prospective model experiment, review whether the trusted record
+segmentation and selector already make the workload deterministically
+executable. The same-type field-role limitation means further constraints are
+required; if those constraints identify the field values mechanically, route
+the work to deterministic code rather than an LLM. Only if a nontrivial and
+deterministically verifiable model role remains should a successor be frozen on
+fresh tasks and compare deployable local-first latency with direct remote
+service.
