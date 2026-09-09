@@ -1,7 +1,7 @@
 # Adaptive Router build history
 
 **Project path:** `/home/peter/adaptive-router`
-**Updated:** 2026-09-08
+**Updated:** 2026-09-09
 
 This is the single history for Adaptive Router. It combines the narrative
 project history (motivation, lessons, standing rules) with the dated engineering
@@ -2505,3 +2505,27 @@ corrected in `8baa252`, `b97b7be`, and `6cd8716`. Fifteen focused tests then
 passed, `git diff --check` was silent, and the corrected Markdown hash above was
 verified. Future multi-command release sequences should stop explicitly when a
 verification command fails rather than relying on visual inspection of output.
+
+## 2026-09-09 — Runtime v0.3 structural-JSON 1B shadow V1 frozen
+
+### Scope
+
+The sealed 270M V2 result and retrospective error review supported a model-change hypothesis but no deployable rule. A successor prospective experiment was therefore frozen for `gemma3:1b` while leaving runtime v0.3 remote-authoritative and live `config.json` unchanged.
+
+The model identity was captured from Ollama's local metadata API: digest `8648f39daa8fbf5b18c7b4e6a8fb4990c692751d49917417b8842ca5758e7ffc`, 999.89M parameters, Q4_K_M, and package size 815319791 bytes. Metadata collection made no generation request.
+
+### Frozen artifacts
+
+- `benchmark_runtime_v0_3_shadow_json_1b_v1.json`: 40 fresh tasks, three repetitions, 120 observations, with ten tasks in each of the four established structural-JSON strata. Exact task identifiers, prompts, and complete expected JSON objects were checked against shadow V1 and V2. SHA-256: `54fd3f5c253dbe0bf7b558c8cba807bfc341c48187df04a2815ec5153b1a60d1`.
+- `config_runtime_v0_3_shadow_json_1b_v1.json`: experiment-only remote-authoritative configuration with 1B shadow execution at sample rate 1.0. SHA-256: `0285d0b79dba88c2f6714b1c9742910fd9508b24115e4defa3ee65df87a4192c`.
+- `RUNTIME_V0_3_SHADOW_JSON_1B_V1_PLAN.md`: prospective protocol frozen before implementation or provider execution. SHA-256: `a608ac5b5a5d77061992c75a44425428aa05dbce90b1e1e6a2467da050ec0ee1`.
+
+### Decision boundary
+
+Promotion requires zero local accepted errors, at least 60 local contract passes, an exact one-sided 95% accepted-error upper bound no greater than 0.05, counterfactual correctness no worse than actual runtime, at least 60 avoided remote logical calls, and counterfactual request median latency no worse than actual runtime request latency. All 120 paired observations and their budgets, identities, and telemetry must authenticate.
+
+The experiment screens 1B independently. Because it does not pair 1B and 270M on the same fresh tasks, it cannot support a causal model-size comparison. It does not validate retrospective V2 subgroups or alter the shipped policy.
+
+### Gotchas
+
+The 1B model's larger package and slower likely inference do not count against it until measured under the frozen latency rule; assumed performance must not leak into implementation or task replacement. Conversely, improved conformance would not be enough: contract PASS remains distinct from recursive semantic correctness.
