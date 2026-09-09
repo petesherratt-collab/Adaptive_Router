@@ -1,0 +1,26 @@
+{
+  "benchmark_sha256": "54fd3f5c253dbe0bf7b558c8cba807bfc341c48187df04a2815ec5153b1a60d1",
+  "budget": {
+    "local_logical_calls": 120,
+    "remote_http_attempts": 120,
+    "remote_logical_calls": 120,
+    "reported_remote_cost_usd": 0.0117774,
+    "reserved_unreported_failure_cost_usd": 0.0,
+    "unreported_remote_failure_count": 0
+  },
+  "config_sha256": "0285d0b79dba88c2f6714b1c9742910fd9508b24115e4defa3ee65df87a4192c",
+  "implementation_revision": "7beda3493e70a5b3719a67d6ae06be06a794174c",
+  "local_accepted_error_count": 17,
+  "local_provider_errors": {},
+  "local_provider_success_count": 120,
+  "observation_count": 120,
+  "plan_sha256": "a608ac5b5a5d77061992c75a44425428aa05dbce90b1e1e6a2467da050ec0ee1",
+  "remote_provider_errors": {},
+  "remote_provider_success_count": 120,
+  "router_telemetry_sha256": "28192c78b1fba0979478b0281e8e20f8e7085dac413cbb11bdd66e995d3cf03a",
+  "runs_sha256": "6fc99afd2ee7be1f3ecabef728dd561d6280dc441860db0560f0e27c731d2e52",
+  "runtime_accepted_error_count": 5,
+  "runtime_correct_count": 105,
+  "schema_version": "runtime_v0_3_shadow_json_1b_summary_v1",
+  "suite_id": "runtime_v0_3_shadow_json_1b_v1"
+}
