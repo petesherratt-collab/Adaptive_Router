@@ -179,7 +179,7 @@ def validate_benchmark(document):
     if (
         document["schema_version"] != "runtime_v0_3_shadow_json_1b_benchmark_v1"
         or document["suite_id"] != SUITE_ID
-        or document["created_date"] != "2026-09-08"
+        or document["created_date"] != "2026-09-09"
         or document["task_count"] != TASK_COUNT
         or document["repetitions"] != REPETITIONS
         or document["observation_count"] != OBSERVATION_COUNT
