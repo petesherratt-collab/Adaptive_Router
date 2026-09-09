@@ -411,6 +411,46 @@ class AnalysisTests(unittest.TestCase):
         self.assertEqual(analyzer._counterfactual(passing), (True, False, 2))
         self.assertEqual(analyzer._counterfactual(rejected), (False, True, 10))
 
+    def test_promotion_latency_uses_actual_runtime_request(self):
+        _, tasks, _ = pv.load_frozen_inputs(ROOT)
+        rows = []
+        for task in tasks:
+            for repetition in range(1, 4):
+                rows.append({
+                    "task_id": task["task_id"],
+                    "repetition": repetition,
+                    "stratum": task["stratum"],
+                    "runtime_correct": True,
+                    "actual_route": "remote",
+                    "actual_reason": "SAFE_REMOTE_POLICY",
+                    "router_decision": {"total_ms": 10},
+                    "local": {
+                        "success": True, "error": None, "total_ms": 9,
+                        "cost": None, "attempt_count": 0,
+                    },
+                    "remote": {
+                        "success": True, "error": None, "total_ms": 8,
+                        "cost": 0.0, "attempt_count": 1,
+                    },
+                    "local_contract": {"status": "PASS"},
+                    "remote_contract": {"status": "PASS"},
+                    "local_oracle": {"correct": True},
+                    "remote_oracle": {"correct": True},
+                })
+        with (
+            patch.object(pv, "validate_rows"),
+            patch.object(analyzer, "_bootstrap", return_value={}),
+        ):
+            report = analyzer.analyze_rows(rows, tasks, "fixture")
+        self.assertTrue(
+            report["promotion"]["conditions"][
+                "counterfactual_median_at_most_actual_runtime"
+            ]
+        )
+        self.assertEqual(
+            report["promotion"]["decision"], "PROMOTION_CANDIDATE"
+        )
+
     def test_synthetic_analysis_reconciles_and_promotes(self):
         result = runner.dry_run(ROOT)
         self.assertEqual(result["runtime_correct_count"], 120)
