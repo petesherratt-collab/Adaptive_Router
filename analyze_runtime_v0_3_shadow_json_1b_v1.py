@@ -235,9 +235,9 @@ def analyze_rows(rows, tasks, revision):
             overall["counterfactual_correct_count"] >= overall["runtime_correct_count"]
         ),
         "at_least_60_remote_calls_avoided": overall["remote_calls_avoided"] >= 60,
-        "counterfactual_median_at_most_remote_provider": (
+        "counterfactual_median_at_most_actual_runtime": (
             overall["counterfactual_request_median_ms"]
-            <= overall["remote_median_ms"]
+            <= overall["actual_runtime_median_ms"]
         ),
         "no_instrumentation_or_execution_failure": True,
     }
