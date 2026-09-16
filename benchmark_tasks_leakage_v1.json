@@ -1,0 +1,62 @@
+[
+  {
+    "task_id": "extract_person",
+    "task_class": "structured_extraction",
+    "variant_id": "base",
+    "prompt": "Extract the person's full name exactly.\nInput: The inspection was signed by Mira Okafor for the Alpine Transit Operations Center."
+  },
+  {
+    "task_id": "extract_person",
+    "task_class": "structured_extraction",
+    "variant_id": "mut1",
+    "prompt": "Extract the person's full name exactly.\nInput: The inspection was signed by Tomasz Zielinski for the Meridian Coastal Research Office."
+  },
+  {
+    "task_id": "classify_sentiment",
+    "task_class": "classification",
+    "variant_id": "base",
+    "prompt": "Classify the sentiment as positive, negative, or neutral.\nInput: The repair team handled the outage adequately, with no notable change in service quality."
+  },
+  {
+    "task_id": "classify_sentiment",
+    "task_class": "classification",
+    "variant_id": "mut1",
+    "prompt": "Classify the sentiment as positive, negative, or neutral.\nInput: The repair team handled the outage poorly."
+  },
+  {
+    "task_id": "format_bullets",
+    "task_class": "format",
+    "variant_id": "base",
+    "prompt": "List the supplied items as exactly two Markdown bullets, one item per line.\nInput: cedar; basalt"
+  },
+  {
+    "task_id": "format_bullets",
+    "task_class": "format",
+    "variant_id": "mut1",
+    "prompt": "List the supplied items as exactly two Markdown bullets, one item per line.\nInput: saffron; granite"
+  },
+  {
+    "task_id": "format_json",
+    "task_class": "format",
+    "variant_id": "base",
+    "prompt": "Return one JSON object with exactly the keys city and zone. Preserve the supplied values.\nInput: city is Valparaíso; zone is coastal"
+  },
+  {
+    "task_id": "format_json",
+    "task_class": "format",
+    "variant_id": "mut1",
+    "prompt": "Return one JSON object with exactly the keys city and zone. Preserve the supplied values.\nInput: city is Windhoek; zone is inland"
+  },
+  {
+    "task_id": "transform_reverse",
+    "task_class": "transform",
+    "variant_id": "base",
+    "prompt": "Reverse the supplied string exactly and return only the result.\nInput: cobalt"
+  },
+  {
+    "task_id": "transform_reverse",
+    "task_class": "transform",
+    "variant_id": "mut1",
+    "prompt": "Reverse the supplied string exactly and return only the result.\nInput: juniper"
+  }
+]

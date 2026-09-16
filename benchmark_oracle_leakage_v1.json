@@ -1,0 +1,48 @@
+{
+  "extract_person__base": {
+    "expected": "Mira Okafor",
+    "match_mode": "text"
+  },
+  "extract_person__mut1": {
+    "expected": "Tomasz Zielinski",
+    "match_mode": "text"
+  },
+  "classify_sentiment__base": {
+    "expected": "neutral",
+    "match_mode": "classification"
+  },
+  "classify_sentiment__mut1": {
+    "expected": "negative",
+    "match_mode": "classification"
+  },
+  "format_bullets__base": {
+    "expected": "- cedar\n- basalt",
+    "match_mode": "text"
+  },
+  "format_bullets__mut1": {
+    "expected": "- saffron\n- granite",
+    "match_mode": "text"
+  },
+  "format_json__base": {
+    "expected": {
+      "city": "Valparaíso",
+      "zone": "coastal"
+    },
+    "match_mode": "structured_json"
+  },
+  "format_json__mut1": {
+    "expected": {
+      "city": "Windhoek",
+      "zone": "inland"
+    },
+    "match_mode": "structured_json"
+  },
+  "transform_reverse__base": {
+    "expected": "tlaboc",
+    "match_mode": "text"
+  },
+  "transform_reverse__mut1": {
+    "expected": "repinuj",
+    "match_mode": "text"
+  }
+}

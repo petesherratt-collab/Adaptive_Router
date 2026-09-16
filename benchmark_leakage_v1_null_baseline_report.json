@@ -1,0 +1,778 @@
+{
+  "ablation_runs_executed": 0,
+  "baseline_ids": [
+    "empty",
+    "echo_prompt",
+    "echo_input_block",
+    "first_line",
+    "last_line",
+    "longest_capitalised_span",
+    "longest_word",
+    "constant_positive",
+    "constant_high"
+  ],
+  "construct_validity": {
+    "classify_sentiment__base": "CV_OK",
+    "classify_sentiment__mut1": "CV_OK",
+    "extract_person__base": "CV_OK",
+    "extract_person__mut1": "CV_OK",
+    "format_bullets__base": "CV_OK",
+    "format_bullets__mut1": "CV_OK",
+    "format_json__base": "CV_OK",
+    "format_json__mut1": "CV_OK",
+    "transform_reverse__base": "CV_OK",
+    "transform_reverse__mut1": "CV_OK"
+  },
+  "model_runs_executed": 0,
+  "request_boundary": {
+    "oracle_values_checked": 12,
+    "task_count": 10
+  },
+  "rows": [
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "extract_person",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Extract the person's full name exactly.\nInput: The inspection was signed by Mira Okafor for the Alpine Transit Operations Center.",
+      "task_id": "extract_person",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "The inspection was signed by Mira Okafor for the Alpine Transit Operations Center.",
+      "task_id": "extract_person",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Extract the person's full name exactly.",
+      "task_id": "extract_person",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: The inspection was signed by Mira Okafor for the Alpine Transit Operations Center.",
+      "task_id": "extract_person",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Alpine Transit Operations Center",
+      "task_id": "extract_person",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "inspection",
+      "task_id": "extract_person",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "extract_person",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "extract_person",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "extract_person",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Extract the person's full name exactly.\nInput: The inspection was signed by Tomasz Zielinski for the Meridian Coastal Research Office.",
+      "task_id": "extract_person",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "The inspection was signed by Tomasz Zielinski for the Meridian Coastal Research Office.",
+      "task_id": "extract_person",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Extract the person's full name exactly.",
+      "task_id": "extract_person",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: The inspection was signed by Tomasz Zielinski for the Meridian Coastal Research Office.",
+      "task_id": "extract_person",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Meridian Coastal Research Office",
+      "task_id": "extract_person",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "inspection",
+      "task_id": "extract_person",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "extract_person",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "extract_person",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "classify_sentiment",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Classify the sentiment as positive, negative, or neutral.\nInput: The repair team handled the outage adequately, with no notable change in service quality.",
+      "task_id": "classify_sentiment",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "The repair team handled the outage adequately, with no notable change in service quality.",
+      "task_id": "classify_sentiment",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Classify the sentiment as positive, negative, or neutral.",
+      "task_id": "classify_sentiment",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: The repair team handled the outage adequately, with no notable change in service quality.",
+      "task_id": "classify_sentiment",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Classify",
+      "task_id": "classify_sentiment",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "adequately,",
+      "task_id": "classify_sentiment",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "classify_sentiment",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "classify_sentiment",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "classify_sentiment",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Classify the sentiment as positive, negative, or neutral.\nInput: The repair team handled the outage poorly.",
+      "task_id": "classify_sentiment",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "The repair team handled the outage poorly.",
+      "task_id": "classify_sentiment",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Classify the sentiment as positive, negative, or neutral.",
+      "task_id": "classify_sentiment",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: The repair team handled the outage poorly.",
+      "task_id": "classify_sentiment",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Classify",
+      "task_id": "classify_sentiment",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "sentiment",
+      "task_id": "classify_sentiment",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "classify_sentiment",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "classify_sentiment",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "format_bullets",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "List the supplied items as exactly two Markdown bullets, one item per line.\nInput: cedar; basalt",
+      "task_id": "format_bullets",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "cedar; basalt",
+      "task_id": "format_bullets",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "List the supplied items as exactly two Markdown bullets, one item per line.",
+      "task_id": "format_bullets",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: cedar; basalt",
+      "task_id": "format_bullets",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Markdown",
+      "task_id": "format_bullets",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "supplied",
+      "task_id": "format_bullets",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "format_bullets",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "format_bullets",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "format_bullets",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "List the supplied items as exactly two Markdown bullets, one item per line.\nInput: saffron; granite",
+      "task_id": "format_bullets",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "saffron; granite",
+      "task_id": "format_bullets",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "List the supplied items as exactly two Markdown bullets, one item per line.",
+      "task_id": "format_bullets",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: saffron; granite",
+      "task_id": "format_bullets",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Markdown",
+      "task_id": "format_bullets",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "supplied",
+      "task_id": "format_bullets",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "format_bullets",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "format_bullets",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "format_json",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return one JSON object with exactly the keys city and zone. Preserve the supplied values.\nInput: city is Valparaíso; zone is coastal",
+      "task_id": "format_json",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "city is Valparaíso; zone is coastal",
+      "task_id": "format_json",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return one JSON object with exactly the keys city and zone. Preserve the supplied values.",
+      "task_id": "format_json",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: city is Valparaíso; zone is coastal",
+      "task_id": "format_json",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Valparaíso",
+      "task_id": "format_json",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Valparaíso;",
+      "task_id": "format_json",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "format_json",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "format_json",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "format_json",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return one JSON object with exactly the keys city and zone. Preserve the supplied values.\nInput: city is Windhoek; zone is inland",
+      "task_id": "format_json",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "city is Windhoek; zone is inland",
+      "task_id": "format_json",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return one JSON object with exactly the keys city and zone. Preserve the supplied values.",
+      "task_id": "format_json",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: city is Windhoek; zone is inland",
+      "task_id": "format_json",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Preserve",
+      "task_id": "format_json",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Windhoek;",
+      "task_id": "format_json",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "format_json",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "format_json",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "transform_reverse",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Reverse the supplied string exactly and return only the result.\nInput: cobalt",
+      "task_id": "transform_reverse",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "cobalt",
+      "task_id": "transform_reverse",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Reverse the supplied string exactly and return only the result.",
+      "task_id": "transform_reverse",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: cobalt",
+      "task_id": "transform_reverse",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Reverse",
+      "task_id": "transform_reverse",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "supplied",
+      "task_id": "transform_reverse",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "transform_reverse",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "transform_reverse",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "transform_reverse",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Reverse the supplied string exactly and return only the result.\nInput: juniper",
+      "task_id": "transform_reverse",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "juniper",
+      "task_id": "transform_reverse",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Reverse the supplied string exactly and return only the result.",
+      "task_id": "transform_reverse",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: juniper",
+      "task_id": "transform_reverse",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Reverse",
+      "task_id": "transform_reverse",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "supplied",
+      "task_id": "transform_reverse",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "transform_reverse",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "transform_reverse",
+      "variant_id": "mut1"
+    }
+  ],
+  "schema_version": "benchmark_leakage_v1_null_baseline_report",
+  "task_count": 10,
+  "variant_count": 10,
+  "variants": {
+    "classify_sentiment": [
+      "base",
+      "mut1"
+    ],
+    "extract_person": [
+      "base",
+      "mut1"
+    ],
+    "format_bullets": [
+      "base",
+      "mut1"
+    ],
+    "format_json": [
+      "base",
+      "mut1"
+    ],
+    "transform_reverse": [
+      "base",
+      "mut1"
+    ]
+  }
+}
