@@ -1,0 +1,112 @@
+{
+  "ablation_reason_counts": {
+    "FAIL_EMPTY_OUTPUT": 6,
+    "FAIL_ORACLE_MISMATCH": 54
+  },
+  "ablation_rows": 60,
+  "construct_validity": {
+    "classify_sentiment": {
+      "ablation_status": "CV_ABLATION_FAILS",
+      "baseline_status": "CV_OK",
+      "final_status": "CV_OK",
+      "model_status": "MODEL_FAIL",
+      "mutation_status": "CV_OK",
+      "variants": {
+        "base": {
+          "ablation_pass": false,
+          "baseline_pass": false,
+          "model_pass": false
+        },
+        "mut1": {
+          "ablation_pass": false,
+          "baseline_pass": false,
+          "model_pass": false
+        }
+      }
+    },
+    "extract_person": {
+      "ablation_status": "CV_ABLATION_FAILS",
+      "baseline_status": "CV_OK",
+      "final_status": "CV_OK",
+      "model_status": "MODEL_PASS",
+      "mutation_status": "CV_OK",
+      "variants": {
+        "base": {
+          "ablation_pass": false,
+          "baseline_pass": false,
+          "model_pass": true
+        },
+        "mut1": {
+          "ablation_pass": false,
+          "baseline_pass": false,
+          "model_pass": true
+        }
+      }
+    },
+    "format_bullets": {
+      "ablation_status": "CV_ABLATION_FAILS",
+      "baseline_status": "CV_OK",
+      "final_status": "CV_OK",
+      "model_status": "MODEL_FAIL",
+      "mutation_status": "CV_OK",
+      "variants": {
+        "base": {
+          "ablation_pass": false,
+          "baseline_pass": false,
+          "model_pass": false
+        },
+        "mut1": {
+          "ablation_pass": false,
+          "baseline_pass": false,
+          "model_pass": false
+        }
+      }
+    },
+    "format_json": {
+      "ablation_status": "CV_ABLATION_FAILS",
+      "baseline_status": "CV_OK",
+      "final_status": "CV_OK",
+      "model_status": "MODEL_FAIL",
+      "mutation_status": "CV_OK",
+      "variants": {
+        "base": {
+          "ablation_pass": false,
+          "baseline_pass": false,
+          "model_pass": false
+        },
+        "mut1": {
+          "ablation_pass": false,
+          "baseline_pass": false,
+          "model_pass": false
+        }
+      }
+    },
+    "transform_reverse": {
+      "ablation_status": "CV_ABLATION_FAILS",
+      "baseline_status": "CV_OK",
+      "final_status": "CV_OK",
+      "model_status": "MODEL_FAIL",
+      "mutation_status": "CV_OK",
+      "variants": {
+        "base": {
+          "ablation_pass": false,
+          "baseline_pass": false,
+          "model_pass": false
+        },
+        "mut1": {
+          "ablation_pass": false,
+          "baseline_pass": false,
+          "model_pass": false
+        }
+      }
+    }
+  },
+  "model_reason_counts": {
+    "FAIL_ORACLE_MISMATCH": 24,
+    "PASS_VIA_NORMALIZATION": 6
+  },
+  "model_rows": 30,
+  "normalization_changed_verdict_count": 6,
+  "run_rows": 90,
+  "schema_version": "benchmark_leakage_v1_construct_validity_report"
+}
