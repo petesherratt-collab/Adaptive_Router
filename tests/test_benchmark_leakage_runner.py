@@ -20,6 +20,16 @@ class LeakageRunnerTests(unittest.TestCase):
         self.assertEqual(rows[0]["reason_code"], "FAIL_EMPTY_OUTPUT")
         self.assertEqual(rows[0]["status"], "FAIL")
 
+    def test_generator_metadata_is_preserved(self):
+        tasks = [{"task_id": "t", "variant_id": "base", "task_class": "format", "prompt": "Input: x"}]
+        oracle = {"t__base": {"expected": "x", "match_mode": "text"}}
+        rows = run_conditions(
+            tasks, oracle,
+            lambda prompt, model: {"raw_output": "x", "telemetry": {"total_ms": 1.5}},
+            "stub",
+        )
+        self.assertEqual(rows[0]["telemetry"], {"total_ms": 1.5})
+
     def test_ablation_uses_same_callback_without_provider_discovery(self):
         tasks = [{"task_id": "t", "variant_id": "base", "task_class": "format", "prompt": "do task\nInput: alpha beta"}]
         oracle = {"t__base": {"expected": "alpha", "match_mode": "text"}}

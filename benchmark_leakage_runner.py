@@ -29,7 +29,13 @@ def run_conditions(tasks, oracle, generate_fn, model, *, reps=1, condition="mode
         key = f"{task['task_id']}__{task['variant_id']}"
         entry = oracle[key]
         for rep in range(1, reps + 1):
-            raw_output = generate_fn(task["prompt"], model)
+            generated = generate_fn(task["prompt"], model)
+            telemetry = {}
+            if isinstance(generated, dict):
+                raw_output = generated.get("raw_output", "")
+                telemetry = dict(generated.get("telemetry") or {})
+            else:
+                raw_output = generated
             if not isinstance(raw_output, str):
                 raw_output = ""
             raw_correct, normalized_correct = oracle_correct(entry, raw_output)
@@ -48,6 +54,7 @@ def run_conditions(tasks, oracle, generate_fn, model, *, reps=1, condition="mode
                 **delta,
                 "status": "OK" if normalized_correct else "FAIL",
                 "reason_code": _reason(raw_output, raw_correct, normalized_correct),
+                "telemetry": telemetry,
             })
     return rows
 

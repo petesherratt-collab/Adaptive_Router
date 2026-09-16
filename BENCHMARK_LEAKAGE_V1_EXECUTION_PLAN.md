@@ -15,6 +15,7 @@ benchmark or reuse its evidence.
 - Control implementation: `benchmark_leakage_controls.py`
 - Preflight: `benchmark_leakage_preflight.py`
 - Runner: `benchmark_leakage_runner.py`
+- Execution wrapper: `run_benchmark_leakage_v1.py`
 - Baseline report: `benchmark_leakage_v1_null_baseline_report.json`
 
 The task and oracle files are separate. Task data contains no `expected`
@@ -30,7 +31,8 @@ Authenticated input and implementation hashes at freeze:
 | `benchmark_leakage_controls.py` | `671502409e1c5042e804c31014e586a77fca32fe219759d1e5d9ae5425b72a54` |
 | `benchmark_leakage_preflight.py` | `6e0990beb0b490d37f753ea5b3194b1e69f82cdc6a0f7b47999c3caf37fd34f5` |
 | `analyze_benchmark_leakage_v1.py` | `2070275a0ee2881957e19a8ca567b3135ece7a7ed88218531d7b43bc2d418c79` |
-| `benchmark_leakage_runner.py` | `715339d9835cd9129bc5856a3e278ce3cce24ecb18d4cde40fc492e5ae4a1410` |
+| `benchmark_leakage_runner.py` | `457c29b3459ee461d7638aedafe2076e95e92d48c1484bdaa47b1bedc7dc2624` |
+| `run_benchmark_leakage_v1.py` | `0fde692a8a4a2e4a2d26d8cde40a96e045139d890fd7c8f1890e9d7626c9dd71` |
 | `benchmark_leakage_v1_null_baseline_report.json` | `c9a4af2d4928a77daa77cac14ee945bd72a2f2641614e307fb36aabf2dd8e374` |
 
 ## Frozen execution parameters
@@ -52,6 +54,8 @@ were explicitly reviewed before freeze:
 
 This produces 30 ordinary model observations and 60 ablation observations.
 Null baselines remain offline and are not counted as model observations.
+Canonical evidence will be written once to `benchmark_leakage_v1_runs.jsonl`;
+the wrapper refuses an existing canonical or partial path.
 
 Before freeze, preflight must authenticate the installed model tag and digest,
 record residency, confirm the output paths are absent, and bind the execution
