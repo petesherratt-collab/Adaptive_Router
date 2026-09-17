@@ -9,4 +9,14 @@
   "format_json_nested__mut1": {"expected": {"site": "Malmö", "active": false, "limits": {"daily": 8}}, "match_mode": "structured_json"},
   "transform_rotate__base": {"expected": "arblem", "match_mode": "text"},
   "transform_rotate__mut1": {"expected": "atellites", "match_mode": "text"}
+  ,"extract_location__base": {"expected": "Lake Bled", "match_mode": "text"}
+  ,"extract_location__mut1": {"expected": "Cape Verde", "match_mode": "text"}
+  ,"classify_risk__base": {"expected": "low", "match_mode": "classification"}
+  ,"classify_risk__mut1": {"expected": "medium", "match_mode": "classification"}
+  ,"format_bullets_numbered__base": {"expected": "* amber\n* slate\n* ivory", "match_mode": "text"}
+  ,"format_bullets_numbered__mut1": {"expected": "* copper\n* teal\n* cream", "match_mode": "text"}
+  ,"format_json_array__base": {"expected": {"items": ["birch", "elm", "yew"]}, "match_mode": "structured_json"}
+  ,"format_json_array__mut1": {"expected": {"items": ["cedar", "ash", "pine"]}, "match_mode": "structured_json"}
+  ,"transform_swap_case__base": {"expected": "qUASAR7", "match_mode": "text"}
+  ,"transform_swap_case__mut1": {"expected": "bEACON9", "match_mode": "text"}
 }

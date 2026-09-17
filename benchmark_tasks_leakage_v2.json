@@ -58,5 +58,65 @@
     "task_class": "transform",
     "variant_id": "mut1",
     "prompt": "Move the first character to the end and return only the result.\nInput: satellite"
+  },
+  {
+    "task_id": "extract_location",
+    "task_class": "structured_extraction",
+    "variant_id": "base",
+    "prompt": "Extract the named location exactly.\nInput: The permit was filed for Lake Bled beside the Eastern Alpine Conservation Authority."
+  },
+  {
+    "task_id": "extract_location",
+    "task_class": "structured_extraction",
+    "variant_id": "mut1",
+    "prompt": "Extract the named location exactly.\nInput: The permit was filed for Cape Verde beside the Southern Meridian Conservation Authority."
+  },
+  {
+    "task_id": "classify_risk",
+    "task_class": "classification",
+    "variant_id": "base",
+    "prompt": "Classify risk as high, medium, or low.\nInput: The warning is informational and no unsafe condition is present."
+  },
+  {
+    "task_id": "classify_risk",
+    "task_class": "classification",
+    "variant_id": "mut1",
+    "prompt": "Classify risk as high, medium, or low.\nInput: The warning requires action within three days, but work can continue and no unsafe condition is present."
+  },
+  {
+    "task_id": "format_bullets_numbered",
+    "task_class": "format",
+    "variant_id": "base",
+    "prompt": "Return exactly three lines, each beginning with '* '.\nInput: amber; slate; ivory"
+  },
+  {
+    "task_id": "format_bullets_numbered",
+    "task_class": "format",
+    "variant_id": "mut1",
+    "prompt": "Return exactly three lines, each beginning with '* '.\nInput: copper; teal; cream"
+  },
+  {
+    "task_id": "format_json_array",
+    "task_class": "format",
+    "variant_id": "base",
+    "prompt": "Return one JSON object with exactly the key items whose value is the supplied ordered array.\nInput: items are [\"birch\", \"elm\", \"yew\"]"
+  },
+  {
+    "task_id": "format_json_array",
+    "task_class": "format",
+    "variant_id": "mut1",
+    "prompt": "Return one JSON object with exactly the key items whose value is the supplied ordered array.\nInput: items are [\"cedar\", \"ash\", \"pine\"]"
+  },
+  {
+    "task_id": "transform_swap_case",
+    "task_class": "transform",
+    "variant_id": "base",
+    "prompt": "Swap the ASCII case of every letter and return only the result.\nInput: Quasar7"
+  },
+  {
+    "task_id": "transform_swap_case",
+    "task_class": "transform",
+    "variant_id": "mut1",
+    "prompt": "Swap the ASCII case of every letter and return only the result.\nInput: Beacon9"
   }
 ]

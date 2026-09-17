@@ -27,3 +27,12 @@ provider request because its request-boundary preflight omitted the required
 oracle argument. No warm-up record or 4B output was created. The call was
 corrected in place before retrying the already-frozen continuation; this is a
 second implementation-only preflight defect, not evidence.
+
+The corrected 4B continuation then executed 90 provider observations for the
+five-task bundle, but stopped before publication because the wrapper asserted
+the planned 180-row count while the bundle actually contained only 10
+variants. Those 90 outputs were held in memory and were not written to an
+evidence file. This is a design-count and execution-wrapper incident, not
+model evidence. The v2 bundle is being expanded with five additional fresh
+task IDs to reach the intended 20 variants, and a new corrected output path
+and plan are required.
