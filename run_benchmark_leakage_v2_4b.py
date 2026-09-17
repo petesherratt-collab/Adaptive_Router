@@ -28,7 +28,7 @@ def warmup(config):
 def run(config=None):
     config = dict(config or json.loads((ROOT / "config.json").read_text())["local"])
     tasks, oracle = load_separated_suite(TASKS_PATH, ORACLE_PATH)
-    validate_variant_inventory(tasks); validate_mutation_pairs(tasks); validate_request_boundary(tasks)
+    validate_variant_inventory(tasks); validate_mutation_pairs(tasks); validate_request_boundary(tasks, oracle)
     if OUTPUT_PATH.exists() or Path(str(OUTPUT_PATH) + ".partial").exists():
         raise FileExistsError("4B output already exists")
     if config.get("temperature") != 0 or config.get("max_tokens") != 256:

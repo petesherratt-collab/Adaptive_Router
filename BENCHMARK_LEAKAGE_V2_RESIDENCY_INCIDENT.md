@@ -21,3 +21,9 @@ Observed effects:
 This is an operational/preflight failure, not a model result. The partial file
 must remain immutable and be authenticated before any later analysis or
 combination. A continuation must use a new plan and output path.
+
+The first invocation of the 4B continuation wrapper also stopped before any
+provider request because its request-boundary preflight omitted the required
+oracle argument. No warm-up record or 4B output was created. The call was
+corrected in place before retrying the already-frozen continuation; this is a
+second implementation-only preflight defect, not evidence.
