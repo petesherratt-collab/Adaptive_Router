@@ -1,0 +1,12 @@
+{
+  "extract_device__base": {"expected": "Lumen X4", "match_mode": "text"},
+  "extract_device__mut1": {"expected": "Aster Dock 12", "match_mode": "text"},
+  "classify_priority__base": {"expected": "medium", "match_mode": "classification"},
+  "classify_priority__mut1": {"expected": "low", "match_mode": "classification"},
+  "format_labels__base": {"expected": "owner: Nia\nregion: west", "match_mode": "text"},
+  "format_labels__mut1": {"expected": "owner: Pavel\nregion: north", "match_mode": "text"},
+  "format_json_nested__base": {"expected": {"site": "Quito", "active": true, "limits": {"daily": 12}}, "match_mode": "structured_json"},
+  "format_json_nested__mut1": {"expected": {"site": "Malmö", "active": false, "limits": {"daily": 8}}, "match_mode": "structured_json"},
+  "transform_rotate__base": {"expected": "arblem", "match_mode": "text"},
+  "transform_rotate__mut1": {"expected": "atellites", "match_mode": "text"}
+}

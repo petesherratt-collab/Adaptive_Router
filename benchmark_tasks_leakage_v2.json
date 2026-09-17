@@ -1,0 +1,62 @@
+[
+  {
+    "task_id": "extract_device",
+    "task_class": "structured_extraction",
+    "variant_id": "base",
+    "prompt": "Extract the device name exactly.\nInput: The shipment uses a Lumen X4 sensor from the Northern Harbor Logistics Office."
+  },
+  {
+    "task_id": "extract_device",
+    "task_class": "structured_extraction",
+    "variant_id": "mut1",
+    "prompt": "Extract the device name exactly.\nInput: The shipment uses an Aster Dock 12 terminal from the Western Alpine Freight Directorate."
+  },
+  {
+    "task_id": "classify_priority",
+    "task_class": "classification",
+    "variant_id": "base",
+    "prompt": "Classify priority as high, medium, or low.\nInput: The maintenance report is due in three days and work can continue safely."
+  },
+  {
+    "task_id": "classify_priority",
+    "task_class": "classification",
+    "variant_id": "mut1",
+    "prompt": "Classify priority as high, medium, or low.\nInput: The maintenance report is due in twelve days and no action is currently needed."
+  },
+  {
+    "task_id": "format_labels",
+    "task_class": "format",
+    "variant_id": "base",
+    "prompt": "Return exactly two lines in key: value form.\nInput: owner is Nia; region is west"
+  },
+  {
+    "task_id": "format_labels",
+    "task_class": "format",
+    "variant_id": "mut1",
+    "prompt": "Return exactly two lines in key: value form.\nInput: owner is Pavel; region is north"
+  },
+  {
+    "task_id": "format_json_nested",
+    "task_class": "format",
+    "variant_id": "base",
+    "prompt": "Return one JSON object with exactly site, active, and limits keys. Preserve the supplied values and nested object.\nInput: site is Quito; active is true; daily limit is 12"
+  },
+  {
+    "task_id": "format_json_nested",
+    "task_class": "format",
+    "variant_id": "mut1",
+    "prompt": "Return one JSON object with exactly site, active, and limits keys. Preserve the supplied values and nested object.\nInput: site is Malmö; active is false; daily limit is 8"
+  },
+  {
+    "task_id": "transform_rotate",
+    "task_class": "transform",
+    "variant_id": "base",
+    "prompt": "Move the first character to the end and return only the result.\nInput: marble"
+  },
+  {
+    "task_id": "transform_rotate",
+    "task_class": "transform",
+    "variant_id": "mut1",
+    "prompt": "Move the first character to the end and return only the result.\nInput: satellite"
+  }
+]
