@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parent
 TASKS_PATH = ROOT / "benchmark_tasks_leakage_v2.json"
 ORACLE_PATH = ROOT / "benchmark_oracle_leakage_v2.json"
 PLAN_PATH = ROOT / "BENCHMARK_LEAKAGE_V2_EXECUTION_PLAN.md"
-OUTPUT_PATH = ROOT / "benchmark_leakage_v2_runs.jsonl"
+OUTPUT_PATH = ROOT / "benchmark_leakage_v2_retry_runs.jsonl"
 PARTIAL_PATH = Path(str(OUTPUT_PATH) + ".partial")
 MODEL_ORDER = ("gemma3:270m", "gemma3:1b", "gemma3:4b")
 REPS = 3
@@ -83,6 +83,11 @@ def _preflight(config):
     return tasks, oracle
 
 
+def _generate(prompt, config):
+    result = generate(prompt, config)
+    return {"raw_output": result.text if result.success else "", "telemetry": result.metadata()}
+
+
 def run(config=None, session=requests):
     config = dict(config or json.loads((ROOT / "config.json").read_text())["local"])
     tasks, oracle = _preflight(config)
@@ -99,10 +104,7 @@ def run(config=None, session=requests):
             for model in MODEL_ORDER:
                 identity = authenticate_model(model, config["base_url"], session)
                 metadata = {**run_metadata_base, "requested_model": model, "model_digest": identity["digest"], "model_identity": identity}
-                generator = lambda prompt, requested_model, cfg={**config, "model": model}: {
-                    "raw_output": (result := generate(prompt, cfg)).text if result.success else "",
-                    "telemetry": result.metadata(),
-                }
+                generator = lambda prompt, requested_model, cfg={**config, "model": model}: _generate(prompt, cfg)
                 rows = run_conditions(tasks, oracle, generator, model, reps=REPS, run_metadata=metadata)
                 rows.extend(run_ablation_conditions(tasks, oracle, generator, model, reps=REPS, run_metadata=metadata))
                 for row in rows:
