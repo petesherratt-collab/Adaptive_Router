@@ -68,14 +68,14 @@ def _normalize_for_entry(raw_output, entry):
     return normalize_output(raw_output, entry["match_mode"])
 
 
-def run_ablation_conditions(tasks, oracle, generate_fn, model, *, reps=1):
+def run_ablation_conditions(tasks, oracle, generate_fn, model, *, reps=1, run_metadata=None):
     """Run generated ablation prompts through the same result path."""
     ablated = build_ablation_conditions(tasks)
     rows = []
     for condition in ablated:
         task = dict(condition)
         task_key = f"{task['task_id']}__{task['variant_id']}"
-        rows.extend(run_conditions([task], oracle, generate_fn, model, reps=reps, condition="ablation"))
+        rows.extend(run_conditions([task], oracle, generate_fn, model, reps=reps, condition="ablation", run_metadata=run_metadata))
         for row in rows[-reps:]:
             row["ablation_mode"] = condition["ablation_mode"]
     return rows

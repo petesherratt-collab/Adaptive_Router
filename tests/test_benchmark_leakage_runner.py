@@ -56,6 +56,12 @@ class LeakageRunnerTests(unittest.TestCase):
         self.assertEqual(len(prompts), 2)
         self.assertEqual({row["ablation_mode"] for row in rows}, {"input_removed", "input_shuffled"})
 
+    def test_ablation_preserves_run_metadata(self):
+        tasks = [{"task_id": "t", "variant_id": "base", "task_class": "format", "prompt": "do task\nInput: alpha"}]
+        oracle = {"t__base": {"expected": "wrong", "match_mode": "text"}}
+        rows = run_ablation_conditions(tasks, oracle, lambda prompt, model: "wrong", "stub", run_metadata={"digest": "d"})
+        self.assertEqual(rows[0]["run_metadata"], {"digest": "d"})
+
 
 if __name__ == "__main__":
     unittest.main()
