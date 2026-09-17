@@ -5,7 +5,9 @@ from benchmark_leakage_controls import normalization_delta
 from benchmark_leakage_preflight import build_ablation_conditions
 
 
-def _reason(raw_output, raw_correct, normalized_correct):
+def _reason(raw_output, raw_correct, normalized_correct, telemetry):
+    if telemetry.get("success") is False:
+        return "PROVIDER_FAILURE"
     if raw_correct:
         return "PASS_MODEL"
     if normalized_correct:
@@ -15,7 +17,7 @@ def _reason(raw_output, raw_correct, normalized_correct):
     return "FAIL_ORACLE_MISMATCH"
 
 
-def run_conditions(tasks, oracle, generate_fn, model, *, reps=1, condition="model"):
+def run_conditions(tasks, oracle, generate_fn, model, *, reps=1, condition="model", run_metadata=None):
     """Run supplied tasks through an injected generator and return result rows.
 
     ``generate_fn`` is deliberately injected so preflight and tests can use a
@@ -53,8 +55,9 @@ def run_conditions(tasks, oracle, generate_fn, model, *, reps=1, condition="mode
                 "model": model,
                 **delta,
                 "status": "OK" if normalized_correct else "FAIL",
-                "reason_code": _reason(raw_output, raw_correct, normalized_correct),
+                "reason_code": _reason(raw_output, raw_correct, normalized_correct, telemetry),
                 "telemetry": telemetry,
+                "run_metadata": dict(run_metadata or {}),
             })
     return rows
 
