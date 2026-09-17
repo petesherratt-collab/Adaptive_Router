@@ -1,0 +1,3175 @@
+{
+  "condition_counts": {
+    "ablation": 360,
+    "model": 180
+  },
+  "controls": {
+    "gemma3:1b|classify_priority|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": true,
+      "model": "gemma3:1b",
+      "ordinary_normalized_passes": 3,
+      "ordinary_passes_all_reps": true,
+      "ordinary_reps": 3,
+      "task_class": "classification",
+      "task_id": "classify_priority",
+      "variant_id": "base"
+    },
+    "gemma3:1b|classify_priority|mut1": {
+      "ablation_normalized_passes": 3,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:1b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "classification",
+      "task_id": "classify_priority",
+      "variant_id": "mut1"
+    },
+    "gemma3:1b|classify_risk|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": true,
+      "model": "gemma3:1b",
+      "ordinary_normalized_passes": 3,
+      "ordinary_passes_all_reps": true,
+      "ordinary_reps": 3,
+      "task_class": "classification",
+      "task_id": "classify_risk",
+      "variant_id": "base"
+    },
+    "gemma3:1b|classify_risk|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:1b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "classification",
+      "task_id": "classify_risk",
+      "variant_id": "mut1"
+    },
+    "gemma3:1b|extract_device|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": true,
+      "model": "gemma3:1b",
+      "ordinary_normalized_passes": 3,
+      "ordinary_passes_all_reps": true,
+      "ordinary_reps": 3,
+      "task_class": "structured_extraction",
+      "task_id": "extract_device",
+      "variant_id": "base"
+    },
+    "gemma3:1b|extract_device|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": true,
+      "model": "gemma3:1b",
+      "ordinary_normalized_passes": 3,
+      "ordinary_passes_all_reps": true,
+      "ordinary_reps": 3,
+      "task_class": "structured_extraction",
+      "task_id": "extract_device",
+      "variant_id": "mut1"
+    },
+    "gemma3:1b|extract_location|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": true,
+      "model": "gemma3:1b",
+      "ordinary_normalized_passes": 3,
+      "ordinary_passes_all_reps": true,
+      "ordinary_reps": 3,
+      "task_class": "structured_extraction",
+      "task_id": "extract_location",
+      "variant_id": "base"
+    },
+    "gemma3:1b|extract_location|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": true,
+      "model": "gemma3:1b",
+      "ordinary_normalized_passes": 3,
+      "ordinary_passes_all_reps": true,
+      "ordinary_reps": 3,
+      "task_class": "structured_extraction",
+      "task_id": "extract_location",
+      "variant_id": "mut1"
+    },
+    "gemma3:1b|format_bullets_numbered|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:1b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "base"
+    },
+    "gemma3:1b|format_bullets_numbered|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:1b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "mut1"
+    },
+    "gemma3:1b|format_json_array|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:1b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_json_array",
+      "variant_id": "base"
+    },
+    "gemma3:1b|format_json_array|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:1b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_json_array",
+      "variant_id": "mut1"
+    },
+    "gemma3:1b|format_json_nested|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:1b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_json_nested",
+      "variant_id": "base"
+    },
+    "gemma3:1b|format_json_nested|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:1b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_json_nested",
+      "variant_id": "mut1"
+    },
+    "gemma3:1b|format_labels|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:1b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_labels",
+      "variant_id": "base"
+    },
+    "gemma3:1b|format_labels|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:1b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_labels",
+      "variant_id": "mut1"
+    },
+    "gemma3:1b|transform_rotate|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:1b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "transform",
+      "task_id": "transform_rotate",
+      "variant_id": "base"
+    },
+    "gemma3:1b|transform_rotate|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:1b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "transform",
+      "task_id": "transform_rotate",
+      "variant_id": "mut1"
+    },
+    "gemma3:1b|transform_swap_case|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:1b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "transform",
+      "task_id": "transform_swap_case",
+      "variant_id": "base"
+    },
+    "gemma3:1b|transform_swap_case|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:1b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "transform",
+      "task_id": "transform_swap_case",
+      "variant_id": "mut1"
+    },
+    "gemma3:270m|classify_priority|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:270m",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "classification",
+      "task_id": "classify_priority",
+      "variant_id": "base"
+    },
+    "gemma3:270m|classify_priority|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:270m",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "classification",
+      "task_id": "classify_priority",
+      "variant_id": "mut1"
+    },
+    "gemma3:270m|classify_risk|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:270m",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "classification",
+      "task_id": "classify_risk",
+      "variant_id": "base"
+    },
+    "gemma3:270m|classify_risk|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:270m",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "classification",
+      "task_id": "classify_risk",
+      "variant_id": "mut1"
+    },
+    "gemma3:270m|extract_device|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": true,
+      "model": "gemma3:270m",
+      "ordinary_normalized_passes": 3,
+      "ordinary_passes_all_reps": true,
+      "ordinary_reps": 3,
+      "task_class": "structured_extraction",
+      "task_id": "extract_device",
+      "variant_id": "base"
+    },
+    "gemma3:270m|extract_device|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": true,
+      "model": "gemma3:270m",
+      "ordinary_normalized_passes": 3,
+      "ordinary_passes_all_reps": true,
+      "ordinary_reps": 3,
+      "task_class": "structured_extraction",
+      "task_id": "extract_device",
+      "variant_id": "mut1"
+    },
+    "gemma3:270m|extract_location|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": true,
+      "model": "gemma3:270m",
+      "ordinary_normalized_passes": 3,
+      "ordinary_passes_all_reps": true,
+      "ordinary_reps": 3,
+      "task_class": "structured_extraction",
+      "task_id": "extract_location",
+      "variant_id": "base"
+    },
+    "gemma3:270m|extract_location|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": true,
+      "model": "gemma3:270m",
+      "ordinary_normalized_passes": 3,
+      "ordinary_passes_all_reps": true,
+      "ordinary_reps": 3,
+      "task_class": "structured_extraction",
+      "task_id": "extract_location",
+      "variant_id": "mut1"
+    },
+    "gemma3:270m|format_bullets_numbered|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:270m",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "base"
+    },
+    "gemma3:270m|format_bullets_numbered|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:270m",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "mut1"
+    },
+    "gemma3:270m|format_json_array|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:270m",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_json_array",
+      "variant_id": "base"
+    },
+    "gemma3:270m|format_json_array|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:270m",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_json_array",
+      "variant_id": "mut1"
+    },
+    "gemma3:270m|format_json_nested|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:270m",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_json_nested",
+      "variant_id": "base"
+    },
+    "gemma3:270m|format_json_nested|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:270m",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_json_nested",
+      "variant_id": "mut1"
+    },
+    "gemma3:270m|format_labels|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:270m",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_labels",
+      "variant_id": "base"
+    },
+    "gemma3:270m|format_labels|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:270m",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_labels",
+      "variant_id": "mut1"
+    },
+    "gemma3:270m|transform_rotate|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:270m",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "transform",
+      "task_id": "transform_rotate",
+      "variant_id": "base"
+    },
+    "gemma3:270m|transform_rotate|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:270m",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "transform",
+      "task_id": "transform_rotate",
+      "variant_id": "mut1"
+    },
+    "gemma3:270m|transform_swap_case|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:270m",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "transform",
+      "task_id": "transform_swap_case",
+      "variant_id": "base"
+    },
+    "gemma3:270m|transform_swap_case|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:270m",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "transform",
+      "task_id": "transform_swap_case",
+      "variant_id": "mut1"
+    },
+    "gemma3:4b|classify_priority|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:4b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "classification",
+      "task_id": "classify_priority",
+      "variant_id": "base"
+    },
+    "gemma3:4b|classify_priority|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:4b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "classification",
+      "task_id": "classify_priority",
+      "variant_id": "mut1"
+    },
+    "gemma3:4b|classify_risk|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:4b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "classification",
+      "task_id": "classify_risk",
+      "variant_id": "base"
+    },
+    "gemma3:4b|classify_risk|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:4b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "classification",
+      "task_id": "classify_risk",
+      "variant_id": "mut1"
+    },
+    "gemma3:4b|extract_device|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": true,
+      "model": "gemma3:4b",
+      "ordinary_normalized_passes": 3,
+      "ordinary_passes_all_reps": true,
+      "ordinary_reps": 3,
+      "task_class": "structured_extraction",
+      "task_id": "extract_device",
+      "variant_id": "base"
+    },
+    "gemma3:4b|extract_device|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:4b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "structured_extraction",
+      "task_id": "extract_device",
+      "variant_id": "mut1"
+    },
+    "gemma3:4b|extract_location|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": true,
+      "model": "gemma3:4b",
+      "ordinary_normalized_passes": 3,
+      "ordinary_passes_all_reps": true,
+      "ordinary_reps": 3,
+      "task_class": "structured_extraction",
+      "task_id": "extract_location",
+      "variant_id": "base"
+    },
+    "gemma3:4b|extract_location|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": true,
+      "model": "gemma3:4b",
+      "ordinary_normalized_passes": 3,
+      "ordinary_passes_all_reps": true,
+      "ordinary_reps": 3,
+      "task_class": "structured_extraction",
+      "task_id": "extract_location",
+      "variant_id": "mut1"
+    },
+    "gemma3:4b|format_bullets_numbered|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:4b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "base"
+    },
+    "gemma3:4b|format_bullets_numbered|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:4b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "mut1"
+    },
+    "gemma3:4b|format_json_array|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:4b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_json_array",
+      "variant_id": "base"
+    },
+    "gemma3:4b|format_json_array|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:4b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_json_array",
+      "variant_id": "mut1"
+    },
+    "gemma3:4b|format_json_nested|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:4b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_json_nested",
+      "variant_id": "base"
+    },
+    "gemma3:4b|format_json_nested|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:4b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_json_nested",
+      "variant_id": "mut1"
+    },
+    "gemma3:4b|format_labels|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:4b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_labels",
+      "variant_id": "base"
+    },
+    "gemma3:4b|format_labels|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:4b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "format",
+      "task_id": "format_labels",
+      "variant_id": "mut1"
+    },
+    "gemma3:4b|transform_rotate|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:4b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "transform",
+      "task_id": "transform_rotate",
+      "variant_id": "base"
+    },
+    "gemma3:4b|transform_rotate|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:4b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "transform",
+      "task_id": "transform_rotate",
+      "variant_id": "mut1"
+    },
+    "gemma3:4b|transform_swap_case|base": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:4b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "transform",
+      "task_id": "transform_swap_case",
+      "variant_id": "base"
+    },
+    "gemma3:4b|transform_swap_case|mut1": {
+      "ablation_normalized_passes": 0,
+      "ablation_passes_all_reps": false,
+      "ablation_reps": 6,
+      "ablation_suppressed_all_ordinary_passes": false,
+      "model": "gemma3:4b",
+      "ordinary_normalized_passes": 0,
+      "ordinary_passes_all_reps": false,
+      "ordinary_reps": 3,
+      "task_class": "transform",
+      "task_id": "transform_swap_case",
+      "variant_id": "mut1"
+    }
+  },
+  "model_digests": {
+    "gemma3:1b": [
+      "8648f39daa8fbf5b18c7b4e6a8fb4990c692751d49917417b8842ca5758e7ffc"
+    ],
+    "gemma3:270m": [
+      "e7d36fb2c3b3293cfe56d55889867a064b3a2b22e98335f2e6e8a387e081d6be"
+    ],
+    "gemma3:4b": [
+      "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a"
+    ]
+  },
+  "models": [
+    "gemma3:270m",
+    "gemma3:1b",
+    "gemma3:4b"
+  ],
+  "null_baseline_rows": [
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "extract_device",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Extract the device name exactly.\nInput: The shipment uses a Lumen X4 sensor from the Northern Harbor Logistics Office.",
+      "task_id": "extract_device",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "The shipment uses a Lumen X4 sensor from the Northern Harbor Logistics Office.",
+      "task_id": "extract_device",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Extract the device name exactly.",
+      "task_id": "extract_device",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: The shipment uses a Lumen X4 sensor from the Northern Harbor Logistics Office.",
+      "task_id": "extract_device",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Northern Harbor Logistics Office",
+      "task_id": "extract_device",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Logistics",
+      "task_id": "extract_device",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "extract_device",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "extract_device",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "extract_device",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Extract the device name exactly.\nInput: The shipment uses an Aster Dock 12 terminal from the Western Alpine Freight Directorate.",
+      "task_id": "extract_device",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "The shipment uses an Aster Dock 12 terminal from the Western Alpine Freight Directorate.",
+      "task_id": "extract_device",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Extract the device name exactly.",
+      "task_id": "extract_device",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: The shipment uses an Aster Dock 12 terminal from the Western Alpine Freight Directorate.",
+      "task_id": "extract_device",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Western Alpine Freight Directorate",
+      "task_id": "extract_device",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Directorate.",
+      "task_id": "extract_device",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "extract_device",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "extract_device",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "classify_priority",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Classify priority as high, medium, or low.\nInput: The maintenance report is due in three days and work can continue safely.",
+      "task_id": "classify_priority",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "The maintenance report is due in three days and work can continue safely.",
+      "task_id": "classify_priority",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Classify priority as high, medium, or low.",
+      "task_id": "classify_priority",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: The maintenance report is due in three days and work can continue safely.",
+      "task_id": "classify_priority",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Classify",
+      "task_id": "classify_priority",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "maintenance",
+      "task_id": "classify_priority",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "classify_priority",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "classify_priority",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "classify_priority",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Classify priority as high, medium, or low.\nInput: The maintenance report is due in twelve days and no action is currently needed.",
+      "task_id": "classify_priority",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "The maintenance report is due in twelve days and no action is currently needed.",
+      "task_id": "classify_priority",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Classify priority as high, medium, or low.",
+      "task_id": "classify_priority",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: The maintenance report is due in twelve days and no action is currently needed.",
+      "task_id": "classify_priority",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Classify",
+      "task_id": "classify_priority",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "maintenance",
+      "task_id": "classify_priority",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "classify_priority",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "classify_priority",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "format_labels",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return exactly two lines in key: value form.\nInput: owner is Nia; region is west",
+      "task_id": "format_labels",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "owner is Nia; region is west",
+      "task_id": "format_labels",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return exactly two lines in key: value form.",
+      "task_id": "format_labels",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: owner is Nia; region is west",
+      "task_id": "format_labels",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return",
+      "task_id": "format_labels",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "exactly",
+      "task_id": "format_labels",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "format_labels",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "format_labels",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "format_labels",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return exactly two lines in key: value form.\nInput: owner is Pavel; region is north",
+      "task_id": "format_labels",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "owner is Pavel; region is north",
+      "task_id": "format_labels",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return exactly two lines in key: value form.",
+      "task_id": "format_labels",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: owner is Pavel; region is north",
+      "task_id": "format_labels",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return",
+      "task_id": "format_labels",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "exactly",
+      "task_id": "format_labels",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "format_labels",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "format_labels",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "format_json_nested",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return one JSON object with exactly site, active, and limits keys. Preserve the supplied values and nested object.\nInput: site is Quito; active is true; daily limit is 12",
+      "task_id": "format_json_nested",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "site is Quito; active is true; daily limit is 12",
+      "task_id": "format_json_nested",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return one JSON object with exactly site, active, and limits keys. Preserve the supplied values and nested object.",
+      "task_id": "format_json_nested",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: site is Quito; active is true; daily limit is 12",
+      "task_id": "format_json_nested",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Preserve",
+      "task_id": "format_json_nested",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Preserve",
+      "task_id": "format_json_nested",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "format_json_nested",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "format_json_nested",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "format_json_nested",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return one JSON object with exactly site, active, and limits keys. Preserve the supplied values and nested object.\nInput: site is Malmö; active is false; daily limit is 8",
+      "task_id": "format_json_nested",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "site is Malmö; active is false; daily limit is 8",
+      "task_id": "format_json_nested",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return one JSON object with exactly site, active, and limits keys. Preserve the supplied values and nested object.",
+      "task_id": "format_json_nested",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: site is Malmö; active is false; daily limit is 8",
+      "task_id": "format_json_nested",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Preserve",
+      "task_id": "format_json_nested",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Preserve",
+      "task_id": "format_json_nested",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "format_json_nested",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "format_json_nested",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "transform_rotate",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Move the first character to the end and return only the result.\nInput: marble",
+      "task_id": "transform_rotate",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "marble",
+      "task_id": "transform_rotate",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Move the first character to the end and return only the result.",
+      "task_id": "transform_rotate",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: marble",
+      "task_id": "transform_rotate",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input",
+      "task_id": "transform_rotate",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "character",
+      "task_id": "transform_rotate",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "transform_rotate",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "transform_rotate",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "transform_rotate",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Move the first character to the end and return only the result.\nInput: satellite",
+      "task_id": "transform_rotate",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "satellite",
+      "task_id": "transform_rotate",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Move the first character to the end and return only the result.",
+      "task_id": "transform_rotate",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: satellite",
+      "task_id": "transform_rotate",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input",
+      "task_id": "transform_rotate",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "character",
+      "task_id": "transform_rotate",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "transform_rotate",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "transform_rotate",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "extract_location",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Extract the named location exactly.\nInput: The permit was filed for Lake Bled beside the Eastern Alpine Conservation Authority.",
+      "task_id": "extract_location",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "The permit was filed for Lake Bled beside the Eastern Alpine Conservation Authority.",
+      "task_id": "extract_location",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Extract the named location exactly.",
+      "task_id": "extract_location",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: The permit was filed for Lake Bled beside the Eastern Alpine Conservation Authority.",
+      "task_id": "extract_location",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Eastern Alpine Conservation Authority",
+      "task_id": "extract_location",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Conservation",
+      "task_id": "extract_location",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "extract_location",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "extract_location",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "extract_location",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Extract the named location exactly.\nInput: The permit was filed for Cape Verde beside the Southern Meridian Conservation Authority.",
+      "task_id": "extract_location",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "The permit was filed for Cape Verde beside the Southern Meridian Conservation Authority.",
+      "task_id": "extract_location",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Extract the named location exactly.",
+      "task_id": "extract_location",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: The permit was filed for Cape Verde beside the Southern Meridian Conservation Authority.",
+      "task_id": "extract_location",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Southern Meridian Conservation Authority",
+      "task_id": "extract_location",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Conservation",
+      "task_id": "extract_location",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "extract_location",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "extract_location",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "classify_risk",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Classify risk as high, medium, or low.\nInput: The warning is informational and no unsafe condition is present.",
+      "task_id": "classify_risk",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "The warning is informational and no unsafe condition is present.",
+      "task_id": "classify_risk",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Classify risk as high, medium, or low.",
+      "task_id": "classify_risk",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: The warning is informational and no unsafe condition is present.",
+      "task_id": "classify_risk",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Classify",
+      "task_id": "classify_risk",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "informational",
+      "task_id": "classify_risk",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "classify_risk",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "classify_risk",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "classify_risk",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Classify risk as high, medium, or low.\nInput: The warning requires action within three days, but work can continue and no unsafe condition is present.",
+      "task_id": "classify_risk",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "The warning requires action within three days, but work can continue and no unsafe condition is present.",
+      "task_id": "classify_risk",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Classify risk as high, medium, or low.",
+      "task_id": "classify_risk",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: The warning requires action within three days, but work can continue and no unsafe condition is present.",
+      "task_id": "classify_risk",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Classify",
+      "task_id": "classify_risk",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "condition",
+      "task_id": "classify_risk",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "classify_risk",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "classify_risk",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return exactly three lines, each beginning with '* '.\nInput: amber; slate; ivory",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "amber; slate; ivory",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return exactly three lines, each beginning with '* '.",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: amber; slate; ivory",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "beginning",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return exactly three lines, each beginning with '* '.\nInput: copper; teal; cream",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "copper; teal; cream",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return exactly three lines, each beginning with '* '.",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: copper; teal; cream",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "beginning",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "format_bullets_numbered",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "format_json_array",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return one JSON object with exactly the key items whose value is the supplied ordered array.\nInput: items are [\"birch\", \"elm\", \"yew\"]",
+      "task_id": "format_json_array",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "items are [\"birch\", \"elm\", \"yew\"]",
+      "task_id": "format_json_array",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return one JSON object with exactly the key items whose value is the supplied ordered array.",
+      "task_id": "format_json_array",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: items are [\"birch\", \"elm\", \"yew\"]",
+      "task_id": "format_json_array",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return",
+      "task_id": "format_json_array",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "[\"birch\",",
+      "task_id": "format_json_array",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "format_json_array",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "format_json_array",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "format_json_array",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return one JSON object with exactly the key items whose value is the supplied ordered array.\nInput: items are [\"cedar\", \"ash\", \"pine\"]",
+      "task_id": "format_json_array",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "items are [\"cedar\", \"ash\", \"pine\"]",
+      "task_id": "format_json_array",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return one JSON object with exactly the key items whose value is the supplied ordered array.",
+      "task_id": "format_json_array",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: items are [\"cedar\", \"ash\", \"pine\"]",
+      "task_id": "format_json_array",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Return",
+      "task_id": "format_json_array",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "[\"cedar\",",
+      "task_id": "format_json_array",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "format_json_array",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "format_json_array",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "transform_swap_case",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Swap the ASCII case of every letter and return only the result.\nInput: Quasar7",
+      "task_id": "transform_swap_case",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Quasar7",
+      "task_id": "transform_swap_case",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Swap the ASCII case of every letter and return only the result.",
+      "task_id": "transform_swap_case",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: Quasar7",
+      "task_id": "transform_swap_case",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Quasar7",
+      "task_id": "transform_swap_case",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "result.",
+      "task_id": "transform_swap_case",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "transform_swap_case",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "transform_swap_case",
+      "variant_id": "base"
+    },
+    {
+      "baseline_id": "empty",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "",
+      "task_id": "transform_swap_case",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_prompt",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Swap the ASCII case of every letter and return only the result.\nInput: Beacon9",
+      "task_id": "transform_swap_case",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "echo_input_block",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Beacon9",
+      "task_id": "transform_swap_case",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "first_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Swap the ASCII case of every letter and return only the result.",
+      "task_id": "transform_swap_case",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "last_line",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Input: Beacon9",
+      "task_id": "transform_swap_case",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_capitalised_span",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "Beacon9",
+      "task_id": "transform_swap_case",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "longest_word",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "result.",
+      "task_id": "transform_swap_case",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_positive",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "positive",
+      "task_id": "transform_swap_case",
+      "variant_id": "mut1"
+    },
+    {
+      "baseline_id": "constant_high",
+      "condition": "null_baseline",
+      "oracle_correct": false,
+      "raw_output": "high",
+      "task_id": "transform_swap_case",
+      "variant_id": "mut1"
+    }
+  ],
+  "null_baseline_verdicts": {
+    "classify_priority__base": "CV_OK",
+    "classify_priority__mut1": "CV_OK",
+    "classify_risk__base": "CV_OK",
+    "classify_risk__mut1": "CV_OK",
+    "extract_device__base": "CV_OK",
+    "extract_device__mut1": "CV_OK",
+    "extract_location__base": "CV_OK",
+    "extract_location__mut1": "CV_OK",
+    "format_bullets_numbered__base": "CV_OK",
+    "format_bullets_numbered__mut1": "CV_OK",
+    "format_json_array__base": "CV_OK",
+    "format_json_array__mut1": "CV_OK",
+    "format_json_nested__base": "CV_OK",
+    "format_json_nested__mut1": "CV_OK",
+    "format_labels__base": "CV_OK",
+    "format_labels__mut1": "CV_OK",
+    "transform_rotate__base": "CV_OK",
+    "transform_rotate__mut1": "CV_OK",
+    "transform_swap_case__base": "CV_OK",
+    "transform_swap_case__mut1": "CV_OK"
+  },
+  "oracle_sha256": "70c20a3586669791498f9aa7b8e2eba56f18fb555fb53b7a369549ba63e2f86d",
+  "per_model_condition": {
+    "gemma3:1b|ablation": {
+      "n": 120,
+      "normalization_changed_verdict": 3,
+      "normalized_passes": 3,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 117,
+        "PASS_VIA_NORMALIZATION": 3
+      },
+      "status_counts": {
+        "FAIL": 117,
+        "OK": 3
+      }
+    },
+    "gemma3:1b|model": {
+      "n": 60,
+      "normalization_changed_verdict": 18,
+      "normalized_passes": 18,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 42,
+        "PASS_VIA_NORMALIZATION": 18
+      },
+      "status_counts": {
+        "FAIL": 42,
+        "OK": 18
+      }
+    },
+    "gemma3:270m|ablation": {
+      "n": 120,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_EMPTY_OUTPUT": 12,
+        "FAIL_ORACLE_MISMATCH": 108
+      },
+      "status_counts": {
+        "FAIL": 120
+      }
+    },
+    "gemma3:270m|model": {
+      "n": 60,
+      "normalization_changed_verdict": 9,
+      "normalized_passes": 12,
+      "raw_passes": 3,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 48,
+        "PASS_MODEL": 3,
+        "PASS_VIA_NORMALIZATION": 9
+      },
+      "status_counts": {
+        "FAIL": 48,
+        "OK": 12
+      }
+    },
+    "gemma3:4b|ablation": {
+      "n": 120,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 120
+      },
+      "status_counts": {
+        "FAIL": 120
+      }
+    },
+    "gemma3:4b|model": {
+      "n": 60,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 9,
+      "raw_passes": 9,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 51,
+        "PASS_MODEL": 9
+      },
+      "status_counts": {
+        "FAIL": 51,
+        "OK": 9
+      }
+    }
+  },
+  "per_model_task": {
+    "gemma3:1b|ablation|classify_priority": {
+      "n": 12,
+      "normalization_changed_verdict": 3,
+      "normalized_passes": 3,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 9,
+        "PASS_VIA_NORMALIZATION": 3
+      },
+      "status_counts": {
+        "FAIL": 9,
+        "OK": 3
+      }
+    },
+    "gemma3:1b|ablation|classify_risk": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:1b|ablation|extract_device": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:1b|ablation|extract_location": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:1b|ablation|format_bullets_numbered": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:1b|ablation|format_json_array": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:1b|ablation|format_json_nested": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:1b|ablation|format_labels": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:1b|ablation|transform_rotate": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:1b|ablation|transform_swap_case": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:1b|model|classify_priority": {
+      "n": 6,
+      "normalization_changed_verdict": 3,
+      "normalized_passes": 3,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 3,
+        "PASS_VIA_NORMALIZATION": 3
+      },
+      "status_counts": {
+        "FAIL": 3,
+        "OK": 3
+      }
+    },
+    "gemma3:1b|model|classify_risk": {
+      "n": 6,
+      "normalization_changed_verdict": 3,
+      "normalized_passes": 3,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 3,
+        "PASS_VIA_NORMALIZATION": 3
+      },
+      "status_counts": {
+        "FAIL": 3,
+        "OK": 3
+      }
+    },
+    "gemma3:1b|model|extract_device": {
+      "n": 6,
+      "normalization_changed_verdict": 6,
+      "normalized_passes": 6,
+      "raw_passes": 0,
+      "reason_counts": {
+        "PASS_VIA_NORMALIZATION": 6
+      },
+      "status_counts": {
+        "OK": 6
+      }
+    },
+    "gemma3:1b|model|extract_location": {
+      "n": 6,
+      "normalization_changed_verdict": 6,
+      "normalized_passes": 6,
+      "raw_passes": 0,
+      "reason_counts": {
+        "PASS_VIA_NORMALIZATION": 6
+      },
+      "status_counts": {
+        "OK": 6
+      }
+    },
+    "gemma3:1b|model|format_bullets_numbered": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    },
+    "gemma3:1b|model|format_json_array": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    },
+    "gemma3:1b|model|format_json_nested": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    },
+    "gemma3:1b|model|format_labels": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    },
+    "gemma3:1b|model|transform_rotate": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    },
+    "gemma3:1b|model|transform_swap_case": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    },
+    "gemma3:270m|ablation|classify_priority": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:270m|ablation|classify_risk": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:270m|ablation|extract_device": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_EMPTY_OUTPUT": 6,
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:270m|ablation|extract_location": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:270m|ablation|format_bullets_numbered": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:270m|ablation|format_json_array": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:270m|ablation|format_json_nested": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:270m|ablation|format_labels": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:270m|ablation|transform_rotate": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_EMPTY_OUTPUT": 6,
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:270m|ablation|transform_swap_case": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:270m|model|classify_priority": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    },
+    "gemma3:270m|model|classify_risk": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    },
+    "gemma3:270m|model|extract_device": {
+      "n": 6,
+      "normalization_changed_verdict": 6,
+      "normalized_passes": 6,
+      "raw_passes": 0,
+      "reason_counts": {
+        "PASS_VIA_NORMALIZATION": 6
+      },
+      "status_counts": {
+        "OK": 6
+      }
+    },
+    "gemma3:270m|model|extract_location": {
+      "n": 6,
+      "normalization_changed_verdict": 3,
+      "normalized_passes": 6,
+      "raw_passes": 3,
+      "reason_counts": {
+        "PASS_MODEL": 3,
+        "PASS_VIA_NORMALIZATION": 3
+      },
+      "status_counts": {
+        "OK": 6
+      }
+    },
+    "gemma3:270m|model|format_bullets_numbered": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    },
+    "gemma3:270m|model|format_json_array": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    },
+    "gemma3:270m|model|format_json_nested": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    },
+    "gemma3:270m|model|format_labels": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    },
+    "gemma3:270m|model|transform_rotate": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    },
+    "gemma3:270m|model|transform_swap_case": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    },
+    "gemma3:4b|ablation|classify_priority": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:4b|ablation|classify_risk": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:4b|ablation|extract_device": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:4b|ablation|extract_location": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:4b|ablation|format_bullets_numbered": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:4b|ablation|format_json_array": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:4b|ablation|format_json_nested": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:4b|ablation|format_labels": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:4b|ablation|transform_rotate": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:4b|ablation|transform_swap_case": {
+      "n": 12,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 12
+      },
+      "status_counts": {
+        "FAIL": 12
+      }
+    },
+    "gemma3:4b|model|classify_priority": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    },
+    "gemma3:4b|model|classify_risk": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    },
+    "gemma3:4b|model|extract_device": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 3,
+      "raw_passes": 3,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 3,
+        "PASS_MODEL": 3
+      },
+      "status_counts": {
+        "FAIL": 3,
+        "OK": 3
+      }
+    },
+    "gemma3:4b|model|extract_location": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 6,
+      "raw_passes": 6,
+      "reason_counts": {
+        "PASS_MODEL": 6
+      },
+      "status_counts": {
+        "OK": 6
+      }
+    },
+    "gemma3:4b|model|format_bullets_numbered": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    },
+    "gemma3:4b|model|format_json_array": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    },
+    "gemma3:4b|model|format_json_nested": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    },
+    "gemma3:4b|model|format_labels": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    },
+    "gemma3:4b|model|transform_rotate": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    },
+    "gemma3:4b|model|transform_swap_case": {
+      "n": 6,
+      "normalization_changed_verdict": 0,
+      "normalized_passes": 0,
+      "raw_passes": 0,
+      "reason_counts": {
+        "FAIL_ORACLE_MISMATCH": 6
+      },
+      "status_counts": {
+        "FAIL": 6
+      }
+    }
+  },
+  "plan_sha256": "a3195365841200649668f1005fd56a83718753474f22dad8bea0e827f4917663",
+  "provenance": {
+    "config_sha256": [
+      "36df214e322b8148614e0ac8289ddb77779e326e06d91e3780ea39b87bd01657"
+    ],
+    "implementation_revision": [
+      "e6b20dd94150332b827d9a3df60f2fed4cf38743"
+    ],
+    "plan_sha256": [
+      "a3195365841200649668f1005fd56a83718753474f22dad8bea0e827f4917663"
+    ]
+  },
+  "reason_counts": {
+    "FAIL_EMPTY_OUTPUT": 12,
+    "FAIL_ORACLE_MISMATCH": 486,
+    "PASS_MODEL": 12,
+    "PASS_VIA_NORMALIZATION": 30
+  },
+  "repetitions": [
+    1,
+    2,
+    3
+  ],
+  "request_boundary": {
+    "oracle_values_checked": 24,
+    "task_count": 20
+  },
+  "row_count": 540,
+  "run_sha256": "bcbbc595c41827d3b5e47440d1de0f79fca8f349a5d117d3161a0eb2474690cd",
+  "schema_version": "benchmark_leakage_v2_corrected_report",
+  "status_counts": {
+    "FAIL": 498,
+    "OK": 42
+  },
+  "task_classes": {
+    "classify_priority": "classification",
+    "classify_risk": "classification",
+    "extract_device": "structured_extraction",
+    "extract_location": "structured_extraction",
+    "format_bullets_numbered": "format",
+    "format_json_array": "format",
+    "format_json_nested": "format",
+    "format_labels": "format",
+    "transform_rotate": "transform",
+    "transform_swap_case": "transform"
+  },
+  "tasks_sha256": "f83126da7ca0203074297680d88bfe8b5d00c30306902e5481194ed57e13f6b7",
+  "variant_inventory": {
+    "classify_priority": [
+      "base",
+      "mut1"
+    ],
+    "classify_risk": [
+      "base",
+      "mut1"
+    ],
+    "extract_device": [
+      "base",
+      "mut1"
+    ],
+    "extract_location": [
+      "base",
+      "mut1"
+    ],
+    "format_bullets_numbered": [
+      "base",
+      "mut1"
+    ],
+    "format_json_array": [
+      "base",
+      "mut1"
+    ],
+    "format_json_nested": [
+      "base",
+      "mut1"
+    ],
+    "format_labels": [
+      "base",
+      "mut1"
+    ],
+    "transform_rotate": [
+      "base",
+      "mut1"
+    ],
+    "transform_swap_case": [
+      "base",
+      "mut1"
+    ]
+  }
+}
