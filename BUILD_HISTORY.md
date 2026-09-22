@@ -1,7 +1,7 @@
 # Adaptive Router build history
 
 **Project path:** `/home/peter/adaptive-router`
-**Updated:** 2026-09-09
+**Updated:** 2026-09-22
 
 This is the single history for Adaptive Router. It combines the narrative
 project history (motivation, lessons, standing rules) with the dated engineering
@@ -2715,3 +2715,17 @@ the work to deterministic code rather than an LLM. Only if a nontrivial and
 deterministically verifiable model role remains should a successor be frozen on
 fresh tasks and compare deployable local-first latency with direct remote
 service.
+
+---
+
+## 2026-09-22 — Initial research-cycle endpoint
+
+The initial local-authority research cycle is closed. Runtime v0.3 remains remote-authoritative for generative work, deterministic operations continue to bypass models, and local generation retains no user-visible authority.
+
+The decisive 1B shadow experiment met its volume and potential-savings thresholds but failed safety and correctness: 43/120 local correct, 60/120 contract passes, 17 accepted errors, a 39.4% one-sided accepted-error upper bound, and an 88/120 local-first counterfactual against 105/120 for the runtime. Its 4874.6 ms deployable median also exceeded the 2509.0 ms direct remote median. Every locally correct observation was also remotely correct.
+
+No 4B structural-JSON promotion experiment will be started in this cycle. Source-aware verification remains a negative boundary, and the documentation-only verifiable-witness design remains paused without implementation or promotion authority.
+
+The diverged leakage investigation is preserved at `preserve/local-main-leakage-2026-09-20` (`d2cccad`) and was not merged into canonical history. The bundle SHA-256 is `214d3c81c6b9b42126d90fbc55f3aa15defa12e18d97bca3d2e201cd1e76f675`; the untracked-artifact archive SHA-256 is `f42c40cc87404c0355c60322bf3cfeff63e9d6f9cc76c882d286f9d37dd128f8`.
+
+This endpoint is documentation only. It changes no runtime source, configuration, sealed benchmark, evidence or analysis; makes no provider request; and grants no new authority. Full reasoning and reopening conditions are recorded in `RESEARCH_ENDPOINT_2026-09-22.md`.
