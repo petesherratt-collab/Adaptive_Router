@@ -2,6 +2,12 @@
 
 A small Linux terminal router for deterministic execution and remote-authoritative generative inference through OpenRouter. Ollama is retained as an opt-in, non-authoritative shadow measurement path. The runtime preserves the research instruments that established this safety boundary, and each request produces metadata-only JSONL telemetry.
 
+## Research endpoint
+
+The initial local-authority research cycle closed on 2026-09-22. The tested mechanisms did not establish a safe semantic boundary for serving local generative output, so runtime v0.3 remains remote-authoritative and no promotion experiment is active.
+
+See [`RESEARCH_ENDPOINT_2026-09-22.md`](RESEARCH_ENDPOINT_2026-09-22.md) for the terminal claim, decisive evidence, preserved branches and conditions for reopening.
+
 ## Prospective deterministic-contract case study
 
 A prospectively frozen experiment across Gemma 3 270M, 1B, and 4B found that
