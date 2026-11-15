@@ -1,0 +1,13 @@
+{
+  "fast_path": {
+    "race_models": ["openai/gpt-5.6-luna"],
+    "synthesis_model": "openai/gpt-5.6-luna",
+    "synthesis_max_tokens": 1024,
+    "agreement_quorum": 2,
+    "min_gate_examples": 8,
+    "max_synthesis_attempts": 2,
+    "sandbox_timeout_seconds": 2.0,
+    "audit_sample_rate": 0.1,
+    "audit_salt": "adaptive-router-fast-path-v1"
+  }
+}

@@ -8,6 +8,78 @@ The initial local-authority research cycle closed on 2026-09-22. The tested mech
 
 See [`RESEARCH_ENDPOINT_2026-09-22.md`](RESEARCH_ENDPOINT_2026-09-22.md) for the terminal claim, decisive evidence, preserved branches and conditions for reopening.
 
+## Fast path (developmental, started 2026-11-15)
+
+A second line of work reopens the project with a different question: for
+repeated single-step tasks, how much answer time can be removed by moving work
+into verified code and racing remote models for the rest? Cost is not an
+objective. Local generative authority stays closed; this line does not use it.
+
+A `fast_path_request_v1` names a task shape (a specification plus a `solve`
+signature), supplies JSON arguments and may supply examples.
+
+- If a promoted function exists for the shape, it runs in a sandbox and no
+  model is called.
+- Otherwise the request is raced across `fast_path.race_models` and the first
+  parseable JSON answer is returned.
+- After the answer is returned, every racer's answer is collected. Unanimous
+  agreement among at least `agreement_quorum` models becomes a stored example.
+- Once a shape has `min_gate_examples` examples, the synthesis model is asked
+  for a function from the specification alone. It never sees the examples.
+- The promotion gate is execution only: a static screen, then every stored
+  example must be reproduced exactly. No model judges a candidate.
+- A promoted function is demoted if it raises at run time, or if a sampled
+  audit race later agrees on an answer it does not reproduce.
+
+```bash
+python main.py --fast-request-json examples/fast_path_request_run_length.json
+python main.py --fast-status
+python evaluate_fast_path_gate.py                                   # CCC development set
+python evaluate_fast_path_gate.py --bank fast_path_gold_items_v1.py # fresh set
+```
+
+Settings live in `config_fast_path.json`, separate from `config.json` because
+sealed experiment runners read the latter. `fast_path_runs.jsonl` holds
+metadata only. `fast_path_store/` holds specifications, example arguments,
+example answers and promoted source, because the gate needs them; both are
+git-ignored.
+
+### What has been measured
+
+Only the promotion gate, without any model call. Using the Contextual
+Conclusion Capture recipe (mechanical gold, a correct reference and a plausible
+single-bug variant per item), the gate was shown k of an item's tests and the
+share of k-subsets that let the buggy variant through was recorded:
+
+| Examples shown | CCC development set (16 items) | Fresh set (28 items) |
+|---:|---:|---:|
+| 1 | 50.5% | 66.5% |
+| 2 | 21.2% | 42.4% |
+| 3 | 3.8% | 25.7% |
+| 4 | 0.0% | 14.5% |
+| 6 | n/a | 3.0% |
+| 8 | n/a | 0.0% |
+
+The gate never rejected a reference implementation. The right-hand end of each
+column is zero by construction, because every buggy variant fails at least one
+test of its full set. The usable reading is the slope: acceptance of a wrong
+function falls only as fast as inputs that expose the fault arrive. In the
+fresh set roughly one test in three exposes the bug; ordinary traffic may
+expose it far less often. The checked-in `min_gate_examples` of 8 and the
+post-promotion audit follow from that, and neither is a validated threshold.
+
+### What has not been measured
+
+No provider call has been made on this line. There is no measured answer-time
+result, model fail rate, model-agreement error rate or synthesiser fail rate.
+`run_fast_path_gold.py` collects the last three from a gold bank and has only
+been exercised against fakes. `fast_path_gold_items_v1.py` is a draft bank: it
+is not frozen and should be reviewed before any run that will be cited.
+
+The sandbox (separate process, stripped builtins, module allowlist, resource
+limits, best-effort network namespace) guards against accidents. It is not a
+hardened boundary against adversarial code.
+
 ## Prospective deterministic-contract case study
 
 A prospectively frozen experiment across Gemma 3 270M, 1B, and 4B found that

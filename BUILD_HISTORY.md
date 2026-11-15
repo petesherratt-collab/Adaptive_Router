@@ -2729,3 +2729,68 @@ No 4B structural-JSON promotion experiment will be started in this cycle. Source
 The diverged leakage investigation is preserved at `preserve/local-main-leakage-2026-09-20` (`d2cccad`) and was not merged into canonical history. The bundle SHA-256 is `214d3c81c6b9b42126d90fbc55f3aa15defa12e18d97bca3d2e201cd1e76f675`; the untracked-artifact archive SHA-256 is `f42c40cc87404c0355c60322bf3cfeff63e9d6f9cc76c882d286f9d37dd128f8`.
 
 This endpoint is documentation only. It changes no runtime source, configuration, sealed benchmark, evidence or analysis; makes no provider request; and grants no new authority. Full reasoning and reopening conditions are recorded in `RESEARCH_ENDPOINT_2026-09-22.md`.
+
+---
+
+## 2026-11-15 — Fast path V1 developmental build
+
+The project is reopened on a substantively different question from the closed
+local-authority cycle. The objective is answer time for repeated single-step
+tasks; cost is dropped as a parameter. Deterministic code is the fast route,
+several remote models are raced for everything else, and code written on the
+fly must pass an execution-only gate before it serves an answer. Runtime v0.3
+and its remote-authoritative policy are unchanged; `router.py` and
+`config.json` were not edited.
+
+### Added
+
+- `sandbox.py`: static screen plus restricted subprocess execution.
+- `fast_path.py`: request schema, shape store, model race, agreement examples,
+  background synthesis, promotion gate, audit and demotion.
+- `main.py`: `--fast-request-json` and `--fast-status`.
+- `config_fast_path.json`: separate from `config.json`, which sealed runners read.
+- `vendor/ccc_code_items.py`: the 16 CCC code items, vendored byte-identical
+  from `petesherratt-collab/jev-ccc-probe` at `c5ba7e3` and hash-pinned.
+- `fast_path_gold_items_v1.py`: 28 fresh items to the same recipe. Draft, not
+  frozen. Expected values were written from the specifications, not derived
+  from the references.
+- `evaluate_fast_path_gate.py`, `fast_path_gate_dev_v1.json`,
+  `fast_path_gate_fresh_v1.json`: provider-free gate measurement.
+- `run_fast_path_gold.py`: collector for model and synthesiser fail rates. Not run.
+
+### Design decisions
+
+- The routing decision is a lookup, never a model call, so nothing slow sits
+  in front of the answer.
+- The first parseable racer wins; agreement is evaluated afterwards and only
+  feeds learning.
+- Following the CCC finding that a judge shown a conclusion tends to adopt it,
+  no model judges a candidate function and the synthesiser never sees examples.
+- Caller-supplied examples outrank model agreement. Two contradictory
+  model-agreement examples cancel.
+- A provider failure during synthesis does not consume a bounded attempt.
+
+### Gate measurement
+
+Mean share of k-example subsets that accepted the single-bug variant:
+development set 50.5%, 21.2%, 3.8% for k = 1, 2, 3; fresh set 66.5%, 42.4%,
+25.7%, 14.5%, 7.3%, 3.0%, 0.8%, 0.0% for k = 1 to 8. No reference was
+rejected. Zero at the top of each range is forced by construction. The
+default `min_gate_examples` was raised from 4 to 8 after the fresh result; it
+is an operating setting, not a validated threshold.
+
+### Verification
+
+- `python -m unittest discover -s tests` — 472 tests passed.
+- `python fast_path_gold_items_v1.py` — self-verify passed for 28 items.
+- `git diff --check` passed.
+- No provider generation request was made. OpenRouter was not reachable from
+  the build environment and no key was present.
+
+### Next boundary
+
+Review and freeze the fresh bank, choose the race roster, then run
+`run_fast_path_gold.py` once to obtain per-model fail rates, the rate at which
+two models agree on a wrong answer, and the synthesiser's fail rate. An
+answer-time comparison against direct single-model service needs its own
+frozen plan with repeated task shapes.

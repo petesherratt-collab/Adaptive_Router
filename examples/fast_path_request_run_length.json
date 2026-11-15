@@ -1,0 +1,60 @@
+{
+  "schema_version": "fast_path_request_v1",
+  "task": {
+    "spec": "Return the run-length encoding of a string: each maximal run of a character c of length n becomes c followed by the decimal n. The empty string maps to the empty string.",
+    "signature": "def solve(s: str) -> str:"
+  },
+  "args": [
+    "aaabccdddd"
+  ],
+  "examples": [
+    {
+      "args": [
+        "aaabb"
+      ],
+      "expected": "a3b2"
+    },
+    {
+      "args": [
+        "abc"
+      ],
+      "expected": "a1b1c1"
+    },
+    {
+      "args": [
+        ""
+      ],
+      "expected": ""
+    },
+    {
+      "args": [
+        "zzzz"
+      ],
+      "expected": "z4"
+    },
+    {
+      "args": [
+        "aab"
+      ],
+      "expected": "a2b1"
+    },
+    {
+      "args": [
+        "x"
+      ],
+      "expected": "x1"
+    },
+    {
+      "args": [
+        "aabbaa"
+      ],
+      "expected": "a2b2a2"
+    },
+    {
+      "args": [
+        "abbbbbbbbbbbb"
+      ],
+      "expected": "a1b12"
+    }
+  ]
+}
