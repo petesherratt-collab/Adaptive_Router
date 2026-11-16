@@ -440,6 +440,18 @@ class FastPathRouter:
             return self._finish(log, started, None, "none", RACE_NO_VALID_ANSWER)
         return self._finish(log, started, value, "model", MODEL_RACE_WON, model=winner)
 
+    def race_prompt(self, prompt):
+        """Race an arbitrary prompt. Returns ``(winning model, value)``.
+
+        Nothing is stored or learned. ``(None, None)`` means no racer gave a
+        usable answer.
+        """
+        futures = {
+            self._models.submit(self._ask, model, prompt): model
+            for model in self.settings["race_models"]
+        }
+        return self._first_valid(futures)
+
     def _finish(self, log, started, value, route, reason, model=None, audited=False):
         total_ms = (time.perf_counter() - started) * 1000
         log["decision"] = {

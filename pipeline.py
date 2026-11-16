@@ -205,6 +205,40 @@ class Orchestrator:
                 handle.write(json.dumps(record, separators=(",", ":")) + "\n")
 
 
+def build_job_prompt(job):
+    """One prompt asking a model to carry out the whole plan in a single reply."""
+    if not isinstance(job, Job):
+        job = Job.from_mapping(job)
+    lines = [
+        "Carry out the procedure below and give its final result.",
+        "",
+        "Inputs:",
+    ]
+    lines += [f"- {name} (JSON): {json.dumps(value)}" for name, value in job.inputs.items()]
+    lines += ["", "Steps, in order:"]
+    for number, step in enumerate(job.steps, start=1):
+        arguments = ", ".join(
+            (f"input '{name}'" if name in job.inputs else f"the result of step '{name}'")
+            if how == "ref" else f"the value {json.dumps(name)}"
+            for how, name in step.arguments
+        )
+        lines.append(
+            f"{number}. Step '{step.id}': {step.spec} "
+            f"Signature: {step.signature} Arguments in order: {arguments}."
+        )
+    lines += [
+        "",
+        f"The final result is the result of step '{job.output}'.",
+        "",
+        "Reply with exactly one line: the word ANSWER, a colon, then the "
+        "final result encoded as JSON. Examples of the form: "
+        'ANSWER: "text"   ANSWER: 42   ANSWER: [1, 2]   ANSWER: null',
+        "Give the bare final result. Do not wrap it in an object unless the "
+        "result itself is an object, and write nothing after the ANSWER line.",
+    ]
+    return "\n".join(lines)
+
+
 def render_job(result):
     lines = [f"[{result['reason']} | {result['total_ms']:.0f} ms]"]
     for step in result["steps"]:

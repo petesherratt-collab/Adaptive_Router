@@ -3137,3 +3137,34 @@ ran as code and jobs took 0.86 to 1.66 s. One synthesised function was
 rejected by the gate and its retry promoted, in the earlier of two demo runs.
 
 Verification: full unit suite passed; `git diff --check` passed.
+
+---
+
+## 2026-11-16 — Fast-path jobs V1 freeze
+
+`FAST_PATH_JOBS_V1_PLAN.md` freezes one four-arm run on
+`fast_path_jobs_bench_v1.py`: 12 mixed job shapes, 20 jobs each, gold by
+construction. Arms: one direct whole-job call, a whole-job race, the step
+pipeline on the race, and the step pipeline over the fast path.
+
+Added: `pipeline.build_job_prompt`, `FastPathRouter.race_prompt`,
+`run_fast_path_jobs_v1.py`, `analyze_fast_path_jobs_v1.py`,
+`tests/test_fast_path_jobs.py`. No provider call has touched the benchmark.
+A live smoke test used one six-job shape outside it and is not evidence.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_jobs_bench_v1.py` | `68e092a8990939b876baabb7a4c611bae7ac07c1558b977d95cfd0dfa4fd13b4` |
+| `config_fast_path.json` | `39cf0ef944193465e62c08001b423220b37a738a2ee9fddd7e28b9c0c32e7cc6` |
+| `fast_path.py` | `bfae3e002d5ab8ebe23b1c5fa020e023fdc17fefde09fcf33f59e109bc331623` |
+| `pipeline.py` | `bca87fc09cb826de1b6e5376b4eb38102ac0d5f5025662181d87bb472eed679d` |
+| `sandbox.py` | `b132f5d8175e60916baa0550c09d2f5d34e247e99bd390eee07510f596a9dcff` |
+| `remote.py` | `4efc49ab45e68d09f026e75fca9e3aff2780fac8682b3b27f7fa983eda51afc2` |
+| `run_fast_path_timing_v1.py` | `c1c242d8da450dd037848596648b0ec763f737ef957ddc0e22f703d7aea61ea5` |
+| `run_fast_path_jobs_v1.py` | `f7398118495f8db27e902848cabd05e9e03f59389ef55666d85e74e010743289` |
+| `analyze_fast_path_timing_v1.py` | `b01b8fab99b0f3724d7789bf2caa87e51e59137e6da49dc50fd998e792523b9a` |
+| `analyze_fast_path_jobs_v1.py` | `68cd5ff613647929428e2e8ac9bdb1aea959e47711cd4d8ac01997e079e78004` |
+| `FAST_PATH_JOBS_V1_PLAN.md` | `8a32094866ce0995390a0fef1462ac45d98bbb600cf66c62c72b32b66879745b` |
+
+Verification: full unit suite passed; benchmark self-verify passed;
+`git diff --check` passed.
