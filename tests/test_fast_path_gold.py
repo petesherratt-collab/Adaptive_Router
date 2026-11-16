@@ -77,3 +77,40 @@ class GoldRunTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ProbeEvaluationTests(unittest.TestCase):
+    def test_pass_vectors_and_summary(self):
+        import evaluate_fast_path_probes as probes
+
+        examples = [{"args": [0], "expected": 0}, {"args": [3], "expected": 6}]
+        self.assertEqual(probes.passes("def solve(n):\n    return n * 2\n", examples), [True, True])
+        self.assertEqual(probes.passes("def solve(n):\n    return n * n\n", examples), [True, False])
+        self.assertEqual(probes.passes("import os\ndef solve(n):\n    return 0\n", examples), [False, False])
+        self.assertEqual(probes.passes("def solve(n):\n    return 0\n", []), [])
+        rows = [
+            {"record_type": "item", "item": "a", "proposed": 3, "agreed": 2, "disagreed": 1,
+             "reference_rejected": False, "buggy_rejected": True},
+            {"record_type": "item", "item": "b", "proposed": 2, "agreed": 0, "disagreed": 0,
+             "reference_rejected": False, "buggy_rejected": False},
+            {"record_type": "item", "item": "c", "proposed": 2, "agreed": 2, "disagreed": 0,
+             "reference_rejected": True, "buggy_rejected": True},
+        ]
+        summary = probes.summarise(rows)
+        self.assertEqual((summary["buggy_rejected"], summary["buggy_accepted"]), (2, 1))
+        self.assertEqual(summary["reference_rejected_items"], ["c"])
+        self.assertEqual(summary["buggy_accepted_items"], ["b"])
+        self.assertEqual(summary["items_with_probe_examples"], 2)
+
+    def test_recorded_case_is_wrong_only_at_zero(self):
+        import json as _json
+        from pathlib import Path
+        import evaluate_fast_path_probes as probes
+
+        case = _json.loads(
+            (Path(__file__).resolve().parents[1] / "fast_path_probe_case_number_to_words.json")
+            .read_text(encoding="utf-8")
+        )[0]
+        examples = [{"args": [0], "expected": "zero"}, {"args": [21], "expected": "twenty-one"}]
+        self.assertEqual(probes.passes(case["buggy"], examples), [False, True])
+        self.assertEqual(probes.passes(case["reference"], examples), [True, True])

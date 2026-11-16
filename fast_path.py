@@ -18,6 +18,7 @@ correctness.
 from __future__ import annotations
 
 import ast
+import collections
 from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from datetime import datetime, timezone
 import hashlib
@@ -41,6 +42,7 @@ SCHEMA_VERSION = "fast_path_request_v1"
     RACE_NO_VALID_ANSWER,
 ) = ("CODE_FAST_PATH", "MODEL_RACE_WON", "RACE_NO_VALID_ANSWER")
 SOURCE_CALLER, SOURCE_AGREEMENT = "caller", "model_agreement"
+SOURCE_PROBE = "probe_agreement"
 _SIGNATURE = re.compile(r"^def solve\(.*\)(\s*->\s*.+)?:$")
 _FENCE = re.compile(r"^```[A-Za-z0-9_-]*\n(.*?)\n?```$", re.DOTALL)
 
@@ -187,6 +189,45 @@ def build_synthesis_prompt(spec, signature):
     )
 
 
+def build_probe_prompt(spec, signature, limit):
+    return (
+        "List boundary and edge-case inputs for testing an implementation of "
+        "this function.\n\n"
+        f"Specification: {spec}\n"
+        f"Signature: {signature}\n\n"
+        f"Give up to {limit} argument lists. Every one must be a valid input "
+        "under the specification. Cover boundaries such as zero, one, empty "
+        "values, the smallest and largest sensible values, ties and repeated "
+        "values, and every special case or exception the specification "
+        "mentions.\n"
+        "Reply with one JSON array in which each element is the JSON array of "
+        "positional arguments for one call, for example [[0], [1], [10]] for a "
+        "one-argument function. Reply with the JSON only."
+    )
+
+
+def parse_probes(text, arity, limit):
+    """Return distinct argument lists of the right arity from a probe reply."""
+    try:
+        value = strict_json(_unfence(text))
+    except (ValueError, TypeError, RecursionError):
+        return None
+    if not isinstance(value, list):
+        return None
+    seen, probes = set(), []
+    for args in value:
+        if not isinstance(args, list) or len(args) != arity:
+            continue
+        try:
+            key = sandbox.canonical(args)
+        except (ValueError, TypeError):
+            continue
+        if key not in seen:
+            seen.add(key)
+            probes.append(args)
+    return probes[:limit]
+
+
 class ShapeStore:
     """One JSON document per task shape, written atomically."""
 
@@ -219,6 +260,7 @@ class ShapeStore:
                     "signature": request.signature,
                     "examples": [],
                     "function": None,
+                    "probes": None,
                     "synthesis_attempts": [],
                     "demotions": [],
                     "disagreements": 0,
@@ -542,12 +584,90 @@ class FastPathRouter:
                 return
             self._synthesising.add(shape)
             spec, signature = record["spec"], record["signature"]
+            needs_probes = (
+                self.settings.get("probe_enabled", False)
+                and record.get("probes") is None
+            )
+            arity = len(record["examples"][0]["args"])
         try:
+            if needs_probes:
+                self._probe(shape, spec, signature, arity)
             attempt = self._synthesise(shape, spec, signature)
         finally:
             with self.store.lock():
                 self._synthesising.discard(shape)
         self._log({"record_type": "fast_path_synthesis", "shape": shape, **attempt})
+
+    def propose_probes(self, spec, signature, arity):
+        """Ask the probe model for boundary inputs. Returns ``(probes, error)``."""
+        model = self.settings["probe_model"]
+        limit = self.settings["max_probes"]
+        config = {
+            **self.remote_config,
+            "model": model,
+            "max_tokens": self.settings["probe_max_tokens"],
+        }
+        try:
+            result = self.remote_fn(
+                build_probe_prompt(spec, signature, limit), config, self.api_key
+            )
+        except Exception as exc:
+            return [], type(exc).__name__
+        if not result.success:
+            return [], result.error
+        probes = parse_probes(result.text, arity, limit)
+        if probes is None:
+            return [], "PROBE_REPLY_INVALID"
+        return probes, None
+
+    def answer_probes(self, spec, signature, probes):
+        """Race every model on each probe. Returns ``(agreed examples, disagreed)``.
+
+        An example is kept only when at least ``agreement_quorum`` models gave
+        a valid answer and all valid answers are identical.
+        """
+        batches = []
+        for args in probes:
+            prompt = build_answer_prompt(spec, signature, args)
+            batches.append(
+                [
+                    self._models.submit(self._ask, model, prompt)
+                    for model in self.settings["race_models"]
+                ]
+            )
+        agreed, disagreed = [], 0
+        for args, futures in zip(probes, batches):
+            valid = [a for a in (f.result() for f in futures) if a["valid"]]
+            distinct = {sandbox.canonical(a["value"]) for a in valid}
+            if len(valid) >= self.settings["agreement_quorum"] and len(distinct) == 1:
+                agreed.append({"args": args, "expected": valid[0]["value"]})
+            elif len(distinct) > 1:
+                disagreed += 1
+        return agreed, disagreed
+
+    def _probe(self, shape, spec, signature, arity):
+        started = time.perf_counter()
+        probes, error = self.propose_probes(spec, signature, arity)
+        agreed, disagreed = self.answer_probes(spec, signature, probes)
+        with self.store.lock():
+            record = self.store.get(shape)
+            outcomes = collections.Counter(
+                add_example(record, e["args"], e["expected"], SOURCE_PROBE)
+                for e in agreed
+            )
+            record["probes"] = {
+                "model": self.settings["probe_model"],
+                "error": error,
+                "proposed": len(probes),
+                "agreed": len(agreed),
+                "disagreed": disagreed,
+                "added": outcomes["added"],
+                "conflicts": outcomes["conflict"],
+            }
+            self.store.save(shape)
+            summary = dict(record["probes"])
+        summary["ms"] = (time.perf_counter() - started) * 1000
+        self._log({"record_type": "fast_path_probe", "shape": shape, **summary})
 
     def _synthesise(self, shape, spec, signature):
         model = self.settings["synthesis_model"]

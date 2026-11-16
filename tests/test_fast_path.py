@@ -43,10 +43,16 @@ class FakeRemote:
         self.answers, self.sources = answers, list(sources)
         self.delays = delays or {}
         self.calls = []
+        self.probe_reply = None
 
     def __call__(self, prompt, config, api_key):
         model = config["model"]
         self.calls.append((model, prompt))
+        if prompt.startswith("List boundary"):
+            reply = self.probe_reply
+            if reply is None:
+                return RemoteResult(False, error="OPENROUTER_TIMEOUT", model=model)
+            return RemoteResult(True, text=reply, model=model, total_ms=1.0)
         if prompt.startswith("Write a Python function"):
             if not self.sources:
                 return RemoteResult(False, error="OPENROUTER_TIMEOUT", model=model)
@@ -349,6 +355,81 @@ class LearningTests(FastPathTestCase):
         self.assertIsNone(shape["function"])
         self.assertEqual(shape["demotions"][0]["reason"], "EXAMPLE_MISMATCH")
         self.assertTrue(self.records("fast_path_request")[-1]["decision"]["audited"])
+
+    def probing_router(self, remote, **overrides):
+        settings = {
+            "min_gate_examples": 2, "max_synthesis_attempts": 1,
+            "probe_enabled": True, "probe_model": "prober", "max_probes": 4,
+            "probe_max_tokens": 128, **overrides,
+        }
+        return self.build(remote, **settings)
+
+    def test_probes_block_a_function_that_fits_the_arrived_examples(self):
+        # BAD reproduces the arrived examples (0 and 2) but not the probes.
+        remote = FakeRemote({"a": double, "b": double}, sources=[BAD])
+        remote.probe_reply = "```json\n[[3], [5], [3], [1, 2], \"x\", [7], [9], [11]]\n```"
+        router = self.probing_router(remote)
+        router.handle(request([0], examples(0, 2)))
+        router.drain()
+        shape = self.shape(router)
+        self.assertIsNone(shape["function"])
+        self.assertEqual(shape["synthesis_attempts"][0]["outcome"], "REJECTED")
+        # Duplicates and wrong-arity entries are dropped; the cap is four.
+        self.assertEqual(
+            shape["probes"],
+            {"model": "prober", "error": None, "proposed": 4, "agreed": 4,
+             "disagreed": 0, "added": 4, "conflicts": 0},
+        )
+        sources = {e["source"] for e in shape["examples"]}
+        self.assertEqual(sources, {"caller", "probe_agreement"})
+
+    def test_probes_do_not_block_a_correct_function(self):
+        remote = FakeRemote({"a": double, "b": double}, sources=[GOOD])
+        remote.probe_reply = "[[0], [1], [-1], [1000]]"
+        router = self.probing_router(remote)
+        router.handle(request([10], examples(1, 2)))
+        router.drain()
+        self.assertEqual(self.shape(router)["function"]["gate"]["examples"], 6)
+
+    def test_disputed_probe_is_not_stored(self):
+        remote = FakeRemote(
+            {"a": double, "b": lambda args: "0" if args[0] == 5 else double(args)},
+            sources=[GOOD],
+        )
+        remote.probe_reply = "[[5], [6]]"
+        router = self.probing_router(remote)
+        router.handle(request([10], examples(1, 2)))
+        router.drain()
+        shape = self.shape(router)
+        self.assertEqual((shape["probes"]["agreed"], shape["probes"]["disagreed"]), (1, 1))
+        self.assertNotIn([5], [e["args"] for e in shape["examples"]])
+        self.assertIsNotNone(shape["function"])
+
+    def test_probe_failure_does_not_stop_synthesis_and_is_not_repeated(self):
+        for reply, error in ((None, "OPENROUTER_TIMEOUT"), ("not json", "PROBE_REPLY_INVALID")):
+            with self.subTest(error=error):
+                remote = FakeRemote({"a": double, "b": double}, sources=[BAD, GOOD])
+                remote.probe_reply = reply
+                router = self.probing_router(remote, max_synthesis_attempts=2)
+                router.handle(request([10], examples(1, 3)))
+                router.drain()
+                router.handle(request([11]))
+                router.drain()
+                shape = self.shape(router)
+                self.assertEqual(shape["probes"]["error"], error)
+                self.assertIsNotNone(shape["function"])
+                probes = [c for c in remote.calls if c[1].startswith("List boundary")]
+                self.assertEqual(len(probes), 1)
+
+    def test_probe_proposer_sees_no_examples(self):
+        remote = FakeRemote({"a": double, "b": double}, sources=[GOOD])
+        remote.probe_reply = "[[0]]"
+        router = self.probing_router(remote)
+        router.handle(request([10], examples(111, 222)))
+        router.drain()
+        prompt = next(p for _, p in remote.calls if p.startswith("List boundary"))
+        for token in ("111", "222", "444"):
+            self.assertNotIn(token, prompt)
 
     def test_store_survives_restart(self):
         remote = FakeRemote({"a": double, "b": double}, sources=[GOOD])

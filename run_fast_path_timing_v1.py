@@ -235,11 +235,20 @@ def shape_summary(shape, inputs, golds, record, promoted_at):
             and sandbox.canonical(result["value"]) == sandbox.canonical(expected)
             for result, expected in zip(run.results, wanted)
         )
-    gold_by_args = {sandbox.canonical(a): sandbox.canonical(g) for a, g in zip(inputs, golds)}
-    wrong_examples = sum(
-        gold_by_args.get(sandbox.canonical(e["args"])) != sandbox.canonical(e["expected"])
-        for e in record["examples"]
-    )
+    # Examples may include probe inputs outside the request stream, so gold
+    # comes from the reference directly. A probe the reference cannot run is
+    # outside the specification and is counted separately.
+    wrong_examples = unverifiable_examples = 0
+    if record["examples"]:
+        check = sandbox.run_function(
+            shape["reference"], [e["args"] for e in record["examples"]],
+            timeout_seconds=10.0,
+        )
+        for example, result in zip(record["examples"], check.results if check.ok else []):
+            if not result["ok"]:
+                unverifiable_examples += 1
+            elif sandbox.canonical(result["value"]) != sandbox.canonical(example["expected"]):
+                wrong_examples += 1
     return {
         "record_type": "shape",
         "shape": shape["name"],
@@ -251,6 +260,11 @@ def shape_summary(shape, inputs, golds, record, promoted_at):
         "demotions": record["demotions"],
         "examples": len(record["examples"]),
         "wrong_examples": wrong_examples,
+        "unverifiable_examples": unverifiable_examples,
+        "probes": record.get("probes"),
+        "example_sources": dict(
+            collections.Counter(e["source"] for e in record["examples"])
+        ),
         "disagreements": record["disagreements"],
     }
 
