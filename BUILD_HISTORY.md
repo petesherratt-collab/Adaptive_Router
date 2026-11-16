@@ -2912,3 +2912,29 @@ now used; later runs on it are descriptive sensitivity runs only.
 |---|---|
 | `fast_path_timing_v1_primary.jsonl` | `e47435883c4004e282ffa69c410388f23904dbcb6ec543bf5bea5daf0d4002db` |
 | `fast_path_timing_v1_primary_analysis.json` | `328e98481cc42ce29a0648ff2493e7c1d3311e5f4ae116dce8943d780af25a0a` |
+
+---
+
+## 2026-11-16 — Timing V1 sensitivity: immediate arrival
+
+`run_fast_path_timing_v1.py` gained `--arrival immediate`, which stops
+draining background learning between requests and records the gap since the
+previous request of the same arm. The default is unchanged. The runner and
+analysis hashes therefore differ from the freeze entry; the primary evidence
+was produced by the frozen versions and re-analyses to the same figures.
+
+One descriptive run on the already-used benchmark, label `arrival_immediate`:
+
+- Fast path: 892/900 correct, median 33 ms, mean 337 ms, 573 code-served.
+- Direct: 815/900 correct (22 unanswered), median 1233 ms. Race: 882/900, 853 ms.
+- Ratio C/A 0.0265 (interval 0.0245 to 0.0280); correctness +0.0856.
+- First code-served index: median 10, range 9 to 19 (primary: median 8, max 17).
+- 30 of 30 promoted first attempt; no wrong function, example or demotion.
+- Gap between consecutive fast-path requests: median 2.2 s, 10th pct 0 s.
+
+Not a prospective result. Arrival faster than about two seconds is untested.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_timing_v1_arrival_immediate.jsonl` | `b8814cfbf2531467cf22d15cd653729953137b25df2b27b54c2653ed1bcc414b` |
+| `fast_path_timing_v1_arrival_immediate_analysis.json` | `4e8a31650452dcd262b4981c99eec2daeefb7300b0e5079255928138e0e633e4` |

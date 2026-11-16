@@ -136,6 +136,33 @@ here concerns one-off tasks, natural workloads or multi-step work.
 Evidence: `fast_path_timing_v1_primary.jsonl`,
 `fast_path_timing_v1_primary_analysis.json`.
 
+### Sensitivity: no pause for learning (descriptive)
+
+The same benchmark was run again with `--arrival immediate`: the next request
+of a shape is issued without waiting for learning to finish. This reuses a
+seen benchmark, so it is descriptive and not a second prospective result.
+
+| | Primary (learning drained) | Immediate arrival |
+|---|---:|---:|
+| Fast-path median ms | 30 | 33 |
+| Fast-path mean ms | 290 | 337 |
+| Fast-path correct | 892/900 | 892/900 |
+| Requests served by code | 629 | 573 |
+| First code-served request, median index | 8 | 10 |
+| First code-served request, latest index | 17 | 19 |
+| Direct arm median ms | 1198 | 1233 |
+| Direct arm correct | 824/900 | 815/900 |
+
+All 30 shapes were still promoted on the first attempt, with no wrong
+function, no wrong stored example and no demotion. Removing the pause delayed
+the first code-served answer by about two requests. The median gap between
+consecutive fast-path requests of a shape was 2.2 s (10th percentile 0 s, 90th
+4.8 s), set by the other two arms taking their turns; faster arrival than that
+is untested. The direct arm returned no answer on 22 requests in this run.
+
+Evidence: `fast_path_timing_v1_arrival_immediate.jsonl`,
+`fast_path_timing_v1_arrival_immediate_analysis.json`.
+
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
 hardened boundary against adversarial code.
