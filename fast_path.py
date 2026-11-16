@@ -461,6 +461,12 @@ class FastPathRouter:
         while self._pending:
             self._pending.pop().result()
 
+    def close(self):
+        """Finish background work and release worker threads."""
+        self.drain()
+        self._models.shutdown(wait=True)
+        self._background.shutdown(wait=True)
+
     def _observe(self, request, futures, request_id):
         answers = [future.result() for future in futures]
         valid = [a for a in answers if a["valid"]]
@@ -523,7 +529,8 @@ class FastPathRouter:
         with self.store.lock():
             record = self.store.get(shape)
             if (
-                record["function"] is not None
+                not self.settings.get("synthesis_enabled", True)
+                or record["function"] is not None
                 or shape in self._synthesising
                 or len(record["examples"]) < self.settings["min_gate_examples"]
                 or sum(

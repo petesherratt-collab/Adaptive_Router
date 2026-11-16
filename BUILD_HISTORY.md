@@ -2844,3 +2844,37 @@ when reasoning consumed the 256-token limit.
   evidence, so it requires a new benchmark.
 
 Verification: full unit suite passed; `git diff --check` passed.
+
+---
+
+## 2026-11-16 — Fast-path timing V1 freeze
+
+The timing experiment is frozen before any provider call against its
+benchmark. The owner accepted the proposed workload size, criteria and
+arrival assumption in session. The 30-shape benchmark was written by the
+assistant and was not reviewed by the owner before the freeze.
+
+Added: `fast_path_timing_bench_v1.py` (30 shapes, 30 seeded requests each, no
+overlap with either earlier bank), `run_fast_path_timing_v1.py`,
+`analyze_fast_path_timing_v1.py`, `tests/test_fast_path_timing.py`, a
+`synthesis_enabled` setting for the race-only arm and `FastPathRouter.close`.
+
+A live smoke test on three development-bank shapes with 12 requests each
+completed without error: two shapes were promoted at request index 7 and then
+served from code at a median of 28 ms; the third reached only 7 agreed
+examples because the five models were not unanimous on 5 of 12 requests.
+That output is not evidence for this experiment and was not committed.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_timing_bench_v1.py` | `e36398997f733a6deaf611e1f7541572ab4f39e68e1f983546c0044dd552848d` |
+| `config_fast_path.json` | `1f14f980657cc059a3ad5955fe30fb7e13f4b924fbdf341057c9501c016d986f` |
+| `fast_path.py` | `b6f4c739fdd17911daf85a85bc424ecb19faccfd16310b917014c15b97060ea2` |
+| `sandbox.py` | `b132f5d8175e60916baa0550c09d2f5d34e247e99bd390eee07510f596a9dcff` |
+| `remote.py` | `4efc49ab45e68d09f026e75fca9e3aff2780fac8682b3b27f7fa983eda51afc2` |
+| `run_fast_path_timing_v1.py` | `68c96d073103a29e7d857a0141ad096b0c4962dd36e4b3d8751b4888e191fe64` |
+| `analyze_fast_path_timing_v1.py` | `b8175ab605d53390c03567fc6e3f3f351a726748617aea6929a5026aa87cc1e8` |
+| `FAST_PATH_TIMING_V1_PLAN.md` | `011887d3686609ecbe360a5b82844979e3cee920349a41929009906c86c7b313` |
+
+Verification: full unit suite passed; `python fast_path_timing_bench_v1.py`
+self-verify passed; `git diff --check` passed.

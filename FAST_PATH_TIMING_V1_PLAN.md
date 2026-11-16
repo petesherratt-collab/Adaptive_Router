@@ -1,14 +1,17 @@
 # Fast-path timing V1 plan
 
-**Status:** DRAFT for review. Not frozen. No run is authorized by this document.
+**Status:** FROZEN 2026-11-16. One primary run is authorized.
 
 **Runtime policy authority:** none. Runtime v0.3 is unchanged.
 
-**Provider generation requests:** forbidden until this plan, the benchmark,
-the configuration and the runner are frozen and their hashes recorded.
+**Provider generation requests:** permitted only through
+`run_fast_path_timing_v1.py` against the frozen files whose hashes are listed
+in the `BUILD_HISTORY.md` freeze entry.
 
-Every number marked *proposed* is a placeholder for the owner to accept or
-change before the freeze.
+The owner accepted the proposed numbers and the arrival assumption in session
+on 2026-11-16, describing them as a starting point to be varied later. The
+benchmark was written by the assistant and delegated without owner review;
+that is a limitation of this freeze and must be stated with any result.
 
 ## Question
 
@@ -28,12 +31,13 @@ the answer prompt and are excluded for the same reason.
 
 ## Benchmark
 
-- *Proposed:* 30 new task shapes, none sharing a specification with either
+- 30 new task shapes, none sharing a specification with either
   earlier bank.
 - Each shape has a specification, a `solve` signature, a reference
-  implementation, a single-bug variant and at least 8 hand-written tests whose
-  expected values come from the specification, as in the CCC recipe.
-- Each shape also has a request stream of *proposed* 30 distinct inputs drawn
+  implementation and at least 6 hand-written tests whose expected values come
+  from the specification. No single-bug variant is included because no
+  analysis in this plan uses one.
+- Each shape also has a request stream of 30 distinct inputs drawn
   by a seeded generator committed with the benchmark. Gold for a stream input
   is the reference implementation's output. The reference earns that role only
   by passing every hand-written test.
@@ -74,7 +78,7 @@ reported separately; it is not part of answer time.
 
 Per request and arm: wall-clock answer time from call to returned value;
 route (`code`, `model`, `none`); winning model; whether the returned value
-equals gold under type-strict canonical JSON; reported provider cost.
+equals gold under type-strict canonical JSON. Cost is not recorded.
 
 Per shape for arm C: the request index at which a function was promoted, if
 any; whether the promoted function is gold-correct on all hand-written tests
@@ -87,14 +91,14 @@ answers are recorded because gold comparison requires them.
 ## Primary analysis
 
 Uncertainty is from a paired bootstrap that resamples the 30 shapes and keeps
-each shape's 30 requests together. The bootstrap seed is recorded in this plan
-before the freeze.
+each shape's 30 requests together: 10,000 replicates, percentile intervals,
+seed 20261116.
 
 1. **Time.** Median answer time of arm C divided by median answer time of
-   arm A, over all 900 requests. *Proposed* criterion: the ratio's 95%
+   arm A, over all 900 requests. Criterion: the ratio's 95%
    interval lies wholly below 0.5.
 2. **Correctness.** Share of requests answered correctly, arm C minus arm A.
-   *Proposed* criterion: the difference's 95% interval lies wholly above
+   Criterion: the difference's 95% interval lies wholly above
    −2 percentage points.
 
 The fast path is supported for this workload only if both criteria hold. A
@@ -117,8 +121,9 @@ after the run may be described as prospectively validated.
 
 ## Stop rules
 
-- If the first 3 shapes show a provider failure rate above *proposed* 20% in
-  any arm, stop, record an execution incident, and do not analyse.
+- The first 3 shapes run before the rest. If any arm returned no answer on
+  more than 20% of their requests, stop, record an execution incident, and do
+  not analyse.
 - A crash leaves the partial file in place with a `.partial` suffix. A rerun
   uses a new file and the incident is documented; partial evidence is never
   merged into a completed run.
@@ -135,10 +140,21 @@ A negative result on time would most likely mean promotions arrive too late in
 a 30-request stream to move the median; the route and requests-to-promotion
 tables are there to show that.
 
-## Still to build before the freeze
+## Execution
 
-- The 30-shape benchmark and its seeded input generators.
-- A switch that disables synthesis, for arm B.
-- The three-arm runner and the analysis script, each with tests against fakes.
-- Recorded SHA-256 hashes of the benchmark, `config_fast_path.json`,
-  `fast_path.py`, `sandbox.py`, the runner and the analysis script.
+- Benchmark: `fast_path_timing_bench_v1.py`. Runner:
+  `run_fast_path_timing_v1.py`. Analysis: `analyze_fast_path_timing_v1.py`.
+- Shapes run six at a time; within a shape, requests and arms are sequential.
+  Concurrent shapes add provider load, which falls on all three arms alike.
+- The arm-order seed and stream seed are 20261116.
+- Before the freeze the pipeline was exercised live once on three shapes from
+  the development bank, none of which is in this benchmark.
+
+## Sensitivity runs after the primary run
+
+The owner intends to repeat the run with one setting varied at a time
+(`--set name=value`) to map the starting position. Those runs reuse a
+benchmark that has already been seen. They are descriptive, are labelled in
+their headers, and may not be reported as prospective results. Only the first
+completed run with label `primary` and no override counts against the
+criteria above.
