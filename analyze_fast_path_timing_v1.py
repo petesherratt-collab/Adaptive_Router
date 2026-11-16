@@ -104,7 +104,15 @@ def analyse(kinds, replicates=BOOTSTRAP_REPLICATES):
     requests = kinds.get("request", [])
     shapes = kinds.get("shape", [])
     footer = (kinds.get("footer") or [{}])[0]
+    header = kinds["header"][0]
+    prospective = (
+        header.get("label") == "primary"
+        and header.get("override") is None
+        and header.get("arrival", "drained") == "drained"
+    )
     result = {
+        "scope": "PROSPECTIVE" if prospective else "DESCRIPTIVE_SENSITIVITY",
+        "arrival": header.get("arrival", "drained"),
         "status": footer.get("status", "INCOMPLETE"),
         "label": kinds["header"][0].get("label"),
         "override": kinds["header"][0].get("override"),
@@ -122,6 +130,10 @@ def analyse(kinds, replicates=BOOTSTRAP_REPLICATES):
     correctness_met = difference_interval[0] > CORRECTNESS_MARGIN
     promoted = [s for s in shapes if s["promoted_at_index"] is not None]
     code_rows = [r for r in requests if r["arm"] == "C" and r["route"] == "code"]
+    first_code = {}
+    for row in sorted(code_rows, key=lambda r: r["index"]):
+        first_code.setdefault(row["shape"], row["index"])
+    gaps = [r["gap_ms"] for r in requests if r["arm"] == "C" and r.get("gap_ms") is not None]
     result.update(
         {
             "time_ratio_c_over_a": ratio,
@@ -132,6 +144,12 @@ def analyse(kinds, replicates=BOOTSTRAP_REPLICATES):
             "correctness_criterion_met": correctness_met,
             "decision": "SUPPORTED" if time_met and correctness_met else "NOT_SUPPORTED",
             "shapes_promoted": len(promoted),
+            "shapes_ever_served_by_code": len(first_code),
+            "median_first_code_index": (
+                statistics.median(first_code.values()) if first_code else None
+            ),
+            "max_first_code_index": max(first_code.values()) if first_code else None,
+            "median_gap_ms_arm_c": statistics.median(gaps) if gaps else None,
             "median_promotion_index": (
                 statistics.median(s["promoted_at_index"] for s in promoted)
                 if promoted else None

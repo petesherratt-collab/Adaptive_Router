@@ -74,13 +74,37 @@ class BenchTests(unittest.TestCase):
 
 
 class RunnerTests(unittest.TestCase):
-    def run_all(self, bench_module, remote_fn):
+    def run_all(self, bench_module, remote_fn, arrival="drained"):
         rows = []
         status = runner.execute(
             bench_module.SHAPES, bench_module, {"model": "x"}, dict(SETTINGS),
-            remote_fn, "k", 2, rows.append,
+            remote_fn, "k", 2, rows.append, arrival,
         )
         return status, rows
+
+    def test_immediate_arrival_does_not_wait_for_learning(self):
+        # One racer is slow, so agreement and synthesis lag behind the answers.
+        def remote_fn(prompt, config, api_key):
+            if config["model"] == "m2" and not prompt.startswith("Write"):
+                time.sleep(0.25)
+            return fake_remote()(prompt, config, api_key)
+
+        _, drained = self.run_all(tiny_bench(), remote_fn)
+        _, immediate = self.run_all(tiny_bench(), remote_fn, arrival="immediate")
+
+        def code_count(rows):
+            return sum(r.get("arm") == "C" and r.get("route") == "code" for r in rows)
+
+        self.assertEqual(code_count(drained), 4)
+        self.assertLess(code_count(immediate), 4)
+        requests = [r for r in immediate if r["record_type"] == "request"]
+        self.assertTrue(all(r["correct"] for r in requests))
+        self.assertTrue(all(r["background_ms"] == 0.0 for r in requests))
+        later = [r["gap_ms"] for r in requests if r["arm"] == "C" and r["index"] > 0]
+        self.assertTrue(all(g is not None and g < 250 for g in later))
+        # Learning still completes once the shape is closed.
+        summary = next(r for r in immediate if r["record_type"] == "shape")
+        self.assertTrue(summary["function_present_at_end"])
 
     def test_three_arms_per_request_and_promotion(self):
         status, rows = self.run_all(tiny_bench(), fake_remote(delay=0.05))
@@ -151,6 +175,8 @@ class AnalysisTests(unittest.TestCase):
     def test_supported_when_both_criteria_hold(self):
         result = analysis.analyse(synthetic(20.0), replicates=200)
         self.assertEqual(result["decision"], "SUPPORTED")
+        self.assertEqual(result["scope"], "DESCRIPTIVE_SENSITIVITY")
+        self.assertEqual(result["median_first_code_index"], 0)
         self.assertAlmostEqual(result["time_ratio_c_over_a"], 0.02)
         self.assertEqual(result["correctness_c_minus_a"], 0.0)
         self.assertEqual(result["arms"]["B"]["median_ms"], 700.0)

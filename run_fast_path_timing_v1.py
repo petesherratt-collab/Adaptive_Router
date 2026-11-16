@@ -9,6 +9,11 @@ Every request of every shape is served by three arms in a seeded random order:
 Answer time is wall-clock time until a value is returned. Background learning
 is drained, untimed, before the next request of the same shape.
 
+``--arrival immediate`` removes that pause: the next request is issued while
+learning from earlier ones may still be running, and each row records the gap
+since the previous request of the same arm. Background work is drained only
+when the shape ends.
+
 ``--set name=value`` overrides one ``fast_path`` setting for a sensitivity run;
 the override and a label are written to the header.
 """
@@ -81,7 +86,10 @@ def direct_answer(shape, args, remote_config, settings, remote_fn, api_key):
     return fast_path.parse_answer(result.text) if result.success else (False, None)
 
 
-def run_shape(shape, inputs, golds, remote_config, settings, remote_fn, api_key, workdir):
+def run_shape(
+    shape, inputs, golds, remote_config, settings, remote_fn, api_key, workdir,
+    arrival="drained",
+):
     """Return (request rows, shape summary) for one shape."""
     request = {
         "schema_version": fast_path.SCHEMA_VERSION,
@@ -101,12 +109,13 @@ def run_shape(shape, inputs, golds, remote_config, settings, remote_fn, api_key,
             api_key=api_key,
         )
     order_rng = random.Random(f"{ARM_ORDER_SEED}:{shape['name']}")
-    rows, promoted_at = [], None
+    rows, promoted_at, last_end = [], None, {}
     for index, (args, expected) in enumerate(zip(inputs, golds)):
         order = ["A", "B", "C"]
         order_rng.shuffle(order)
         for position, arm in enumerate(order):
             started = time.perf_counter()
+            gap_ms = (started - last_end[arm]) * 1000 if arm in last_end else None
             if arm == "A":
                 answered, value = direct_answer(
                     shape, args, remote_config, settings, remote_fn, api_key
@@ -116,9 +125,10 @@ def run_shape(shape, inputs, golds, remote_config, settings, remote_fn, api_key,
                 result = routers[arm].handle({**request, "args": args})
                 answered = result["route"] != "none"
                 value, route, model = result["value"], result["route"], result["model"]
-            answer_ms = (time.perf_counter() - started) * 1000
+            last_end[arm] = time.perf_counter()
+            answer_ms = (last_end[arm] - started) * 1000
             background_ms = 0.0
-            if arm != "A":
+            if arm != "A" and arrival == "drained":
                 started = time.perf_counter()
                 routers[arm].drain()
                 background_ms = (time.perf_counter() - started) * 1000
@@ -130,6 +140,7 @@ def run_shape(shape, inputs, golds, remote_config, settings, remote_fn, api_key,
                     "arm": arm,
                     "position": position,
                     "answer_ms": answer_ms,
+                    "gap_ms": gap_ms,
                     "background_ms": background_ms,
                     "route": route,
                     "model": model,
@@ -144,6 +155,7 @@ def run_shape(shape, inputs, golds, remote_config, settings, remote_fn, api_key,
             promoted_at = index
     for router in routers.values():
         router.close()
+    record = routers["C"].store.get(record["shape"])
     return rows, shape_summary(shape, inputs, golds, record, promoted_at)
 
 
@@ -187,13 +199,16 @@ def failure_rates(rows):
     return rates
 
 
-def execute(shapes, bench, remote_config, settings, remote_fn, api_key, workers, write):
+def execute(
+    shapes, bench, remote_config, settings, remote_fn, api_key, workers, write,
+    arrival="drained",
+):
     """Run all shapes. Returns ``"COMPLETED"`` or ``"EARLY_STOP"``."""
     def job(shape):
         inputs = bench.stream(shape)
         return run_shape(
             shape, inputs, bench.gold(shape, inputs), remote_config, settings,
-            remote_fn, api_key, workdir,
+            remote_fn, api_key, workdir, arrival,
         )
 
     def collect(batch, pool):
@@ -220,6 +235,7 @@ def main():
     parser.add_argument("--output", required=True, help="observations JSONL (must not exist)")
     parser.add_argument("--label", default="primary")
     parser.add_argument("--set", dest="override", metavar="NAME=VALUE")
+    parser.add_argument("--arrival", choices=("drained", "immediate"), default="drained")
     parser.add_argument("--workers", type=int, default=6)
     parser.add_argument("--limit-shapes", type=int)
     args = parser.parse_args()
@@ -258,6 +274,7 @@ def main():
                 "record_type": "header",
                 "label": args.label,
                 "override": override,
+                "arrival": args.arrival,
                 "baseline_model": BASELINE_MODEL,
                 "settings": settings,
                 "bench": {"name": Path(args.bench).name, "sha256": sha256_file(args.bench)},
@@ -271,7 +288,7 @@ def main():
         )
         status = execute(
             shapes, bench, remote_config, settings, remote.generate, api_key,
-            args.workers, write,
+            args.workers, write, args.arrival,
         )
         write({"record_type": "footer", "status": status})
     if status == "COMPLETED":
