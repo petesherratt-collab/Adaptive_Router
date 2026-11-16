@@ -19,6 +19,6 @@
     "probe_enabled": true,
     "probe_model": "google/gemini-3.8-flash",
     "max_probes": 12,
-    "probe_max_tokens": 1024
+    "probe_max_tokens": 4096
   }
 }
