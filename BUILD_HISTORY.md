@@ -2938,3 +2938,14 @@ Not a prospective result. Arrival faster than about two seconds is untested.
 |---|---|
 | `fast_path_timing_v1_arrival_immediate.jsonl` | `b8814cfbf2531467cf22d15cd653729953137b25df2b27b54c2653ed1bcc414b` |
 | `fast_path_timing_v1_arrival_immediate_analysis.json` | `4e8a31650452dcd262b4981c99eec2daeefb7300b0e5079255928138e0e633e4` |
+
+---
+
+## 2026-11-16 — Timing V1 `min_gate_examples=4` run invalidated
+
+The second sensitivity run lost its provider partway: the OpenRouter account
+ran out of credits and returned HTTP 402. The direct arm is missing 451 of 900
+answers, so no comparison from this run is valid. Details, the limited
+descriptive reading and follow-up are in
+`FAST_PATH_TIMING_V1_GATE4_EXECUTION_INCIDENT.md`. The evidence file is kept
+unaltered. Provider calls on this line are paused until credit is added.

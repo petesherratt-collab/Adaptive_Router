@@ -163,6 +163,10 @@ is untested. The direct arm returned no answer on 22 requests in this run.
 Evidence: `fast_path_timing_v1_arrival_immediate.jsonl`,
 `fast_path_timing_v1_arrival_immediate_analysis.json`.
 
+A further run with `min_gate_examples=4` is invalid: the provider account ran
+out of credits partway through. See
+[`FAST_PATH_TIMING_V1_GATE4_EXECUTION_INCIDENT.md`](FAST_PATH_TIMING_V1_GATE4_EXECUTION_INCIDENT.md).
+
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
 hardened boundary against adversarial code.
