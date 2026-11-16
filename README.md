@@ -101,11 +101,40 @@ only, unusable answers there fell from 7 of 300 to 0 of 300
 (`fast_path_prompt_dev_ccc_before.jsonl`, `fast_path_prompt_dev_ccc_after.jsonl`).
 The fresh bank was not re-run with the new prompt.
 
-Still unmeasured: answer time of the running router on repeated task shapes
-against direct single-model service. The draft design is in
-[`FAST_PATH_TIMING_V1_PLAN.md`](FAST_PATH_TIMING_V1_PLAN.md); it is not frozen
-and needs a new benchmark, because both existing banks are now development
-evidence.
+### Timing V1 primary result (2026-11-16)
+
+The frozen three-arm experiment in
+[`FAST_PATH_TIMING_V1_PLAN.md`](FAST_PATH_TIMING_V1_PLAN.md) completed once:
+30 task shapes, 30 requests each, every request served by all three arms.
+Decision under the frozen criteria: `SUPPORTED`.
+
+| Arm | Correct | Median ms | 90th pct ms | Mean ms |
+|---|---:|---:|---:|---:|
+| A. Direct `openai/gpt-5.6-luna` | 824/900 | 1198 | 3205 | 1651 |
+| B. Race only | 884/900 | 864 | 1125 | 891 |
+| C. Fast path | 892/900 | 30 | 961 | 290 |
+
+- Time: median C over median A was 0.025 (95% interval 0.024 to 0.027);
+  the criterion was an interval wholly below 0.5.
+- Correctness: C minus A was +7.6 points (95% interval +3.8 to +11.9); the
+  criterion was an interval wholly above -2 points.
+- All 30 shapes were promoted, at a median request index of 7. Every promoted
+  function was gold-correct on the hand-written tests and the full stream.
+  629 of 900 fast-path requests were served by code (median 27 ms), none wrong.
+- No stored example was wrong, and no function was demoted.
+- The 8 wrong fast-path answers all came from the model race before promotion.
+
+Read the result with its limits. The 900 requests are 30 task clusters. The
+tasks are short pure functions written for the experiment, and the benchmark
+was not reviewed by the owner before the freeze. Background learning was
+allowed to finish between requests of a shape, the favourable case; it took
+about 1,170 s in total against 261 s of answer time. The median reflects a
+30-request stream in which promotion arrives by about the eighth request; a
+shorter stream, or tasks no function can capture, would not show it. Nothing
+here concerns one-off tasks, natural workloads or multi-step work.
+
+Evidence: `fast_path_timing_v1_primary.jsonl`,
+`fast_path_timing_v1_primary_analysis.json`.
 
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a

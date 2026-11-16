@@ -2878,3 +2878,37 @@ That output is not evidence for this experiment and was not committed.
 
 Verification: full unit suite passed; `python fast_path_timing_bench_v1.py`
 self-verify passed; `git diff --check` passed.
+
+---
+
+## 2026-11-16 — Fast-path timing V1 primary result
+
+The frozen primary run completed in one attempt with no early stop, no
+incident and no unanswered request in any arm. Frozen-criteria decision:
+`SUPPORTED`.
+
+| Arm | Correct | Median ms | 90th pct ms | Mean ms |
+|---|---:|---:|---:|---:|
+| A. Direct | 824/900 | 1198 | 3205 | 1651 |
+| B. Race only | 884/900 | 864 | 1125 | 891 |
+| C. Fast path | 892/900 | 30 | 961 | 290 |
+
+- Time ratio C/A 0.0254, shape-cluster bootstrap 95% interval 0.0238 to 0.0267.
+- Correctness C minus A +0.0756, interval +0.0378 to +0.1189.
+- 30 of 30 shapes promoted on the first synthesis attempt; promotion index
+  median 7, maximum 16. Zero gold-wrong functions, zero demotions, zero wrong
+  stored examples, zero wrong code-served answers out of 629.
+- Fast-path model-route requests: 271, of which 8 wrong, in three shapes.
+- Arm A errors were concentrated in counting and arithmetic shapes.
+- Race winners in arm B: `claude-haiku-5.5` 585, `deepseek-v4.1-flash` 275,
+  `gpt-5.6-luna` 39, `gemini-3.8-flash` 1.
+- Background learning in arm C totalled about 1,166 s, untimed by design.
+
+Limits: 30 task clusters; constructed pure-function tasks; benchmark not
+owner-reviewed before the freeze; favourable arrival model. The benchmark is
+now used; later runs on it are descriptive sensitivity runs only.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_timing_v1_primary.jsonl` | `e47435883c4004e282ffa69c410388f23904dbcb6ec543bf5bea5daf0d4002db` |
+| `fast_path_timing_v1_primary_analysis.json` | `328e98481cc42ce29a0648ff2493e7c1d3311e5f4ae116dce8943d780af25a0a` |
