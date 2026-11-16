@@ -1,0 +1,93 @@
+{
+ "per_model": {
+  "anthropic/claude-haiku-5.5": {
+   "observations": 251,
+   "task_clusters": 28,
+   "wrong_or_invalid": 84,
+   "invalid": 77
+  },
+  "deepseek/deepseek-v4.1-flash": {
+   "observations": 251,
+   "task_clusters": 28,
+   "wrong_or_invalid": 10,
+   "invalid": 9
+  },
+  "google/gemini-3.8-flash": {
+   "observations": 251,
+   "task_clusters": 28,
+   "wrong_or_invalid": 5,
+   "invalid": 5
+  },
+  "openai/gpt-5.6-luna": {
+   "observations": 251,
+   "task_clusters": 28,
+   "wrong_or_invalid": 3,
+   "invalid": 0
+  },
+  "openai/gpt-6-luna": {
+   "observations": 251,
+   "task_clusters": 28,
+   "wrong_or_invalid": 3,
+   "invalid": 0
+  }
+ },
+ "pairwise_agreement": {
+  "anthropic/claude-haiku-5.5 + deepseek/deepseek-v4.1-flash": {
+   "cases": 251,
+   "agreed": 163,
+   "agreed_and_wrong": 1
+  },
+  "anthropic/claude-haiku-5.5 + google/gemini-3.8-flash": {
+   "cases": 251,
+   "agreed": 164,
+   "agreed_and_wrong": 0
+  },
+  "anthropic/claude-haiku-5.5 + openai/gpt-5.6-luna": {
+   "cases": 251,
+   "agreed": 166,
+   "agreed_and_wrong": 0
+  },
+  "anthropic/claude-haiku-5.5 + openai/gpt-6-luna": {
+   "cases": 251,
+   "agreed": 167,
+   "agreed_and_wrong": 1
+  },
+  "deepseek/deepseek-v4.1-flash + google/gemini-3.8-flash": {
+   "cases": 251,
+   "agreed": 239,
+   "agreed_and_wrong": 0
+  },
+  "deepseek/deepseek-v4.1-flash + openai/gpt-5.6-luna": {
+   "cases": 251,
+   "agreed": 238,
+   "agreed_and_wrong": 0
+  },
+  "deepseek/deepseek-v4.1-flash + openai/gpt-6-luna": {
+   "cases": 251,
+   "agreed": 240,
+   "agreed_and_wrong": 1
+  },
+  "google/gemini-3.8-flash + openai/gpt-5.6-luna": {
+   "cases": 251,
+   "agreed": 243,
+   "agreed_and_wrong": 0
+  },
+  "google/gemini-3.8-flash + openai/gpt-6-luna": {
+   "cases": 251,
+   "agreed": 243,
+   "agreed_and_wrong": 0
+  },
+  "openai/gpt-5.6-luna + openai/gpt-6-luna": {
+   "cases": 251,
+   "agreed": 247,
+   "agreed_and_wrong": 1
+  }
+ },
+ "synthesis": {
+  "items": 28,
+  "provider_failures": 0,
+  "statically_rejected": 0,
+  "gold_correct": 27,
+  "gold_wrong": 1
+ }
+}

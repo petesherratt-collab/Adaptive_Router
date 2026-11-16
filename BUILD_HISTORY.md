@@ -2794,3 +2794,30 @@ Review and freeze the fresh bank, choose the race roster, then run
 two models agree on a wrong answer, and the synthesiser's fail rate. An
 answer-time comparison against direct single-model service needs its own
 frozen plan with repeated task shapes.
+
+---
+
+## 2026-11-16 — Fast path development gold run
+
+First provider run on the fast-path line, made from a cloud session through a
+dedicated `adaptive-router` environment. Status: development only. The bank
+`fast_path_gold_items_v1.py` (SHA-256 `c14f31f7…e0b921`) had not been reviewed
+or frozen and the roster was chosen on the day, so nothing here is a
+prospective result.
+
+Roster: `openai/gpt-5.6-luna`, `openai/gpt-6-luna`,
+`anthropic/claude-haiku-5.5`, `google/gemini-3.8-flash`,
+`deepseek/deepseek-v4.1-flash`; synthesis by `openai/gpt-6-luna`. 1,255 answer
+calls and 28 synthesis calls, no retries, no provider failures on synthesis.
+
+- Wrong or unusable answers per model out of 251: 3, 3, 84, 5, 10 in roster
+  order. 77 of the 84 and 9 of the 10 were unparseable or empty responses.
+- Unanimous valid answers: 240 cases, all correct. Non-unanimous: 11.
+- Replayed fastest-valid race: median 716 ms, 90th percentile 1053 ms, one
+  wrong answer. Best accurate single model: median 1049 ms.
+- Synthesis: 27 of 28 gold-correct. The failure (`slugify`, missing
+  `import re`) fails all examples and is rejected by the gate.
+
+Artifacts: `fast_path_gold_dev_run_v1.jsonl`,
+`fast_path_gold_dev_run_v1_summary.json`. `config_fast_path.json` now carries
+the roster. No runtime v0.3 source or sealed artifact changed.

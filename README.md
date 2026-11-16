@@ -68,13 +68,35 @@ fresh set roughly one test in three exposes the bug; ordinary traffic may
 expose it far less often. The checked-in `min_gate_examples` of 8 and the
 post-promotion audit follow from that, and neither is a validated threshold.
 
-### What has not been measured
+### Development gold run (2026-11-16, not frozen, not citable)
 
-No provider call has been made on this line. There is no measured answer-time
-result, model fail rate, model-agreement error rate or synthesiser fail rate.
-`run_fast_path_gold.py` collects the last three from a gold bank and has only
-been exercised against fakes. `fast_path_gold_items_v1.py` is a draft bank: it
-is not frozen and should be reviewed before any run that will be cited.
+`run_fast_path_gold.py` was run once against the draft fresh bank: 28 items,
+251 test cases, five models, no retries. Observations are in
+`fast_path_gold_dev_run_v1.jsonl`. The 251 cases are 28 task clusters, not 251
+independent tasks.
+
+| Model | Wrong or unusable | Of which unparseable or empty | Median ms |
+|---|---:|---:|---:|
+| `openai/gpt-5.6-luna` | 3/251 | 0 | 1049 |
+| `openai/gpt-6-luna` | 3/251 | 0 | 2135 |
+| `google/gemini-3.8-flash` | 5/251 | 5 | 2407 |
+| `deepseek/deepseek-v4.1-flash` | 10/251 | 9 | 832 |
+| `anthropic/claude-haiku-5.5` | 84/251 | 77 | 799 |
+
+- All valid answers agreed on 240 cases and every one of those was correct.
+  The other 11 cases had a dissenting answer. Some pairs of models agreed on a
+  wrong answer once; no case had every valid answer wrong.
+- Taking the fastest parseable answer per case from the recorded latencies
+  gives a median of 716 ms and one wrong answer in 251. This is a replay of
+  separately recorded calls, not a run of the router.
+- The synthesis model wrote a gold-correct function for 27 of 28 items
+  (median 3.7 s per function). The one failure omitted an import and fails
+  every example, so the gate rejects it.
+- Most `claude-haiku-5.5` failures are format: it wrapped or explained the
+  answer despite the instruction. The answer prompt has not been tuned.
+
+Still unmeasured: answer time of the running router on repeated task shapes
+against direct single-model service. That needs a frozen bank and its own plan.
 
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
