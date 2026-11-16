@@ -3003,3 +3003,40 @@ this benchmark. The benchmark was not owner-reviewed before the freeze.
 
 Verification: full unit suite passed; benchmark self-verify and standard
 library cross-checks passed; `git diff --check` passed.
+
+---
+
+## 2026-11-16 — Fast-path timing V2 (harder shapes) result
+
+The frozen run completed in one attempt: 4,766 provider calls, 61 invalid
+responses, no early stop. Frozen-criteria decision: `SUPPORTED`.
+
+| Arm | Correct | Median ms | 90th pct ms | Mean ms |
+|---|---:|---:|---:|---:|
+| A. Direct | 571/600 (2 unanswered) | 2964 | 4951 | 2987 |
+| B. Race only | 593/600 | 1161 | 2157 | 1344 |
+| C. Fast path | 598/600 | 32 | 1660 | 458 |
+
+- Ratio C/A 0.0109 (interval 0.0094 to 0.0147); correctness +0.045
+  (interval +0.020 to +0.075).
+- 20 of 20 shapes promoted; promotion index median 7, latest 14 (`luhn_valid`,
+  8 disagreements). 418 code-served answers, none wrong. No wrong stored
+  example, no demotion. Both wrong fast-path answers came from the race.
+
+Readings fixed in advance:
+
+- First synthesised function gold-wrong and rejected by the gate: one,
+  `eval_expression`, a syntax error rejected statically; the retry passed.
+- Gold-wrong function promoted: one, `number_to_words`. It returns '' for 0.
+  It differs from the reference on exactly 1 of the 10,000 inputs in range.
+  It passed the gate on 8 examples and was never demoted. Wrong answers
+  served: 0, because 0 was not in the request stream.
+- Shapes never promoted: none.
+
+No gate failure as the plan defines it. The latent fault shows the limit of
+example-based promotion and of auditing only the inputs that arrive.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_timing_v2_hard_primary.jsonl` | `550c110445435754eeb39ba5ef45a6933dedb41db6889157ca207486fa6b36eb` |
+| `fast_path_timing_v2_hard_primary_analysis.json` | `c69166f9e581b4213753cf84f4d8493df77966e69074de238bc7593edb19915e` |

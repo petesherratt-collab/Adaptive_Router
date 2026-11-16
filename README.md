@@ -193,6 +193,39 @@ seven. Descriptive only, on a benchmark already used.
 Evidence: `fast_path_timing_v1_gate4_rerun.jsonl`,
 `fast_path_timing_v1_gate4_rerun_analysis.json`.
 
+### Timing V2: harder task shapes (prospective, 2026-11-16)
+
+[`FAST_PATH_TIMING_V2_HARD_PLAN.md`](FAST_PATH_TIMING_V2_HARD_PLAN.md) froze
+one run on 20 new shapes chosen to be easy to implement subtly wrong, under
+the V1 rules and criteria. Decision: `SUPPORTED`.
+
+| Arm | Correct | Median ms | 90th pct ms | Mean ms |
+|---|---:|---:|---:|---:|
+| A. Direct `openai/gpt-5.6-luna` | 571/600 | 2964 | 4951 | 2987 |
+| B. Race only | 593/600 | 1161 | 2157 | 1344 |
+| C. Fast path | 598/600 | 32 | 1660 | 458 |
+
+- Time ratio C/A 0.011 (95% interval 0.009 to 0.015). Correctness C minus A
+  +4.5 points (interval +2.0 to +7.5).
+- All 20 shapes were promoted; 418 of 600 fast-path requests were served by
+  code, none wrong. No stored example was wrong. No function was demoted.
+- One first synthesis attempt (`eval_expression`) was a syntax error and was
+  rejected statically; the second attempt was correct.
+- **One promoted function is wrong.** The `number_to_words` function returns
+  an empty string for 0 instead of 'zero'. It agrees with the reference on
+  the other 9,999 inputs in range, passed the gate on 8 examples, and served
+  22 correct answers because 0 never arrived. By the plan's definition this
+  is not a gate failure, since no wrong answer was served, but it is the
+  failure mode the offline gate measurement predicted: a fault is caught only
+  when an input that exposes it arrives, and the audit can only see inputs
+  that do arrive.
+
+The shapes were selected to be error-prone and the benchmark was not reviewed
+by the owner before the freeze. 20 task clusters.
+
+Evidence: `fast_path_timing_v2_hard_primary.jsonl`,
+`fast_path_timing_v2_hard_primary_analysis.json`.
+
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
 hardened boundary against adversarial code.

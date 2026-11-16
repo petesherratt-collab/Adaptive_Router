@@ -1,0 +1,73 @@
+{
+ "scope": "PROSPECTIVE",
+ "arrival": "drained",
+ "status": "COMPLETED",
+ "label": "primary",
+ "override": null,
+ "task_clusters": 20,
+ "arms": {
+  "A": {
+   "requests": 600,
+   "correct": 571,
+   "unanswered": 2,
+   "errors": {
+    "OPENROUTER_RESPONSE_INVALID": 2
+   },
+   "median_ms": 2964.026127000011,
+   "p90_ms": 4951.190291200032
+  },
+  "B": {
+   "requests": 600,
+   "correct": 593,
+   "unanswered": 0,
+   "errors": {},
+   "median_ms": 1160.7331205000264,
+   "p90_ms": 2156.650428399962
+  },
+  "C": {
+   "requests": 600,
+   "correct": 598,
+   "unanswered": 0,
+   "errors": {},
+   "median_ms": 32.203430999970806,
+   "p90_ms": 1660.066241500084
+  }
+ },
+ "arm_c_routes": {
+  "code": {
+   "requests": 418,
+   "correct": 418,
+   "median_ms": 28.08375149999165
+  },
+  "model": {
+   "requests": 182,
+   "correct": 180,
+   "median_ms": 1263.1539894999833
+  }
+ },
+ "time_ratio_c_over_a": 0.010864759492712355,
+ "time_ratio_interval_95": [
+  0.009351581802620215,
+  0.014720297218382123
+ ],
+ "correctness_c_minus_a": 0.04500000000000004,
+ "correctness_interval_95": [
+  0.019999999999999907,
+  0.07500000000000007
+ ],
+ "time_criterion_met": true,
+ "correctness_criterion_met": true,
+ "decision": "SUPPORTED",
+ "shapes_promoted": 20,
+ "shapes_ever_served_by_code": 20,
+ "median_first_code_index": 8.0,
+ "max_first_code_index": 15,
+ "median_gap_ms_arm_c": 8315.797769000028,
+ "median_promotion_index": 7.0,
+ "shapes_with_gold_wrong_function": 1,
+ "shapes_with_demotion": 0,
+ "wrong_stored_examples": 0,
+ "code_served_wrong": 0,
+ "shapes_with_code_served_wrong": 0,
+ "median_background_ms_arm_c": 0.0012000000424450263
+}
