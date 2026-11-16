@@ -3168,3 +3168,43 @@ A live smoke test used one six-job shape outside it and is not evidence.
 
 Verification: full unit suite passed; benchmark self-verify passed;
 `git diff --check` passed.
+
+---
+
+## 2026-11-16 — Fast-path jobs V1 result
+
+The frozen run completed in one attempt: 10,708 provider calls, 8 invalid
+responses, no unanswered job. Frozen-criteria decision: `NOT_SUPPORTED`.
+
+| Arm | Correct | Median ms | Mean ms |
+|---|---:|---:|---:|
+| A. Direct whole job | 234/240 | 2218 | 2269 |
+| R. Whole-job race | 238/240 | 1233 | 1240 |
+| B. Pipeline, race only | 238/240 | 2616 | 2614 |
+| C. Pipeline, fast path | 240/240 | 1115 | 1402 |
+
+- C/A time ratio 0.502, interval 0.416 to 0.784: fails the 0.75 limit.
+  Correctness C minus A +0.025, interval 0.000 to +0.054: meets the margin.
+- C/R 0.904 (0.800 to 1.284), correctness +0.008. B/A 1.179 (1.010 to 1.533).
+  R/A 0.556 (0.469 to 0.740).
+- Arm C steps: 447 function steps on code (median 26 ms, 0 wrong), 133
+  function steps on the race (0 wrong), 380 judgement steps (0 wrong).
+  Arm B: 4 wrong function steps of 580, 0 wrong judgement steps of 380.
+- 27 of 29 function steps promoted, 0 gold-wrong, 0 demotions, 0 wrong
+  examples, 0 judgement shapes stored.
+- Not promoted: `store_aisle.aisle` (3 examples) and `greeting.hello` (4):
+  domains smaller than `min_gate_examples`.
+- Fixed-in-advance shapes: `dial_code` C median 1847 ms against R 1165 ms;
+  `triple_code` C 1108 ms against R 1341 ms, and correct 20/20 against 18/20.
+- After the fifth job of each shape, medians were A 2205, R 1220, B 2620,
+  C 1050 ms.
+
+Reading: decomposition without code is a cost; with code it roughly halves
+time against one model but does not beat a whole-job race on this workload.
+A fixed minimum example count cannot be met by a function whose whole domain
+is smaller than that count.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_jobs_v1_primary.jsonl` | `a9b35987181a775c74ebadcf61280313bc9a88a0bd810cb6fc63efcde5eb30f5` |
+| `fast_path_jobs_v1_primary_analysis.json` | `ed636371abc96d88aee1f7ce3a66d9198a655830c6e506e70ac71d7ed4cca349` |

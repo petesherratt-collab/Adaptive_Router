@@ -308,6 +308,46 @@ which is the time of the two judgement steps running side by side. No gold
 labels were defined, so nothing is claimed about correctness, and no
 comparison with a single whole-job model call was made.
 
+### Jobs V1: multi-step jobs (prospective, 2026-11-16)
+
+[`FAST_PATH_JOBS_V1_PLAN.md`](FAST_PATH_JOBS_V1_PLAN.md) froze one four-arm
+run on 12 mixed job shapes, 20 jobs each. Decision under the frozen criteria:
+`NOT_SUPPORTED`. The correctness criterion was met; the time criterion was not.
+
+| Arm | Correct | Median ms | 90th pct ms | Mean ms |
+|---|---:|---:|---:|---:|
+| A. One direct whole-job call | 234/240 | 2218 | 3238 | 2269 |
+| R. Whole-job race | 238/240 | 1233 | 1576 | 1240 |
+| B. Step pipeline, race only | 238/240 | 2616 | 3339 | 2614 |
+| C. Step pipeline, fast path | 240/240 | 1115 | 2433 | 1402 |
+
+- Primary, C against A: time ratio 0.50, 95% interval 0.42 to 0.78. The
+  criterion required the interval wholly below 0.75. Correctness +2.5 points,
+  interval 0.0 to +5.4.
+- C against R: time ratio 0.90, interval 0.80 to 1.28; correctness +0.8
+  points. On this workload the step pipeline is not distinguishable in speed
+  from simply racing the whole job, and it is slower in the mean.
+- B against A: time ratio 1.18. Splitting a job into steps without code makes
+  it slower than one direct call.
+- Every judgement step was answered correctly in both pipeline arms, and none
+  was stored. All four wrong step answers in arm B were function steps
+  answered by a model; arm C had no wrong step.
+- 27 of 29 function steps were promoted, all gold-correct, no wrong stored
+  example, no demotion. Two were never promoted: `store_aisle.aisle` and
+  `greeting.hello` have three and four possible inputs, so they could not
+  reach eight distinct examples even with probes. Those two shapes, and
+  `dial_code` with its two judgement steps in sequence, ran at about 1.7 s.
+
+What this supports: a step pipeline is worth having only where code replaces
+model calls, and its floor is the time of its slowest chain of judgement
+steps. Against a single model it roughly halved job time and made no errors.
+Against a whole-job race it bought little. The judgement texts were short and
+unambiguous, the jobs small, learning was drained between jobs, and there are
+12 task clusters.
+
+Evidence: `fast_path_jobs_v1_primary.jsonl`,
+`fast_path_jobs_v1_primary_analysis.json`.
+
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
 hardened boundary against adversarial code.
