@@ -21,6 +21,7 @@ the override and a label are written to the header.
 from __future__ import annotations
 
 import argparse
+import collections
 from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import importlib.util
@@ -54,6 +55,52 @@ HASHED_FILES = (
 )
 
 
+HARD_PROVIDER_ERRORS = frozenset({"OPENROUTER_HTTP_401", "OPENROUTER_HTTP_402"})
+
+
+class ProviderMonitor:
+    """Wrap the remote call, tally provider errors and trip on sustained failure.
+
+    Trips at once on an account-level error (401, 402), or when more than half
+    of the last ``window`` calls failed.
+    """
+
+    def __init__(self, remote_fn, window=100, limit=0.5):
+        self.remote_fn, self.limit = remote_fn, limit
+        self.recent = collections.deque(maxlen=window)
+        self.errors = collections.Counter()
+        self.calls = 0
+        self.tripped_by = None
+        self._lock = threading.Lock()
+
+    def __call__(self, prompt, config, api_key):
+        result = self.remote_fn(prompt, config, api_key)
+        with self._lock:
+            self.calls += 1
+            self.recent.append(result.success)
+            if not result.success:
+                self.errors[result.error or "UNKNOWN"] += 1
+                if result.error in HARD_PROVIDER_ERRORS:
+                    self.tripped_by = self.tripped_by or result.error
+            if (
+                self.tripped_by is None
+                and len(self.recent) == self.recent.maxlen
+                and self.recent.count(False) / len(self.recent) > self.limit
+            ):
+                self.tripped_by = "SUSTAINED_FAILURE_RATE"
+        return result
+
+    def tripped(self):
+        return self.tripped_by is not None
+
+    def report(self):
+        return {
+            "calls": self.calls,
+            "errors": dict(self.errors),
+            "tripped_by": self.tripped_by,
+        }
+
+
 def sha256_file(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
@@ -81,14 +128,17 @@ def direct_answer(shape, args, remote_config, settings, remote_fn, api_key):
     }
     try:
         result = remote_fn(prompt, config, api_key)
-    except Exception:
-        return False, None
-    return fast_path.parse_answer(result.text) if result.success else (False, None)
+    except Exception as exc:
+        return False, None, type(exc).__name__
+    if not result.success:
+        return False, None, result.error
+    answered, value = fast_path.parse_answer(result.text)
+    return answered, value, None if answered else "UNPARSEABLE_ANSWER"
 
 
 def run_shape(
     shape, inputs, golds, remote_config, settings, remote_fn, api_key, workdir,
-    arrival="drained",
+    arrival="drained", should_stop=lambda: False,
 ):
     """Return (request rows, shape summary) for one shape."""
     request = {
@@ -111,13 +161,16 @@ def run_shape(
     order_rng = random.Random(f"{ARM_ORDER_SEED}:{shape['name']}")
     rows, promoted_at, last_end = [], None, {}
     for index, (args, expected) in enumerate(zip(inputs, golds)):
+        if should_stop():
+            break
         order = ["A", "B", "C"]
         order_rng.shuffle(order)
         for position, arm in enumerate(order):
             started = time.perf_counter()
             gap_ms = (started - last_end[arm]) * 1000 if arm in last_end else None
+            error = None
             if arm == "A":
-                answered, value = direct_answer(
+                answered, value, error = direct_answer(
                     shape, args, remote_config, settings, remote_fn, api_key
                 )
                 route, model = ("model" if answered else "none"), BASELINE_MODEL
@@ -145,18 +198,29 @@ def run_shape(
                     "route": route,
                     "model": model,
                     "answered": answered,
+                    "error": error,
                     "correct": answered
                     and sandbox.canonical(value) == sandbox.canonical(expected),
                     "value": value if answered else None,
                 }
             )
-        record = routers["C"].store.get(routers["C"].store.shapes()[0]["shape"])
+        record = routers["C"].store.get(
+            fast_path.shape_key(shape["spec"], shape["signature"])
+        )
         if promoted_at is None and record["function"] is not None:
             promoted_at = index
     for router in routers.values():
         router.close()
-    record = routers["C"].store.get(record["shape"])
-    return rows, shape_summary(shape, inputs, golds, record, promoted_at)
+    key = fast_path.shape_key(shape["spec"], shape["signature"])
+    record = routers["C"].store.get(key)
+    if record is None:  # stopped before this shape's first request
+        summary = {"record_type": "shape", "shape": shape["name"],
+                   "promoted_at_index": None, "function_gold_correct": None,
+                   "demotions": [], "wrong_examples": 0}
+    else:
+        summary = shape_summary(shape, inputs, golds, record, promoted_at)
+    summary["requests_completed"] = len(rows) // 3
+    return rows, summary
 
 
 def shape_summary(shape, inputs, golds, record, promoted_at):
@@ -201,14 +265,19 @@ def failure_rates(rows):
 
 def execute(
     shapes, bench, remote_config, settings, remote_fn, api_key, workers, write,
-    arrival="drained",
+    arrival="drained", monitor=None,
 ):
-    """Run all shapes. Returns ``"COMPLETED"`` or ``"EARLY_STOP"``."""
+    """Run all shapes.
+
+    Returns ``"COMPLETED"``, ``"EARLY_STOP"`` or ``"PROVIDER_FAILURE_STOP"``.
+    """
+    should_stop = monitor.tripped if monitor is not None else (lambda: False)
+
     def job(shape):
         inputs = bench.stream(shape)
         return run_shape(
             shape, inputs, bench.gold(shape, inputs), remote_config, settings,
-            remote_fn, api_key, workdir, arrival,
+            remote_fn, api_key, workdir, arrival, should_stop,
         )
 
     def collect(batch, pool):
@@ -225,8 +294,9 @@ def execute(
         if len(shapes) > EARLY_STOP_SHAPES and max(rates.values()) > EARLY_STOP_FAILURE_RATE:
             write({"record_type": "early_stop", "failure_rates": rates})
             return "EARLY_STOP"
-        collect(shapes[EARLY_STOP_SHAPES:], pool)
-    return "COMPLETED"
+        if not should_stop():
+            collect(shapes[EARLY_STOP_SHAPES:], pool)
+    return "PROVIDER_FAILURE_STOP" if should_stop() else "COMPLETED"
 
 
 def main():
@@ -286,11 +356,12 @@ def main():
                 "files": {name: sha256_file(ROOT / name) for name in HASHED_FILES},
             }
         )
+        monitor = ProviderMonitor(remote.generate)
         status = execute(
-            shapes, bench, remote_config, settings, remote.generate, api_key,
-            args.workers, write, args.arrival,
+            shapes, bench, remote_config, settings, monitor, api_key,
+            args.workers, write, args.arrival, monitor,
         )
-        write({"record_type": "footer", "status": status})
+        write({"record_type": "footer", "status": status, "provider": monitor.report()})
     if status == "COMPLETED":
         partial.rename(output)
     print(status, output if status == "COMPLETED" else partial)

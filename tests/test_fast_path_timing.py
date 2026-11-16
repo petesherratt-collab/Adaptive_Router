@@ -142,6 +142,49 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(rows[-1]["record_type"], "early_stop")
         self.assertEqual(len({r["shape"] for r in rows if r["record_type"] == "request"}), 3)
 
+    def test_account_error_stops_the_run(self):
+        calls = {"n": 0}
+
+        def remote_fn(prompt, config, api_key):
+            calls["n"] += 1
+            if calls["n"] > 40:
+                return RemoteResult(False, error="OPENROUTER_HTTP_402", model=config["model"])
+            return fake_remote()(prompt, config, api_key)
+
+        monitor = runner.ProviderMonitor(remote_fn)
+        rows = []
+        status = runner.execute(
+            tiny_bench(shapes=5).SHAPES, tiny_bench(shapes=5), {"model": "x"},
+            dict(SETTINGS), monitor, "k", 1, rows.append, "drained", monitor,
+        )
+        self.assertEqual(status, "PROVIDER_FAILURE_STOP")
+        self.assertEqual(monitor.report()["tripped_by"], "OPENROUTER_HTTP_402")
+        summaries = [r for r in rows if r["record_type"] == "shape"]
+        self.assertTrue(any(s["requests_completed"] < 6 for s in summaries))
+        self.assertLess(calls["n"], 120)
+
+    def test_sustained_failures_trip_the_monitor(self):
+        monitor = runner.ProviderMonitor(
+            lambda p, c, k: RemoteResult(False, error="OPENROUTER_TIMEOUT"), window=10
+        )
+        for _ in range(9):
+            monitor("p", {}, "k")
+        self.assertFalse(monitor.tripped())
+        monitor("p", {}, "k")
+        self.assertEqual(monitor.report()["tripped_by"], "SUSTAINED_FAILURE_RATE")
+        self.assertEqual(monitor.report()["errors"], {"OPENROUTER_TIMEOUT": 10})
+
+    def test_direct_answer_reports_error(self):
+        shape = tiny_bench().SHAPES[0]
+        self.assertEqual(
+            runner.direct_answer(shape, [2], {}, SETTINGS, fake_remote(fail=True), "k"),
+            (False, None, "OPENROUTER_HTTP_500"),
+        )
+        self.assertEqual(
+            runner.direct_answer(shape, [2], {}, SETTINGS, fake_remote(), "k"),
+            (True, 4, None),
+        )
+
     def test_override_parsing(self):
         self.assertEqual(runner.parse_override("min_gate_examples=4"), ("min_gate_examples", 4))
         self.assertEqual(runner.parse_override('synthesis_model="a/b"'), ("synthesis_model", "a/b"))

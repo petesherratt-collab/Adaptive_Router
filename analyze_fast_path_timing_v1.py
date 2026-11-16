@@ -8,6 +8,7 @@ paired bootstrap that resamples whole shapes.
 from __future__ import annotations
 
 import argparse
+import collections
 import json
 from pathlib import Path
 import random
@@ -81,6 +82,9 @@ def arm_table(requests):
             "requests": len(mine),
             "correct": sum(r["correct"] for r in mine),
             "unanswered": sum(not r["answered"] for r in mine),
+            "errors": dict(
+                collections.Counter(r["error"] for r in mine if r.get("error"))
+            ),
             "median_ms": statistics.median(times),
             "p90_ms": percentile(times, 0.9),
         }
