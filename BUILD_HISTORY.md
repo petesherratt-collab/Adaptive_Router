@@ -2978,3 +2978,28 @@ test the gate's ability to reject one. Descriptive only.
 |---|---|
 | `fast_path_timing_v1_gate4_rerun.jsonl` | `e50063042646580aa47906ee64b7354ead13b6f6aa588d7d3352f541cd984816` |
 | `fast_path_timing_v1_gate4_rerun_analysis.json` | `aa75436f8dd8eb92de4f41dc69494790f7a90415b471560ed32be3e1a985eecf` |
+
+---
+
+## 2026-11-16 — Fast-path timing V2 (harder shapes) freeze
+
+The V1 runs never produced a wrong synthesised function, so they could not
+exercise the gate or the audit. `fast_path_timing_bench_v2_hard.py` adds 20
+error-prone shapes and `FAST_PATH_TIMING_V2_HARD_PLAN.md` freezes one primary
+run on them under the V1 rules and criteria. No provider call has touched
+this benchmark. The benchmark was not owner-reviewed before the freeze.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_timing_bench_v2_hard.py` | `54abf8668ef51d5a9acf8d11366102b9b086a72bb5497339129e33cf9f4446a9` |
+| `fast_path_timing_bench_v1.py` | `e36398997f733a6deaf611e1f7541572ab4f39e68e1f983546c0044dd552848d` |
+| `config_fast_path.json` | `1f14f980657cc059a3ad5955fe30fb7e13f4b924fbdf341057c9501c016d986f` |
+| `fast_path.py` | `b6f4c739fdd17911daf85a85bc424ecb19faccfd16310b917014c15b97060ea2` |
+| `sandbox.py` | `b132f5d8175e60916baa0550c09d2f5d34e247e99bd390eee07510f596a9dcff` |
+| `remote.py` | `4efc49ab45e68d09f026e75fca9e3aff2780fac8682b3b27f7fa983eda51afc2` |
+| `run_fast_path_timing_v1.py` | `afe13bde696a309dd29a97378f9883104cd9fae9a346c1c4cfc855e30d55a2bf` |
+| `analyze_fast_path_timing_v1.py` | `b01b8fab99b0f3724d7789bf2caa87e51e59137e6da49dc50fd998e792523b9a` |
+| `FAST_PATH_TIMING_V2_HARD_PLAN.md` | `94d17a7d64f40939988d59e077a6a03eba71d762b3699f9e81e17cce781f6601` |
+
+Verification: full unit suite passed; benchmark self-verify and standard
+library cross-checks passed; `git diff --check` passed.

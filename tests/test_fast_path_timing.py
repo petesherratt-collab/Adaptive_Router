@@ -66,6 +66,13 @@ class BenchTests(unittest.TestCase):
         bench.self_verify()
         self.assertEqual(len(bench.SHAPES), 30)
 
+    def test_hard_bench_self_verifies(self):
+        import fast_path_timing_bench_v2_hard as hard
+
+        hard.self_verify()
+        self.assertEqual(len(hard.SHAPES), 20)
+        self.assertNotEqual(hard.STREAM_SEED, bench.STREAM_SEED)
+
     def test_streams_are_distinct_and_seeded(self):
         shape = bench.SHAPES[0]
         inputs = bench.stream(shape)
