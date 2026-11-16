@@ -257,6 +257,17 @@ using probe examples alone (`fast_path_probe_eval_v2.jsonl`):
   measurement: 18 of 44 probe replies were truncated by a 1,024-token limit.
   The limit is now 4,096 and an unparseable probe reply is retried once.
 
+End to end on the harder benchmark with probing enabled
+(`fast_path_timing_v2_hard_probes.jsonl`, descriptive, benchmark already
+seen): all 20 shapes were promoted on the first attempt against 18 to 20
+examples each, at the same request index as before (median 7, latest 12).
+Every promoted function was gold-correct, including `number_to_words`. Of 240
+probes proposed, 234 were answered unanimously and every one of those matched
+the reference. Fast-path answers: 598/600 correct, median 33 ms, 425 served by
+code. Background work rose from about 1,170 s to about 1,440 s. In this run
+the synthesis model wrote no wrong function, so the probes rejected nothing;
+the evidence that they reject a wrong one is the replay above.
+
 Both banks were already development evidence, so these figures are
 descriptive. Probing depends on the models answering edge cases correctly and
 unanimously; a unanimous wrong answer would block a correct function.

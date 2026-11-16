@@ -3075,3 +3075,30 @@ Results, all descriptive:
 | `fast_path_probe_eval_v2.jsonl` | `3b2b6743286adb1304c146c6895a7d98fc8aad60c2ceaffb81fadb98487f6670` |
 | `fast_path_probe_eval_v1.jsonl` | `a2a2a8537c45f090a006a2fd933a02e047cd84c3b444992d66cedf5aac519489` |
 | `fast_path_probe_case_number_to_words_result.jsonl` | `fd79903ba58e452e70618ae2b6f1280f974584c26c2f7ade531c45f3b425024c` |
+
+---
+
+## 2026-11-16 — Harder benchmark with probing enabled (descriptive)
+
+Label `probes_enabled`, benchmark already used once. 5,925 provider calls, 62
+invalid responses, no unanswered request.
+
+| Arm | Correct | Median ms | Mean ms |
+|---|---:|---:|---:|
+| A. Direct | 572/600 | 2791 | 2800 |
+| B. Race only | 595/600 | 1166 | 1340 |
+| C. Fast path | 598/600 | 33 | 437 |
+
+- 20 of 20 shapes promoted on the first attempt, gate examples 18 to 20.
+  Promotion index median 7, latest 12. First code-served index median 8.
+- Every promoted function gold-correct. No demotion.
+- Probes: 240 proposed, 234 unanimous, 6 disputed, 0 wrong against the
+  reference, 0 outside the reference's domain.
+- 425 code-served answers, none wrong. Background work about 1,443 s.
+- No synthesised function was wrong in this run, so no probe rejection
+  occurred; the run shows probing did not obstruct promotion or answer time.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_timing_v2_hard_probes.jsonl` | `796c59372613fc27ecbf0b3c7f6d142e2d2fd20272437ff1f61797733a806fa5` |
+| `fast_path_timing_v2_hard_probes_analysis.json` | `4b45ee0ce969eb8da690e9ae8184bad0974ee2939b1ecdf9709ce17adef66181` |
