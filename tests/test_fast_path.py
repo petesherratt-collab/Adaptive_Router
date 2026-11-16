@@ -424,6 +424,32 @@ class LearningTests(FastPathTestCase):
                 probes = [c for c in remote.calls if c[1].startswith("List boundary")]
                 self.assertEqual(len(probes), calls)
 
+    def test_early_probes_count_toward_the_minimum(self):
+        # Only two inputs ever arrive, but four probes bring the total to six.
+        remote = FakeRemote({"a": double, "b": double}, sources=[GOOD])
+        remote.probe_reply = "[[0], [1], [-1], [1000]]"
+        router = self.probing_router(remote, min_gate_examples=6, probe_after_examples=2)
+        router.handle(request([10]))
+        router.drain()
+        self.assertIsNone(self.shape(router)["probes"])
+        router.handle(request([11]))
+        router.drain()
+        shape = self.shape(router)
+        self.assertEqual(shape["probes"]["added"], 4)
+        self.assertEqual(shape["function"]["gate"]["examples"], 6)
+
+    def test_early_probes_that_fall_short_do_not_trigger_synthesis(self):
+        remote = FakeRemote({"a": double, "b": double}, sources=[GOOD])
+        remote.probe_reply = "[[0]]"
+        router = self.probing_router(remote, min_gate_examples=6, probe_after_examples=2)
+        for n in (10, 11):
+            router.handle(request([n]))
+            router.drain()
+        shape = self.shape(router)
+        self.assertEqual((len(shape["examples"]), shape["synthesis_attempts"]), (3, []))
+        self.assertIsNone(shape["function"])
+        self.assertEqual(len(remote.sources), 1)
+
     def test_probe_proposer_sees_no_examples(self):
         remote = FakeRemote({"a": double, "b": double}, sources=[GOOD])
         remote.probe_reply = "[[0]]"

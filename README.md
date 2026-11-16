@@ -272,6 +272,42 @@ Both banks were already development evidence, so these figures are
 descriptive. Probing depends on the models answering edge cases correctly and
 unanimously; a unanimous wrong answer would block a correct function.
 
+### Multi-step jobs (developmental, 2026-11-16)
+
+`pipeline.py` runs a caller-declared plan over the fast path. A
+`fast_path_job_v1` document names its inputs, lists steps and names one
+output. A step's arguments are literal values, job inputs or results of
+earlier steps. The orchestrator is plain code and makes no model call of its
+own; per step it only looks up whether promoted code exists.
+
+- `function` steps are fully determined by their specification. They learn
+  and may be promoted to code.
+- `judgement` steps need a model's reading of the input. They are always
+  raced and are never stored, synthesised or promoted.
+- Steps whose arguments are all available run concurrently. A step may refer
+  only to inputs and earlier steps, so a plan cannot contain a cycle.
+- If a step returns no answer the job fails, dependants are not started, and
+  no partial answer is returned.
+
+```bash
+python main.py --job-json examples/fast_path_job_ticket_triage.json
+```
+
+Probes can now be fetched before enough traffic has arrived
+(`probe_after_examples`, 3) and their answers count toward
+`min_gate_examples`. Without this a function with a small input domain, such
+as a rule over three tones and four categories, never accumulated eight
+distinct examples.
+
+One live demonstration, not a measurement: the ticket-triage example (two
+judgement steps, three function steps) was run on 16 hand-written messages
+against the five-model roster. The first three jobs took 2.3 to 2.8 s with
+every step on the model race. All three function steps were promoted after the
+third job, and the remaining thirteen took 0.86 to 1.66 s (median about 1.0 s),
+which is the time of the two judgement steps running side by side. No gold
+labels were defined, so nothing is claimed about correctness, and no
+comparison with a single whole-job model call was made.
+
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
 hardened boundary against adversarial code.

@@ -3102,3 +3102,38 @@ invalid responses, no unanswered request.
 |---|---|
 | `fast_path_timing_v2_hard_probes.jsonl` | `796c59372613fc27ecbf0b3c7f6d142e2d2fd20272437ff1f61797733a806fa5` |
 | `fast_path_timing_v2_hard_probes_analysis.json` | `4b45ee0ce969eb8da690e9ae8184bad0974ee2939b1ecdf9709ce17adef66181` |
+
+---
+
+## 2026-11-16 — Multi-step jobs, first build
+
+The owner chose to move from single-step tasks to multi-step jobs. The first
+stage keeps the plan in the caller's hands: the orchestrator executes a
+declared plan and decides nothing except, by lookup, whether a step can be
+answered by promoted code. A model-written plan is deferred.
+
+Added: `pipeline.py` (job schema, validation, concurrent step execution,
+metadata-only job log), `tests/test_pipeline.py`, `main.py --job-json`,
+`examples/fast_path_job_ticket_triage.json`, and a `learn` argument to
+`FastPathRouter.handle` so judgement steps are raced without being stored.
+
+Reasoning for the two step kinds: a whole job that is a pure function would
+simply be promoted as one function by the single-step fast path. Decomposition
+earns its place only for mixed jobs, where some steps need a model and the
+rest can go down to code. Letting a judgement step learn would invite a
+keyword heuristic that reproduces a handful of examples; declaring the kind
+prevents that. Discovering the kind automatically is not attempted.
+
+Change to learning: `probe_after_examples` (3) lets the probe step run before
+`min_gate_examples` arrived examples exist, with probe answers counting toward
+the minimum. Found in the first live demonstration, where a rule over twelve
+possible inputs reached only seven distinct examples in sixteen jobs and was
+never promoted. This changes single-step behaviour too; the recorded timing
+runs predate it.
+
+Live demonstration (no gold, not evidence): 16 ticket-triage jobs. Jobs 1 to 3
+ran every step on the race, 2.3 to 2.8 s. From job 4 all three function steps
+ran as code and jobs took 0.86 to 1.66 s. One synthesised function was
+rejected by the gate and its retry promoted, in the earlier of two demo runs.
+
+Verification: full unit suite passed; `git diff --check` passed.

@@ -373,26 +373,35 @@ class FastPathRouter:
 
     # ---- hot path -------------------------------------------------------
 
-    def handle(self, request):
+    def handle(self, request, learn=True):
+        """Answer one request.
+
+        With ``learn=False`` the request is raced and nothing is stored: no
+        examples, no synthesis, no promotion. Use it for steps whose answer is
+        a judgement and must never be replaced by generated code.
+        """
         if not isinstance(request, FastPathRequest):
             request = FastPathRequest.from_mapping(request)
         started = time.perf_counter()
         request_id = str(uuid.uuid4())
-        with self.store.lock():
-            record = self.store.ensure(request)
-            changed = [
-                add_example(record, e["args"], e["expected"], SOURCE_CALLER)
-                for e in request.examples
-            ]
-            if any(outcome != "duplicate" for outcome in changed):
-                self.store.save(request.shape)
-            function = record["function"]
+        function = None
+        if learn:
+            with self.store.lock():
+                record = self.store.ensure(request)
+                changed = [
+                    add_example(record, e["args"], e["expected"], SOURCE_CALLER)
+                    for e in request.examples
+                ]
+                if any(outcome != "duplicate" for outcome in changed):
+                    self.store.save(request.shape)
+                function = record["function"]
 
         log = {
             "record_type": "fast_path_request",
             "request_id": request_id,
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "shape": request.shape,
+            "learn": learn,
             "code": {"attempted": False},
         }
         if function is not None:
@@ -425,7 +434,8 @@ class FastPathRouter:
 
         futures = self._start_race(request)
         winner, value = self._first_valid(futures)
-        self._submit(self._observe, request, futures, request_id)
+        if learn:
+            self._submit(self._observe, request, futures, request_id)
         if winner is None:
             return self._finish(log, started, None, "none", RACE_NO_VALID_ANSWER)
         return self._finish(log, started, value, "model", MODEL_RACE_WON, model=winner)
@@ -570,11 +580,21 @@ class FastPathRouter:
     def _maybe_synthesise(self, shape):
         with self.store.lock():
             record = self.store.get(shape)
+            needs_probes = (
+                self.settings.get("probe_enabled", False)
+                and record.get("probes") is None
+            )
+            # Probes need no traffic, so they may be fetched before enough
+            # examples have arrived; their answers count toward the minimum.
+            enough = len(record["examples"]) >= self.settings["min_gate_examples"]
+            early_probe = needs_probes and len(record["examples"]) >= self.settings.get(
+                "probe_after_examples", self.settings["min_gate_examples"]
+            )
             if (
                 not self.settings.get("synthesis_enabled", True)
                 or record["function"] is not None
                 or shape in self._synthesising
-                or len(record["examples"]) < self.settings["min_gate_examples"]
+                or not (enough or early_probe)
                 or sum(
                     attempt["outcome"] != "REMOTE_ERROR"
                     for attempt in record["synthesis_attempts"]
@@ -584,19 +604,23 @@ class FastPathRouter:
                 return
             self._synthesising.add(shape)
             spec, signature = record["spec"], record["signature"]
-            needs_probes = (
-                self.settings.get("probe_enabled", False)
-                and record.get("probes") is None
-            )
             arity = len(record["examples"][0]["args"])
+        attempt = None
         try:
             if needs_probes:
                 self._probe(shape, spec, signature, arity)
-            attempt = self._synthesise(shape, spec, signature)
+            with self.store.lock():
+                ready = (
+                    len(self.store.get(shape)["examples"])
+                    >= self.settings["min_gate_examples"]
+                )
+            if ready:
+                attempt = self._synthesise(shape, spec, signature)
         finally:
             with self.store.lock():
                 self._synthesising.discard(shape)
-        self._log({"record_type": "fast_path_synthesis", "shape": shape, **attempt})
+        if attempt is not None:
+            self._log({"record_type": "fast_path_synthesis", "shape": shape, **attempt})
 
     def propose_probes(self, spec, signature, arity):
         """Ask the probe model for boundary inputs. Returns ``(probes, error)``."""

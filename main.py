@@ -14,6 +14,7 @@ from fast_path import (
     render_status,
 )
 from local import model_residency
+from pipeline import JobError, Orchestrator, load_job, render_job
 from probe import run_probe
 from router import Router
 from runtime_contracts import RuntimeContractError, load_runtime_request
@@ -134,6 +135,11 @@ def build_parser():
         help="answer one fast_path_request_v1 JSON document",
     )
     mode.add_argument(
+        "--job-json",
+        metavar="PATH",
+        help="run one multi-step fast_path_job_v1 JSON document",
+    )
+    mode.add_argument(
         "--fast-status",
         action="store_true",
         help="list recorded fast-path task shapes",
@@ -156,6 +162,22 @@ def main():
 
     if args.fast_status:
         print(render_status(ShapeStore(ROOT / "fast_path_store")))
+        return
+    if args.job_json:
+        try:
+            job = load_job(args.job_json)
+        except JobError as exc:
+            parser.error(f"invalid job: {exc}")
+        fast_router = FastPathRouter(
+            load_fast_path_config(config),
+            ROOT / "fast_path_store",
+            ROOT / "fast_path_runs.jsonl",
+        )
+        orchestrator = Orchestrator(fast_router, ROOT / "fast_path_jobs.jsonl")
+        print(render_job(orchestrator.run(job)))
+        # The answer is already printed; learning happens afterwards.
+        orchestrator.close()
+        fast_router.close()
         return
     if args.fast_request_json:
         try:
