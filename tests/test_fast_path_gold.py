@@ -1,10 +1,15 @@
 from concurrent.futures import ThreadPoolExecutor
 import json
+import re
 import unittest
 
 import fast_path_gold_items_v1 as bank
 from remote import RemoteResult
 import run_fast_path_gold as gold
+
+
+def prompt_args(prompt):
+    return [json.loads(v) for v in re.findall(r"^Argument \d+ \(JSON\): (.*)$", prompt, re.M)]
 
 
 ITEM = {
@@ -19,7 +24,7 @@ def fake_remote(prompt, config, api_key):
     model = config["model"]
     if prompt.startswith("Write a Python function"):
         return RemoteResult(True, text="def solve(n):\n    return n * n\n", model=model)
-    n = json.loads(prompt.split("positional): ")[1].split("\n")[0])[0]
+    n = prompt_args(prompt)[0]
     if model == "down":
         return RemoteResult(False, error="OPENROUTER_TIMEOUT", model=model)
     if model == "prose":

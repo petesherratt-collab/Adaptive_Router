@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 from concurrent.futures import ThreadPoolExecutor
+import hashlib
 from itertools import combinations
 import json
 import os
@@ -31,7 +32,10 @@ import sandbox
 ROOT = Path(__file__).resolve().parent
 
 
-def answer_rows(item, models, remote_config, remote_fn, api_key, pool):
+def answer_rows(item, models, remote_config, remote_fn, api_key, pool, max_tokens=None):
+    if max_tokens is not None:
+        remote_config = {**remote_config, "max_tokens": max_tokens}
+
     def ask(job):
         index, model = job
         args, expected = item["tests"][index]
@@ -150,10 +154,15 @@ def main():
             "bank_sha256": gate_eval.sha256_file(args.bank),
             "race_models": settings["race_models"],
             "synthesis_model": settings["synthesis_model"],
+            "answer_max_tokens": settings["answer_max_tokens"],
+            "answer_prompt_sha256": hashlib.sha256(
+                fast_path.build_answer_prompt("S", "def solve(a):", ["A"]).encode()
+            ).hexdigest(),
         }) + "\n")
         for item in items:
             batch = answer_rows(
-                item, settings["race_models"], remote_config, remote.generate, api_key, pool
+                item, settings["race_models"], remote_config, remote.generate, api_key, pool,
+                settings["answer_max_tokens"],
             )
             batch.append(synthesis_row(
                 item, settings["synthesis_model"], remote_config,

@@ -72,10 +72,20 @@ def _unfence(text):
     return match.group(1).strip() if match else stripped
 
 
+_ANSWER_LINE = re.compile(r"^\s*ANSWER:(.*)$", re.MULTILINE)
+
+
 def parse_answer(text):
-    """Return ``(ok, value)`` for a model answer that should be one JSON value."""
+    """Return ``(ok, value)`` for a model answer.
+
+    The answer is the JSON value on the last ``ANSWER:`` line. A reply that is
+    nothing but one JSON value is also accepted. Anything else is unusable;
+    no value is ever dug out of surrounding prose.
+    """
+    marked = _ANSWER_LINE.findall(text)
+    candidate = marked[-1].strip() if marked else _unfence(text)
     try:
-        return True, strict_json(_unfence(text))
+        return True, strict_json(candidate)
     except (ValueError, TypeError, RecursionError):
         return False, None
 
@@ -142,14 +152,24 @@ def load_fast_path_request(path):
 
 
 def build_answer_prompt(spec, signature, args):
+    if args:
+        arguments = "\n".join(
+            f"Argument {index} (JSON): {json.dumps(value)}"
+            for index, value in enumerate(args, start=1)
+        )
+    else:
+        arguments = "The function takes no arguments."
     return (
-        "Compute the return value of the function described below for the "
-        "given arguments.\n\n"
+        "Work out what the function described below returns for the given "
+        "arguments.\n\n"
         f"Specification: {spec}\n"
         f"Signature: {signature}\n"
-        f"Arguments (JSON array, positional): {json.dumps(args)}\n\n"
-        "Reply with the return value as a single JSON value and nothing else. "
-        "No explanation, no code fence."
+        f"{arguments}\n\n"
+        "Reply with exactly one line: the word ANSWER, a colon, then the "
+        "return value encoded as JSON. Examples of the form: "
+        'ANSWER: "text"   ANSWER: 42   ANSWER: [1, 2]   ANSWER: null\n'
+        "Give the bare return value. Do not wrap it in an object, do not "
+        "repeat the arguments, and write nothing after the ANSWER line."
     )
 
 
@@ -398,7 +418,13 @@ class FastPathRouter:
     def _ask(self, model, prompt):
         try:
             result = self.remote_fn(
-                prompt, {**self.remote_config, "model": model}, self.api_key
+                prompt,
+                {
+                    **self.remote_config,
+                    "model": model,
+                    "max_tokens": self.settings["answer_max_tokens"],
+                },
+                self.api_key,
             )
         except Exception as exc:  # a racer must never take the request down
             return {"model": model, "success": False, "valid": False,

@@ -2821,3 +2821,26 @@ calls and 28 synthesis calls, no retries, no provider failures on synthesis.
 Artifacts: `fast_path_gold_dev_run_v1.jsonl`,
 `fast_path_gold_dev_run_v1_summary.json`. `config_fast_path.json` now carries
 the roster. No runtime v0.3 source or sealed artifact changed.
+
+---
+
+## 2026-11-16 — Answer prompt revision and timing plan draft
+
+The development run showed that most unusable answers were format failures:
+one model reasoned in prose before its answer, and two returned empty content
+when reasoning consumed the 256-token limit.
+
+- `build_answer_prompt` now lists each argument on its own line and requires a
+  final `ANSWER: <JSON>` line. `parse_answer` reads the last `ANSWER:` line, or
+  a reply that is a single JSON value. It never extracts a value from prose.
+- `fast_path.answer_max_tokens` (1024) replaces the inherited 256 for answers.
+- Tuning used only the vendored CCC items, 60 cases by five models. Wrong or
+  unusable answers: 7 of 300 before, 0 of 300 after. Median latencies did not
+  rise materially. The 28-item bank was not re-run.
+- `run_fast_path_gold.py` now records the answer token limit and a hash of the
+  answer prompt template in its header.
+- `FAST_PATH_TIMING_V1_PLAN.md` drafts a three-arm timing experiment. It is
+  not frozen and authorizes nothing. Both existing banks are development
+  evidence, so it requires a new benchmark.
+
+Verification: full unit suite passed; `git diff --check` passed.

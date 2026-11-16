@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 import tempfile
 import time
@@ -7,6 +8,10 @@ import unittest
 import fast_path
 from fast_path import FastPathRequest, FastPathRequestError, FastPathRouter
 from remote import RemoteResult
+
+
+def prompt_args(prompt):
+    return [json.loads(v) for v in re.findall(r"^Argument \d+ \(JSON\): (.*)$", prompt, re.M)]
 
 
 SPEC = "Return the input integer doubled."
@@ -53,7 +58,7 @@ class FakeRemote:
         if answer is None:
             return RemoteResult(False, error="OPENROUTER_HTTP_500", model=model)
         if callable(answer):
-            answer = answer(json.loads(prompt.split("positional): ")[1].split("\n")[0]))
+            answer = answer(prompt_args(prompt))
         return RemoteResult(
             True, text=answer, model=model, total_ms=self.delays.get(model, 0) * 1000
         )
@@ -73,6 +78,7 @@ class FastPathTestCase(unittest.TestCase):
         settings = {
             "race_models": list(models),
             "synthesis_model": "writer",
+            "answer_max_tokens": 128,
             "synthesis_max_tokens": 512,
             "agreement_quorum": 2,
             "min_gate_examples": 3,
@@ -126,6 +132,15 @@ class RequestTests(unittest.TestCase):
         self.assertEqual(fast_path.parse_answer(' "a3" \n'), (True, "a3"))
         self.assertEqual(fast_path.parse_answer("```json\n[1, 2]\n```"), (True, [1, 2]))
         self.assertEqual(fast_path.parse_answer("null"), (True, None))
+        self.assertEqual(fast_path.parse_answer("ANSWER: [1, 2]"), (True, [1, 2]))
+        self.assertEqual(
+            fast_path.parse_answer('16 -> 1+6=7\n\nANSWER: {"value": 1}\nANSWER: 7\n'),
+            (True, 7),
+        )
+        # A marked line that is not JSON is unusable even if other text parses.
+        self.assertEqual(fast_path.parse_answer("7\nANSWER: seven"), (False, None))
+        # Prose followed by a bare value is not mined for an answer.
+        self.assertEqual(fast_path.parse_answer("9+9=18, 1+8=9\n\n9"), (False, None))
         for text in ("The answer is 4", "NaN", '{"a": 1, "a": 2}', ""):
             with self.subTest(text=text):
                 self.assertEqual(fast_path.parse_answer(text), (False, None))
@@ -266,6 +281,11 @@ class LearningTests(FastPathTestCase):
         prompt = next(p for _, p in remote.calls if p.startswith("Write a Python function"))
         for token in ("111", "222", "333", "444", "666"):
             self.assertNotIn(token, prompt)
+
+    def test_answer_prompt_lists_each_argument(self):
+        prompt = fast_path.build_answer_prompt(SPEC, SIGNATURE, [[1, 2], "x"])
+        self.assertIn("Argument 1 (JSON): [1, 2]\nArgument 2 (JSON): \"x\"", prompt)
+        self.assertIn("no arguments", fast_path.build_answer_prompt(SPEC, SIGNATURE, []))
 
     def test_wrong_function_is_rejected_and_attempts_are_bounded(self):
         remote = FakeRemote({"a": double, "b": double}, sources=[BAD, BAD, GOOD])

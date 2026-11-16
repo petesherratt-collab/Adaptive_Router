@@ -95,8 +95,17 @@ independent tasks.
 - Most `claude-haiku-5.5` failures are format: it wrapped or explained the
   answer despite the instruction. The answer prompt has not been tuned.
 
+After that run the answer prompt was changed to require a final `ANSWER:` line
+and the answer token limit was raised to 1024. Tuned on the vendored CCC items
+only, unusable answers there fell from 7 of 300 to 0 of 300
+(`fast_path_prompt_dev_ccc_before.jsonl`, `fast_path_prompt_dev_ccc_after.jsonl`).
+The fresh bank was not re-run with the new prompt.
+
 Still unmeasured: answer time of the running router on repeated task shapes
-against direct single-model service. That needs a frozen bank and its own plan.
+against direct single-model service. The draft design is in
+[`FAST_PATH_TIMING_V1_PLAN.md`](FAST_PATH_TIMING_V1_PLAN.md); it is not frozen
+and needs a new benchmark, because both existing banks are now development
+evidence.
 
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
