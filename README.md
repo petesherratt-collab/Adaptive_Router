@@ -163,9 +163,35 @@ is untested. The direct arm returned no answer on 22 requests in this run.
 Evidence: `fast_path_timing_v1_arrival_immediate.jsonl`,
 `fast_path_timing_v1_arrival_immediate_analysis.json`.
 
-A further run with `min_gate_examples=4` is invalid: the provider account ran
+### Sensitivity: promotion after 4 examples (descriptive)
+
+A first attempt at `min_gate_examples=4` is invalid: the provider account ran
 out of credits partway through. See
 [`FAST_PATH_TIMING_V1_GATE4_EXECUTION_INCIDENT.md`](FAST_PATH_TIMING_V1_GATE4_EXECUTION_INCIDENT.md).
+The runner now records provider errors and stops on sustained failure. The
+run was repeated in full with no provider failure affecting any request.
+
+| | 8 examples (primary) | 4 examples (rerun) |
+|---|---:|---:|
+| Fast-path median ms | 30 | 31 |
+| Fast-path mean ms | 290 | 158 |
+| Fast-path 90th pct ms | 961 | 779 |
+| Fast-path correct | 892/900 | 895/900 |
+| Requests served by code | 629 | 768 |
+| First code-served request, median index | 8 | 4 |
+| First code-served request, latest index | 17 | 8 |
+| Gold-wrong promoted functions | 0 | 0 |
+| Wrong code-served answers | 0 | 0 |
+
+Halving the gate did not admit a wrong function on this benchmark: all 30
+shapes were promoted on the first attempt and every function was gold-correct.
+That is weak evidence about the gate, because the synthesis model wrote no
+wrong function for the gate to catch. The offline gate measurement above
+still says four examples pass a deliberately buggy variant about one time in
+seven. Descriptive only, on a benchmark already used.
+
+Evidence: `fast_path_timing_v1_gate4_rerun.jsonl`,
+`fast_path_timing_v1_gate4_rerun_analysis.json`.
 
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a

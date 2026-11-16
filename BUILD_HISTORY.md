@@ -2949,3 +2949,32 @@ answers, so no comparison from this run is valid. Details, the limited
 descriptive reading and follow-up are in
 `FAST_PATH_TIMING_V1_GATE4_EXECUTION_INCIDENT.md`. The evidence file is kept
 unaltered. Provider calls on this line are paused until credit is added.
+
+---
+
+## 2026-11-16 — Runner hardening and `min_gate_examples=4` rerun
+
+After the credit incident `run_fast_path_timing_v1.py` gained a
+`ProviderMonitor`: it tallies provider errors, stops at once on HTTP 401 or
+402, and stops when more than half of the last 100 calls fail. Direct-arm rows
+record their error and the footer carries the tally. A stopped run keeps its
+`.partial` name with status `PROVIDER_FAILURE_STOP`.
+
+The owner added credit and the run was repeated from the start, label
+`min_gate_examples_4_rerun`. 6,545 provider calls, 13 invalid responses, no
+unanswered request in any arm.
+
+- Fast path: 895/900 correct, median 31 ms, mean 158 ms, 768 code-served.
+- Direct: 829/900, median 1183 ms. Race only: 884/900, median 844 ms.
+- Ratio C/A 0.0260 (interval 0.0241 to 0.0270); correctness +0.0733.
+- First code-served index: median 4, latest 8 (primary: 8 and 17).
+- 30 of 30 promoted first attempt; no wrong function, example or demotion.
+- All 5 wrong fast-path answers came from the model race.
+
+No synthesised function was wrong in any run so far, so these runs do not
+test the gate's ability to reject one. Descriptive only.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_timing_v1_gate4_rerun.jsonl` | `e50063042646580aa47906ee64b7354ead13b6f6aa588d7d3352f541cd984816` |
+| `fast_path_timing_v1_gate4_rerun_analysis.json` | `aa75436f8dd8eb92de4f41dc69494790f7a90415b471560ed32be3e1a985eecf` |
