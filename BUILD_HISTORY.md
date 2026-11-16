@@ -3040,3 +3040,38 @@ example-based promotion and of auditing only the inputs that arrive.
 |---|---|
 | `fast_path_timing_v2_hard_primary.jsonl` | `550c110445435754eeb39ba5ef45a6933dedb41db6889157ca207486fa6b36eb` |
 | `fast_path_timing_v2_hard_primary_analysis.json` | `c69166f9e581b4213753cf84f4d8493df77966e69074de238bc7593edb19915e` |
+
+---
+
+## 2026-11-16 — Boundary probing before promotion
+
+Chosen by the owner over an independent-implementation comparison, as the
+response to the latent `number_to_words` fault promoted in the V2 run.
+
+Added to `fast_path.py`: `build_probe_prompt`, `parse_probes`,
+`propose_probes`, `answer_probes` and a probe step that runs once per shape
+before the first synthesis attempt. New settings: `probe_enabled`,
+`probe_model` (`google/gemini-3.8-flash`), `max_probes` (12),
+`probe_max_tokens` (4096). Probe examples carry source `probe_agreement`.
+`run_fast_path_timing_v1.py` now verifies stored examples against the
+reference directly, because probe inputs lie outside the request stream.
+`evaluate_fast_path_probes.py` measures probing on items with a buggy variant.
+
+Results, all descriptive:
+
+- Replay of the promoted wrong function: 12 probes proposed, 12 agreed, wrong
+  function rejected on input 0, reference passed all 12.
+- First 44-item evaluation invalid: 18 probe replies truncated at 1,024
+  tokens. Kept as `fast_path_probe_eval_v1.jsonl`.
+- Second 44-item evaluation: 516 probes, 502 agreed, 14 disputed. Buggy
+  variants rejected 42 of 44. One accepted because no probe exposed an
+  order-dependent fault; one untested because the probe reply was unusable.
+  One reference rejected, `caesar_decode`, where the vendored reference
+  shifts uppercase letters contrary to its specification.
+- After that run an unparseable probe reply is retried once.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_probe_eval_v2.jsonl` | `3b2b6743286adb1304c146c6895a7d98fc8aad60c2ceaffb81fadb98487f6670` |
+| `fast_path_probe_eval_v1.jsonl` | `a2a2a8537c45f090a006a2fd933a02e047cd84c3b444992d66cedf5aac519489` |
+| `fast_path_probe_case_number_to_words_result.jsonl` | `fd79903ba58e452e70618ae2b6f1280f974584c26c2f7ade531c45f3b425024c` |

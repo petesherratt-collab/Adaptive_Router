@@ -607,18 +607,20 @@ class FastPathRouter:
             "model": model,
             "max_tokens": self.settings["probe_max_tokens"],
         }
-        try:
-            result = self.remote_fn(
-                build_probe_prompt(spec, signature, limit), config, self.api_key
-            )
-        except Exception as exc:
-            return [], type(exc).__name__
-        if not result.success:
-            return [], result.error
-        probes = parse_probes(result.text, arity, limit)
-        if probes is None:
-            return [], "PROBE_REPLY_INVALID"
-        return probes, None
+        # An unparseable reply is retried once; a provider failure is not.
+        for _ in range(2):
+            try:
+                result = self.remote_fn(
+                    build_probe_prompt(spec, signature, limit), config, self.api_key
+                )
+            except Exception as exc:
+                return [], type(exc).__name__
+            if not result.success:
+                return [], result.error
+            probes = parse_probes(result.text, arity, limit)
+            if probes is not None:
+                return probes, None
+        return [], "PROBE_REPLY_INVALID"
 
     def answer_probes(self, spec, signature, probes):
         """Race every model on each probe. Returns ``(agreed examples, disagreed)``.

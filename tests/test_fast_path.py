@@ -406,7 +406,10 @@ class LearningTests(FastPathTestCase):
         self.assertIsNotNone(shape["function"])
 
     def test_probe_failure_does_not_stop_synthesis_and_is_not_repeated(self):
-        for reply, error in ((None, "OPENROUTER_TIMEOUT"), ("not json", "PROBE_REPLY_INVALID")):
+        for reply, error, calls in (
+            (None, "OPENROUTER_TIMEOUT", 1),
+            ("not json", "PROBE_REPLY_INVALID", 2),
+        ):
             with self.subTest(error=error):
                 remote = FakeRemote({"a": double, "b": double}, sources=[BAD, GOOD])
                 remote.probe_reply = reply
@@ -419,7 +422,7 @@ class LearningTests(FastPathTestCase):
                 self.assertEqual(shape["probes"]["error"], error)
                 self.assertIsNotNone(shape["function"])
                 probes = [c for c in remote.calls if c[1].startswith("List boundary")]
-                self.assertEqual(len(probes), 1)
+                self.assertEqual(len(probes), calls)
 
     def test_probe_proposer_sees_no_examples(self):
         remote = FakeRemote({"a": double, "b": double}, sources=[GOOD])

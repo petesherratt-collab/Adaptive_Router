@@ -226,6 +226,41 @@ by the owner before the freeze. 20 task clusters.
 Evidence: `fast_path_timing_v2_hard_primary.jsonl`,
 `fast_path_timing_v2_hard_primary_analysis.json`.
 
+### Boundary probing before promotion (descriptive)
+
+The V2 run promoted a function with a fault no arriving input exposed. With
+`probe_enabled`, a probe model (a different vendor from the synthesis model)
+proposes up to `max_probes` boundary inputs from the specification alone, all
+race models answer each one, and unanimous answers become examples the gate
+must reproduce. The proposer never sees examples. A probe step that fails does
+not block synthesis.
+
+Measured on the 44 development items that have a known single-bug variant,
+using probe examples alone (`fast_path_probe_eval_v2.jsonl`):
+
+| | Count |
+|---|---:|
+| Probes proposed / unanimously answered | 516 / 502 |
+| Buggy variants rejected | 42 of 44 |
+| Buggy variant accepted: probes did not expose the fault | 1 (`longest_common_prefix`) |
+| Buggy variant accepted: probe reply unusable, nothing tested | 1 (`transpose`) |
+| References rejected | 1 (`caesar_decode`) |
+
+- The recorded wrong `number_to_words` function from V2 is rejected: the first
+  proposed probe was 0 (`fast_path_probe_case_number_to_words_result.jsonl`).
+- The `caesar_decode` rejection is the reference's own doing. The
+  specification says the shift applies to lowercase letters; the probe
+  'ABCxyz' drew the unanimous answer 'ABCuvw', while the vendored reference
+  shifts uppercase letters as well and returns 'rstuvw'. The bank's own tests
+  contain no uppercase input, so its gold labels are unaffected.
+- An earlier run (`fast_path_probe_eval_v1.jsonl`) is invalid as a
+  measurement: 18 of 44 probe replies were truncated by a 1,024-token limit.
+  The limit is now 4,096 and an unparseable probe reply is retried once.
+
+Both banks were already development evidence, so these figures are
+descriptive. Probing depends on the models answering edge cases correctly and
+unanimously; a unanimous wrong answer would block a correct function.
+
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
 hardened boundary against adversarial code.
