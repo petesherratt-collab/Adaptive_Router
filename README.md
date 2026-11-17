@@ -562,6 +562,25 @@ between jobs.
 Evidence: `fast_path_planned_v2_primary.jsonl`,
 `fast_path_planned_v2_primary_analysis.json`.
 
+Follow-up, descriptive: the same jobs with `job_agreement_min` 4, so a 4-of-5
+majority answer can serve as a job example. Plans arrived earlier everywhere
+(first plan job 3 or 4 for every shape; `timesheet` moved from job 8 to job 3),
+no wrong job example was stored, and arm C answered all 105 jobs correctly.
+Overall it was not faster: C/R 0.72 (interval 0.47 to 1.02), because the
+`timesheet` and `playlist` plans stayed slow (3.9 s and 3.1 s medians). Over
+the last five jobs of each shape: A 3908, R 2641, C 967 ms.
+
+This run also metered every provider call per arm, background work included.
+Over 105 jobs, arm A made 105 calls and arm R 525. Arm C made 8,962, and used
+about 3.4 million tokens against 0.64 million for arm R: some 17 times the
+calls and 5 times the tokens. Nearly all of that is learning (plan trials,
+probes, step races before promotion), front-loaded in the first jobs of each
+shape; with 15 jobs per shape it is not amortised. The speed-up therefore
+costs compute, which cost was dropped as an objective but is real.
+
+Evidence: `fast_path_planned_v2_majority.jsonl`,
+`fast_path_planned_v2_majority_analysis.json`.
+
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
 hardened boundary against adversarial code.

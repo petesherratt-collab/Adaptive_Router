@@ -3547,3 +3547,27 @@ Full suite passed (549 tests).
 | `run_fast_path_planned_v1.py` | `c27f73ab4e5f4fe9e751e7842848c612de2212c1e1b761ec4e17a149e9270f78` |
 | `analyze_fast_path_planned_v1.py` | `644089f209b8eec130d250a2631f91c49e1f3a057f477120bd9b054afe964c4a` |
 | `FAST_PATH_PLANNED_V2_PLAN.md` | `360a1786e7e0132b40724ba353645ca96585efa970f12e8221d385fe6137c85b` |
+
+---
+
+## 2026-11-17 — Follow-up 1: majority agreement (descriptive)
+
+Label `majority`, `job_agreement_min` 4: 9,592 provider calls, no unanswered
+job. Correct A 96, R 100, C 105 of 105. Medians A 4090, R 2585, C 1865 ms.
+C/R 0.721 (0.472 to 1.024); C minus R +0.048 (+0.019 to +0.086).
+
+- First plan job index 2 for five shapes, 3 for two; `timesheet` 2 (job 3)
+  against 7 (job 8) under unanimity. No wrong job example, no demotion.
+- 14 plan attempts: 12 adopted, 2 rejected (one first plan, one refinement).
+- Final plans: 86 function steps (83 promoted), 7 judgement.
+- Usage per arm: A 105 calls, 50,566 prompt and 27,932 completion tokens;
+  R 525 calls, 281,442 and 358,348; C 8,962 calls, 2,020,135 and 1,393,248.
+- Last five jobs per shape: A 3908, R 2641, C 967 ms.
+
+Decision for follow-up 2: keep `job_agreement_min` 4, which brought plans
+earlier with no observed safety cost.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v2_majority.jsonl` | `acf2741db820ff701f382ac6e1c317a60f5dc5cb4a17e69fa2264ae9fd46e477` |
+| `fast_path_planned_v2_majority_analysis.json` | `416c0c875508cb688e2f97e2dd51a51d93753f172bdcd81b0650cd5fb656e2bd` |
