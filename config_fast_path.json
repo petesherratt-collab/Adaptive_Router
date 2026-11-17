@@ -25,8 +25,9 @@
     "saturation_min_examples": 2,
     "planner_model": "openai/gpt-6-luna",
     "planner_max_tokens": 8192,
-    "plan_examples": 3,
+    "plan_examples": 2,
     "max_plan_attempts": 2,
-    "plan_audit_rate": 0.1
+    "plan_audit_rate": 0.1,
+    "plan_retries": 1
   }
 }

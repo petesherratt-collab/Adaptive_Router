@@ -3371,3 +3371,19 @@ invalid responses, no unanswered job. Decision, C against R: `NOT_SUPPORTED`.
 |---|---|
 | `fast_path_planned_v1.jsonl` | `4c462b877dfb4129289e1dff877f9678bd54eebc4458c608d6f4be663a8d83a1` |
 | `fast_path_planned_v1_analysis.json` | `913cda0eed7f53654084dc5f4830ab8aad408ae2c559a6050e8a79167a72d25d` |
+
+---
+
+## 2026-11-17 — Planner fixes and rerun authorised
+
+At the owner's request: signature tidying and one retry with the refusal reason
+in `planner.py` (`normalise_signature`, `plan_retries`), refused and rejected
+plans kept in the record, and `plan_examples` lowered from 3 to 2. Recorded as
+amendment 1 to `FAST_PATH_PLANNED_V1_PLAN.md`. Full suite passed (539 tests).
+Credit before the rerun: about $9.45.
+
+| Changed file | SHA-256 |
+|---|---|
+| `config_fast_path.json` | `b3ca27f9c3e828074293a51cc5a1530e73302998998a8d084dbcb99fef9cf06a` |
+| `planner.py` | `8366396755502fcd320ffa6a22860afdb0ab5d5dd1375e051eb53a05aaa986a5` |
+| `FAST_PATH_PLANNED_V1_PLAN.md` | `38a2e1a14014fa7791391cde991ee3f9c83acdd0dd9780627ace3c44a8193f5e` |

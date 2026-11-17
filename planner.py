@@ -26,6 +26,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import threading
 import time
@@ -126,6 +127,33 @@ def build_plan_prompt(description, inputs):
     return "\n".join(lines)
 
 
+_FUNCTION_NAME = re.compile(r"^def\s+\w+\s*\(")
+
+
+def normalise_signature(signature):
+    """Tidy slips that do not change meaning: surrounding space, a missing
+    final colon, and a function name other than ``solve``."""
+    if not isinstance(signature, str):
+        return signature
+    text = signature.strip()
+    text = _FUNCTION_NAME.sub("def solve(", text, count=1)
+    if text.startswith("def solve(") and not text.endswith(":"):
+        text += ":"
+    return text
+
+
+def _normalise_steps(steps):
+    if not isinstance(steps, list):
+        return steps
+    tidy = []
+    for step in steps:
+        if isinstance(step, dict) and isinstance(step.get("task"), dict):
+            task = {**step["task"], "signature": normalise_signature(step["task"].get("signature"))}
+            step = {**step, "task": task}
+        tidy.append(step)
+    return tidy
+
+
 def parse_plan(text, inputs):
     """Return ``(job_document, None)`` or ``(None, reason)`` for a planner reply."""
     try:
@@ -134,6 +162,7 @@ def parse_plan(text, inputs):
         return None, "PLAN_NOT_JSON"
     if not isinstance(plan, dict) or set(plan) != {"steps", "output"}:
         return None, "PLAN_FIELDS_MISMATCH"
+    plan = {**plan, "steps": _normalise_steps(plan["steps"])}
     document = {
         "schema_version": pipeline.SCHEMA_VERSION,
         "inputs": inputs,
@@ -330,28 +359,42 @@ class PlanningRouter:
                 self._planning.discard(template)
 
     def propose_plan(self, description, inputs):
-        """Ask the planner model for a plan. Returns ``(document, reason, ms)``."""
+        """Ask the planner model for a plan.
+
+        Returns ``(document, reason, ms, refused)``. A reply the validator
+        refuses is sent back once with the reason; ``refused`` keeps each
+        refused reply and its reason. A provider failure is not retried.
+        """
         config = {
             **self.router.remote_config,
             "model": self.settings["planner_model"],
             "max_tokens": self.settings["planner_max_tokens"],
         }
-        started = time.perf_counter()
-        try:
-            result = self.router.remote_fn(build_plan_prompt(description, inputs), config,
-                                           self.router.api_key)
-        except Exception as exc:
-            return None, type(exc).__name__, (time.perf_counter() - started) * 1000
-        ms = (time.perf_counter() - started) * 1000
-        if not result.success:
-            return None, result.error, ms
-        document, reason = parse_plan(result.text, inputs)
-        return document, reason, ms
+        prompt = build_plan_prompt(description, inputs)
+        started, refused = time.perf_counter(), []
+        for _ in range(1 + self.settings.get("plan_retries", 1)):
+            try:
+                result = self.router.remote_fn(prompt, config, self.router.api_key)
+            except Exception as exc:
+                return None, type(exc).__name__, (time.perf_counter() - started) * 1000, refused
+            if not result.success:
+                return None, result.error, (time.perf_counter() - started) * 1000, refused
+            document, reason = parse_plan(result.text, inputs)
+            if document is not None:
+                return document, None, (time.perf_counter() - started) * 1000, refused
+            refused.append({"reason": reason, "reply": result.text[:6000]})
+            prompt = (
+                build_plan_prompt(description, inputs)
+                + "\n\nYour previous reply was refused by the plan checker with this reason: "
+                + reason
+                + ". Reply again with the whole corrected plan, JSON only."
+            )
+        return None, refused[-1]["reason"], (time.perf_counter() - started) * 1000, refused
 
     def _plan(self, description, examples):
         checked = examples[: self.settings["plan_examples"]]
-        document, reason, ms = self.propose_plan(description, checked[0]["inputs"])
-        attempt = {"model": self.settings["planner_model"], "plan_ms": ms}
+        document, reason, ms, refused = self.propose_plan(description, checked[0]["inputs"])
+        attempt = {"model": self.settings["planner_model"], "plan_ms": ms, "refused": refused}
         if document is None:
             outcome = "REMOTE_ERROR" if reason and reason.startswith("OPENROUTER") else "INVALID_PLAN"
             return {**attempt, "outcome": outcome, "reason": reason}
@@ -370,8 +413,11 @@ class PlanningRouter:
                     and sandbox.canonical(result["value"]) == sandbox.canonical(example["expected"])):
                 passed += 1
         outcome = "ADOPTED" if passed == len(checked) else "REJECTED"
-        return {**attempt, "outcome": outcome, "trial": {"examples": len(checked), "passed": passed},
-                "document": document}
+        attempt.update({"outcome": outcome, "trial": {"examples": len(checked), "passed": passed},
+                        "document": document})
+        if outcome == "REJECTED":
+            attempt["rejected_plan"] = {"steps": document["steps"], "output": document["output"]}
+        return attempt
 
     def _log(self, record):
         with self._log_lock:

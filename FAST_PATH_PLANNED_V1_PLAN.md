@@ -75,3 +75,18 @@ plan's steady state but not wholly in it.
 Runner `run_fast_path_planned_v1.py`, four shapes at a time. Stops on HTTP
 401 or 402 or sustained provider failure. A two-shape, seven-job smoke run
 before the freeze adopted a plan for both shapes; it is not evidence.
+
+## Amendment 1 (2026-11-17): second run with two fixes
+
+After the first run the owner asked for two fixes and a rerun on the same
+jobs. Both runs are descriptive; the rerun is labelled `planned_v1_fixes`.
+
+1. The plan validator tidies slips that do not change a step's meaning (a
+   function name other than `solve`, a missing final colon, surrounding
+   space). A reply it still refuses is sent back to the planner once with the
+   reason (`plan_retries` 1). Refused replies and trial-rejected plans are now
+   kept in the record.
+2. `plan_examples` is lowered from 3 to 2, so a plan is written and checked
+   after two agreed whole-task answers instead of three.
+
+Everything else, including the criteria and analysis, is unchanged.

@@ -138,6 +138,17 @@ class RequestTests(unittest.TestCase):
         forward = {"steps": list(reversed(GOOD_PLAN["steps"])), "output": "total"}
         self.assertTrue(planner.parse_plan(json.dumps(forward), inputs)[1].startswith("PLAN_INVALID"))
 
+    def test_signature_slips_are_tidied(self):
+        self.assertEqual(planner.normalise_signature("  def parse_rows(csv: str) -> list "),
+                         "def solve(csv: str) -> list:")
+        self.assertEqual(planner.normalise_signature("def solve(a: int):"), "def solve(a: int):")
+        sloppy = json.loads(json.dumps(GOOD_PLAN))
+        sloppy["steps"][0]["task"]["signature"] = "def double(n: int) -> int"
+        document, reason = planner.parse_plan(json.dumps(sloppy), {"n": 1, "text": "a"})
+        self.assertIsNone(reason)
+        self.assertEqual(document["steps"][0]["task"]["signature"], "def solve(n: int) -> int:")
+        self.assertEqual(planner.normalise_signature("lambda n: n")[:6], "lambda")
+
     def test_plan_prompt_shows_inputs_but_no_answer(self):
         prompt = planner.build_plan_prompt(DESCRIPTION, {"n": 4, "text": "hello"})
         self.assertIn('- n (JSON): 4', prompt)
@@ -188,15 +199,42 @@ class PlanningTests(PlannerTestCase):
         self.assertIsNone(record["plan"])
         self.assertEqual(remote.count("Plan how to compute"), 2)
 
-    def test_invalid_and_failed_plans_are_recorded(self):
-        remote = FakeRemote(plans=[{"steps": [], "output": "x"}])
+    def test_invalid_plans_are_kept_and_failures_recorded(self):
+        bad = {"steps": [], "output": "x"}
+        remote = FakeRemote(plans=[bad, bad])
         router = self.build(remote, max_plan_attempts=3)
         for n in (1, 2, 3):
             router.handle(request(n, "ab"))
             router.drain()
-        outcomes = [a["outcome"] for a in self.record(router)["plan_attempts"]]
-        self.assertEqual(outcomes[0], "INVALID_PLAN")
-        self.assertEqual(outcomes[1], "REMOTE_ERROR")
+        attempts = self.record(router)["plan_attempts"]
+        self.assertEqual([a["outcome"] for a in attempts[:2]], ["INVALID_PLAN", "REMOTE_ERROR"])
+        self.assertEqual(len(attempts[0]["refused"]), 2)
+        self.assertIn('"steps": []', attempts[0]["refused"][0]["reply"])
+
+    def test_refused_plan_is_retried_with_its_reason(self):
+        broken = json.loads(json.dumps(GOOD_PLAN))
+        broken["steps"][0]["task"]["signature"] = "solve n"
+        remote = FakeRemote(plans=[broken, GOOD_PLAN])
+        router = self.build(remote)
+        for n in (1, 2):
+            router.handle(request(n, "ab"))
+            router.drain()
+        attempt = self.record(router)["plan_attempts"][0]
+        self.assertEqual(attempt["outcome"], "ADOPTED")
+        self.assertEqual(attempt["refused"][0]["reason"],
+                         "PLAN_INVALID:INVALID_STEP_TASK:INVALID_SIGNATURE")
+        retry = [p for _, p in remote.calls if p.startswith("Plan how to compute")][1]
+        self.assertIn("refused by the plan checker with this reason: PLAN_INVALID", retry)
+
+    def test_rejected_plan_text_is_kept(self):
+        remote = FakeRemote(plans=[BAD_PLAN])
+        router = self.build(remote, max_plan_attempts=1)
+        for n in (1, 2):
+            router.handle(request(n, "ab"))
+            router.drain()
+        attempt = self.record(router)["plan_attempts"][0]
+        self.assertEqual(attempt["outcome"], "REJECTED")
+        self.assertEqual(attempt["rejected_plan"]["output"], "total")
 
     def test_disagreement_forms_no_example(self):
         remote = FakeRemote(plans=[GOOD_PLAN],
