@@ -126,3 +126,11 @@ first time.
    written from the task descriptions alone, their file's hash is recorded,
    and only then are the tasks' texts opened. That version is reserved for
    the owner's real tasks.
+
+5. `isolated`: the live test of the two fixes for follow-up 3, at the owner's
+   request. Conditions as follow-up 3 (jobs back to back, `job_agreement_min`
+   4, shadow plans on), with the code changes since: live answers and
+   background learning use separate model pools, and each task has at most one
+   shadow run in flight. The ceiling arm D is added for reference. The
+   question is whether arm C's race answers are no longer slowed by learning,
+   and whether shadow plans now reach live mode.

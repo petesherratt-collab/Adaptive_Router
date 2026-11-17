@@ -3728,3 +3728,20 @@ Label `ceiling`: 9,337 provider calls, 8 invalid responses, no unanswered job.
 |---|---|
 | `fast_path_planned_v2_ceiling.jsonl` | `b708475aa1d2f8c6989791cdd53269935e788bb8980b503cbfaa62001e5840a7` |
 | `fast_path_planned_v2_ceiling_analysis.json` | `f37b88d4a74ef0b10233655a29f4c655162b28576f330b88061c38f78ab81afc` |
+
+---
+
+## 2026-11-17 — Follow-up 5 authorised: isolation fixes under live traffic
+
+The owner asked for both the real-task test and a live run of the isolation
+fixes. The real-task test waits on tasks from the owner. Follow-up 5 recorded
+in `FAST_PATH_PLANNED_V2_PLAN.md`. Credit before the run: about $20.95.
+
+| File | SHA-256 |
+|---|---|
+| `fast_path.py` | `fe034b1b0fc35799017548e5dd7d9f090659676e756c32af9153b962d4f956f2` |
+| `pipeline.py` | `fecc96aee7349fbf2229dad47207c7467a76c884fec281dd596d35185f528e83` |
+| `planner.py` | `941d7f2baaa04caa7f92b5ae369760e3a10f6a0acdf2e925c87b6807aa3dccb3` |
+| `config_fast_path.json` | `eff69a362c563b90abce44cd08e442cac38beb0df66f9aa898e35573c1c1b066` |
+| `run_fast_path_planned_v1.py` | `47ae8affb3032d303bced2227b32a90885521661729a579ac558b9b33d58522d` |
+| `FAST_PATH_PLANNED_V2_PLAN.md` | `42726e1a0475dfdcc41fc492651cd0cac5d7466dd734a4c9d8cca1843b453468` |
