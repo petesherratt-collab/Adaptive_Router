@@ -1,0 +1,251 @@
+import json
+from pathlib import Path
+import re
+import tempfile
+import time
+import unittest
+
+from fast_path import FastPathRouter
+import planner
+from planner import PlanningRouter, TaskRequest, TaskRequestError
+from remote import RemoteResult
+
+
+DESCRIPTION = "Double the number n, then add the number of characters in the text."
+DOUBLE = "Return the input integer doubled."
+LENGTH = "Return the number of characters in the text."
+ADD = "Return the sum of two integers."
+GOOD_PLAN = {
+    "steps": [
+        {"id": "twice", "kind": "function",
+         "task": {"spec": DOUBLE, "signature": "def solve(n: int) -> int:"}, "args": [{"ref": "n"}]},
+        {"id": "size", "kind": "function",
+         "task": {"spec": LENGTH, "signature": "def solve(text: str) -> int:"}, "args": [{"ref": "text"}]},
+        {"id": "total", "kind": "function",
+         "task": {"spec": ADD, "signature": "def solve(a: int, b: int) -> int:"},
+         "args": [{"ref": "twice"}, {"ref": "size"}]},
+    ],
+    "output": "total",
+}
+# Forgets to double: wrong on every example.
+BAD_PLAN = {
+    "steps": [GOOD_PLAN["steps"][1],
+              {"id": "total", "kind": "function",
+               "task": {"spec": ADD, "signature": "def solve(a: int, b: int) -> int:"},
+               "args": [{"ref": "n"}, {"ref": "size"}]}],
+    "output": "total",
+}
+SOURCES = {
+    DOUBLE: "def solve(n):\n    return n * 2\n",
+    LENGTH: "def solve(text):\n    return len(text)\n",
+    ADD: "def solve(a, b):\n    return a + b\n",
+}
+
+
+def request(n, text):
+    return {"schema_version": "fast_path_task_v1", "description": DESCRIPTION,
+            "inputs": {"n": n, "text": text}}
+
+
+def step_args(prompt):
+    return [json.loads(v) for v in re.findall(r"^Argument \d+ \(JSON\): (.*)$", prompt, re.M)]
+
+
+def job_inputs(prompt):
+    return {k: json.loads(v) for k, v in re.findall(r"^- (\w+) \(JSON\): (.*)$", prompt, re.M)}
+
+
+class FakeRemote:
+    def __init__(self, plans=(), task_answer=None):
+        self.plans = list(plans)
+        self.task_answer = task_answer or (lambda model, i: i["n"] * 2 + len(i["text"]))
+        self.calls = []
+
+    def __call__(self, prompt, config, api_key):
+        model = config["model"]
+        self.calls.append((model, prompt))
+        if prompt.startswith("Plan how to compute"):
+            if not self.plans:
+                return RemoteResult(False, error="OPENROUTER_TIMEOUT", model=model)
+            return RemoteResult(True, text=json.dumps(self.plans.pop(0)), model=model)
+        if prompt.startswith("Write a Python function"):
+            spec = re.search(r"^Specification: (.*)$", prompt, re.M).group(1)
+            return RemoteResult(True, text=SOURCES[spec], model=model)
+        if prompt.startswith("Carry out the task"):
+            value = self.task_answer(model, job_inputs(prompt))
+            return RemoteResult(True, text=f"ANSWER: {json.dumps(value)}", model=model, total_ms=1.0)
+        args = step_args(prompt)
+        if DOUBLE in prompt:
+            value = args[0] * 2
+        elif LENGTH in prompt:
+            value = len(args[0])
+        else:
+            value = args[0] + args[1]
+        return RemoteResult(True, text=f"ANSWER: {json.dumps(value)}", model=model, total_ms=1.0)
+
+    def count(self, prefix):
+        return sum(p.startswith(prefix) for _, p in self.calls)
+
+
+class PlannerTestCase(unittest.TestCase):
+    def build(self, remote, **overrides):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        root = Path(tmp.name)
+        settings = {
+            "race_models": ["a", "b"], "synthesis_model": "writer", "answer_max_tokens": 64,
+            "synthesis_max_tokens": 256, "agreement_quorum": 2, "min_gate_examples": 2,
+            "max_synthesis_attempts": 1, "sandbox_timeout_seconds": 2.0,
+            "audit_sample_rate": 0.0, "audit_salt": "t",
+            "planner_model": "planner", "planner_max_tokens": 512,
+            "plan_examples": 2, "max_plan_attempts": 2, "plan_audit_rate": 0.0,
+            **overrides,
+        }
+        fast = FastPathRouter({"remote": {"model": "x"}, "fast_path": settings},
+                              root / "store", root / "runs.jsonl", remote_fn=remote, api_key="k")
+        router = PlanningRouter(fast, root / "templates", root / "tasks.jsonl")
+        self.addCleanup(router.close)
+        self.addCleanup(fast.close)
+        return router
+
+    def record(self, router, n=1, text="ab"):
+        return router.store.get(TaskRequest.from_mapping(request(n, text)).template)
+
+
+class RequestTests(unittest.TestCase):
+    def test_template_depends_on_description_names_and_types(self):
+        one = TaskRequest.from_mapping(request(1, "a")).template
+        self.assertEqual(one, TaskRequest.from_mapping(request(9, "zzz")).template)
+        self.assertNotEqual(one, TaskRequest.from_mapping(request("1", "a")).template)
+        other = {**request(1, "a"), "description": DESCRIPTION + " "}
+        self.assertNotEqual(one, TaskRequest.from_mapping(other).template)
+
+    def test_malformed_requests(self):
+        for bad in ([], {**request(1, "a"), "extra": 1}, {**request(1, "a"), "schema_version": "x"},
+                    {**request(1, "a"), "description": " "}, {**request(1, "a"), "inputs": {}}):
+            with self.subTest(bad=str(bad)[:50]):
+                with self.assertRaises(TaskRequestError):
+                    TaskRequest.from_mapping(bad)
+
+    def test_parse_plan(self):
+        inputs = {"n": 1, "text": "a"}
+        document, reason = planner.parse_plan("```json\n" + json.dumps(GOOD_PLAN) + "\n```", inputs)
+        self.assertIsNone(reason)
+        self.assertEqual(document["inputs"], inputs)
+        self.assertEqual(planner.parse_plan("not json", inputs), (None, "PLAN_NOT_JSON"))
+        self.assertEqual(planner.parse_plan(json.dumps({**GOOD_PLAN, "x": 1}), inputs),
+                         (None, "PLAN_FIELDS_MISMATCH"))
+        forward = {"steps": list(reversed(GOOD_PLAN["steps"])), "output": "total"}
+        self.assertTrue(planner.parse_plan(json.dumps(forward), inputs)[1].startswith("PLAN_INVALID"))
+
+    def test_plan_prompt_shows_inputs_but_no_answer(self):
+        prompt = planner.build_plan_prompt(DESCRIPTION, {"n": 4, "text": "hello"})
+        self.assertIn('- n (JSON): 4', prompt)
+        self.assertIn('"judgement"', prompt)
+        self.assertNotIn("13", prompt)
+
+
+class PlanningTests(PlannerTestCase):
+    def test_race_then_plan_adopted_then_served_by_plan(self):
+        remote = FakeRemote(plans=[GOOD_PLAN])
+        router = self.build(remote)
+        first = router.handle(request(3, "abcd"))
+        self.assertEqual((first["value"], first["route"]), (10, "race"))
+        router.drain()
+        self.assertIsNone(self.record(router)["plan"])
+        router.handle(request(5, "xy"))
+        router.drain()
+        record = self.record(router)
+        self.assertEqual([a["outcome"] for a in record["plan_attempts"]], ["ADOPTED"])
+        self.assertEqual(record["plan_attempts"][0]["trial"], {"examples": 2, "passed": 2})
+        self.assertEqual(record["plan_attempts"][0]["function_steps"], 3)
+        third = router.handle(request(7, "hello"))
+        router.drain()
+        self.assertEqual((third["value"], third["route"]), (19, "plan"))
+        self.assertEqual({s["id"] for s in third["steps"]}, {"twice", "size", "total"})
+        self.assertEqual(remote.count("Plan how to compute"), 1)
+
+    def test_planner_never_sees_agreed_answers(self):
+        remote = FakeRemote(plans=[GOOD_PLAN])
+        router = self.build(remote)
+        router.handle(request(100, "abc"))
+        router.drain()
+        router.handle(request(200, "de"))
+        router.drain()
+        prompt = next(p for _, p in remote.calls if p.startswith("Plan how to compute"))
+        self.assertNotIn("203", prompt)
+        self.assertNotIn("402", prompt)
+
+    def test_wrong_plan_is_rejected_and_attempts_are_bounded(self):
+        remote = FakeRemote(plans=[BAD_PLAN, BAD_PLAN, GOOD_PLAN])
+        router = self.build(remote)
+        for n in range(1, 6):
+            served = router.handle(request(n, "ab"))
+            router.drain()
+            self.assertEqual(served["route"], "race")
+        record = self.record(router)
+        self.assertEqual([a["outcome"] for a in record["plan_attempts"]], ["REJECTED", "REJECTED"])
+        self.assertIsNone(record["plan"])
+        self.assertEqual(remote.count("Plan how to compute"), 2)
+
+    def test_invalid_and_failed_plans_are_recorded(self):
+        remote = FakeRemote(plans=[{"steps": [], "output": "x"}])
+        router = self.build(remote, max_plan_attempts=3)
+        for n in (1, 2, 3):
+            router.handle(request(n, "ab"))
+            router.drain()
+        outcomes = [a["outcome"] for a in self.record(router)["plan_attempts"]]
+        self.assertEqual(outcomes[0], "INVALID_PLAN")
+        self.assertEqual(outcomes[1], "REMOTE_ERROR")
+
+    def test_disagreement_forms_no_example(self):
+        remote = FakeRemote(plans=[GOOD_PLAN],
+                            task_answer=lambda model, i: 0 if model == "b" else i["n"] * 2 + len(i["text"]))
+        router = self.build(remote)
+        for n in (1, 2, 3):
+            router.handle(request(n, "ab"))
+            router.drain()
+        record = self.record(router)
+        self.assertEqual((record["examples"], record["disagreements"]), ([], 3))
+        self.assertEqual(remote.count("Plan how to compute"), 0)
+
+    def test_audit_mismatch_drops_the_plan(self):
+        state = {"wrong": False}
+        remote = FakeRemote(plans=[GOOD_PLAN], task_answer=lambda model, i: (
+            -1 if state["wrong"] else i["n"] * 2 + len(i["text"])))
+        router = self.build(remote, plan_audit_rate=1.0)
+        for n in (1, 2):
+            router.handle(request(n, "ab"))
+            router.drain()
+        self.assertIsNotNone(self.record(router)["plan"])
+        state["wrong"] = True
+        served = router.handle(request(9, "ab"))
+        router.drain()
+        self.assertEqual(served["route"], "plan")
+        record = self.record(router)
+        self.assertIsNone(record["plan"])
+        self.assertEqual(record["demotions"][0]["reason"], "AUDIT_MISMATCH")
+
+    def test_failed_plan_run_falls_back_to_the_race(self):
+        remote = FakeRemote(plans=[GOOD_PLAN])
+        router = self.build(remote)
+        for n in (1, 2):
+            router.handle(request(n, "ab"))
+            router.drain()
+        original = remote.__call__
+
+        def broken(prompt, config, api_key):
+            if "characters in the text" in prompt and not prompt.startswith("Carry out"):
+                return RemoteResult(False, error="OPENROUTER_HTTP_500", model=config["model"])
+            return original(prompt, config, api_key)
+        router.router.remote_fn = broken
+        router.router.store.get(router.router.store.shapes()[0]["shape"])  # store warm
+        for record in router.router.store.shapes():
+            record["function"] = None
+        served = router.handle(request(30, "xyz"))
+        router.drain()
+        self.assertEqual((served["route"], served["value"]), ("race", 63))
+
+
+if __name__ == "__main__":
+    unittest.main()

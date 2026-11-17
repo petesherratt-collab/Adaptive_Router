@@ -440,6 +440,17 @@ class FastPathRouter:
             return self._finish(log, started, None, "none", RACE_NO_VALID_ANSWER)
         return self._finish(log, started, value, "model", MODEL_RACE_WON, model=winner)
 
+    def start_prompt_race(self, prompt):
+        """Send ``prompt`` to every race model. Returns ``{future: model}``.
+
+        Each future yields ``{"model", "success", "valid", "value", "error",
+        "total_ms"}``. Nothing is stored or learned.
+        """
+        return {
+            self._models.submit(self._ask, model, prompt): model
+            for model in self.settings["race_models"]
+        }
+
     def race_prompt(self, prompt):
         """Race an arbitrary prompt. Returns ``(winning model, value)``.
 
