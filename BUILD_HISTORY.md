@@ -3490,3 +3490,33 @@ jobs.
 | `FAST_PATH_PLANNED_V2_PLAN.md` | `274701454f923abf1e9ef14e695c00c102043100fa0275554c03698fbc8ba1af` |
 
 Verification: full unit suite passed; benchmark self-verify passed.
+
+---
+
+## 2026-11-17 — Planned jobs V2 result: supported on fresh jobs
+
+The frozen prospective run completed in one attempt: 8,061 provider calls, 11
+invalid responses, no unanswered job. Decision: `SUPPORTED`.
+
+| Arm | Correct | Median ms | Mean ms |
+|---|---:|---:|---:|
+| A. Direct | 98/105 | 4275 | 4355 |
+| R. Whole-task race | 102/105 | 2469 | 2552 |
+| C. Planning router | 104/105 | 1534 | 2090 |
+
+- C/R 0.621 (0.412 to 0.919); C minus R +0.019 (-0.019 to +0.067).
+  C/A 0.359 (0.229 to 0.587); +0.057.
+- 13 plan attempts: 12 adopted, 1 rejected (playlist refinement, 0 of 2).
+  Six were speed refinements. No plan demotion, no wrong job example.
+- Plan-served jobs 84, all correct, median 1261 ms. Race-served 21, 20
+  correct (pick_list job 1 wrong).
+- First plan-served job index: 2 for four shapes, 3 for two, 7 for
+  timesheet (5 whole-task disagreements delayed its examples).
+- Final plans: 74 function steps (70 promoted), 7 judgement. Step executions:
+  689 function on code, 152 function on the race, 84 judgement.
+- Last five jobs per shape: A 4623, R 2486, C 1063 ms.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v2_primary.jsonl` | `58419c3b641273822f1f819655c587323985239af8dd46bd01f8f246993f8139` |
+| `fast_path_planned_v2_primary_analysis.json` | `062baa8b50c49431c45d6e4d1d8e6feb93f8effd881af8469ec7d4a310e9fbf2` |

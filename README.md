@@ -526,6 +526,42 @@ interval, but the clearest speed result of the three runs.
 Evidence: `fast_path_planned_v1_steer.jsonl`,
 `fast_path_planned_v1_steer_analysis.json`.
 
+### Planned jobs V2: the router plans fresh jobs (prospective, 2026-11-17)
+
+[`FAST_PATH_PLANNED_V2_PLAN.md`](FAST_PATH_PLANNED_V2_PLAN.md) froze one run of
+the planning router, with small-step steering and speed feedback, on 7 job
+shapes no model had seen, 15 jobs each, given only plain-language
+descriptions. Decision: `SUPPORTED`.
+
+| Arm | Correct | Median ms | 90th pct ms | Mean ms |
+|---|---:|---:|---:|---:|
+| A. One direct call | 98/105 | 4275 | 5954 | 4355 |
+| R. Whole-task race | 102/105 | 2469 | 3472 | 2552 |
+| C. Planning router | 104/105 | 1534 | 3692 | 2090 |
+
+- C against R: time ratio 0.62 (95% interval 0.41 to 0.92), wholly below 1.0.
+  Correctness +1.9 points (interval -1.9 to +6.7), above the -2 point margin.
+- C against A: time ratio 0.36 (0.23 to 0.59), correctness +5.7 points.
+- All 7 shapes adopted a plan. 84 of 105 jobs ran on a plan, all 84 correct,
+  median 1261 ms. The one wrong answer in arm C was a whole-task race answer
+  before any plan existed.
+- Over the last five jobs of each shape: A 4623, R 2486, C 1063 ms.
+- Plans held 74 function steps (70 promoted to code) and 7 judgement steps;
+  689 function-step executions ran as code.
+- Speed feedback revised 6 plans: 5 revisions passed their trial and were
+  adopted, 1 (`playlist`) matched 0 of 2 agreed answers and was rejected, so
+  the working plan stayed in use.
+- `timesheet` was the weak shape: the five models disagreed on 5 of its first
+  7 whole-task answers, so two agreed examples took until job 7 and the plan
+  served only the last 8 jobs. Its arm-C median matched the race (3.4 s).
+
+Limits: 7 task clusters; constructed jobs with unambiguous prose fields;
+benchmark not owner-reviewed before the freeze; background work drained
+between jobs.
+
+Evidence: `fast_path_planned_v2_primary.jsonl`,
+`fast_path_planned_v2_primary_analysis.json`.
+
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
 hardened boundary against adversarial code.
