@@ -3598,3 +3598,23 @@ slower than a single whole-task race.
 |---|---|
 | `fast_path_planned_v2_immediate.jsonl` | `84642a8fe9f752f82b3998c36e5943c5aefd672193da75f45fa8485ac2d6d2a1` |
 | `fast_path_planned_v2_immediate_analysis.json` | `db532fa5af5310d86dab9d62180e77f9a63c37ce983a64a45d4d29bfab0723d8` |
+
+---
+
+## 2026-11-17 — Shadow plans: go live only when fast
+
+The owner chose to test a fix for the back-to-back result. `PlanningRouter`
+now adopts a plan in shadow mode when `plan_shadow` is set: the whole-task race
+keeps answering, `_shadow` runs the plan on each live job's inputs off the
+answer path, drops the plan on an agreed mismatch, and switches it live once
+its last `plan_live_window` runs each beat `plan_live_ratio` times the median
+race time recorded for the template. Refinement counts shadow runs as uses.
+Shape summaries record the plan's mode and shadow timings. Full suite passed
+(552 tests). Credit before the run: about $11.85.
+
+| Changed file | SHA-256 |
+|---|---|
+| `config_fast_path.json` | `eff69a362c563b90abce44cd08e442cac38beb0df66f9aa898e35573c1c1b066` |
+| `planner.py` | `8e76fbb9146c106d61f9c4884fa75db7969349f5188980734952215451959f00` |
+| `run_fast_path_planned_v1.py` | `6aeca26a05da142d6d7efe4400b805127f1bdc4cfe5bc550cd3c7d118efdc9f2` |
+| `FAST_PATH_PLANNED_V2_PLAN.md` | `74b138f3b7f80426ba0b54da58cf77c9e3a83d00fbee078fa0787797c650a612` |

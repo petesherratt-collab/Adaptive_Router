@@ -104,8 +104,9 @@ class PlannerTestCase(unittest.TestCase):
         fast = FastPathRouter({"remote": {"model": "x"}, "fast_path": settings},
                               root / "store", root / "runs.jsonl", remote_fn=remote, api_key="k")
         router = PlanningRouter(fast, root / "templates", root / "tasks.jsonl")
-        self.addCleanup(router.close)
+        # Cleanups run last-in first-out: the planning router drains first.
         self.addCleanup(fast.close)
+        self.addCleanup(router.close)
         return router
 
     def record(self, router, n=1, text="ab"):
@@ -329,6 +330,63 @@ class MajorityTests(PlannerTestCase):
         self.assertEqual(PlanningRouter._agreement(lead, 2, 3)[:2], (True, 1))
         self.assertEqual(PlanningRouter._agreement(lead, 2, 4)[0], False)
         self.assertEqual(PlanningRouter._agreement(lead, 2)[0], False)
+
+
+class ShadowTests(PlannerTestCase):
+    def slow_remote(self, plans, task_delay=0.3, step_delay=0.15, task_answer=None):
+        remote = FakeRemote(plans=plans, task_answer=task_answer)
+        original = remote.__call__
+
+        def call(prompt, config, api_key):
+            if prompt.startswith("Carry out the task"):
+                time.sleep(task_delay)
+            elif not prompt.startswith(("Plan how", "Write a Python", "List boundary")):
+                time.sleep(step_delay)
+            return original(prompt, config, api_key)
+        return remote, call
+
+    def test_plan_serves_only_once_its_shadow_runs_beat_the_race(self):
+        remote, call = self.slow_remote([GOOD_PLAN])
+        router = self.build(call, plan_shadow=True, plan_live_window=2, plan_live_ratio=0.75)
+        routes = []
+        for n in range(1, 9):
+            routes.append(router.handle(request(n, "a" * n))["route"])
+            router.drain()
+        record = self.record(router)
+        self.assertEqual(record["plan"]["mode"], "live")
+        self.assertEqual(routes[:3], ["race", "race", "race"])
+        self.assertEqual(routes[-1], "plan")
+        switch = routes.index("plan")
+        # It went live only after shadow runs, and after the steps became code.
+        self.assertGreaterEqual(record["plan"]["live_after_shadow_runs"], 2)
+        self.assertTrue(all(r["function"] for r in router.router.store.shapes()))
+        self.assertTrue(all(r == "race" for r in routes[:switch]))
+
+    def test_slow_plan_stays_in_shadow(self):
+        remote, call = self.slow_remote([GOOD_PLAN], task_delay=0.0)
+        router = self.build(call, plan_shadow=True, synthesis_enabled=False)
+        routes = []
+        for n in range(1, 6):
+            routes.append(router.handle(request(n, "ab"))["route"])
+            router.drain()
+        self.assertEqual(set(routes), {"race"})
+        self.assertEqual(self.record(router)["plan"]["mode"], "shadow")
+
+    def test_shadow_mismatch_drops_the_plan(self):
+        state = {"wrong": False}
+        remote, call = self.slow_remote([GOOD_PLAN], task_delay=0.0, step_delay=0.0, task_answer=(
+            lambda model, i: -1 if state["wrong"] else i["n"] * 2 + len(i["text"])))
+        router = self.build(call, plan_shadow=True)
+        for n in (1, 2):
+            router.handle(request(n, "ab"))
+            router.drain()
+        self.assertEqual(self.record(router)["plan"]["mode"], "shadow")
+        state["wrong"] = True
+        router.handle(request(3, "ab"))
+        router.drain()
+        record = self.record(router)
+        self.assertIsNone(record["plan"])
+        self.assertEqual(record["demotions"][0]["reason"], "SHADOW_MISMATCH")
 
 
 class RefinementTests(PlannerTestCase):

@@ -80,3 +80,13 @@ V2 jobs, so they are descriptive and do not change the primary result.
 Both runs record, per arm, every provider call and token, background work
 included, so the cost of the planning router's learning is measured for the
 first time.
+
+3. `shadow`: at the owner's choice, the fix for the flaw follow-up 2 exposed.
+   An adopted plan starts in shadow mode (`plan_shadow`): jobs are still
+   answered by the whole-task race, and the plan runs in the background on each
+   job's inputs, so its function steps learn and its answer is checked against
+   the race (an agreed mismatch drops the plan). It goes live only when its
+   last `plan_live_window` (2) shadow runs each took under `plan_live_ratio`
+   (0.75) of the median race time for that task. Run with jobs back to back
+   (`--arrival immediate`) and `job_agreement_min` 4, as in follow-up 2, so
+   the two runs differ only in the shadow rule.

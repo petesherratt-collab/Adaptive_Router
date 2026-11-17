@@ -31,6 +31,9 @@
     "plan_retries": 1,
     "refine_after_jobs": 4,
     "max_refinements": 1,
-    "job_agreement_min": null
+    "job_agreement_min": null,
+    "plan_shadow": true,
+    "plan_live_window": 2,
+    "plan_live_ratio": 0.75
   }
 }

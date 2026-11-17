@@ -158,6 +158,10 @@ def shape_summary(shape, instances, golds, record, learning):
         "examples": len(record["examples"]), "wrong_examples": wrong_examples,
         "disagreements": record["disagreements"],
         "plan_attempts": record["plan_attempts"], "plan_adopted": plan is not None,
+        "plan_mode": plan.get("mode", "live") if plan else None,
+        "live_after_shadow_runs": plan.get("live_after_shadow_runs") if plan else None,
+        "shadow_ms": plan.get("shadow_ms") if plan else None,
+        "race_ms": record.get("race_ms"),
         "plan_demotions": record["demotions"], "plan_steps": plan_steps,
         "plan_document": plan["document"] if plan else None,
     }

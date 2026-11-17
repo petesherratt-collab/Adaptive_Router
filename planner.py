@@ -27,6 +27,7 @@ import hashlib
 import json
 import os
 import re
+import statistics
 from pathlib import Path
 import threading
 import time
@@ -272,7 +273,7 @@ class PlanningRouter:
         with self.store.lock():
             plan = self.store.ensure(request)["plan"]
         steps = None
-        if plan is not None:
+        if plan is not None and plan.get("mode", "live") == "live":
             result = self.orchestrator.run(with_inputs(plan["document"], request.inputs))
             steps = result["steps"]
             if result["reason"] == pipeline.JOB_COMPLETED:
@@ -290,7 +291,14 @@ class PlanningRouter:
                 return self._finish(request, request_id, started, result["value"], PLAN_ROUTE, None, steps)
         futures = self.router.start_prompt_race(build_task_prompt(request.description, request.inputs))
         model, value = fast_path.FastPathRouter._first_valid(futures)
+        race_ms = (time.perf_counter() - started) * 1000
+        with self.store.lock():
+            record = self.store.get(request.template)
+            if model is not None:
+                record["race_ms"] = (record.get("race_ms", []) + [race_ms])[-20:]
         self._submit(self._observe, request, futures)
+        if plan is not None:
+            self._submit(self._shadow, request, futures, plan["sha256"])
         if model is None:
             return self._finish(request, request_id, started, None, NO_ANSWER, None, steps)
         return self._finish(request, request_id, started, value, RACE_ROUTE, model, steps)
@@ -357,6 +365,55 @@ class PlanningRouter:
             self.store.save(request.template)
         self._maybe_plan(request.template)
 
+    def _new_plan(self, document, sha, **extra):
+        mode = "shadow" if self.settings.get("plan_shadow", False) else "live"
+        return {"document": document, "sha256": sha, "mode": mode, "jobs": 0, "shadow_ms": [],
+                "adopted_at": datetime.now(timezone.utc).isoformat(), **extra}
+
+    def _shadow(self, request, futures, plan_sha):
+        """Run a shadow plan on a live job's inputs, off the answer path.
+
+        Its function steps learn as they would on live traffic. Its answer is
+        checked against the race: if the racers agree on something else, the
+        plan is dropped. Once its recent runs are clearly faster than the
+        race, the plan goes live.
+        """
+        with self.store.lock():
+            plan = self.store.get(request.template)["plan"]
+            if plan is None or plan["sha256"] != plan_sha:
+                return
+            document = plan["document"]
+        started = time.perf_counter()
+        result = self.orchestrator.run(with_inputs(document, request.inputs))
+        shadow_ms = (time.perf_counter() - started) * 1000
+        agreed, value, _ = self._agreement(futures, self.settings["agreement_quorum"],
+                                           self.settings.get("job_agreement_min"))
+        completed = result["reason"] == pipeline.JOB_COMPLETED
+        with self.store.lock():
+            record = self.store.get(request.template)
+            plan = record["plan"]
+            if plan is None or plan["sha256"] != plan_sha:
+                return
+            if agreed and (not completed or sandbox.canonical(result["value"]) != sandbox.canonical(value)):
+                record["demotions"].append({"sha256": plan_sha, "reason": "SHADOW_MISMATCH"})
+                record["plan"] = None
+                self.store.save(request.template)
+                self._log({"record_type": "plan_demotion", "template": request.template,
+                           "reason": "SHADOW_MISMATCH"})
+                return
+            plan["jobs"] = plan.get("jobs", 0) + 1
+            plan["shadow_ms"] = (plan.get("shadow_ms", []) + [shadow_ms])[-20:]
+            window = self.settings.get("plan_live_window", 2)
+            recent, races = plan["shadow_ms"][-window:], record.get("race_ms", [])
+            if (plan["mode"] == "shadow" and len(recent) >= window and races
+                    and max(recent) < self.settings.get("plan_live_ratio", 0.75) * statistics.median(races)):
+                plan["mode"] = "live"
+                plan["live_after_shadow_runs"] = len(plan["shadow_ms"])
+                self._log({"record_type": "plan_live", "template": request.template,
+                           "shadow_runs": len(plan["shadow_ms"])})
+            self.store.save(request.template)
+        self._maybe_refine(request.template)
+
     def _audit(self, request, futures, served, plan_sha):
         agreed, value, _ = self._agreement(futures, self.settings["agreement_quorum"],
                                                    self.settings.get("job_agreement_min"))
@@ -395,8 +452,7 @@ class PlanningRouter:
                 record = self.store.get(template)
                 record["plan_attempts"].append({k: v for k, v in attempt.items() if k != "document"})
                 if attempt["outcome"] == "ADOPTED":
-                    record["plan"] = {"document": attempt["document"], "sha256": attempt["sha256"],
-                                      "adopted_at": datetime.now(timezone.utc).isoformat()}
+                    record["plan"] = self._new_plan(attempt["document"], attempt["sha256"])
                 self.store.save(template)
             self._log({"record_type": "plan_attempt", "template": template,
                        **{k: v for k, v in attempt.items() if k != "document"}})
@@ -449,9 +505,8 @@ class PlanningRouter:
                 current = record["plan"]
                 if (attempt["outcome"] == "ADOPTED" and current is not None
                         and current["sha256"] == old_sha):
-                    record["plan"] = {"document": attempt["document"], "sha256": attempt["sha256"],
-                                      "adopted_at": datetime.now(timezone.utc).isoformat(),
-                                      "refined_from": old_sha, "jobs": 0}
+                    record["plan"] = self._new_plan(attempt["document"], attempt["sha256"],
+                                                    refined_from=old_sha)
                 self.store.save(template)
             self._log({"record_type": "plan_refinement", "template": template,
                        **{k: v for k, v in attempt.items() if k != "document"}})
