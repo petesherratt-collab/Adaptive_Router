@@ -3745,3 +3745,28 @@ in `FAST_PATH_PLANNED_V2_PLAN.md`. Credit before the run: about $20.95.
 | `config_fast_path.json` | `eff69a362c563b90abce44cd08e442cac38beb0df66f9aa898e35573c1c1b066` |
 | `run_fast_path_planned_v1.py` | `47ae8affb3032d303bced2227b32a90885521661729a579ac558b9b33d58522d` |
 | `FAST_PATH_PLANNED_V2_PLAN.md` | `42726e1a0475dfdcc41fc492651cd0cac5d7466dd734a4c9d8cca1843b453468` |
+
+---
+
+## 2026-11-17 — Follow-up 5: isolation fixes under live traffic
+
+Label `isolated`: 6,660 provider calls, 6 invalid responses, no HTTP 429, no
+unanswered job. Correct A 102, R 101, C 103, D 105. Medians A 3620, R 2448,
+C 2432, D 838 ms. C/R 0.993 (0.963 to 1.075); correctness +0.019 (-0.019 to
++0.067). D reading 105/105; C/D 2.903.
+
+- All 105 arm-C jobs answered by the race; C race-route median 2432 ms against
+  R 2448 ms. Last five jobs per shape: R 2432, C 2386 ms.
+- 11 plan attempts, all adopted into shadow; one dropped on a shadow mismatch
+  (`playlist`). Six shadow runs finished in total, 4.9 to 47.2 s; none went
+  live. 74 function steps, 38 promoted.
+- Usage: C 5,505 calls (1,403,966 prompt and 1,158,966 completion tokens).
+
+Reading: the pool separation removed the slowdown of the live path seen in
+follow-up 3. Within 15 back-to-back jobs per shape, learning does not finish,
+so the shadow rule never lets a plan serve.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v2_isolated.jsonl` | `1bea144dbcab2988276bbc10bde692b6318952477cb897ea96fcd585c27233e1` |
+| `fast_path_planned_v2_isolated_analysis.json` | `dc7e98daa6d7f08adf2628a8140d2c29ba7afaa80020720dd7638821e7ae50f8` |

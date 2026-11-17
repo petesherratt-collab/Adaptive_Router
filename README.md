@@ -675,6 +675,34 @@ is seen, and is reserved for the owner's real tasks.
 Evidence: `fast_path_planned_v2_ceiling.jsonl`,
 `fast_path_planned_v2_ceiling_analysis.json`.
 
+Follow-up 5, descriptive: the two isolation fixes (separate live and
+background model pools, one shadow run per task at a time) under the
+back-to-back conditions of follow-up 3, with the ceiling arm for reference.
+
+| Arm | Correct | Median ms | 90th pct ms | Model calls |
+|---|---:|---:|---:|---:|
+| A. One direct call | 102/105 | 3620 | 5042 | 105 |
+| R. Whole-task race | 101/105 | 2448 | 3366 | 525 |
+| C. Planning router | 103/105 | 2432 | 3405 | 5,505 |
+| D. Ceiling | 105/105 | 838 | 1060 | 525 |
+
+- **The isolation fix worked.** Arm C's answers, all from the race, took the
+  same time as arm R's (median 2432 against 2448 ms; C/R 0.99, interval 0.96
+  to 1.08) and no longer slowed down as the run went on (last five jobs: 2386
+  against 2432 ms). In follow-up 3 they reached 7967 ms. No HTTP 429 responses.
+- **No plan went live.** Every shape adopted a plan into shadow mode, but only
+  six shadow runs finished across all seven shapes, taking 4.9 to 47 s each.
+  With jobs back to back, each shape's 15 jobs pass in about two minutes,
+  while a plan's learning (probes, synthesis and step races for about ten
+  function steps) takes longer than that.
+- So under live traffic the planning router is now safe (never slower than
+  the race, no wrong plan answer) but gains nothing within 15 jobs. A speed-up
+  would need longer streams of the same job, or cheaper learning: fewer
+  probes, fewer racers for step examples.
+
+Evidence: `fast_path_planned_v2_isolated.jsonl`,
+`fast_path_planned_v2_isolated_analysis.json`.
+
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
 hardened boundary against adversarial code.
