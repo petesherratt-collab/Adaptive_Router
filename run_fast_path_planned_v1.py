@@ -72,10 +72,38 @@ class UsageMeter:
                 "completion_tokens": self.completion_tokens}
 
 
+def ceiling_answer(shape, reading, inputs, router):
+    """Arm D: the reading step raced exactly as arm C races its judgement
+    steps, then the benchmark's own reference code for everything else.
+
+    Returns ``(answered, value, label)``. A label the reference code cannot use
+    makes the job wrong, not unanswered.
+    """
+    result = router.handle(
+        {"schema_version": fast_path.SCHEMA_VERSION,
+         "task": {"spec": reading["spec"], "signature": reading["signature"]},
+         "args": [inputs[reading["field"]]]},
+        learn=False,
+    )
+    if result["route"] == "none":
+        return False, None, None
+    label = result["value"]
+    try:
+        return True, shape["reference"](inputs, {reading["label"]: label}), label
+    except Exception:
+        return True, None, label
+
+
 def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_key,
-              workdir, should_stop=lambda: False, arrival="drained"):
+              workdir, should_stop=lambda: False, arrival="drained", ceiling=None):
     base = Path(workdir) / shape["name"]
-    meters = {arm: UsageMeter(remote_fn) for arm in ARMS}
+    arms = ARMS + (("D",) if ceiling else ())
+    meters = {arm: UsageMeter(remote_fn) for arm in arms}
+    reading = ceiling[shape["name"]] if ceiling else None
+    ceiling_router = fast_path.FastPathRouter(
+        {"remote": remote_config, "fast_path": {**settings, "synthesis_enabled": False}},
+        base / "ceiling_store", base / "ceiling_runs.jsonl",
+        remote_fn=meters["D"], api_key=api_key) if ceiling else None
     learning = fast_path.FastPathRouter({"remote": remote_config, "fast_path": settings},
                                         base / "store", base / "runs.jsonl",
                                         remote_fn=meters["C"], api_key=api_key)
@@ -86,19 +114,24 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
     planning = planner.PlanningRouter(learning, base / "templates", base / "tasks.jsonl")
     order_rng = random.Random(f"{ARM_ORDER_SEED}:{shape['name']}")
     rows = []
-    for index, ((inputs, _), gold) in enumerate(zip(instances, golds)):
+    for index, ((inputs, labels), gold) in enumerate(zip(instances, golds)):
         if should_stop():
             break
         expected = gold[shape["output"]]
         prompt = planner.build_task_prompt(shape["description"], inputs)
-        order = list(ARMS)
+        order = list(arms)
         order_rng.shuffle(order)
         for position, arm in enumerate(order):
             started = time.perf_counter()
             error, model, route, steps = None, None, None, None
+            reading_correct = None
             if arm == "A":
                 answered, value, error = direct(prompt, remote_config, settings, meters["A"], api_key)
                 model, route = BASELINE_MODEL, "direct"
+            elif arm == "D":
+                answered, value, label = ceiling_answer(shape, reading, inputs, ceiling_router)
+                route = "ceiling"
+                reading_correct = answered and label == labels.get(reading["label"])
             elif arm == "R":
                 model, value = racing.race_prompt(prompt)
                 answered, route = model is not None, "race"
@@ -122,6 +155,7 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
                 "answered": answered, "error": error, "model": model, "route": route,
                 "correct": answered and same(value, expected),
                 "value": value if answered else None, "steps": steps,
+                "reading_correct": reading_correct,
             })
     template = planner.template_key(shape["description"], instances[0][0])
     planning.close()
@@ -129,7 +163,9 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
     learning.close()
     racing.close()
     summary = shape_summary(shape, instances, golds, record, learning)
-    summary["jobs_completed"] = len(rows) // len(ARMS)
+    if ceiling_router is not None:
+        ceiling_router.close()
+    summary["jobs_completed"] = len(rows) // len(arms)
     summary["usage"] = {arm: meter.report() for arm, meter in meters.items()}
     return rows, summary
 
@@ -168,13 +204,13 @@ def shape_summary(shape, instances, golds, record, learning):
 
 
 def execute(shapes, bench, remote_config, settings, remote_fn, api_key, workers, write,
-            monitor=None, arrival="drained"):
+            monitor=None, arrival="drained", ceiling=None):
     should_stop = monitor.tripped if monitor is not None else (lambda: False)
 
     def job(shape):
         instances = bench.stream(shape)
         return run_shape(shape, instances, bench.gold(shape, instances), remote_config,
-                         settings, remote_fn, api_key, workdir, should_stop, arrival)
+                         settings, remote_fn, api_key, workdir, should_stop, arrival, ceiling)
 
     with tempfile.TemporaryDirectory() as workdir, ThreadPoolExecutor(workers) as pool:
         for rows, summary in pool.map(job, shapes):
@@ -191,6 +227,7 @@ def main():
     parser.add_argument("--set", dest="override", metavar="NAME=VALUE")
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--arrival", choices=("drained", "immediate"), default="drained")
+    parser.add_argument("--ceiling", help="module of hand-written reading steps; adds arm D")
     parser.add_argument("--limit-shapes", type=int)
     parser.add_argument("--limit-jobs", type=int)
     args = parser.parse_args()
@@ -212,6 +249,7 @@ def main():
         override = {"name": name, "from": settings[name], "to": value}
         settings[name] = value
     bench = load_bench(args.bench)
+    ceiling = load_bench(args.ceiling).READING if args.ceiling else None
     shapes = bench.SHAPES[: args.limit_shapes] if args.limit_shapes else bench.SHAPES
     if args.limit_jobs:
         full = bench.stream
@@ -231,11 +269,13 @@ def main():
             "shapes": len(shapes), "stream_seed": bench.STREAM_SEED,
             "jobs_per_shape": args.limit_jobs or bench.STREAM_LENGTH,
             "arm_order_seed": ARM_ORDER_SEED, "workers": args.workers, "arrival": args.arrival,
+            "ceiling": ({"name": Path(args.ceiling).name, "sha256": sha256_file(args.ceiling)}
+                        if args.ceiling else None),
             "files": {name: sha256_file(ROOT / name) for name in HASHED_FILES},
         })
         monitor = ProviderMonitor(remote.generate)
         status = execute(shapes, bench, remote_config, settings, monitor, api_key,
-                         args.workers, write, monitor, args.arrival)
+                         args.workers, write, monitor, args.arrival, ceiling)
         write({"record_type": "footer", "status": status, "provider": monitor.report()})
     if status == "COMPLETED":
         partial.rename(output)

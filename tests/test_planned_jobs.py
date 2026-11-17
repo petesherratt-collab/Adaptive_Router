@@ -105,3 +105,74 @@ class FreshBenchTests(unittest.TestCase):
         fresh.self_verify()
         self.assertEqual(len(fresh.SHAPES), 7)
         self.assertEqual(fresh.SHAPES[0]["output"], "result")
+
+
+class CeilingTests(unittest.TestCase):
+    def ceiling_bench(self):
+        mood = {"up": 1, "down": -1}
+        instances = [({"n": n, "text": "a" * n, "note": "great"}, {"mood": "up"}) for n in range(1, 6)]
+        shape = {"name": "tiny", "description": DESCRIPTION + " Also read the mood of the note.",
+                 "output": "out",
+                 "reference": lambda inputs, labels: inputs["n"] * 3 + mood[labels["mood"]]}
+        bench = types.SimpleNamespace(
+            SHAPES=[shape], stream=lambda shape: instances,
+            gold=lambda shape, inst: [{"out": i["n"] * 3 + 1} for i, _ in inst])
+        reading = {"tiny": {"field": "note", "label": "mood", "signature": "def solve(text: str) -> str:",
+                            "spec": "Classify the mood of the text as 'up' or 'down'."}}
+        return bench, reading
+
+    def remote(self, mood_answer):
+        fake = FakeRemote(plans=[GOOD_PLAN], task_answer=lambda model, i: i["n"] * 3 + 1)
+
+        def call(prompt, config, api_key):
+            if "mood of the text" in prompt:
+                from remote import RemoteResult
+                return RemoteResult(True, text=f'ANSWER: "{mood_answer}"', model=config["model"], total_ms=1.0)
+            return fake(prompt, config, api_key)
+        return call
+
+    def run(self, mood_answer):
+        bench, reading = self.ceiling_bench()
+        rows = []
+        runner.execute(bench.SHAPES, bench, {"model": "x"}, dict(SETTINGS), self.remote(mood_answer),
+                       "k", 1, rows.append, None, "drained", reading)
+        return rows
+
+    def test_ceiling_arm_races_the_reading_step_and_runs_reference_code(self):
+        rows = self.run("up")
+        d = [r for r in rows if r["record_type"] == "job" and r["arm"] == "D"]
+        self.assertEqual(len(d), 5)
+        self.assertTrue(all(r["correct"] and r["reading_correct"] for r in d))
+        usage = next(r for r in rows if r["record_type"] == "shape")["usage"]
+        # One race of two models per job for the reading step, nothing else.
+        self.assertEqual(usage["D"]["calls"], 10)
+
+    def test_wrong_or_unusable_reading_makes_the_job_wrong(self):
+        for answer in ("down", "sideways"):
+            with self.subTest(answer=answer):
+                d = [r for r in self.run(answer) if r["record_type"] == "job" and r["arm"] == "D"]
+                self.assertTrue(all(r["answered"] and not r["correct"] and not r["reading_correct"] for r in d))
+
+    def test_analysis_reports_the_ceiling(self):
+        rows = self.run("up")
+        kinds = {"header": [{"label": "t"}], "footer": [{"status": "COMPLETED"}]}
+        for row in rows:
+            kinds.setdefault(row["record_type"], []).append(row)
+        result = analysis.analyse(kinds, replicates=50)
+        self.assertEqual((result["ceiling"]["reading_correct"], result["ceiling"]["jobs"]), (5, 5))
+        self.assertIn("D", result["arms"])
+        self.assertIn("C", result["ceiling"]["first_three_jobs_median_ms"])
+
+
+class ShippedCeilingTests(unittest.TestCase):
+    def test_reading_steps_cover_every_fresh_shape(self):
+        import fast_path_ceiling_v1 as ceiling
+        import fast_path_planned_bench_v2 as fresh
+
+        self.assertEqual(set(ceiling.READING), {s["name"] for s in fresh.SHAPES})
+        for shape in fresh.SHAPES:
+            reading = ceiling.READING[shape["name"]]
+            inputs, labels = fresh.stream(shape)[0]
+            self.assertIn(reading["field"], inputs)
+            self.assertIn(reading["label"], labels)
+            self.assertEqual(shape["reference"](inputs, labels), fresh.gold(shape, [(inputs, labels)])[0]["result"])

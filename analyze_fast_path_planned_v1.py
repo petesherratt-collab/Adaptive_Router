@@ -18,7 +18,7 @@ from analyze_fast_path_timing_v1 import BOOTSTRAP_REPLICATES, bootstrap, by_shap
 
 TIME_RATIO_LIMIT = 1.0
 CORRECTNESS_MARGIN = -0.02
-ARMS = ("A", "R", "C")
+ARMS = ("A", "R", "C", "D")
 
 
 def pair(grouped, first, second, replicates):
@@ -50,6 +50,24 @@ def route_table(jobs):
             out[route] = {"jobs": len(mine), "correct": sum(r["correct"] for r in mine),
                           "median_ms": statistics.median(r["answer_ms"] for r in mine)}
     return out
+
+
+def ceiling_summary(jobs, grouped, replicates):
+    """Arm D is a ceiling, not a baseline: its mechanical work is the
+    reference code, so only its time and its reading accuracy inform."""
+    mine = [r for r in jobs if r["arm"] == "D"]
+    if not mine:
+        return None
+    def median(arm, early):
+        times = [r["answer_ms"] for r in jobs if r["arm"] == arm and (r["index"] < 3) == early]
+        return statistics.median(times) if times else None
+    return {
+        "reading_correct": sum(bool(r.get("reading_correct")) for r in mine),
+        "jobs": len(mine),
+        "c_vs_d": pair(grouped, "C", "D", replicates),
+        "first_three_jobs_median_ms": {arm: median(arm, True) for arm in ("R", "C", "D")},
+        "later_jobs_median_ms": {arm: median(arm, False) for arm in ("R", "C", "D")},
+    }
 
 
 def analyse(kinds, replicates=BOOTSTRAP_REPLICATES):
@@ -98,6 +116,7 @@ def analyse(kinds, replicates=BOOTSTRAP_REPLICATES):
             for arm in ARMS
         } if any("usage" in s for s in shapes) else None,
         "arrival": header.get("arrival", "drained"),
+        "ceiling": ceiling_summary(jobs, grouped, replicates),
         "per_shape": {
             shape: {arm: {"correct": sum(r["correct"] for r in rows),
                           "median_ms": statistics.median(r["answer_ms"] for r in rows)}
@@ -107,7 +126,7 @@ def analyse(kinds, replicates=BOOTSTRAP_REPLICATES):
         "median_after_plan_ms": {
             arm: statistics.median(r["answer_ms"] for r in jobs if r["arm"] == arm
                                    and r["shape"] in first_plan and r["index"] >= first_plan[r["shape"]])
-            for arm in ARMS
+            for arm in ARMS if any(r["arm"] == arm for r in jobs)
         } if first_plan else None,
     })
     return result
