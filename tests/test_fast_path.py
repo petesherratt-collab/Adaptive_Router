@@ -450,6 +450,43 @@ class LearningTests(FastPathTestCase):
         self.assertIsNone(shape["function"])
         self.assertEqual(len(remote.sources), 1)
 
+    def test_small_domain_is_promoted_after_saturation(self):
+        # Only three distinct inputs ever arrive; min_gate_examples is eight.
+        remote = FakeRemote({"a": double, "b": double}, sources=[GOOD])
+        router = self.build(remote, min_gate_examples=8, max_synthesis_attempts=1,
+                            saturation_window=4, saturation_min_examples=3)
+        for n in (1, 2, 3, 1, 2, 3):
+            router.handle(request([n]))
+            router.drain()
+        shape = self.shape(router)
+        self.assertEqual((len(shape["examples"]), shape["repeat_streak"]), (3, 3))
+        self.assertIsNone(shape["function"])
+        router.handle(request([1]))
+        router.drain()
+        shape = self.shape(router)
+        self.assertEqual(shape["function"]["gate"]["examples"], 3)
+        self.assertTrue(shape["function"]["gate"]["saturated"])
+        self.assertEqual(router.handle(request([2]))["route"], "code")
+
+    def test_new_input_resets_the_saturation_streak(self):
+        remote = FakeRemote({"a": double, "b": double}, sources=[GOOD])
+        router = self.build(remote, min_gate_examples=8, saturation_window=3,
+                            saturation_min_examples=2)
+        for n in (1, 2, 1, 2, 5):
+            router.handle(request([n]))
+            router.drain()
+        shape = self.shape(router)
+        self.assertEqual(shape["repeat_streak"], 0)
+        self.assertEqual(shape["synthesis_attempts"], [])
+
+    def test_saturation_is_off_without_a_window(self):
+        remote = FakeRemote({"a": double, "b": double}, sources=[GOOD])
+        router = self.build(remote, min_gate_examples=8)
+        for n in (1, 2, 1, 2, 1, 2, 1, 2):
+            router.handle(request([n]))
+            router.drain()
+        self.assertEqual(self.shape(router)["synthesis_attempts"], [])
+
     def test_probe_proposer_sees_no_examples(self):
         remote = FakeRemote({"a": double, "b": double}, sources=[GOOD])
         remote.probe_reply = "[[0]]"

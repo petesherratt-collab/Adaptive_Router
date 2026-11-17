@@ -543,6 +543,11 @@ class FastPathRouter:
                 outcome = add_example(
                     record, request.args, valid[0]["value"], SOURCE_AGREEMENT
                 )
+                # Consecutive agreed inputs that were already known: a long
+                # run suggests the arriving inputs have exhausted the domain.
+                record["repeat_streak"] = (
+                    record.get("repeat_streak", 0) + 1 if outcome == "duplicate" else 0
+                )
             elif len(distinct) > 1:
                 record["disagreements"] += 1
             self.store.save(request.shape)
@@ -589,6 +594,26 @@ class FastPathRouter:
             self.store.save(shape)
         self._log({"record_type": "fast_path_demotion", "shape": shape, "reason": reason})
 
+    def _gate_minimum(self, record):
+        """Examples the gate requires now, or ``None`` if there are too few.
+
+        Normally ``min_gate_examples``. When saturation is enabled and the
+        last ``saturation_window`` agreed inputs were all already known, a
+        smaller set of at least ``saturation_min_examples`` is accepted, so a
+        function whose whole input domain is small can still be promoted.
+        """
+        count = len(record["examples"])
+        if count >= self.settings["min_gate_examples"]:
+            return self.settings["min_gate_examples"]
+        window = self.settings.get("saturation_window")
+        if (
+            window
+            and record.get("repeat_streak", 0) >= window
+            and count >= self.settings.get("saturation_min_examples", 2)
+        ):
+            return self.settings.get("saturation_min_examples", 2)
+        return None
+
     def _maybe_synthesise(self, shape):
         with self.store.lock():
             record = self.store.get(shape)
@@ -598,7 +623,7 @@ class FastPathRouter:
             )
             # Probes need no traffic, so they may be fetched before enough
             # examples have arrived; their answers count toward the minimum.
-            enough = len(record["examples"]) >= self.settings["min_gate_examples"]
+            enough = self._gate_minimum(record) is not None
             early_probe = needs_probes and len(record["examples"]) >= self.settings.get(
                 "probe_after_examples", self.settings["min_gate_examples"]
             )
@@ -622,10 +647,7 @@ class FastPathRouter:
             if needs_probes:
                 self._probe(shape, spec, signature, arity)
             with self.store.lock():
-                ready = (
-                    len(self.store.get(shape)["examples"])
-                    >= self.settings["min_gate_examples"]
-                )
+                ready = self._gate_minimum(self.store.get(shape)) is not None
             if ready:
                 attempt = self._synthesise(shape, spec, signature)
         finally:
@@ -728,12 +750,14 @@ class FastPathRouter:
         with self.store.lock():
             record = self.store.get(shape)
             if source is not None:
+                minimum = self._gate_minimum(record) or self.settings["min_gate_examples"]
                 passed, detail = gate(
                     source,
                     list(record["examples"]),
-                    self.settings["min_gate_examples"],
+                    minimum,
                     self.settings["sandbox_timeout_seconds"],
                 )
+                detail["saturated"] = minimum < self.settings["min_gate_examples"]
                 attempt = {
                     "model": model,
                     "outcome": "PROMOTED" if passed else "REJECTED",
