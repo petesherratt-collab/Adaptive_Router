@@ -581,6 +581,36 @@ costs compute, which cost was dropped as an objective but is real.
 Evidence: `fast_path_planned_v2_majority.jsonl`,
 `fast_path_planned_v2_majority_analysis.json`.
 
+Follow-up 2, descriptive: the same jobs with the majority rule, but arriving
+back to back, so background learning ran alongside live jobs instead of being
+given time between them. **The planning router lost on both measures.**
+
+| Arm | Correct | Median ms | 90th pct ms | Mean ms |
+|---|---:|---:|---:|---:|
+| A. One direct call | 96/105 | 4074 | 5767 | 4138 |
+| R. Whole-task race | 100/105 | 2579 | 3657 | 2709 |
+| C. Planning router | 99/105 | 3117 | 14150 | 6058 |
+
+- C/R 1.21 (interval 1.05 to 1.57): slower than the race. Correctness -1.0
+  point (interval -8.6 to +5.7).
+- Plans arrived late (job 6 to job 14; `expense_claims` never ran on one),
+  because writing and checking a plan takes tens of seconds while jobs keep
+  arriving. Only 36 of 78 plan function steps became code.
+- Plan-served jobs had a median of 6.6 s: a plan whose steps are still answered
+  by models runs them one after another, each a full model race, and is much
+  slower than racing the whole task once.
+- Five wrong answers came from the race route and one from a plan: the first
+  wrong plan-served answer in any run (`bank_statement`, job 10).
+
+The lesson is a design flaw, not just a slow run: the router switches a task to
+its plan as soon as the plan is correct, not when it is fast. Under live
+traffic that is before most steps are code. The fix to test is to keep racing
+the whole task while the plan learns in the background, and switch only once
+its steps run as code.
+
+Evidence: `fast_path_planned_v2_immediate.jsonl`,
+`fast_path_planned_v2_immediate_analysis.json`.
+
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
 hardened boundary against adversarial code.

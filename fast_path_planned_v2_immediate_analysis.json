@@ -1,0 +1,230 @@
+{
+ "status": "COMPLETED",
+ "label": "immediate",
+ "task_clusters": 7,
+ "arms": {
+  "A": {
+   "jobs": 105,
+   "correct": 96,
+   "unanswered": 0,
+   "median_ms": 4074.0578209999967,
+   "p90_ms": 5766.756375400109,
+   "mean_ms": 4137.628053180951
+  },
+  "R": {
+   "jobs": 105,
+   "correct": 100,
+   "unanswered": 0,
+   "median_ms": 2579.0518539999994,
+   "p90_ms": 3657.0027995998776,
+   "mean_ms": 2708.6073546857147
+  },
+  "C": {
+   "jobs": 105,
+   "correct": 99,
+   "unanswered": 0,
+   "median_ms": 3116.8114440001773,
+   "p90_ms": 14149.877912800051,
+   "mean_ms": 6058.111992276192
+  }
+ },
+ "arm_c_routes": {
+  "plan": {
+   "jobs": 44,
+   "correct": 43,
+   "median_ms": 6580.499303000124
+  },
+  "race": {
+   "jobs": 61,
+   "correct": 56,
+   "median_ms": 2489.6080820001316
+  }
+ },
+ "primary_c_vs_r": {
+  "time_ratio": 1.2085105769262203,
+  "time_ratio_interval_95": [
+   1.0534023168061577,
+   1.5680170799772875
+  ],
+  "correctness_difference": -0.00952380952380949,
+  "correctness_interval_95": [
+   -0.08571428571428574,
+   0.05714285714285716
+  ]
+ },
+ "c_vs_a": {
+  "time_ratio": 0.7650385882925789,
+  "time_ratio_interval_95": [
+   0.6423517759462974,
+   1.0260329116804572
+  ],
+  "correctness_difference": 0.02857142857142858,
+  "correctness_interval_95": [
+   -0.06666666666666665,
+   0.12380952380952381
+  ]
+ },
+ "r_vs_a": {
+  "time_ratio": 0.6330425259813713,
+  "time_ratio_interval_95": [
+   0.5861650743720034,
+   0.7242626521313247
+  ],
+  "correctness_difference": 0.03809523809523807,
+  "correctness_interval_95": [
+   -0.03809523809523807,
+   0.11428571428571421
+  ]
+ },
+ "time_criterion_met": false,
+ "correctness_criterion_met": false,
+ "decision": "NOT_SUPPORTED",
+ "shapes_with_plan_adopted": 7,
+ "first_plan_job_index": {
+  "survey_scores": 5,
+  "playlist": 5,
+  "timesheet": 7,
+  "shipment_tracking": 8,
+  "bank_statement": 8,
+  "pick_list": 13
+ },
+ "plan_attempt_outcomes": {
+  "REJECTED": 4,
+  "ADOPTED": 10
+ },
+ "plan_step_kinds": {
+  "judgement": 7,
+  "function": 78
+ },
+ "plan_function_steps_promoted": 36,
+ "plan_demotions": 0,
+ "wrong_job_examples": 0,
+ "plan_step_routes": {
+  "judgement:model": 44,
+  "function:model": 251,
+  "function:code": 127
+ },
+ "usage_per_arm": {
+  "A": {
+   "calls": 105,
+   "prompt_tokens": 50566,
+   "completion_tokens": 28335
+  },
+  "R": {
+   "calls": 525,
+   "prompt_tokens": 281442,
+   "completion_tokens": 357490
+  },
+  "C": {
+   "calls": 6636,
+   "prompt_tokens": 1713420,
+   "completion_tokens": 1279034
+  }
+ },
+ "arrival": "immediate",
+ "per_shape": {
+  "expense_claims": {
+   "C": {
+    "correct": 13,
+    "median_ms": 2567.50789900002
+   },
+   "R": {
+    "correct": 14,
+    "median_ms": 2410.1245559998006
+   },
+   "A": {
+    "correct": 14,
+    "median_ms": 4088.2025779999367
+   }
+  },
+  "shipment_tracking": {
+   "R": {
+    "correct": 13,
+    "median_ms": 2030.5909209998845
+   },
+   "A": {
+    "correct": 15,
+    "median_ms": 3492.4249320001763
+   },
+   "C": {
+    "correct": 15,
+    "median_ms": 2540.1050569998915
+   }
+  },
+  "survey_scores": {
+   "C": {
+    "correct": 14,
+    "median_ms": 6111.913588999869
+   },
+   "A": {
+    "correct": 11,
+    "median_ms": 5409.505127000102
+   },
+   "R": {
+    "correct": 14,
+    "median_ms": 3628.2125129998803
+   }
+  },
+  "timesheet": {
+   "C": {
+    "correct": 15,
+    "median_ms": 3809.8023980001017
+   },
+   "A": {
+    "correct": 12,
+    "median_ms": 3555.6396179999865
+   },
+   "R": {
+    "correct": 14,
+    "median_ms": 3379.2711979999694
+   }
+  },
+  "bank_statement": {
+   "C": {
+    "correct": 12,
+    "median_ms": 2886.203121000108
+   },
+   "R": {
+    "correct": 15,
+    "median_ms": 2398.2820649998757
+   },
+   "A": {
+    "correct": 15,
+    "median_ms": 4247.7701210000305
+   }
+  },
+  "playlist": {
+   "A": {
+    "correct": 14,
+    "median_ms": 4192.173269000023
+   },
+   "R": {
+    "correct": 15,
+    "median_ms": 2812.261542999977
+   },
+   "C": {
+    "correct": 15,
+    "median_ms": 4452.0044629998665
+   }
+  },
+  "pick_list": {
+   "C": {
+    "correct": 15,
+    "median_ms": 2374.7509739998804
+   },
+   "R": {
+    "correct": 15,
+    "median_ms": 2303.292794000072
+   },
+   "A": {
+    "correct": 15,
+    "median_ms": 3324.2669250000745
+   }
+  }
+ },
+ "median_after_plan_ms": {
+  "A": 4246.4420750000045,
+  "R": 2736.316530999943,
+  "C": 6580.499303000124
+ }
+}

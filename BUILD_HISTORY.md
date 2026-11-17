@@ -3571,3 +3571,30 @@ earlier with no observed safety cost.
 |---|---|
 | `fast_path_planned_v2_majority.jsonl` | `acf2741db820ff701f382ac6e1c317a60f5dc5cb4a17e69fa2264ae9fd46e477` |
 | `fast_path_planned_v2_majority_analysis.json` | `416c0c875508cb688e2f97e2dd51a51d93753f172bdcd81b0650cd5fb656e2bd` |
+
+---
+
+## 2026-11-17 — Follow-up 2: back-to-back arrival (descriptive)
+
+Label `immediate`, `job_agreement_min` 4, `--arrival immediate`: 7,266 provider
+calls, 7 HTTP 429 and 3 invalid responses, no unanswered job.
+
+- Correct A 96, R 100, C 99 of 105. Medians A 4074, R 2579, C 3117 ms;
+  C 90th percentile 14,150 ms. C/R 1.209 (1.053 to 1.568); C minus R -0.010
+  (-0.086 to +0.057). Both criteria fail.
+- Arm C routes: 44 plan jobs (43 correct, median 6581 ms), 61 race jobs
+  (56 correct). First plan job index 5 to 13; `expense_claims` none.
+- 14 plan attempts: 10 adopted, 4 rejected. Final plans 78 function steps,
+  36 promoted. Step executions: 127 function on code, 251 on the race.
+- First wrong plan-served answer of any run: `bank_statement` job index 9.
+- Usage: A 105 calls, R 525, C 6,636 (1,713,420 prompt and 1,279,034
+  completion tokens).
+
+Finding: adoption is gated on correctness only. Under live arrival a plan is
+adopted while most of its steps are still raced one by one, which makes jobs
+slower than a single whole-task race.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v2_immediate.jsonl` | `84642a8fe9f752f82b3998c36e5943c5aefd672193da75f45fa8485ac2d6d2a1` |
+| `fast_path_planned_v2_immediate_analysis.json` | `db532fa5af5310d86dab9d62180e77f9a63c37ce983a64a45d4d29bfab0723d8` |
