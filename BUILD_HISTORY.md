@@ -3340,3 +3340,34 @@ the freeze: about $11.60.
 
 Verification: full unit suite passed (536 tests); description self-verify
 passed; `git diff --check` passed.
+
+---
+
+## 2026-11-17 — Planned jobs V1 result
+
+The frozen descriptive run completed in one attempt: 3,489 provider calls, 5
+invalid responses, no unanswered job. Decision, C against R: `NOT_SUPPORTED`.
+
+| Arm | Correct | Median ms | Mean ms |
+|---|---:|---:|---:|
+| A. Direct | 96/105 | 3823 | 3962 |
+| R. Whole-task race | 103/105 | 2528 | 2504 |
+| C. Planning router | 105/105 | 1986 | 1999 |
+
+- C/R 0.786 (0.466 to 1.000): upper bound not below 1.0. C minus R +0.019
+  (0.000 to +0.038). C/A 0.520 (0.310 to 0.668), +0.086.
+- Plans adopted for 6 of 7 shapes, first plan-served job index 3 or 4.
+  Attempts: 6 adopted, 2 rejected by trial (1/3 and 0/3 matched), 2 invalid.
+- `order_batch`: both plans refused as `INVALID_STEP_TASK:INVALID_SIGNATURE`.
+  The plan text was not kept, so which signature failed is unknown.
+- Arm C routes: 69 jobs on a plan (median 1553 ms, all correct), 36 on the
+  race (median 2768 ms, all correct). After adoption, medians A 3823, R 2422,
+  C 1553 ms.
+- Plan steps: 19 function (16 promoted), 7 judgement. Step executions:
+  181 function on code, 36 function on the race, 80 judgement. No wrong job
+  example, no plan demotion.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v1.jsonl` | `4c462b877dfb4129289e1dff877f9678bd54eebc4458c608d6f4be663a8d83a1` |
+| `fast_path_planned_v1_analysis.json` | `913cda0eed7f53654084dc5f4830ab8aad408ae2c559a6050e8a79167a72d25d` |

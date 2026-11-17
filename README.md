@@ -426,6 +426,39 @@ learning drained between jobs; benchmark not owner-reviewed before the freeze.
 Evidence: `fast_path_jobs_v2_large_primary.jsonl`,
 `fast_path_jobs_v2_large_primary_analysis.json`.
 
+### Planned jobs V1: the router writes its own plans (descriptive, 2026-11-17)
+
+[`FAST_PATH_PLANNED_V1_PLAN.md`](FAST_PATH_PLANNED_V1_PLAN.md) froze one run in
+which each job arrives as a plain-language task with no step plan. The router
+races the whole task until it has three agreed answers, has a planner model
+write a step plan, and adopts the plan only if it reproduces those answers.
+The jobs are those of jobs V2, so the run is descriptive. Decision under its
+criteria: `NOT_SUPPORTED`, narrowly on time.
+
+| Arm | Correct | Median ms | 90th pct ms | Mean ms |
+|---|---:|---:|---:|---:|
+| A. One direct call | 96/105 | 3823 | 5867 | 3962 |
+| R. Whole-task race | 103/105 | 2528 | 3152 | 2504 |
+| C. Planning router | 105/105 | 1986 | 3138 | 1999 |
+
+- C against R: time ratio 0.79, 95% interval 0.47 to 1.00; the criterion
+  required the interval wholly below 1.0. Correctness +1.9 points, interval
+  0.0 to +3.8. The planning router made no wrong answer.
+- Six of seven task shapes got an adopted plan, from the fourth or fifth job.
+  On the 69 jobs served by a plan the median was 1553 ms, against 2422 ms for
+  the race over the same jobs.
+- Plans were checked by execution and two wrong ones were caught: one
+  reproduced 1 of 3 agreed answers, another 0 of 3. Both shapes adopted a
+  correct plan on the second attempt.
+- `order_batch` never got a plan: both planner replies were refused by the
+  plan validator for a malformed step signature. That is a strictness of the
+  validator, not a wrong plan, and that shape stayed on the race.
+- The planner wrote 26 steps in all, 19 function and 7 judgement. Every
+  judgement step read prose (tone, topic, intent, language); 16 function steps
+  were promoted to code. No plan was dropped by the audit.
+
+Evidence: `fast_path_planned_v1.jsonl`, `fast_path_planned_v1_analysis.json`.
+
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
 hardened boundary against adversarial code.

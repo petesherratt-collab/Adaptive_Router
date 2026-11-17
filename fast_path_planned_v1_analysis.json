@@ -1,0 +1,213 @@
+{
+ "status": "COMPLETED",
+ "label": "planned_v1",
+ "task_clusters": 7,
+ "arms": {
+  "A": {
+   "jobs": 105,
+   "correct": 96,
+   "unanswered": 0,
+   "median_ms": 3822.7441300000464,
+   "p90_ms": 5866.670840600001,
+   "mean_ms": 3961.756760533325
+  },
+  "R": {
+   "jobs": 105,
+   "correct": 103,
+   "unanswered": 0,
+   "median_ms": 2527.5002319999658,
+   "p90_ms": 3151.9170225999464,
+   "mean_ms": 2504.2047045523796
+  },
+  "C": {
+   "jobs": 105,
+   "correct": 105,
+   "unanswered": 0,
+   "median_ms": 1985.955845000035,
+   "p90_ms": 3137.731674600014,
+   "mean_ms": 1998.7018995714293
+  }
+ },
+ "arm_c_routes": {
+  "plan": {
+   "jobs": 69,
+   "correct": 69,
+   "median_ms": 1553.1402999999955
+  },
+  "race": {
+   "jobs": 36,
+   "correct": 36,
+   "median_ms": 2768.1361829999673
+  }
+ },
+ "primary_c_vs_r": {
+  "time_ratio": 0.7857391346028022,
+  "time_ratio_interval_95": [
+   0.4664864557835463,
+   1.0003530022939227
+  ],
+  "correctness_difference": 0.01904761904761909,
+  "correctness_interval_95": [
+   0.0,
+   0.03809523809523807
+  ]
+ },
+ "c_vs_a": {
+  "time_ratio": 0.5195105341774499,
+  "time_ratio_interval_95": [
+   0.3101407217294925,
+   0.6683865943018664
+  ],
+  "correctness_difference": 0.08571428571428574,
+  "correctness_interval_95": [
+   0.03809523809523807,
+   0.1333333333333333
+  ]
+ },
+ "r_vs_a": {
+  "time_ratio": 0.6611743151116773,
+  "time_ratio_interval_95": [
+   0.598495550210826,
+   0.7559790330950483
+  ],
+  "correctness_difference": 0.06666666666666665,
+  "correctness_interval_95": [
+   0.0,
+   0.1333333333333333
+  ]
+ },
+ "time_criterion_met": false,
+ "correctness_criterion_met": true,
+ "decision": "NOT_SUPPORTED",
+ "shapes_with_plan_adopted": 6,
+ "first_plan_job_index": {
+  "invoice_audit": 3,
+  "log_triage": 3,
+  "stock_reorder": 3,
+  "thread_digest": 4,
+  "grade_report": 4,
+  "meeting_actions": 4
+ },
+ "plan_attempt_outcomes": {
+  "ADOPTED": 6,
+  "INVALID_PLAN": 2,
+  "REJECTED": 2
+ },
+ "plan_step_kinds": {
+  "function": 19,
+  "judgement": 7
+ },
+ "plan_function_steps_promoted": 16,
+ "plan_demotions": 0,
+ "wrong_job_examples": 0,
+ "plan_step_routes": {
+  "function:code": 181,
+  "judgement:model": 80,
+  "function:model": 36
+ },
+ "per_shape": {
+  "invoice_audit": {
+   "C": {
+    "correct": 15,
+    "median_ms": 2315.3695350001726
+   },
+   "A": {
+    "correct": 15,
+    "median_ms": 5786.354014999915
+   },
+   "R": {
+    "correct": 15,
+    "median_ms": 3168.1759129999136
+   }
+  },
+  "log_triage": {
+   "A": {
+    "correct": 13,
+    "median_ms": 3790.07435099993
+   },
+   "R": {
+    "correct": 15,
+    "median_ms": 2233.850199000017
+   },
+   "C": {
+    "correct": 15,
+    "median_ms": 839.2097400001148
+   }
+  },
+  "order_batch": {
+   "A": {
+    "correct": 13,
+    "median_ms": 4418.393615000014
+   },
+   "C": {
+    "correct": 15,
+    "median_ms": 2890.56397499985
+   },
+   "R": {
+    "correct": 15,
+    "median_ms": 2804.7739579999416
+   }
+  },
+  "thread_digest": {
+   "R": {
+    "correct": 14,
+    "median_ms": 1748.854041000186
+   },
+   "C": {
+    "correct": 15,
+    "median_ms": 1065.6396740000673
+   },
+   "A": {
+    "correct": 15,
+    "median_ms": 2317.3635879998074
+   }
+  },
+  "grade_report": {
+   "C": {
+    "correct": 15,
+    "median_ms": 1965.4157579998355
+   },
+   "R": {
+    "correct": 15,
+    "median_ms": 2572.1723819999625
+   },
+   "A": {
+    "correct": 12,
+    "median_ms": 4660.37067000002
+   }
+  },
+  "stock_reorder": {
+   "C": {
+    "correct": 15,
+    "median_ms": 2721.428027999991
+   },
+   "A": {
+    "correct": 14,
+    "median_ms": 3750.546552999822
+   },
+   "R": {
+    "correct": 15,
+    "median_ms": 2452.7790390000064
+   }
+  },
+  "meeting_actions": {
+   "A": {
+    "correct": 14,
+    "median_ms": 2797.026373000108
+   },
+   "R": {
+    "correct": 14,
+    "median_ms": 2398.0986669998856
+   },
+   "C": {
+    "correct": 15,
+    "median_ms": 1070.1188920002096
+   }
+  }
+ },
+ "median_after_plan_ms": {
+  "A": 3822.7441300000464,
+  "R": 2421.894184000166,
+  "C": 1553.1402999999955
+ }
+}
