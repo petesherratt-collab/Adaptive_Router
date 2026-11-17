@@ -3908,3 +3908,19 @@ the two. A cheaper pair by price (for example `openai/gpt-6-luna` with
 |---|---|
 | `fast_path_planned_v2_lean.jsonl` | `ad843e7d6aa69c10b862c52c289604854abe19893f222f6b4b1055d49bd58a11` |
 | `fast_path_planned_v2_lean_analysis.json` | `c1cf18797b379ae53ad9dd2fd0c4955d47e8ec78c4fa7bfc352cce8644d8ee71` |
+
+---
+
+## 2026-11-17 — V3 reading texts generated and hand-checked (before any rule is scored)
+
+`make_bench_v3_prose.py` (hash above) wrote 12 texts per label, 312 in all,
+with one call per shape to `mistralai/mistral-large-4-0`. The assistant read
+every text against its planted label before any rule or model saw it:
+none excluded, 7 borderline texts kept with reasons (recorded in the file).
+The sensor notes all name their site outright, and the delivery notes mostly
+name a city and postcode; the urgency, department, diet, issue, request and
+formality texts mostly do not use the label word.
+
+| File | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v3_prose.json` | `efaf393f643cb108d10ecd0bd170856f5cf5149a249c01a5c6341044b9005cf4` |
