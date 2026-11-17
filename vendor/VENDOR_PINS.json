@@ -1,0 +1,9 @@
+{
+  "ccc_code_items.py": {
+    "sha256": "1b7a306c31cd4e869fe45a89fcb0683e474e07f1d4902079b048555b3406e76c",
+    "source_repository": "petesherratt-collab/jev-ccc-probe",
+    "source_path": "experiments/ccc_code_items.py",
+    "source_commit": "c5ba7e3dab841ae59290dbde69791d683496eb44",
+    "note": "Vendored byte-identical. The pin detects edits to this copy; it does not prove the copy matches upstream."
+  }
+}

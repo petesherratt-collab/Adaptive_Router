@@ -1,0 +1,39 @@
+{
+  "fast_path": {
+    "race_models": [
+      "openai/gpt-5.6-luna",
+      "openai/gpt-6-luna",
+      "anthropic/claude-haiku-5.5",
+      "google/gemini-3.8-flash",
+      "deepseek/deepseek-v4.1-flash"
+    ],
+    "synthesis_model": "openai/gpt-6-luna",
+    "answer_max_tokens": 4096,
+    "synthesis_max_tokens": 1024,
+    "agreement_quorum": 2,
+    "min_gate_examples": 8,
+    "max_synthesis_attempts": 2,
+    "sandbox_timeout_seconds": 2.0,
+    "audit_sample_rate": 0.1,
+    "audit_salt": "adaptive-router-fast-path-v1",
+    "probe_enabled": true,
+    "probe_model": "google/gemini-3.8-flash",
+    "max_probes": 12,
+    "probe_max_tokens": 4096,
+    "probe_after_examples": 3,
+    "saturation_window": 5,
+    "saturation_min_examples": 2,
+    "planner_model": "openai/gpt-6-luna",
+    "planner_max_tokens": 8192,
+    "plan_examples": 2,
+    "max_plan_attempts": 2,
+    "plan_audit_rate": 0.1,
+    "plan_retries": 1,
+    "refine_after_jobs": 4,
+    "max_refinements": 1,
+    "job_agreement_min": null,
+    "plan_shadow": true,
+    "plan_live_window": 2,
+    "plan_live_ratio": 0.75
+  }
+}

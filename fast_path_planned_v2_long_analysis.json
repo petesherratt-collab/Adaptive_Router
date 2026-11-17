@@ -1,0 +1,241 @@
+{
+ "status": "COMPLETED",
+ "label": "long_stream",
+ "task_clusters": 4,
+ "arms": {
+  "A": {
+   "jobs": 160,
+   "correct": 143,
+   "unanswered": 0,
+   "median_ms": 4014.4289779999835,
+   "p90_ms": 6107.947143699988,
+   "mean_ms": 4170.617565512499
+  },
+  "R": {
+   "jobs": 160,
+   "correct": 149,
+   "unanswered": 0,
+   "median_ms": 2755.0013999999974,
+   "p90_ms": 3739.019563000016,
+   "mean_ms": 2761.737239012497
+  },
+  "C": {
+   "jobs": 160,
+   "correct": 151,
+   "unanswered": 0,
+   "median_ms": 2238.5233955000103,
+   "p90_ms": 3502.314684800018,
+   "mean_ms": 2390.7153332687494
+  },
+  "D": {
+   "jobs": 160,
+   "correct": 160,
+   "unanswered": 0,
+   "median_ms": 835.7966125000473,
+   "p90_ms": 1057.1209284000133,
+   "mean_ms": 876.570128250002
+  }
+ },
+ "arm_c_routes": {
+  "plan": {
+   "jobs": 44,
+   "correct": 43,
+   "median_ms": 1602.4510304999922
+  },
+  "race": {
+   "jobs": 116,
+   "correct": 108,
+   "median_ms": 2661.0737789999916
+  }
+ },
+ "primary_c_vs_r": {
+  "time_ratio": 0.8125307651386356,
+  "time_ratio_interval_95": [
+   0.6956365311950811,
+   0.9997691723078518
+  ],
+  "correctness_difference": 0.012499999999999956,
+  "correctness_interval_95": [
+   0.0,
+   0.03749999999999998
+  ]
+ },
+ "c_vs_a": {
+  "time_ratio": 0.5576193794354429,
+  "time_ratio_interval_95": [
+   0.49464828144845696,
+   0.6768612132865597
+  ],
+  "correctness_difference": 0.04999999999999993,
+  "correctness_interval_95": [
+   -0.050000000000000044,
+   0.20000000000000007
+  ]
+ },
+ "r_vs_a": {
+  "time_ratio": 0.6862747890417427,
+  "time_ratio_interval_95": [
+   0.5979270994551095,
+   0.8173379372833508
+  ],
+  "correctness_difference": 0.03749999999999998,
+  "correctness_interval_95": [
+   -0.0625,
+   0.20000000000000007
+  ]
+ },
+ "time_criterion_met": true,
+ "correctness_criterion_met": true,
+ "decision": "SUPPORTED",
+ "shapes_with_plan_adopted": 4,
+ "first_plan_job_index": {
+  "timesheet": 19,
+  "survey_scores": 24,
+  "shipment_tracking": 33
+ },
+ "plan_attempt_outcomes": {
+  "ADOPTED": 6,
+  "REJECTED": 3
+ },
+ "plan_step_kinds": {
+  "judgement": 4,
+  "function": 54
+ },
+ "plan_function_steps_promoted": 49,
+ "plan_demotions": 0,
+ "wrong_job_examples": 0,
+ "plan_step_routes": {
+  "judgement:model": 44,
+  "function:code": 425,
+  "function:model": 41
+ },
+ "usage_per_arm": {
+  "A": {
+   "calls": 160,
+   "prompt_tokens": 81152,
+   "completion_tokens": 47835
+  },
+  "R": {
+   "calls": 800,
+   "prompt_tokens": 449463,
+   "completion_tokens": 604715
+  },
+  "C": {
+   "calls": 5265,
+   "prompt_tokens": 1451151,
+   "completion_tokens": 1221962
+  },
+  "D": {
+   "calls": 800,
+   "prompt_tokens": 140799,
+   "completion_tokens": 30938
+  }
+ },
+ "arrival": "immediate",
+ "ceiling": {
+  "reading_correct": 160,
+  "jobs": 160,
+  "c_vs_d": {
+   "time_ratio": 2.67831116089847,
+   "time_ratio_interval_95": [
+    2.288965394651235,
+    3.4376355465451303
+   ],
+   "correctness_difference": -0.05625000000000002,
+   "correctness_interval_95": [
+    -0.07499999999999996,
+    -0.03749999999999998
+   ]
+  },
+  "first_three_jobs_median_ms": {
+   "R": 2718.3713759999932,
+   "C": 2882.987234999988,
+   "D": 856.9682739999962
+  },
+  "later_jobs_median_ms": {
+   "R": 2755.0013999999974,
+   "C": 2212.5065435000124,
+   "D": 832.8064154999879
+  }
+ },
+ "per_shape": {
+  "expense_claims": {
+   "A": {
+    "correct": 40,
+    "median_ms": 3829.5643234999943
+   },
+   "D": {
+    "correct": 40,
+    "median_ms": 827.7875689999945
+   },
+   "C": {
+    "correct": 37,
+    "median_ms": 2556.8325859999845
+   },
+   "R": {
+    "correct": 37,
+    "median_ms": 2572.60484950001
+   }
+  },
+  "shipment_tracking": {
+   "R": {
+    "correct": 39,
+    "median_ms": 1879.280583499991
+   },
+   "C": {
+    "correct": 39,
+    "median_ms": 1878.8467935000028
+   },
+   "D": {
+    "correct": 40,
+    "median_ms": 837.1331075000086
+   },
+   "A": {
+    "correct": 40,
+    "median_ms": 3215.7762659999776
+   }
+  },
+  "survey_scores": {
+   "D": {
+    "correct": 40,
+    "median_ms": 826.1734790000332
+   },
+   "R": {
+    "correct": 35,
+    "median_ms": 3263.345157999993
+   },
+   "A": {
+    "correct": 36,
+    "median_ms": 5610.343041500017
+   },
+   "C": {
+    "correct": 37,
+    "median_ms": 2913.7988660000074
+   }
+  },
+  "timesheet": {
+   "R": {
+    "correct": 38,
+    "median_ms": 3268.298401499976
+   },
+   "C": {
+    "correct": 38,
+    "median_ms": 2346.5916419999644
+   },
+   "A": {
+    "correct": 27,
+    "median_ms": 3753.11065599999
+   },
+   "D": {
+    "correct": 40,
+    "median_ms": 903.8758974999723
+   }
+  }
+ },
+ "median_after_plan_ms": {
+  "A": 4578.589120999994,
+  "R": 3074.3367480000074,
+  "C": 1602.4510304999922,
+  "D": 832.3374129999763
+ }
+}

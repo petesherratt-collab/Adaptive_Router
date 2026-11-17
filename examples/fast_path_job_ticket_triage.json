@@ -1,0 +1,54 @@
+{
+  "schema_version": "fast_path_job_v1",
+  "inputs": {
+    "message": "I was charged twice for ORD-48213 and nobody has replied in a week. This is unacceptable. The other order, ORD-48260, was fine."
+  },
+  "steps": [
+    {
+      "id": "tone",
+      "kind": "judgement",
+      "task": {
+        "spec": "Classify the customer's tone in the message as exactly one of 'positive', 'negative' or 'neutral'.",
+        "signature": "def solve(message: str) -> str:"
+      },
+      "args": [{"ref": "message"}]
+    },
+    {
+      "id": "category",
+      "kind": "judgement",
+      "task": {
+        "spec": "Classify what the message is mainly about as exactly one of 'billing', 'technical', 'account' or 'other'.",
+        "signature": "def solve(message: str) -> str:"
+      },
+      "args": [{"ref": "message"}]
+    },
+    {
+      "id": "orders",
+      "kind": "function",
+      "task": {
+        "spec": "Return every order reference in the text, in order of first appearance and without duplicates. An order reference is the letters ORD, a hyphen, then exactly five digits, such as ORD-12345.",
+        "signature": "def solve(text: str) -> list:"
+      },
+      "args": [{"ref": "message"}]
+    },
+    {
+      "id": "priority",
+      "kind": "function",
+      "task": {
+        "spec": "Given a tone and a category, return 'high' if the tone is 'negative' and the category is 'billing' or 'account'; return 'medium' if the tone is 'negative' and the category is anything else; otherwise return 'low'.",
+        "signature": "def solve(tone: str, category: str) -> str:"
+      },
+      "args": [{"ref": "tone"}, {"ref": "category"}]
+    },
+    {
+      "id": "header",
+      "kind": "function",
+      "task": {
+        "spec": "Build a one-line ticket header from a priority, a category and a list of order references. The header is the priority in uppercase inside square brackets, a space, the category, then ' - ' and either 'no orders' if the list is empty or the references joined by ', '. Example: '[HIGH] billing - ORD-12345, ORD-22222'.",
+        "signature": "def solve(priority: str, category: str, orders: list) -> str:"
+      },
+      "args": [{"ref": "priority"}, {"ref": "category"}, {"ref": "orders"}]
+    }
+  ],
+  "output": "header"
+}

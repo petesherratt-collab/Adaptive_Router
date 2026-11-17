@@ -1,0 +1,68 @@
+{
+ "scope": "DESCRIPTIVE_SENSITIVITY",
+ "arrival": "immediate",
+ "status": "COMPLETED",
+ "label": "arrival_immediate",
+ "override": null,
+ "task_clusters": 30,
+ "arms": {
+  "A": {
+   "requests": 900,
+   "correct": 815,
+   "unanswered": 22,
+   "median_ms": 1233.0061259999923,
+   "p90_ms": 3349.4886444999797
+  },
+  "B": {
+   "requests": 900,
+   "correct": 882,
+   "unanswered": 0,
+   "median_ms": 852.526413999982,
+   "p90_ms": 1108.6496550999473
+  },
+  "C": {
+   "requests": 900,
+   "correct": 892,
+   "unanswered": 0,
+   "median_ms": 32.675608500028375,
+   "p90_ms": 938.2420673000382
+  }
+ },
+ "arm_c_routes": {
+  "code": {
+   "requests": 573,
+   "correct": 573,
+   "median_ms": 26.987623000024996
+  },
+  "model": {
+   "requests": 327,
+   "correct": 319,
+   "median_ms": 831.6032890000429
+  }
+ },
+ "time_ratio_c_over_a": 0.026500767361174148,
+ "time_ratio_interval_95": [
+  0.024538487782123808,
+  0.02803245024069076
+ ],
+ "correctness_c_minus_a": 0.0855555555555556,
+ "correctness_interval_95": [
+  0.04888888888888887,
+  0.12888888888888894
+ ],
+ "time_criterion_met": true,
+ "correctness_criterion_met": true,
+ "decision": "SUPPORTED",
+ "shapes_promoted": 30,
+ "shapes_ever_served_by_code": 30,
+ "median_first_code_index": 10.0,
+ "max_first_code_index": 19,
+ "median_gap_ms_arm_c": 2203.2098264999718,
+ "median_promotion_index": 10.0,
+ "shapes_with_gold_wrong_function": 0,
+ "shapes_with_demotion": 0,
+ "wrong_stored_examples": 0,
+ "code_served_wrong": 0,
+ "shapes_with_code_served_wrong": 0,
+ "median_background_ms_arm_c": 0.0
+}

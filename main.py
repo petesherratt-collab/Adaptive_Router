@@ -6,7 +6,15 @@ from pathlib import Path
 import requests
 from dotenv import load_dotenv
 
+from fast_path import (
+    FastPathRequestError,
+    FastPathRouter,
+    ShapeStore,
+    load_fast_path_request,
+    render_status,
+)
 from local import model_residency
+from pipeline import JobError, Orchestrator, load_job, render_job
 from probe import run_probe
 from router import Router
 from runtime_contracts import RuntimeContractError, load_runtime_request
@@ -19,6 +27,22 @@ ROOT = Path(__file__).resolve().parent
 
 def load_config():
     return json.loads((ROOT / "config.json").read_text(encoding="utf-8"))
+
+
+def load_fast_path_config(config):
+    settings = json.loads(
+        (ROOT / "config_fast_path.json").read_text(encoding="utf-8")
+    )
+    return {"remote": config["remote"], "fast_path": settings["fast_path"]}
+
+
+def show_fast(result):
+    detail = f" | {result['model']}" if result["model"] else ""
+    print(
+        f"[route: {result['route']} | reason: {result['reason']}{detail}"
+        f" | {result['total_ms']:.1f} ms]"
+    )
+    print("\n" + (result["text"] or "No answer was returned."))
 
 
 def diagnostics(config):
@@ -105,6 +129,21 @@ def build_parser():
         metavar="PATH",
         help="route one explicit runtime_request_v1 JSON document",
     )
+    mode.add_argument(
+        "--fast-request-json",
+        metavar="PATH",
+        help="answer one fast_path_request_v1 JSON document",
+    )
+    mode.add_argument(
+        "--job-json",
+        metavar="PATH",
+        help="run one multi-step fast_path_job_v1 JSON document",
+    )
+    mode.add_argument(
+        "--fast-status",
+        action="store_true",
+        help="list recorded fast-path task shapes",
+    )
     return parser
 
 
@@ -119,6 +158,40 @@ def main():
         return
     if args.diagnostics:
         print(diagnostics(config))
+        return
+
+    if args.fast_status:
+        print(render_status(ShapeStore(ROOT / "fast_path_store")))
+        return
+    if args.job_json:
+        try:
+            job = load_job(args.job_json)
+        except JobError as exc:
+            parser.error(f"invalid job: {exc}")
+        fast_router = FastPathRouter(
+            load_fast_path_config(config),
+            ROOT / "fast_path_store",
+            ROOT / "fast_path_runs.jsonl",
+        )
+        orchestrator = Orchestrator(fast_router, ROOT / "fast_path_jobs.jsonl")
+        print(render_job(orchestrator.run(job)))
+        # The answer is already printed; learning happens afterwards.
+        orchestrator.close()
+        fast_router.close()
+        return
+    if args.fast_request_json:
+        try:
+            request = load_fast_path_request(args.fast_request_json)
+        except FastPathRequestError as exc:
+            parser.error(f"invalid fast-path request: {exc}")
+        fast_router = FastPathRouter(
+            load_fast_path_config(config),
+            ROOT / "fast_path_store",
+            ROOT / "fast_path_runs.jsonl",
+        )
+        show_fast(fast_router.handle(request))
+        # The answer is already printed; learning happens afterwards.
+        fast_router.drain()
         return
 
     router = Router(config, ROOT / "runs.jsonl")

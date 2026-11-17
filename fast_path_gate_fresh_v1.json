@@ -1,0 +1,1611 @@
+{
+ "items": [
+  {
+   "name": "slugify",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 7,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 7,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 21,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 35,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 35,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 21,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 7,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "parse_duration",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 5,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 5,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 10,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 10,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 5,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "format_thousands",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 7,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 7,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 21,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 35,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 35,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 21,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 7,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "median",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 6,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 20,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "merge_intervals",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 7,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 7,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 21,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 35,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 35,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 21,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 7,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "dedupe_keep_first",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 6,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 20,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "camel_to_snake",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 7,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 7,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 21,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 35,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 35,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 21,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 7,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "parse_key_values",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 7,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 7,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 21,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 35,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 35,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 21,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 7,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "truncate_ellipsis",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 6,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 20,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "is_leap_year",
+   "tests": 8,
+   "reference_static": "OK",
+   "reference_passed": 8,
+   "buggy_static": "OK",
+   "buggy_passed": 6,
+   "by_k": {
+    "1": {
+     "subsets": 8,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 28,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 56,
+     "buggy_accepted": 20,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 70,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 56,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 28,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 8,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "day_of_year",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 6,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 20,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "chunk_list",
+   "tests": 8,
+   "reference_static": "OK",
+   "reference_passed": 8,
+   "buggy_static": "OK",
+   "buggy_passed": 4,
+   "by_k": {
+    "1": {
+     "subsets": 8,
+     "buggy_accepted": 4,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 28,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 56,
+     "buggy_accepted": 4,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 70,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 56,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 28,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 8,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "rotate_right",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 6,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 20,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "mask_digits",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 6,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 20,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "count_vowels",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 6,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 20,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "longest_common_prefix",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 7,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 7,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 21,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 35,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 35,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 21,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 7,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "to_base",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 7,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 7,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 21,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 35,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 35,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 21,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 7,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "compare_versions",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 5,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 5,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 10,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 10,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 5,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "is_anagram",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 6,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 20,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "percent_half_up",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 6,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 20,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "normalize_phone",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 7,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 7,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 21,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 35,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 35,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 21,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 7,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "transpose",
+   "tests": 8,
+   "reference_static": "OK",
+   "reference_passed": 8,
+   "buggy_static": "OK",
+   "buggy_passed": 4,
+   "by_k": {
+    "1": {
+     "subsets": 8,
+     "buggy_accepted": 4,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 28,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 56,
+     "buggy_accepted": 4,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 70,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 56,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 28,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 8,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "binary_search",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 5,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 5,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 10,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 10,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 5,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "expand_ranges",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 4,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 4,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 4,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "hex_to_rgb",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 6,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 20,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "ordinal",
+   "tests": 11,
+   "reference_static": "OK",
+   "reference_passed": 11,
+   "buggy_static": "OK",
+   "buggy_passed": 7,
+   "by_k": {
+    "1": {
+     "subsets": 11,
+     "buggy_accepted": 7,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 55,
+     "buggy_accepted": 21,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 165,
+     "buggy_accepted": 35,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 330,
+     "buggy_accepted": 35,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 462,
+     "buggy_accepted": 21,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 462,
+     "buggy_accepted": 7,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 330,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 165,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 55,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "10": {
+     "subsets": 11,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "11": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "time_24_to_12",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 5,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 5,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 10,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 10,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 5,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "initials",
+   "tests": 9,
+   "reference_static": "OK",
+   "reference_passed": 9,
+   "buggy_static": "OK",
+   "buggy_passed": 6,
+   "by_k": {
+    "1": {
+     "subsets": 9,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 36,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 84,
+     "buggy_accepted": 20,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 126,
+     "buggy_accepted": 15,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 126,
+     "buggy_accepted": 6,
+     "reference_rejected": 0
+    },
+    "6": {
+     "subsets": 84,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "7": {
+     "subsets": 36,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "8": {
+     "subsets": 9,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "9": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  }
+ ],
+ "by_example_count": {
+  "1": {
+   "items": 28,
+   "mean_false_accept_rate": 0.6645923520923522,
+   "mean_false_reject_rate": 0.0,
+   "items_with_any_false_accept": 28
+  },
+  "2": {
+   "items": 28,
+   "mean_false_accept_rate": 0.42406720263863124,
+   "mean_false_reject_rate": 0.0,
+   "items_with_any_false_accept": 28
+  },
+  "3": {
+   "items": 28,
+   "mean_false_accept_rate": 0.2567254174397031,
+   "mean_false_reject_rate": 0.0,
+   "items_with_any_false_accept": 28
+  },
+  "4": {
+   "items": 28,
+   "mean_false_accept_rate": 0.14454751597608737,
+   "mean_false_reject_rate": 0.0,
+   "items_with_any_false_accept": 28
+  },
+  "5": {
+   "items": 28,
+   "mean_false_accept_rate": 0.072910224695939,
+   "mean_false_reject_rate": 0.0,
+   "items_with_any_false_accept": 25
+  },
+  "6": {
+   "items": 28,
+   "mean_false_accept_rate": 0.030303030303030297,
+   "mean_false_reject_rate": 0.0,
+   "items_with_any_false_accept": 21
+  },
+  "7": {
+   "items": 28,
+   "mean_false_accept_rate": 0.008044733044733045,
+   "mean_false_reject_rate": 0.0,
+   "items_with_any_false_accept": 9
+  },
+  "8": {
+   "items": 28,
+   "mean_false_accept_rate": 0.0,
+   "mean_false_reject_rate": 0.0,
+   "items_with_any_false_accept": 0
+  },
+  "9": {
+   "items": 25,
+   "mean_false_accept_rate": 0.0,
+   "mean_false_reject_rate": 0.0,
+   "items_with_any_false_accept": 0
+  },
+  "10": {
+   "items": 1,
+   "mean_false_accept_rate": 0.0,
+   "mean_false_reject_rate": 0.0,
+   "items_with_any_false_accept": 0
+  },
+  "11": {
+   "items": 1,
+   "mean_false_accept_rate": 0.0,
+   "mean_false_reject_rate": 0.0,
+   "items_with_any_false_accept": 0
+  }
+ },
+ "bank": {
+  "name": "fast_path_gold_items_v1.py",
+  "sha256": "c14f31f7b9dd17cb16c660e650c9e8661ad8f5203de754e54dd4c72e36e0b921"
+ }
+}

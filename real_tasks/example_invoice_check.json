@@ -1,0 +1,11 @@
+{
+  "name": "example_invoice_check",
+  "description": "Check an invoice. The invoice input has one line per item, of the form 'item | quantity | unit price in euros'. Read the note and say whether the customer is 'happy', 'unhappy' or 'neutral'. Return the text '<n> lines, total <amount> EUR, <mood>', where n is the number of lines and amount is the sum of quantity times unit price, written with exactly two decimals.",
+  "jobs": [
+    {"inputs": {"invoice": "pens | 3 | 1.50\nfolders | 2 | 4.00", "note": "Thanks, all good."}, "answer": "2 lines, total 12.50 EUR, happy"},
+    {"inputs": {"invoice": "paper | 1 | 6.99", "note": "Still waiting for the rest of my order."}, "answer": "1 lines, total 6.99 EUR, unhappy"},
+    {"inputs": {"invoice": "tape | 4 | 0.75\nglue | 1 | 2.10\nclips | 10 | 0.05", "note": "Invoice attached."}, "answer": "3 lines, total 5.60 EUR, neutral"},
+    {"inputs": {"invoice": "ink | 2 | 18.00", "note": "Great service as always."}, "answer": "1 lines, total 36.00 EUR, happy"},
+    {"inputs": {"invoice": "stapler | 1 | 9.95\nstaples | 5 | 1.20", "note": "This is the second wrong delivery."}, "answer": "2 lines, total 15.95 EUR, unhappy"}
+  ]
+}

@@ -2729,3 +2729,1094 @@ No 4B structural-JSON promotion experiment will be started in this cycle. Source
 The diverged leakage investigation is preserved at `preserve/local-main-leakage-2026-09-20` (`d2cccad`) and was not merged into canonical history. The bundle SHA-256 is `214d3c81c6b9b42126d90fbc55f3aa15defa12e18d97bca3d2e201cd1e76f675`; the untracked-artifact archive SHA-256 is `f42c40cc87404c0355c60322bf3cfeff63e9d6f9cc76c882d286f9d37dd128f8`.
 
 This endpoint is documentation only. It changes no runtime source, configuration, sealed benchmark, evidence or analysis; makes no provider request; and grants no new authority. Full reasoning and reopening conditions are recorded in `RESEARCH_ENDPOINT_2026-09-22.md`.
+
+---
+
+## 2026-11-15 — Fast path V1 developmental build
+
+The project is reopened on a substantively different question from the closed
+local-authority cycle. The objective is answer time for repeated single-step
+tasks; cost is dropped as a parameter. Deterministic code is the fast route,
+several remote models are raced for everything else, and code written on the
+fly must pass an execution-only gate before it serves an answer. Runtime v0.3
+and its remote-authoritative policy are unchanged; `router.py` and
+`config.json` were not edited.
+
+### Added
+
+- `sandbox.py`: static screen plus restricted subprocess execution.
+- `fast_path.py`: request schema, shape store, model race, agreement examples,
+  background synthesis, promotion gate, audit and demotion.
+- `main.py`: `--fast-request-json` and `--fast-status`.
+- `config_fast_path.json`: separate from `config.json`, which sealed runners read.
+- `vendor/ccc_code_items.py`: the 16 CCC code items, vendored byte-identical
+  from `petesherratt-collab/jev-ccc-probe` at `c5ba7e3` and hash-pinned.
+- `fast_path_gold_items_v1.py`: 28 fresh items to the same recipe. Draft, not
+  frozen. Expected values were written from the specifications, not derived
+  from the references.
+- `evaluate_fast_path_gate.py`, `fast_path_gate_dev_v1.json`,
+  `fast_path_gate_fresh_v1.json`: provider-free gate measurement.
+- `run_fast_path_gold.py`: collector for model and synthesiser fail rates. Not run.
+
+### Design decisions
+
+- The routing decision is a lookup, never a model call, so nothing slow sits
+  in front of the answer.
+- The first parseable racer wins; agreement is evaluated afterwards and only
+  feeds learning.
+- Following the CCC finding that a judge shown a conclusion tends to adopt it,
+  no model judges a candidate function and the synthesiser never sees examples.
+- Caller-supplied examples outrank model agreement. Two contradictory
+  model-agreement examples cancel.
+- A provider failure during synthesis does not consume a bounded attempt.
+
+### Gate measurement
+
+Mean share of k-example subsets that accepted the single-bug variant:
+development set 50.5%, 21.2%, 3.8% for k = 1, 2, 3; fresh set 66.5%, 42.4%,
+25.7%, 14.5%, 7.3%, 3.0%, 0.8%, 0.0% for k = 1 to 8. No reference was
+rejected. Zero at the top of each range is forced by construction. The
+default `min_gate_examples` was raised from 4 to 8 after the fresh result; it
+is an operating setting, not a validated threshold.
+
+### Verification
+
+- `python -m unittest discover -s tests` — 472 tests passed.
+- `python fast_path_gold_items_v1.py` — self-verify passed for 28 items.
+- `git diff --check` passed.
+- No provider generation request was made. OpenRouter was not reachable from
+  the build environment and no key was present.
+
+### Next boundary
+
+Review and freeze the fresh bank, choose the race roster, then run
+`run_fast_path_gold.py` once to obtain per-model fail rates, the rate at which
+two models agree on a wrong answer, and the synthesiser's fail rate. An
+answer-time comparison against direct single-model service needs its own
+frozen plan with repeated task shapes.
+
+---
+
+## 2026-11-16 — Fast path development gold run
+
+First provider run on the fast-path line, made from a cloud session through a
+dedicated `adaptive-router` environment. Status: development only. The bank
+`fast_path_gold_items_v1.py` (SHA-256 `c14f31f7…e0b921`) had not been reviewed
+or frozen and the roster was chosen on the day, so nothing here is a
+prospective result.
+
+Roster: `openai/gpt-5.6-luna`, `openai/gpt-6-luna`,
+`anthropic/claude-haiku-5.5`, `google/gemini-3.8-flash`,
+`deepseek/deepseek-v4.1-flash`; synthesis by `openai/gpt-6-luna`. 1,255 answer
+calls and 28 synthesis calls, no retries, no provider failures on synthesis.
+
+- Wrong or unusable answers per model out of 251: 3, 3, 84, 5, 10 in roster
+  order. 77 of the 84 and 9 of the 10 were unparseable or empty responses.
+- Unanimous valid answers: 240 cases, all correct. Non-unanimous: 11.
+- Replayed fastest-valid race: median 716 ms, 90th percentile 1053 ms, one
+  wrong answer. Best accurate single model: median 1049 ms.
+- Synthesis: 27 of 28 gold-correct. The failure (`slugify`, missing
+  `import re`) fails all examples and is rejected by the gate.
+
+Artifacts: `fast_path_gold_dev_run_v1.jsonl`,
+`fast_path_gold_dev_run_v1_summary.json`. `config_fast_path.json` now carries
+the roster. No runtime v0.3 source or sealed artifact changed.
+
+---
+
+## 2026-11-16 — Answer prompt revision and timing plan draft
+
+The development run showed that most unusable answers were format failures:
+one model reasoned in prose before its answer, and two returned empty content
+when reasoning consumed the 256-token limit.
+
+- `build_answer_prompt` now lists each argument on its own line and requires a
+  final `ANSWER: <JSON>` line. `parse_answer` reads the last `ANSWER:` line, or
+  a reply that is a single JSON value. It never extracts a value from prose.
+- `fast_path.answer_max_tokens` (1024) replaces the inherited 256 for answers.
+- Tuning used only the vendored CCC items, 60 cases by five models. Wrong or
+  unusable answers: 7 of 300 before, 0 of 300 after. Median latencies did not
+  rise materially. The 28-item bank was not re-run.
+- `run_fast_path_gold.py` now records the answer token limit and a hash of the
+  answer prompt template in its header.
+- `FAST_PATH_TIMING_V1_PLAN.md` drafts a three-arm timing experiment. It is
+  not frozen and authorizes nothing. Both existing banks are development
+  evidence, so it requires a new benchmark.
+
+Verification: full unit suite passed; `git diff --check` passed.
+
+---
+
+## 2026-11-16 — Fast-path timing V1 freeze
+
+The timing experiment is frozen before any provider call against its
+benchmark. The owner accepted the proposed workload size, criteria and
+arrival assumption in session. The 30-shape benchmark was written by the
+assistant and was not reviewed by the owner before the freeze.
+
+Added: `fast_path_timing_bench_v1.py` (30 shapes, 30 seeded requests each, no
+overlap with either earlier bank), `run_fast_path_timing_v1.py`,
+`analyze_fast_path_timing_v1.py`, `tests/test_fast_path_timing.py`, a
+`synthesis_enabled` setting for the race-only arm and `FastPathRouter.close`.
+
+A live smoke test on three development-bank shapes with 12 requests each
+completed without error: two shapes were promoted at request index 7 and then
+served from code at a median of 28 ms; the third reached only 7 agreed
+examples because the five models were not unanimous on 5 of 12 requests.
+That output is not evidence for this experiment and was not committed.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_timing_bench_v1.py` | `e36398997f733a6deaf611e1f7541572ab4f39e68e1f983546c0044dd552848d` |
+| `config_fast_path.json` | `1f14f980657cc059a3ad5955fe30fb7e13f4b924fbdf341057c9501c016d986f` |
+| `fast_path.py` | `b6f4c739fdd17911daf85a85bc424ecb19faccfd16310b917014c15b97060ea2` |
+| `sandbox.py` | `b132f5d8175e60916baa0550c09d2f5d34e247e99bd390eee07510f596a9dcff` |
+| `remote.py` | `4efc49ab45e68d09f026e75fca9e3aff2780fac8682b3b27f7fa983eda51afc2` |
+| `run_fast_path_timing_v1.py` | `68c96d073103a29e7d857a0141ad096b0c4962dd36e4b3d8751b4888e191fe64` |
+| `analyze_fast_path_timing_v1.py` | `b8175ab605d53390c03567fc6e3f3f351a726748617aea6929a5026aa87cc1e8` |
+| `FAST_PATH_TIMING_V1_PLAN.md` | `011887d3686609ecbe360a5b82844979e3cee920349a41929009906c86c7b313` |
+
+Verification: full unit suite passed; `python fast_path_timing_bench_v1.py`
+self-verify passed; `git diff --check` passed.
+
+---
+
+## 2026-11-16 — Fast-path timing V1 primary result
+
+The frozen primary run completed in one attempt with no early stop, no
+incident and no unanswered request in any arm. Frozen-criteria decision:
+`SUPPORTED`.
+
+| Arm | Correct | Median ms | 90th pct ms | Mean ms |
+|---|---:|---:|---:|---:|
+| A. Direct | 824/900 | 1198 | 3205 | 1651 |
+| B. Race only | 884/900 | 864 | 1125 | 891 |
+| C. Fast path | 892/900 | 30 | 961 | 290 |
+
+- Time ratio C/A 0.0254, shape-cluster bootstrap 95% interval 0.0238 to 0.0267.
+- Correctness C minus A +0.0756, interval +0.0378 to +0.1189.
+- 30 of 30 shapes promoted on the first synthesis attempt; promotion index
+  median 7, maximum 16. Zero gold-wrong functions, zero demotions, zero wrong
+  stored examples, zero wrong code-served answers out of 629.
+- Fast-path model-route requests: 271, of which 8 wrong, in three shapes.
+- Arm A errors were concentrated in counting and arithmetic shapes.
+- Race winners in arm B: `claude-haiku-5.5` 585, `deepseek-v4.1-flash` 275,
+  `gpt-5.6-luna` 39, `gemini-3.8-flash` 1.
+- Background learning in arm C totalled about 1,166 s, untimed by design.
+
+Limits: 30 task clusters; constructed pure-function tasks; benchmark not
+owner-reviewed before the freeze; favourable arrival model. The benchmark is
+now used; later runs on it are descriptive sensitivity runs only.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_timing_v1_primary.jsonl` | `e47435883c4004e282ffa69c410388f23904dbcb6ec543bf5bea5daf0d4002db` |
+| `fast_path_timing_v1_primary_analysis.json` | `328e98481cc42ce29a0648ff2493e7c1d3311e5f4ae116dce8943d780af25a0a` |
+
+---
+
+## 2026-11-16 — Timing V1 sensitivity: immediate arrival
+
+`run_fast_path_timing_v1.py` gained `--arrival immediate`, which stops
+draining background learning between requests and records the gap since the
+previous request of the same arm. The default is unchanged. The runner and
+analysis hashes therefore differ from the freeze entry; the primary evidence
+was produced by the frozen versions and re-analyses to the same figures.
+
+One descriptive run on the already-used benchmark, label `arrival_immediate`:
+
+- Fast path: 892/900 correct, median 33 ms, mean 337 ms, 573 code-served.
+- Direct: 815/900 correct (22 unanswered), median 1233 ms. Race: 882/900, 853 ms.
+- Ratio C/A 0.0265 (interval 0.0245 to 0.0280); correctness +0.0856.
+- First code-served index: median 10, range 9 to 19 (primary: median 8, max 17).
+- 30 of 30 promoted first attempt; no wrong function, example or demotion.
+- Gap between consecutive fast-path requests: median 2.2 s, 10th pct 0 s.
+
+Not a prospective result. Arrival faster than about two seconds is untested.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_timing_v1_arrival_immediate.jsonl` | `b8814cfbf2531467cf22d15cd653729953137b25df2b27b54c2653ed1bcc414b` |
+| `fast_path_timing_v1_arrival_immediate_analysis.json` | `4e8a31650452dcd262b4981c99eec2daeefb7300b0e5079255928138e0e633e4` |
+
+---
+
+## 2026-11-16 — Timing V1 `min_gate_examples=4` run invalidated
+
+The second sensitivity run lost its provider partway: the OpenRouter account
+ran out of credits and returned HTTP 402. The direct arm is missing 451 of 900
+answers, so no comparison from this run is valid. Details, the limited
+descriptive reading and follow-up are in
+`FAST_PATH_TIMING_V1_GATE4_EXECUTION_INCIDENT.md`. The evidence file is kept
+unaltered. Provider calls on this line are paused until credit is added.
+
+---
+
+## 2026-11-16 — Runner hardening and `min_gate_examples=4` rerun
+
+After the credit incident `run_fast_path_timing_v1.py` gained a
+`ProviderMonitor`: it tallies provider errors, stops at once on HTTP 401 or
+402, and stops when more than half of the last 100 calls fail. Direct-arm rows
+record their error and the footer carries the tally. A stopped run keeps its
+`.partial` name with status `PROVIDER_FAILURE_STOP`.
+
+The owner added credit and the run was repeated from the start, label
+`min_gate_examples_4_rerun`. 6,545 provider calls, 13 invalid responses, no
+unanswered request in any arm.
+
+- Fast path: 895/900 correct, median 31 ms, mean 158 ms, 768 code-served.
+- Direct: 829/900, median 1183 ms. Race only: 884/900, median 844 ms.
+- Ratio C/A 0.0260 (interval 0.0241 to 0.0270); correctness +0.0733.
+- First code-served index: median 4, latest 8 (primary: 8 and 17).
+- 30 of 30 promoted first attempt; no wrong function, example or demotion.
+- All 5 wrong fast-path answers came from the model race.
+
+No synthesised function was wrong in any run so far, so these runs do not
+test the gate's ability to reject one. Descriptive only.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_timing_v1_gate4_rerun.jsonl` | `e50063042646580aa47906ee64b7354ead13b6f6aa588d7d3352f541cd984816` |
+| `fast_path_timing_v1_gate4_rerun_analysis.json` | `aa75436f8dd8eb92de4f41dc69494790f7a90415b471560ed32be3e1a985eecf` |
+
+---
+
+## 2026-11-16 — Fast-path timing V2 (harder shapes) freeze
+
+The V1 runs never produced a wrong synthesised function, so they could not
+exercise the gate or the audit. `fast_path_timing_bench_v2_hard.py` adds 20
+error-prone shapes and `FAST_PATH_TIMING_V2_HARD_PLAN.md` freezes one primary
+run on them under the V1 rules and criteria. No provider call has touched
+this benchmark. The benchmark was not owner-reviewed before the freeze.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_timing_bench_v2_hard.py` | `54abf8668ef51d5a9acf8d11366102b9b086a72bb5497339129e33cf9f4446a9` |
+| `fast_path_timing_bench_v1.py` | `e36398997f733a6deaf611e1f7541572ab4f39e68e1f983546c0044dd552848d` |
+| `config_fast_path.json` | `1f14f980657cc059a3ad5955fe30fb7e13f4b924fbdf341057c9501c016d986f` |
+| `fast_path.py` | `b6f4c739fdd17911daf85a85bc424ecb19faccfd16310b917014c15b97060ea2` |
+| `sandbox.py` | `b132f5d8175e60916baa0550c09d2f5d34e247e99bd390eee07510f596a9dcff` |
+| `remote.py` | `4efc49ab45e68d09f026e75fca9e3aff2780fac8682b3b27f7fa983eda51afc2` |
+| `run_fast_path_timing_v1.py` | `afe13bde696a309dd29a97378f9883104cd9fae9a346c1c4cfc855e30d55a2bf` |
+| `analyze_fast_path_timing_v1.py` | `b01b8fab99b0f3724d7789bf2caa87e51e59137e6da49dc50fd998e792523b9a` |
+| `FAST_PATH_TIMING_V2_HARD_PLAN.md` | `94d17a7d64f40939988d59e077a6a03eba71d762b3699f9e81e17cce781f6601` |
+
+Verification: full unit suite passed; benchmark self-verify and standard
+library cross-checks passed; `git diff --check` passed.
+
+---
+
+## 2026-11-16 — Fast-path timing V2 (harder shapes) result
+
+The frozen run completed in one attempt: 4,766 provider calls, 61 invalid
+responses, no early stop. Frozen-criteria decision: `SUPPORTED`.
+
+| Arm | Correct | Median ms | 90th pct ms | Mean ms |
+|---|---:|---:|---:|---:|
+| A. Direct | 571/600 (2 unanswered) | 2964 | 4951 | 2987 |
+| B. Race only | 593/600 | 1161 | 2157 | 1344 |
+| C. Fast path | 598/600 | 32 | 1660 | 458 |
+
+- Ratio C/A 0.0109 (interval 0.0094 to 0.0147); correctness +0.045
+  (interval +0.020 to +0.075).
+- 20 of 20 shapes promoted; promotion index median 7, latest 14 (`luhn_valid`,
+  8 disagreements). 418 code-served answers, none wrong. No wrong stored
+  example, no demotion. Both wrong fast-path answers came from the race.
+
+Readings fixed in advance:
+
+- First synthesised function gold-wrong and rejected by the gate: one,
+  `eval_expression`, a syntax error rejected statically; the retry passed.
+- Gold-wrong function promoted: one, `number_to_words`. It returns '' for 0.
+  It differs from the reference on exactly 1 of the 10,000 inputs in range.
+  It passed the gate on 8 examples and was never demoted. Wrong answers
+  served: 0, because 0 was not in the request stream.
+- Shapes never promoted: none.
+
+No gate failure as the plan defines it. The latent fault shows the limit of
+example-based promotion and of auditing only the inputs that arrive.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_timing_v2_hard_primary.jsonl` | `550c110445435754eeb39ba5ef45a6933dedb41db6889157ca207486fa6b36eb` |
+| `fast_path_timing_v2_hard_primary_analysis.json` | `c69166f9e581b4213753cf84f4d8493df77966e69074de238bc7593edb19915e` |
+
+---
+
+## 2026-11-16 — Boundary probing before promotion
+
+Chosen by the owner over an independent-implementation comparison, as the
+response to the latent `number_to_words` fault promoted in the V2 run.
+
+Added to `fast_path.py`: `build_probe_prompt`, `parse_probes`,
+`propose_probes`, `answer_probes` and a probe step that runs once per shape
+before the first synthesis attempt. New settings: `probe_enabled`,
+`probe_model` (`google/gemini-3.8-flash`), `max_probes` (12),
+`probe_max_tokens` (4096). Probe examples carry source `probe_agreement`.
+`run_fast_path_timing_v1.py` now verifies stored examples against the
+reference directly, because probe inputs lie outside the request stream.
+`evaluate_fast_path_probes.py` measures probing on items with a buggy variant.
+
+Results, all descriptive:
+
+- Replay of the promoted wrong function: 12 probes proposed, 12 agreed, wrong
+  function rejected on input 0, reference passed all 12.
+- First 44-item evaluation invalid: 18 probe replies truncated at 1,024
+  tokens. Kept as `fast_path_probe_eval_v1.jsonl`.
+- Second 44-item evaluation: 516 probes, 502 agreed, 14 disputed. Buggy
+  variants rejected 42 of 44. One accepted because no probe exposed an
+  order-dependent fault; one untested because the probe reply was unusable.
+  One reference rejected, `caesar_decode`, where the vendored reference
+  shifts uppercase letters contrary to its specification.
+- After that run an unparseable probe reply is retried once.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_probe_eval_v2.jsonl` | `3b2b6743286adb1304c146c6895a7d98fc8aad60c2ceaffb81fadb98487f6670` |
+| `fast_path_probe_eval_v1.jsonl` | `a2a2a8537c45f090a006a2fd933a02e047cd84c3b444992d66cedf5aac519489` |
+| `fast_path_probe_case_number_to_words_result.jsonl` | `fd79903ba58e452e70618ae2b6f1280f974584c26c2f7ade531c45f3b425024c` |
+
+---
+
+## 2026-11-16 — Harder benchmark with probing enabled (descriptive)
+
+Label `probes_enabled`, benchmark already used once. 5,925 provider calls, 62
+invalid responses, no unanswered request.
+
+| Arm | Correct | Median ms | Mean ms |
+|---|---:|---:|---:|
+| A. Direct | 572/600 | 2791 | 2800 |
+| B. Race only | 595/600 | 1166 | 1340 |
+| C. Fast path | 598/600 | 33 | 437 |
+
+- 20 of 20 shapes promoted on the first attempt, gate examples 18 to 20.
+  Promotion index median 7, latest 12. First code-served index median 8.
+- Every promoted function gold-correct. No demotion.
+- Probes: 240 proposed, 234 unanimous, 6 disputed, 0 wrong against the
+  reference, 0 outside the reference's domain.
+- 425 code-served answers, none wrong. Background work about 1,443 s.
+- No synthesised function was wrong in this run, so no probe rejection
+  occurred; the run shows probing did not obstruct promotion or answer time.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_timing_v2_hard_probes.jsonl` | `796c59372613fc27ecbf0b3c7f6d142e2d2fd20272437ff1f61797733a806fa5` |
+| `fast_path_timing_v2_hard_probes_analysis.json` | `4b45ee0ce969eb8da690e9ae8184bad0974ee2939b1ecdf9709ce17adef66181` |
+
+---
+
+## 2026-11-16 — Multi-step jobs, first build
+
+The owner chose to move from single-step tasks to multi-step jobs. The first
+stage keeps the plan in the caller's hands: the orchestrator executes a
+declared plan and decides nothing except, by lookup, whether a step can be
+answered by promoted code. A model-written plan is deferred.
+
+Added: `pipeline.py` (job schema, validation, concurrent step execution,
+metadata-only job log), `tests/test_pipeline.py`, `main.py --job-json`,
+`examples/fast_path_job_ticket_triage.json`, and a `learn` argument to
+`FastPathRouter.handle` so judgement steps are raced without being stored.
+
+Reasoning for the two step kinds: a whole job that is a pure function would
+simply be promoted as one function by the single-step fast path. Decomposition
+earns its place only for mixed jobs, where some steps need a model and the
+rest can go down to code. Letting a judgement step learn would invite a
+keyword heuristic that reproduces a handful of examples; declaring the kind
+prevents that. Discovering the kind automatically is not attempted.
+
+Change to learning: `probe_after_examples` (3) lets the probe step run before
+`min_gate_examples` arrived examples exist, with probe answers counting toward
+the minimum. Found in the first live demonstration, where a rule over twelve
+possible inputs reached only seven distinct examples in sixteen jobs and was
+never promoted. This changes single-step behaviour too; the recorded timing
+runs predate it.
+
+Live demonstration (no gold, not evidence): 16 ticket-triage jobs. Jobs 1 to 3
+ran every step on the race, 2.3 to 2.8 s. From job 4 all three function steps
+ran as code and jobs took 0.86 to 1.66 s. One synthesised function was
+rejected by the gate and its retry promoted, in the earlier of two demo runs.
+
+Verification: full unit suite passed; `git diff --check` passed.
+
+---
+
+## 2026-11-16 — Fast-path jobs V1 freeze
+
+`FAST_PATH_JOBS_V1_PLAN.md` freezes one four-arm run on
+`fast_path_jobs_bench_v1.py`: 12 mixed job shapes, 20 jobs each, gold by
+construction. Arms: one direct whole-job call, a whole-job race, the step
+pipeline on the race, and the step pipeline over the fast path.
+
+Added: `pipeline.build_job_prompt`, `FastPathRouter.race_prompt`,
+`run_fast_path_jobs_v1.py`, `analyze_fast_path_jobs_v1.py`,
+`tests/test_fast_path_jobs.py`. No provider call has touched the benchmark.
+A live smoke test used one six-job shape outside it and is not evidence.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_jobs_bench_v1.py` | `68e092a8990939b876baabb7a4c611bae7ac07c1558b977d95cfd0dfa4fd13b4` |
+| `config_fast_path.json` | `39cf0ef944193465e62c08001b423220b37a738a2ee9fddd7e28b9c0c32e7cc6` |
+| `fast_path.py` | `bfae3e002d5ab8ebe23b1c5fa020e023fdc17fefde09fcf33f59e109bc331623` |
+| `pipeline.py` | `bca87fc09cb826de1b6e5376b4eb38102ac0d5f5025662181d87bb472eed679d` |
+| `sandbox.py` | `b132f5d8175e60916baa0550c09d2f5d34e247e99bd390eee07510f596a9dcff` |
+| `remote.py` | `4efc49ab45e68d09f026e75fca9e3aff2780fac8682b3b27f7fa983eda51afc2` |
+| `run_fast_path_timing_v1.py` | `c1c242d8da450dd037848596648b0ec763f737ef957ddc0e22f703d7aea61ea5` |
+| `run_fast_path_jobs_v1.py` | `f7398118495f8db27e902848cabd05e9e03f59389ef55666d85e74e010743289` |
+| `analyze_fast_path_timing_v1.py` | `b01b8fab99b0f3724d7789bf2caa87e51e59137e6da49dc50fd998e792523b9a` |
+| `analyze_fast_path_jobs_v1.py` | `68cd5ff613647929428e2e8ac9bdb1aea959e47711cd4d8ac01997e079e78004` |
+| `FAST_PATH_JOBS_V1_PLAN.md` | `8a32094866ce0995390a0fef1462ac45d98bbb600cf66c62c72b32b66879745b` |
+
+Verification: full unit suite passed; benchmark self-verify passed;
+`git diff --check` passed.
+
+---
+
+## 2026-11-16 — Fast-path jobs V1 result
+
+The frozen run completed in one attempt: 10,708 provider calls, 8 invalid
+responses, no unanswered job. Frozen-criteria decision: `NOT_SUPPORTED`.
+
+| Arm | Correct | Median ms | Mean ms |
+|---|---:|---:|---:|
+| A. Direct whole job | 234/240 | 2218 | 2269 |
+| R. Whole-job race | 238/240 | 1233 | 1240 |
+| B. Pipeline, race only | 238/240 | 2616 | 2614 |
+| C. Pipeline, fast path | 240/240 | 1115 | 1402 |
+
+- C/A time ratio 0.502, interval 0.416 to 0.784: fails the 0.75 limit.
+  Correctness C minus A +0.025, interval 0.000 to +0.054: meets the margin.
+- C/R 0.904 (0.800 to 1.284), correctness +0.008. B/A 1.179 (1.010 to 1.533).
+  R/A 0.556 (0.469 to 0.740).
+- Arm C steps: 447 function steps on code (median 26 ms, 0 wrong), 133
+  function steps on the race (0 wrong), 380 judgement steps (0 wrong).
+  Arm B: 4 wrong function steps of 580, 0 wrong judgement steps of 380.
+- 27 of 29 function steps promoted, 0 gold-wrong, 0 demotions, 0 wrong
+  examples, 0 judgement shapes stored.
+- Not promoted: `store_aisle.aisle` (3 examples) and `greeting.hello` (4):
+  domains smaller than `min_gate_examples`.
+- Fixed-in-advance shapes: `dial_code` C median 1847 ms against R 1165 ms;
+  `triple_code` C 1108 ms against R 1341 ms, and correct 20/20 against 18/20.
+- After the fifth job of each shape, medians were A 2205, R 1220, B 2620,
+  C 1050 ms.
+
+Reading: decomposition without code is a cost; with code it roughly halves
+time against one model but does not beat a whole-job race on this workload.
+A fixed minimum example count cannot be met by a function whose whole domain
+is smaller than that count.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_jobs_v1_primary.jsonl` | `a9b35987181a775c74ebadcf61280313bc9a88a0bd810cb6fc63efcde5eb30f5` |
+| `fast_path_jobs_v1_primary_analysis.json` | `ed636371abc96d88aee1f7ce3a66d9198a655830c6e506e70ac71d7ed4cca349` |
+
+---
+
+## 2026-11-17 — Saturation rule and jobs V1 rerun
+
+`fast_path.py` gained `_gate_minimum`: a shape whose last `saturation_window`
+agreed inputs were all already stored may go to synthesis, and pass the gate,
+with as few as `saturation_min_examples` examples. Each agreed observation
+updates `repeat_streak`. Settings 5 and 2. Promotions under the rule carry
+`gate.saturated`.
+
+Descriptive rerun of jobs V1, label `saturation`: 10,700 provider calls, 8
+invalid responses, no unanswered job. Correct A 233, R 239, B 240, C 240 of
+240; medians 2205, 1071, 2266, 963 ms. C/A 0.437 (0.381 to 0.568); C/R 0.900
+(0.797 to 1.298). 28 of 29 function steps promoted, all gold-correct; two
+under saturation. `shipping_estimate.zone` was not promoted: one probe
+example, unanimous across five models, contradicts the reference, and both
+synthesis attempts were rejected at 12 of 13 examples. One wrong stored
+example in total. The runner now records wrong examples with the reference
+value.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_jobs_v1_saturation.jsonl` | `fecc89582efef69ececedb5437178e36dd45a18ea1557f03da730744da56a129` |
+| `fast_path_jobs_v1_saturation_analysis.json` | `a52be2a75b5284f4b171ace998b81e5c83b89c3b4abfa5a091ee213dc673eb04` |
+
+---
+
+## 2026-11-17 — Fast-path jobs V2 (larger jobs) freeze
+
+`FAST_PATH_JOBS_V2_LARGE_PLAN.md` freezes one four-arm run on
+`fast_path_jobs_bench_v2_large.py`: 7 job shapes of 7 steps each, 15 jobs per
+shape, long structured inputs. The primary comparison is the step pipeline
+over the fast path against the whole-job race, the arm it could not beat in
+V1. Settings changes since jobs V1: `answer_max_tokens` 1024 to 4096 for every
+arm, and the saturation rule enabled. `analyze_fast_path_jobs_v1.py` gained
+`--baseline` and `--time-limit`. No provider call has touched this benchmark.
+Provider credit at the freeze: about $16.70.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_jobs_bench_v2_large.py` | `0821ca5e659feaa0980daef76d31117332ab643ab193bfc0f19cf15b12726f3e` |
+| `fast_path_jobs_bench_v1.py` | `68e092a8990939b876baabb7a4c611bae7ac07c1558b977d95cfd0dfa4fd13b4` |
+| `config_fast_path.json` | `7713a63fad7297eb16192b97500b52dbd0400cecb5476f52d7dbad110dc2494c` |
+| `fast_path.py` | `5ec148e775d334871f20e9bccfb7b919c4a150e73679b39339f2272e21c64a04` |
+| `pipeline.py` | `bca87fc09cb826de1b6e5376b4eb38102ac0d5f5025662181d87bb472eed679d` |
+| `sandbox.py` | `b132f5d8175e60916baa0550c09d2f5d34e247e99bd390eee07510f596a9dcff` |
+| `remote.py` | `4efc49ab45e68d09f026e75fca9e3aff2780fac8682b3b27f7fa983eda51afc2` |
+| `run_fast_path_timing_v1.py` | `c1c242d8da450dd037848596648b0ec763f737ef957ddc0e22f703d7aea61ea5` |
+| `run_fast_path_jobs_v1.py` | `3a06f6a10e00169adae33ac43c4a669e333785968b9ae6de3426e05382d2b109` |
+| `analyze_fast_path_timing_v1.py` | `b01b8fab99b0f3724d7789bf2caa87e51e59137e6da49dc50fd998e792523b9a` |
+| `analyze_fast_path_jobs_v1.py` | `46aaf4797fc1844c9b084737604334ba284cc8ddcc1a97737be831a3e74268e7` |
+| `FAST_PATH_JOBS_V2_LARGE_PLAN.md` | `ebde07340a4fedcc1fdd2f0deab9561303905e6fefcb9fdbe3c1f2de0c0bba57` |
+
+Verification: full unit suite passed; benchmark self-verify passed;
+`git diff --check` passed.
+
+---
+
+## 2026-11-17 — Fast-path jobs V2 (larger jobs) result
+
+The frozen run completed in one attempt: 8,357 provider calls, 20 invalid
+responses, no unanswered job. Decision under the frozen criteria, arm C
+against arm R: `SUPPORTED`.
+
+| Arm | Correct | Median ms | Mean ms |
+|---|---:|---:|---:|
+| A. Direct whole job | 99/105 | 3786 | 3969 |
+| R. Whole-job race | 105/105 | 2791 | 2800 |
+| B. Pipeline, race only | 104/105 | 5317 | 5531 |
+| C. Pipeline, fast path | 105/105 | 1129 | 2155 |
+
+- C/R 0.405 (0.340 to 0.877); correctness 0.000 (0.000 to 0.000).
+- C/A 0.298 (0.228 to 0.660); +0.057. R/A 0.737. B/A 1.405 (1.087 to 1.812).
+- Arm A errors: `stock_reorder` 5, `grade_report` 1. Arm B: one wrong job,
+  first wrong step a function step on the race.
+- 39 of 41 function steps promoted. `thread_digest.span`: both synthesised
+  functions rejected by the gate. `stock_reorder.order_line`: one unanimous
+  example in fifteen jobs, never synthesised.
+- `log_triage.worst` is reported gold-wrong by the analysis; it fails only the
+  benchmark's hand-written tests, whose log lines lack the 'HH:MM:SS' field the
+  specification requires. It matched gold on every stream input.
+- Three wrong stored examples, all probe answers where the reference is
+  weaker than or silent relative to the specification: a negative amount in
+  `invoice_audit.summary`, a quoted CSV field in `order_batch.rows`, a hyphen
+  in a name in `meeting_actions.actions`. In that step one synthesis attempt
+  was rejected at 13 of 14 before a later one was promoted; which example it
+  failed was not recorded.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_jobs_v2_large_primary.jsonl` | `0e42c2f0c90dbefb0cc78061b3f45ee0b32ba347e0fef566f927582871de77c6` |
+| `fast_path_jobs_v2_large_primary_analysis.json` | `845504cdf1b601a00fd5693a0225520fae8a5bbcf965e31976e7ce34e855b777` |
+
+---
+
+## 2026-11-17 — The router writes its own plans: build and freeze
+
+The owner chose model-written plans as the next step. `planner.py` adds a
+`PlanningRouter`: whole-task racing until a template has `plan_examples`
+agreed answers, a planner model writing a step plan from the description and
+input names, adoption only when the plan reproduces every agreed answer in a
+trial run through the step pipeline, and an audit that drops a plan when a
+fresh race agrees on something else. `FastPathRouter.start_prompt_race`
+exposes every racer's answer. New settings: `planner_model`
+(`openai/gpt-6-luna`), `planner_max_tokens` 8192, `plan_examples` 3,
+`max_plan_attempts` 2, `plan_audit_rate` 0.1.
+
+`fast_path_planned_bench_v1.py` gives each of the seven large-job shapes one
+plain-language description. A live smoke run on two shapes, seven jobs each,
+adopted a plan for both on the first attempt; every answer in every arm but one
+direct call was correct. Not evidence.
+
+`FAST_PATH_PLANNED_V1_PLAN.md` freezes one descriptive run. Provider credit at
+the freeze: about $11.60.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v1.py` | `f45bae98a0d8b305ece27c5d831f4db09190d7327ad6d96933d3e8502132dda2` |
+| `fast_path_jobs_bench_v2_large.py` | `0821ca5e659feaa0980daef76d31117332ab643ab193bfc0f19cf15b12726f3e` |
+| `config_fast_path.json` | `ce3fb332fa510b89fa0db96087f2850b5fbf79e1540d8c6a07a51893893c9a4a` |
+| `fast_path.py` | `b51396aac1deb7a14fdb12dfb365065f5e9099e21e7f4640e0d24ca08cc88302` |
+| `pipeline.py` | `bca87fc09cb826de1b6e5376b4eb38102ac0d5f5025662181d87bb472eed679d` |
+| `planner.py` | `9f9236703e29acf82912f6c081a2c0fa678cc03b4d641a71d099c827cda44139` |
+| `sandbox.py` | `b132f5d8175e60916baa0550c09d2f5d34e247e99bd390eee07510f596a9dcff` |
+| `remote.py` | `4efc49ab45e68d09f026e75fca9e3aff2780fac8682b3b27f7fa983eda51afc2` |
+| `run_fast_path_planned_v1.py` | `d5d24d842885037df4dc6464c7641db73b9dca69ac7770371647d4513951de0d` |
+| `analyze_fast_path_planned_v1.py` | `5c57588248bbaa6358262b95c9383654d9db9d590f3396486688533852dc4d99` |
+| `FAST_PATH_PLANNED_V1_PLAN.md` | `e15a816f68e86d7abd4b6a49906c0b1467a9cdde2a369efb443d253240b8fc8d` |
+
+Verification: full unit suite passed (536 tests); description self-verify
+passed; `git diff --check` passed.
+
+---
+
+## 2026-11-17 — Planned jobs V1 result
+
+The frozen descriptive run completed in one attempt: 3,489 provider calls, 5
+invalid responses, no unanswered job. Decision, C against R: `NOT_SUPPORTED`.
+
+| Arm | Correct | Median ms | Mean ms |
+|---|---:|---:|---:|
+| A. Direct | 96/105 | 3823 | 3962 |
+| R. Whole-task race | 103/105 | 2528 | 2504 |
+| C. Planning router | 105/105 | 1986 | 1999 |
+
+- C/R 0.786 (0.466 to 1.000): upper bound not below 1.0. C minus R +0.019
+  (0.000 to +0.038). C/A 0.520 (0.310 to 0.668), +0.086.
+- Plans adopted for 6 of 7 shapes, first plan-served job index 3 or 4.
+  Attempts: 6 adopted, 2 rejected by trial (1/3 and 0/3 matched), 2 invalid.
+- `order_batch`: both plans refused as `INVALID_STEP_TASK:INVALID_SIGNATURE`.
+  The plan text was not kept, so which signature failed is unknown.
+- Arm C routes: 69 jobs on a plan (median 1553 ms, all correct), 36 on the
+  race (median 2768 ms, all correct). After adoption, medians A 3823, R 2422,
+  C 1553 ms.
+- Plan steps: 19 function (16 promoted), 7 judgement. Step executions:
+  181 function on code, 36 function on the race, 80 judgement. No wrong job
+  example, no plan demotion.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v1.jsonl` | `4c462b877dfb4129289e1dff877f9678bd54eebc4458c608d6f4be663a8d83a1` |
+| `fast_path_planned_v1_analysis.json` | `913cda0eed7f53654084dc5f4830ab8aad408ae2c559a6050e8a79167a72d25d` |
+
+---
+
+## 2026-11-17 — Planner fixes and rerun authorised
+
+At the owner's request: signature tidying and one retry with the refusal reason
+in `planner.py` (`normalise_signature`, `plan_retries`), refused and rejected
+plans kept in the record, and `plan_examples` lowered from 3 to 2. Recorded as
+amendment 1 to `FAST_PATH_PLANNED_V1_PLAN.md`. Full suite passed (539 tests).
+Credit before the rerun: about $9.45.
+
+| Changed file | SHA-256 |
+|---|---|
+| `config_fast_path.json` | `b3ca27f9c3e828074293a51cc5a1530e73302998998a8d084dbcb99fef9cf06a` |
+| `planner.py` | `8366396755502fcd320ffa6a22860afdb0ab5d5dd1375e051eb53a05aaa986a5` |
+| `FAST_PATH_PLANNED_V1_PLAN.md` | `38a2e1a14014fa7791391cde991ee3f9c83acdd0dd9780627ace3c44a8193f5e` |
+
+---
+
+## 2026-11-17 — Planned jobs V1 rerun with fixes
+
+Label `planned_v1_fixes`: 3,060 provider calls, 2 invalid responses, no
+unanswered job. Decision: `NOT_SUPPORTED`.
+
+| Arm | Correct | Median ms | Mean ms |
+|---|---:|---:|---:|
+| A. Direct | 101/105 | 3736 | 3941 |
+| R. Whole-task race | 102/105 | 2391 | 2419 |
+| C. Planning router | 103/105 | 2009 | 2249 |
+
+- C/R 0.841 (0.716 to 1.087); C minus R +0.010 (-0.019 to +0.038).
+- 8 plan attempts, all adopted on first try (one shape twice, after an audit
+  demotion). No refused plan, so the validator fix and retry were not used.
+- Plan steps 16 function (12 promoted), 8 judgement. Step executions: 130
+  function on code, 80 function on the race, 101 judgement.
+- Arm C routes: 88 plan jobs (87 correct, median 1862 ms), 17 race jobs
+  (16 correct, median 2487 ms). After adoption: A 3709, R 2391, C 1867 ms.
+- Wrong in C: `meeting_actions` job 0 on the race (overdue count 2 for 4);
+  `invoice_audit` job 5 on a plan, final model step returned null. The audit
+  then dropped that plan; a second plan was adopted.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v1_fixes.jsonl` | `c3b5a6c06db7198bc5bd107bbd4cc975683543d88119efbd4089932d8d6a75a2` |
+| `fast_path_planned_v1_fixes_analysis.json` | `e8c413b24886d668478d1f8afc34ce7638dc70d52fc83c965a239e24541f08c5` |
+
+---
+
+## 2026-11-17 — Planner steering and speed feedback
+
+The owner asked to steer the planner to smaller steps and asked whether any
+feedback mechanism existed. Until now feedback covered correctness only (the
+plan trial and the audit). Added: small-step guidance in `build_plan_prompt`;
+`build_refine_prompt` and `PlanningRouter._maybe_refine`, which after
+`refine_after_jobs` plan-served jobs reports to the planner which function
+steps became code and which are still on the models, and adopts a revised plan
+only if it passes the trial. Refinement attempts carry `kind: refine` and do
+not count toward `max_plan_attempts`. Recorded as amendment 2. Full suite
+passed. Credit before the run: about $7.05.
+
+| Changed file | SHA-256 |
+|---|---|
+| `config_fast_path.json` | `64b85380071e693613b97697d31a48111ceab67fd0a9de5f907f520be124cca9` |
+| `planner.py` | `06e432f3159fb0bd76c568ca2e163c9d143e7b2eae93979e2b7831fe7c7f7231` |
+| `FAST_PATH_PLANNED_V1_PLAN.md` | `c499d3c22ddced01be3e183e01ae6eb65d301cb77a09cb322b3b085c46726262` |
+
+---
+
+## 2026-11-17 — Planned jobs V1, third run: steering and speed feedback
+
+Label `planned_v1_steer`: 9,088 provider calls, 4 invalid responses, 26 HTTP
+429 responses, no unanswered job. Decision: `NOT_SUPPORTED`.
+
+| Arm | Correct | Median ms | Mean ms |
+|---|---:|---:|---:|
+| A. Direct | 95/105 | 3675 | 3904 |
+| R. Whole-task race | 104/105 | 2429 | 2435 |
+| C. Planning router | 105/105 | 1370 | 2225 |
+
+- C/R 0.564 (0.397 to 1.091); C minus R +0.010 (0.000 to +0.029).
+  C/A 0.373 (0.249 to 0.713).
+- 13 plan attempts: 12 adopted, 1 rejected by trial (meeting_actions, 1 of 2).
+  5 of them were speed refinements, all adopted, each after 4 jobs.
+- Final plans: 83 function steps (79 promoted), 8 judgement. Step executions:
+  768 function on code, 168 function on the race, 101 judgement.
+- Last five jobs per shape: medians A 3723, R 2375, C 969 ms.
+- `order_batch` C median 3900 ms against R 2683 ms: a 16-step plan with three
+  function steps never promoted.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v1_steer.jsonl` | `b3f728f19cd548383af279e7826edd29ed7addfc8734ee75ee8335dbfa52ff05` |
+| `fast_path_planned_v1_steer_analysis.json` | `9e912b76017943b20bc99fbd86d793af0b61607cc03a0cbe3883b96571ce0dbb` |
+
+---
+
+## 2026-11-17 — Planned jobs V2 freeze: prospective test on fresh jobs
+
+The owner added credit and asked to continue. `fast_path_planned_bench_v2.py`
+adds 7 new job shapes with plain-language descriptions and reference
+functions qualified by hand-worked tests. `FAST_PATH_PLANNED_V2_PLAN.md`
+freezes one prospective run of the planning router (steering and speed
+feedback on) against the whole-task race. No provider call has touched these
+jobs.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v2.py` | `a48b7995948e089d53ca40cf8b241e6111e78c273f5fa39853c742250091b4fb` |
+| `config_fast_path.json` | `64b85380071e693613b97697d31a48111ceab67fd0a9de5f907f520be124cca9` |
+| `fast_path.py` | `b51396aac1deb7a14fdb12dfb365065f5e9099e21e7f4640e0d24ca08cc88302` |
+| `pipeline.py` | `bca87fc09cb826de1b6e5376b4eb38102ac0d5f5025662181d87bb472eed679d` |
+| `planner.py` | `06e432f3159fb0bd76c568ca2e163c9d143e7b2eae93979e2b7831fe7c7f7231` |
+| `sandbox.py` | `b132f5d8175e60916baa0550c09d2f5d34e247e99bd390eee07510f596a9dcff` |
+| `remote.py` | `4efc49ab45e68d09f026e75fca9e3aff2780fac8682b3b27f7fa983eda51afc2` |
+| `run_fast_path_planned_v1.py` | `d5d24d842885037df4dc6464c7641db73b9dca69ac7770371647d4513951de0d` |
+| `analyze_fast_path_planned_v1.py` | `5c57588248bbaa6358262b95c9383654d9db9d590f3396486688533852dc4d99` |
+| `FAST_PATH_PLANNED_V2_PLAN.md` | `274701454f923abf1e9ef14e695c00c102043100fa0275554c03698fbc8ba1af` |
+
+Verification: full unit suite passed; benchmark self-verify passed.
+
+---
+
+## 2026-11-17 — Planned jobs V2 result: supported on fresh jobs
+
+The frozen prospective run completed in one attempt: 8,061 provider calls, 11
+invalid responses, no unanswered job. Decision: `SUPPORTED`.
+
+| Arm | Correct | Median ms | Mean ms |
+|---|---:|---:|---:|
+| A. Direct | 98/105 | 4275 | 4355 |
+| R. Whole-task race | 102/105 | 2469 | 2552 |
+| C. Planning router | 104/105 | 1534 | 2090 |
+
+- C/R 0.621 (0.412 to 0.919); C minus R +0.019 (-0.019 to +0.067).
+  C/A 0.359 (0.229 to 0.587); +0.057.
+- 13 plan attempts: 12 adopted, 1 rejected (playlist refinement, 0 of 2).
+  Six were speed refinements. No plan demotion, no wrong job example.
+- Plan-served jobs 84, all correct, median 1261 ms. Race-served 21, 20
+  correct (pick_list job 1 wrong).
+- First plan-served job index: 2 for four shapes, 3 for two, 7 for
+  timesheet (5 whole-task disagreements delayed its examples).
+- Final plans: 74 function steps (70 promoted), 7 judgement. Step executions:
+  689 function on code, 152 function on the race, 84 judgement.
+- Last five jobs per shape: A 4623, R 2486, C 1063 ms.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v2_primary.jsonl` | `58419c3b641273822f1f819655c587323985239af8dd46bd01f8f246993f8139` |
+| `fast_path_planned_v2_primary_analysis.json` | `062baa8b50c49431c45d6e4d1d8e6feb93f8effd881af8469ec7d4a310e9fbf2` |
+
+---
+
+## 2026-11-17 — Majority agreement, usage metering, immediate arrival
+
+The owner asked to work through the listed next steps in order. Step 1 (real
+tasks) waits on tasks from the owner; steps 2 and 3 start now.
+
+- `PlanningRouter._agreement` takes an optional minimum: with
+  `job_agreement_min` set, an answer given by at least that many racers, and by
+  more than any other answer, counts as agreed. Default `null` keeps
+  unanimity.
+- `run_fast_path_planned_v1.py` wraps each arm's provider calls in a
+  `UsageMeter` and writes calls and tokens per arm to each shape summary; the
+  analysis sums them. `--arrival immediate` stops draining background work
+  between jobs.
+- Follow-up runs recorded in `FAST_PATH_PLANNED_V2_PLAN.md`.
+
+Full suite passed (549 tests).
+
+| Changed file | SHA-256 |
+|---|---|
+| `config_fast_path.json` | `0943897831b3793de717042cbda97a4470d49c327821ed079f7c97ac349bf41a` |
+| `planner.py` | `98e5917acce35e5fbdef78d30b0904c1e1f2c18d370d5aca35ba4725fb73ce4e` |
+| `run_fast_path_planned_v1.py` | `c27f73ab4e5f4fe9e751e7842848c612de2212c1e1b761ec4e17a149e9270f78` |
+| `analyze_fast_path_planned_v1.py` | `644089f209b8eec130d250a2631f91c49e1f3a057f477120bd9b054afe964c4a` |
+| `FAST_PATH_PLANNED_V2_PLAN.md` | `360a1786e7e0132b40724ba353645ca96585efa970f12e8221d385fe6137c85b` |
+
+---
+
+## 2026-11-17 — Follow-up 1: majority agreement (descriptive)
+
+Label `majority`, `job_agreement_min` 4: 9,592 provider calls, no unanswered
+job. Correct A 96, R 100, C 105 of 105. Medians A 4090, R 2585, C 1865 ms.
+C/R 0.721 (0.472 to 1.024); C minus R +0.048 (+0.019 to +0.086).
+
+- First plan job index 2 for five shapes, 3 for two; `timesheet` 2 (job 3)
+  against 7 (job 8) under unanimity. No wrong job example, no demotion.
+- 14 plan attempts: 12 adopted, 2 rejected (one first plan, one refinement).
+- Final plans: 86 function steps (83 promoted), 7 judgement.
+- Usage per arm: A 105 calls, 50,566 prompt and 27,932 completion tokens;
+  R 525 calls, 281,442 and 358,348; C 8,962 calls, 2,020,135 and 1,393,248.
+- Last five jobs per shape: A 3908, R 2641, C 967 ms.
+
+Decision for follow-up 2: keep `job_agreement_min` 4, which brought plans
+earlier with no observed safety cost.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v2_majority.jsonl` | `acf2741db820ff701f382ac6e1c317a60f5dc5cb4a17e69fa2264ae9fd46e477` |
+| `fast_path_planned_v2_majority_analysis.json` | `416c0c875508cb688e2f97e2dd51a51d93753f172bdcd81b0650cd5fb656e2bd` |
+
+---
+
+## 2026-11-17 — Follow-up 2: back-to-back arrival (descriptive)
+
+Label `immediate`, `job_agreement_min` 4, `--arrival immediate`: 7,266 provider
+calls, 7 HTTP 429 and 3 invalid responses, no unanswered job.
+
+- Correct A 96, R 100, C 99 of 105. Medians A 4074, R 2579, C 3117 ms;
+  C 90th percentile 14,150 ms. C/R 1.209 (1.053 to 1.568); C minus R -0.010
+  (-0.086 to +0.057). Both criteria fail.
+- Arm C routes: 44 plan jobs (43 correct, median 6581 ms), 61 race jobs
+  (56 correct). First plan job index 5 to 13; `expense_claims` none.
+- 14 plan attempts: 10 adopted, 4 rejected. Final plans 78 function steps,
+  36 promoted. Step executions: 127 function on code, 251 on the race.
+- First wrong plan-served answer of any run: `bank_statement` job index 9.
+- Usage: A 105 calls, R 525, C 6,636 (1,713,420 prompt and 1,279,034
+  completion tokens).
+
+Finding: adoption is gated on correctness only. Under live arrival a plan is
+adopted while most of its steps are still raced one by one, which makes jobs
+slower than a single whole-task race.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v2_immediate.jsonl` | `84642a8fe9f752f82b3998c36e5943c5aefd672193da75f45fa8485ac2d6d2a1` |
+| `fast_path_planned_v2_immediate_analysis.json` | `db532fa5af5310d86dab9d62180e77f9a63c37ce983a64a45d4d29bfab0723d8` |
+
+---
+
+## 2026-11-17 — Shadow plans: go live only when fast
+
+The owner chose to test a fix for the back-to-back result. `PlanningRouter`
+now adopts a plan in shadow mode when `plan_shadow` is set: the whole-task race
+keeps answering, `_shadow` runs the plan on each live job's inputs off the
+answer path, drops the plan on an agreed mismatch, and switches it live once
+its last `plan_live_window` runs each beat `plan_live_ratio` times the median
+race time recorded for the template. Refinement counts shadow runs as uses.
+Shape summaries record the plan's mode and shadow timings. Full suite passed
+(552 tests). Credit before the run: about $11.85.
+
+| Changed file | SHA-256 |
+|---|---|
+| `config_fast_path.json` | `eff69a362c563b90abce44cd08e442cac38beb0df66f9aa898e35573c1c1b066` |
+| `planner.py` | `8e76fbb9146c106d61f9c4884fa75db7969349f5188980734952215451959f00` |
+| `run_fast_path_planned_v1.py` | `6aeca26a05da142d6d7efe4400b805127f1bdc4cfe5bc550cd3c7d118efdc9f2` |
+| `FAST_PATH_PLANNED_V2_PLAN.md` | `74b138f3b7f80426ba0b54da58cf77c9e3a83d00fbee078fa0787797c650a612` |
+
+---
+
+## 2026-11-17 — Follow-up 3: shadow plans under back-to-back arrival
+
+Label `shadow`: 7,946 provider calls, 108 HTTP 429 and 12 invalid responses,
+no unanswered job. Correct A 98, R 101, C 98 of 105. Medians A 4020, R 2451,
+C 2834 ms; C 90th percentile 13,753 ms. C/R 1.157 (1.065 to 1.279); C minus R
+-0.029 (-0.067 to 0.000).
+
+- All 105 arm-C jobs answered by the race; no plan reached live mode.
+  Recorded shadow-run times 6.2 to 43.4 s; race medians per shape 2.2 to
+  4.5 s. One plan dropped on a shadow mismatch (`playlist`).
+- 14 plan attempts: 12 adopted into shadow, 2 refinements rejected. Final
+  plans 87 function steps, 30 promoted.
+- Last five jobs per shape: A 4147, R 2506, C 7967 ms.
+- Cause found in code: `FastPathRouter._models` is one pool used by the live
+  race and by all background work, so background calls delay live ones.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v2_shadow.jsonl` | `1759f1f78dd41e9f2c88921840a1658f860ff8fda26d98d3605790dedb71bd5b` |
+| `fast_path_planned_v2_shadow_analysis.json` | `7d8ba0651ceab2b9addb08e9e0822dcf8de88edc5acb95234f8c7d01d1c5b775` |
+
+---
+
+## 2026-11-17 — Live/background isolation and the real-tasks format (no provider calls)
+
+The owner chose to keep the remaining credit (about $7.65) for a test on real
+tasks. Meanwhile, two fixes for the second back-to-back flaw, tested against
+fake models only:
+
+- `FastPathRouter` has a separate background model pool
+  (`background_model_workers`, default as large as the live pool) and a
+  `background_context`; everything submitted through `_submit` runs in it.
+  `pipeline.Orchestrator(background=True)` runs a job's steps on the
+  background pool. `PlanningRouter` uses such an orchestrator for plan trials
+  and shadow runs, and runs its own background work in the same context. A
+  test checks that whole-task answers run on live threads and every step run
+  on background threads.
+- `PlanningRouter` allows one shadow run per task at a time; a run that would
+  queue is skipped and counted in `shadow_skipped`.
+
+These are not yet measured on live traffic.
+
+For the owner's tasks: `real_tasks/` with a README describing the JSON format,
+a made-up `example_invoice_check.json`, and `fast_path_real_bench.py`, which
+loads every non-example file as a job shape for the planned-jobs runner and
+explains format errors. Full suite passed.
+
+| Changed file | SHA-256 |
+|---|---|
+| `fast_path.py` | `fe034b1b0fc35799017548e5dd7d9f090659676e756c32af9153b962d4f956f2` |
+| `pipeline.py` | `fecc96aee7349fbf2229dad47207c7467a76c884fec281dd596d35185f528e83` |
+| `planner.py` | `941d7f2baaa04caa7f92b5ae369760e3a10f6a0acdf2e925c87b6807aa3dccb3` |
+| `fast_path_real_bench.py` | `cb24a842075f25b52d4fd601be560f88b7f150ab85f769e544c1a182c5471425` |
+| `real_tasks/README.md` | `c6ec342711818564d90ed4e4e1adb003ea4fc2acafe205c60d73e7df58351e9c` |
+| `real_tasks/example_invoice_check.json` | `5a9940bddd45ba86f013aa70f8a56e2dede4ee13cb00f14b670e71bc8bdcd1bd` |
+
+---
+
+## 2026-11-17 — Ceiling arm, frozen before its run
+
+The owner pointed out that no run had a code-only arm and specified a ceiling
+arm: hand-written code for the mechanical work, reading steps raced as arm C
+races its judgement steps, drained arrival, per-arm metering, and the reading
+of a perfect score stated in advance. Added `fast_path_ceiling_v1.py`
+(reading steps for the seven fresh shapes) and arm D in
+`run_fast_path_planned_v1.py` (`--ceiling`) and in the analysis
+(`ceiling`: reading accuracy, C against D, medians of the first three and the
+later jobs). Recorded as follow-up 4 in `FAST_PATH_PLANNED_V2_PLAN.md`. The
+owner chose a full paired run (about $4 of $7.65). Full suite passed.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_ceiling_v1.py` | `a166f9e727199adffc9bb6ecf9137f28732c74c0375c7f21c291ba14c6c669e7` |
+| `run_fast_path_planned_v1.py` | `47ae8affb3032d303bced2227b32a90885521661729a579ac558b9b33d58522d` |
+| `analyze_fast_path_planned_v1.py` | `e9f83ace806fd733628076e6382ddb3fd08bdb0701788ab5aff7a16dfb5453d9` |
+| `planner.py` | `941d7f2baaa04caa7f92b5ae369760e3a10f6a0acdf2e925c87b6807aa3dccb3` |
+| `fast_path.py` | `fe034b1b0fc35799017548e5dd7d9f090659676e756c32af9153b962d4f956f2` |
+| `pipeline.py` | `fecc96aee7349fbf2229dad47207c7467a76c884fec281dd596d35185f528e83` |
+| `config_fast_path.json` | `eff69a362c563b90abce44cd08e442cac38beb0df66f9aa898e35573c1c1b066` |
+| `FAST_PATH_PLANNED_V2_PLAN.md` | `347ca922f14c51d948bda3682bb00050997da80ec426db8a056c036eaa6decd8` |
+
+---
+
+## 2026-11-17 — Follow-up 4: ceiling arm result
+
+Label `ceiling`: 9,337 provider calls, 8 invalid responses, no unanswered job.
+
+| Arm | Correct | Median ms | Calls | Prompt tokens | Completion tokens |
+|---|---:|---:|---:|---:|---:|
+| A | 96/105 | 3891 | 105 | 50,566 | 28,193 |
+| R | 98/105 | 2360 | 525 | 281,438 | 362,227 |
+| C | 104/105 | 2146 | 8,182 | 1,833,042 | 1,290,226 |
+| D | 105/105 | 834 | 525 | 91,516 | 18,679 |
+
+- D reading steps correct 105/105. C/D 2.574 (1.590 to 3.534).
+- Medians, first three jobs per shape: R 2385, C 2533, D 834; later jobs:
+  R 2347, C 1956, D 838; last five: A 3908, R 2491, C 1198, D 870.
+- Arm C, same settings as the frozen run: C/R 0.909 (0.535 to 1.245);
+  correctness +0.057 (+0.010 to +0.133). All 7 shapes planned; 13 attempts all
+  adopted; 80 function steps, 72 promoted. One wrong C answer, from the race.
+- Not recorded as a decision: the frozen run's decision stands, and this
+  descriptive re-run shows its time margin varies widely between runs.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v2_ceiling.jsonl` | `b708475aa1d2f8c6989791cdd53269935e788bb8980b503cbfaa62001e5840a7` |
+| `fast_path_planned_v2_ceiling_analysis.json` | `f37b88d4a74ef0b10233655a29f4c655162b28576f330b88061c38f78ab81afc` |
+
+---
+
+## 2026-11-17 — Follow-up 5 authorised: isolation fixes under live traffic
+
+The owner asked for both the real-task test and a live run of the isolation
+fixes. The real-task test waits on tasks from the owner. Follow-up 5 recorded
+in `FAST_PATH_PLANNED_V2_PLAN.md`. Credit before the run: about $20.95.
+
+| File | SHA-256 |
+|---|---|
+| `fast_path.py` | `fe034b1b0fc35799017548e5dd7d9f090659676e756c32af9153b962d4f956f2` |
+| `pipeline.py` | `fecc96aee7349fbf2229dad47207c7467a76c884fec281dd596d35185f528e83` |
+| `planner.py` | `941d7f2baaa04caa7f92b5ae369760e3a10f6a0acdf2e925c87b6807aa3dccb3` |
+| `config_fast_path.json` | `eff69a362c563b90abce44cd08e442cac38beb0df66f9aa898e35573c1c1b066` |
+| `run_fast_path_planned_v1.py` | `47ae8affb3032d303bced2227b32a90885521661729a579ac558b9b33d58522d` |
+| `FAST_PATH_PLANNED_V2_PLAN.md` | `42726e1a0475dfdcc41fc492651cd0cac5d7466dd734a4c9d8cca1843b453468` |
+
+---
+
+## 2026-11-17 — Follow-up 5: isolation fixes under live traffic
+
+Label `isolated`: 6,660 provider calls, 6 invalid responses, no HTTP 429, no
+unanswered job. Correct A 102, R 101, C 103, D 105. Medians A 3620, R 2448,
+C 2432, D 838 ms. C/R 0.993 (0.963 to 1.075); correctness +0.019 (-0.019 to
++0.067). D reading 105/105; C/D 2.903.
+
+- All 105 arm-C jobs answered by the race; C race-route median 2432 ms against
+  R 2448 ms. Last five jobs per shape: R 2432, C 2386 ms.
+- 11 plan attempts, all adopted into shadow; one dropped on a shadow mismatch
+  (`playlist`). Six shadow runs finished in total, 4.9 to 47.2 s; none went
+  live. 74 function steps, 38 promoted.
+- Usage: C 5,505 calls (1,403,966 prompt and 1,158,966 completion tokens).
+
+Reading: the pool separation removed the slowdown of the live path seen in
+follow-up 3. Within 15 back-to-back jobs per shape, learning does not finish,
+so the shadow rule never lets a plan serve.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v2_isolated.jsonl` | `1bea144dbcab2988276bbc10bde692b6318952477cb897ea96fcd585c27233e1` |
+| `fast_path_planned_v2_isolated_analysis.json` | `dc7e98daa6d7f08adf2628a8140d2c29ba7afaa80020720dd7638821e7ae50f8` |
+
+---
+
+## 2026-11-17 — Write-up and spreadsheet brought up to date; follow-up 6 recorded
+
+The owner has no real tasks to supply, so the real-task test is dropped. The
+shared write-up gained a section on live traffic and the ceiling and corrected
+limits; the spreadsheet gained five follow-up rows and a Ceiling sheet.
+`run_fast_path_planned_v1.py` now takes several `--set` overrides and
+`--jobs N`. Follow-up 6 (`long_stream`) recorded before its run. Credit
+before the run: about $17.40.
+
+| File | SHA-256 |
+|---|---|
+| `run_fast_path_planned_v1.py` | `53676003b38dcc69536957ffc7c3bb79515c75da06cd7ea7276fceb204c4a7e1` |
+| `config_fast_path.json` | `eff69a362c563b90abce44cd08e442cac38beb0df66f9aa898e35573c1c1b066` |
+| `planner.py` | `941d7f2baaa04caa7f92b5ae369760e3a10f6a0acdf2e925c87b6807aa3dccb3` |
+| `fast_path.py` | `fe034b1b0fc35799017548e5dd7d9f090659676e756c32af9153b962d4f956f2` |
+| `FAST_PATH_PLANNED_V2_PLAN.md` | `fb200f5655592fe5d6bcaa505740eb60ab755b3d9549096e0b9185510d1ee01a` |
+
+---
+
+## 2026-11-17 — Follow-up 6: long stream, cheaper learning
+
+Label `long_stream`: four shapes, 40 jobs each, back to back, `max_probes` 4,
+`job_agreement_min` 4, shadow plans, separate pools, ceiling arm. 7,025
+provider calls, 7 invalid responses, no unanswered job.
+
+| Arm | Correct | Median ms | Calls | Prompt tokens | Completion tokens |
+|---|---:|---:|---:|---:|---:|
+| A | 143/160 | 4014 | 160 | 81,152 | 47,835 |
+| R | 149/160 | 2755 | 800 | 449,463 | 604,715 |
+| C | 151/160 | 2239 | 5,265 | 1,451,151 | 1,221,962 |
+| D | 160/160 | 836 | 800 | 140,799 | 30,938 |
+
+- Live from job index 19 (`timesheet`, after 6 shadow runs), 24
+  (`survey_scores`, after 3), 33 (`shipment_tracking`, after 12).
+  `expense_claims` stayed in shadow: 17 of 20 function steps promoted, shadow
+  runs 2.8 to 15.2 s against a race median of 2651 ms.
+- Arm C routes: 44 plan jobs (43 correct, median 1602 ms), 116 race jobs
+  (108 correct, median 2661 ms). After each shape went live: C 1678, 1789,
+  845 ms; R 3110, 3261, 1900 ms; D 836, 819, 831 ms.
+- C/R 0.813 (0.696 to 1.000); C minus R +0.012 (0.000 to +0.037).
+  D reading 160/160; C/D 2.678.
+- 9 plan attempts: 6 adopted, 3 rejected (1 plan, 2 refinements).
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v2_long.jsonl` | `844adab42aada6d993f03a276a5d9ab75c4b68e5bf8d037636834fdcafe4cc6c` |
+| `fast_path_planned_v2_long_analysis.json` | `5c6d921486826f87ea02d5c07631ee6ace1ee0e9814823e0d24a62e5daf47fe7` |

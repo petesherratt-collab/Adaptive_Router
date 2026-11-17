@@ -5,3 +5,6 @@ __pycache__/
 .env
 benchmark_runs.jsonl
 runs.jsonl
+fast_path_store/
+fast_path_runs.jsonl
+fast_path_jobs.jsonl

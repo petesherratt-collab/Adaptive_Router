@@ -1,0 +1,500 @@
+{
+ "items": [
+  {
+   "name": "run_length_encode",
+   "tests": 4,
+   "reference_static": "OK",
+   "reference_passed": 4,
+   "buggy_static": "OK",
+   "buggy_passed": 1,
+   "by_k": {
+    "1": {
+     "subsets": 4,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 6,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 4,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "is_balanced",
+   "tests": 4,
+   "reference_static": "OK",
+   "reference_passed": 4,
+   "buggy_static": "OK",
+   "buggy_passed": 3,
+   "by_k": {
+    "1": {
+     "subsets": 4,
+     "buggy_accepted": 3,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 6,
+     "buggy_accepted": 3,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 4,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "roman_to_int",
+   "tests": 5,
+   "reference_static": "OK",
+   "reference_passed": 5,
+   "buggy_static": "OK",
+   "buggy_passed": 2,
+   "by_k": {
+    "1": {
+     "subsets": 5,
+     "buggy_accepted": 2,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 10,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 10,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 5,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "missing_number",
+   "tests": 4,
+   "reference_static": "OK",
+   "reference_passed": 4,
+   "buggy_static": "OK",
+   "buggy_passed": 0,
+   "by_k": {
+    "1": {
+     "subsets": 4,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 6,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 4,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "caesar_decode",
+   "tests": 4,
+   "reference_static": "OK",
+   "reference_passed": 4,
+   "buggy_static": "OK",
+   "buggy_passed": 2,
+   "by_k": {
+    "1": {
+     "subsets": 4,
+     "buggy_accepted": 2,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 6,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 4,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "flatten_sum",
+   "tests": 3,
+   "reference_static": "OK",
+   "reference_passed": 3,
+   "buggy_static": "OK",
+   "buggy_passed": 2,
+   "by_k": {
+    "1": {
+     "subsets": 3,
+     "buggy_accepted": 2,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 3,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "count_words",
+   "tests": 4,
+   "reference_static": "OK",
+   "reference_passed": 4,
+   "buggy_static": "OK",
+   "buggy_passed": 2,
+   "by_k": {
+    "1": {
+     "subsets": 4,
+     "buggy_accepted": 2,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 6,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 4,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "gcd",
+   "tests": 4,
+   "reference_static": "OK",
+   "reference_passed": 4,
+   "buggy_static": "OK",
+   "buggy_passed": 3,
+   "by_k": {
+    "1": {
+     "subsets": 4,
+     "buggy_accepted": 3,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 6,
+     "buggy_accepted": 3,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 4,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "is_palindrome_alnum",
+   "tests": 4,
+   "reference_static": "OK",
+   "reference_passed": 4,
+   "buggy_static": "OK",
+   "buggy_passed": 2,
+   "by_k": {
+    "1": {
+     "subsets": 4,
+     "buggy_accepted": 2,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 6,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 4,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "rpn_eval",
+   "tests": 3,
+   "reference_static": "OK",
+   "reference_passed": 3,
+   "buggy_static": "OK",
+   "buggy_passed": 2,
+   "by_k": {
+    "1": {
+     "subsets": 3,
+     "buggy_accepted": 2,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 3,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "title_case",
+   "tests": 3,
+   "reference_static": "OK",
+   "reference_passed": 3,
+   "buggy_static": "OK",
+   "buggy_passed": 1,
+   "by_k": {
+    "1": {
+     "subsets": 3,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 3,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "binary_to_int",
+   "tests": 5,
+   "reference_static": "OK",
+   "reference_passed": 5,
+   "buggy_static": "OK",
+   "buggy_passed": 3,
+   "by_k": {
+    "1": {
+     "subsets": 5,
+     "buggy_accepted": 3,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 10,
+     "buggy_accepted": 3,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 10,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 5,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "5": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "second_largest",
+   "tests": 3,
+   "reference_static": "OK",
+   "reference_passed": 3,
+   "buggy_static": "OK",
+   "buggy_passed": 2,
+   "by_k": {
+    "1": {
+     "subsets": 3,
+     "buggy_accepted": 2,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 3,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "char_frequency_max",
+   "tests": 3,
+   "reference_static": "OK",
+   "reference_passed": 3,
+   "buggy_static": "OK",
+   "buggy_passed": 2,
+   "by_k": {
+    "1": {
+     "subsets": 3,
+     "buggy_accepted": 2,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 3,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "digital_root",
+   "tests": 4,
+   "reference_static": "OK",
+   "reference_passed": 4,
+   "buggy_static": "OK",
+   "buggy_passed": 2,
+   "by_k": {
+    "1": {
+     "subsets": 4,
+     "buggy_accepted": 2,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 6,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 4,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "4": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  },
+  {
+   "name": "remove_adjacent_dups",
+   "tests": 3,
+   "reference_static": "OK",
+   "reference_passed": 3,
+   "buggy_static": "OK",
+   "buggy_passed": 1,
+   "by_k": {
+    "1": {
+     "subsets": 3,
+     "buggy_accepted": 1,
+     "reference_rejected": 0
+    },
+    "2": {
+     "subsets": 3,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    },
+    "3": {
+     "subsets": 1,
+     "buggy_accepted": 0,
+     "reference_rejected": 0
+    }
+   }
+  }
+ ],
+ "by_example_count": {
+  "1": {
+   "items": 16,
+   "mean_false_accept_rate": 0.5052083333333334,
+   "mean_false_reject_rate": 0.0,
+   "items_with_any_false_accept": 15
+  },
+  "2": {
+   "items": 16,
+   "mean_false_accept_rate": 0.2125,
+   "mean_false_reject_rate": 0.0,
+   "items_with_any_false_accept": 12
+  },
+  "3": {
+   "items": 16,
+   "mean_false_accept_rate": 0.0375,
+   "mean_false_reject_rate": 0.0,
+   "items_with_any_false_accept": 3
+  },
+  "4": {
+   "items": 10,
+   "mean_false_accept_rate": 0.0,
+   "mean_false_reject_rate": 0.0,
+   "items_with_any_false_accept": 0
+  },
+  "5": {
+   "items": 2,
+   "mean_false_accept_rate": 0.0,
+   "mean_false_reject_rate": 0.0,
+   "items_with_any_false_accept": 0
+  }
+ },
+ "bank": {
+  "name": "ccc_code_items.py",
+  "sha256": "1b7a306c31cd4e869fe45a89fcb0683e474e07f1d4902079b048555b3406e76c"
+ }
+}

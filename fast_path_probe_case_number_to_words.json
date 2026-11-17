@@ -1,0 +1,90 @@
+[
+ {
+  "name": "number_to_words_v2_promoted",
+  "spec": "Write an integer from 0 to 9999 in English words, lowercase. Hyphenate 21 to 99 where needed ('twenty-one'). Use British style: put 'and' before the final tens-or-units part whenever something precedes it and that part is non-zero, as in 'one hundred and five', 'one thousand and five' and 'one thousand two hundred and thirty-four'. No commas.",
+  "signature": "def solve(n: int) -> str:",
+  "reference": "def solve(n):\n    ones = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',\n            'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen',\n            'eighteen', 'nineteen']\n    tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety']\n    if n == 0:\n        return 'zero'\n    parts = []\n    if n >= 1000:\n        parts.append(ones[n // 1000] + ' thousand')\n    rest = n % 1000\n    if rest >= 100:\n        parts.append(ones[rest // 100] + ' hundred')\n    last = rest % 100\n    if last:\n        if last < 20:\n            word = ones[last]\n        else:\n            word = tens[last // 10]\n            if last % 10:\n                word += '-' + ones[last % 10]\n        if parts:\n            word = 'and ' + word\n        parts.append(word)\n    return ' '.join(parts)\n",
+  "buggy": "def solve(n: int) -> str:\n    ones = [\n        \"zero\", \"one\", \"two\", \"three\", \"four\", \"five\", \"six\", \"seven\",\n        \"eight\", \"nine\", \"ten\", \"eleven\", \"twelve\", \"thirteen\", \"fourteen\",\n        \"fifteen\", \"sixteen\", \"seventeen\", \"eighteen\", \"nineteen\",\n    ]\n    tens = [\n        \"\", \"\", \"twenty\", \"thirty\", \"forty\", \"fifty\", \"sixty\", \"seventy\",\n        \"eighty\", \"ninety\",\n    ]\n\n    def under_thousand(value: int) -> str:\n        parts = []\n        hundreds, remainder = divmod(value, 100)\n\n        if hundreds:\n            parts.append(ones[hundreds] + \" hundred\")\n            if remainder:\n                parts.append(\"and\")\n\n        if remainder >= 20:\n            ten, unit = divmod(remainder, 10)\n            parts.append(tens[ten] + (\"-\" + ones[unit] if unit else \"\"))\n        elif remainder:\n            parts.append(ones[remainder])\n\n        return \" \".join(parts)\n\n    if n < 1000:\n        return under_thousand(n)\n\n    thousands, remainder = divmod(n, 1000)\n    result = ones[thousands] + \" thousand\"\n\n    if remainder:\n        connector = \" and \" if remainder < 100 else \" \"\n        result += connector + under_thousand(remainder)\n\n    return result\n",
+  "bug_desc": "returns '' for 0; promoted in the V2 run",
+  "tests": [
+   [
+    [
+     0
+    ],
+    "zero"
+   ],
+   [
+    [
+     7
+    ],
+    "seven"
+   ],
+   [
+    [
+     13
+    ],
+    "thirteen"
+   ],
+   [
+    [
+     21
+    ],
+    "twenty-one"
+   ],
+   [
+    [
+     40
+    ],
+    "forty"
+   ],
+   [
+    [
+     100
+    ],
+    "one hundred"
+   ],
+   [
+    [
+     105
+    ],
+    "one hundred and five"
+   ],
+   [
+    [
+     999
+    ],
+    "nine hundred and ninety-nine"
+   ],
+   [
+    [
+     1000
+    ],
+    "one thousand"
+   ],
+   [
+    [
+     1005
+    ],
+    "one thousand and five"
+   ],
+   [
+    [
+     1234
+    ],
+    "one thousand two hundred and thirty-four"
+   ],
+   [
+    [
+     2100
+    ],
+    "two thousand one hundred"
+   ],
+   [
+    [
+     9019
+    ],
+    "nine thousand and nineteen"
+   ]
+  ]
+ }
+]

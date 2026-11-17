@@ -1,0 +1,210 @@
+{
+ "status": "COMPLETED",
+ "label": "shadow",
+ "task_clusters": 7,
+ "arms": {
+  "A": {
+   "jobs": 105,
+   "correct": 98,
+   "unanswered": 0,
+   "median_ms": 4019.570478999867,
+   "p90_ms": 5419.926231199954,
+   "mean_ms": 4091.8931794571413
+  },
+  "R": {
+   "jobs": 105,
+   "correct": 101,
+   "unanswered": 0,
+   "median_ms": 2450.6282029997237,
+   "p90_ms": 3380.1368816000836,
+   "mean_ms": 2610.9698099999932
+  },
+  "C": {
+   "jobs": 105,
+   "correct": 98,
+   "unanswered": 0,
+   "median_ms": 2834.237407999808,
+   "p90_ms": 13753.378889200032,
+   "mean_ms": 5363.588049161916
+  }
+ },
+ "arm_c_routes": {
+  "race": {
+   "jobs": 105,
+   "correct": 98,
+   "median_ms": 2834.237407999808
+  }
+ },
+ "primary_c_vs_r": {
+  "time_ratio": 1.156535048658349,
+  "time_ratio_interval_95": [
+   1.0648051848304918,
+   1.2794646262585905
+  ],
+  "correctness_difference": -0.02857142857142858,
+  "correctness_interval_95": [
+   -0.06666666666666665,
+   0.0
+  ]
+ },
+ "c_vs_a": {
+  "time_ratio": 0.7051095192402277,
+  "time_ratio_interval_95": [
+   0.6514280658554544,
+   0.8595609225699022
+  ],
+  "correctness_difference": 0.0,
+  "correctness_interval_95": [
+   -0.06666666666666665,
+   0.06666666666666665
+  ]
+ },
+ "r_vs_a": {
+  "time_ratio": 0.6096741469773852,
+  "time_ratio_interval_95": [
+   0.5692193016660738,
+   0.7646975483394762
+  ],
+  "correctness_difference": 0.02857142857142858,
+  "correctness_interval_95": [
+   -0.02857142857142858,
+   0.08571428571428574
+  ]
+ },
+ "time_criterion_met": false,
+ "correctness_criterion_met": false,
+ "decision": "NOT_SUPPORTED",
+ "shapes_with_plan_adopted": 7,
+ "first_plan_job_index": {},
+ "plan_attempt_outcomes": {
+  "ADOPTED": 12,
+  "REJECTED": 2
+ },
+ "plan_step_kinds": {
+  "judgement": 7,
+  "function": 87
+ },
+ "plan_function_steps_promoted": 30,
+ "plan_demotions": 1,
+ "wrong_job_examples": 0,
+ "plan_step_routes": {},
+ "usage_per_arm": {
+  "A": {
+   "calls": 105,
+   "prompt_tokens": 50566,
+   "completion_tokens": 28859
+  },
+  "R": {
+   "calls": 525,
+   "prompt_tokens": 279939,
+   "completion_tokens": 354630
+  },
+  "C": {
+   "calls": 7316,
+   "prompt_tokens": 1878039,
+   "completion_tokens": 1491891
+  }
+ },
+ "arrival": "immediate",
+ "per_shape": {
+  "expense_claims": {
+   "C": {
+    "correct": 14,
+    "median_ms": 2546.964006000053
+   },
+   "R": {
+    "correct": 14,
+    "median_ms": 2505.998883999837
+   },
+   "A": {
+    "correct": 15,
+    "median_ms": 4098.321636999799
+   }
+  },
+  "shipment_tracking": {
+   "R": {
+    "correct": 14,
+    "median_ms": 2057.392365999931
+   },
+   "A": {
+    "correct": 15,
+    "median_ms": 3246.6645659997084
+   },
+   "C": {
+    "correct": 14,
+    "median_ms": 2182.691040999998
+   }
+  },
+  "survey_scores": {
+   "C": {
+    "correct": 12,
+    "median_ms": 4505.894568000258
+   },
+   "A": {
+    "correct": 14,
+    "median_ms": 5499.57296599996
+   },
+   "R": {
+    "correct": 14,
+    "median_ms": 3343.332738999834
+   }
+  },
+  "timesheet": {
+   "C": {
+    "correct": 13,
+    "median_ms": 3594.953018999604
+   },
+   "A": {
+    "correct": 12,
+    "median_ms": 3991.5787820000332
+   },
+   "R": {
+    "correct": 14,
+    "median_ms": 3262.424219999957
+   }
+  },
+  "bank_statement": {
+   "C": {
+    "correct": 15,
+    "median_ms": 2668.015933999868
+   },
+   "R": {
+    "correct": 15,
+    "median_ms": 2270.8232700001645
+   },
+   "A": {
+    "correct": 14,
+    "median_ms": 4029.4598729997233
+   }
+  },
+  "playlist": {
+   "A": {
+    "correct": 15,
+    "median_ms": 4264.905545000147
+   },
+   "R": {
+    "correct": 15,
+    "median_ms": 2371.1407699997835
+   },
+   "C": {
+    "correct": 15,
+    "median_ms": 2785.947981999925
+   }
+  },
+  "pick_list": {
+   "C": {
+    "correct": 15,
+    "median_ms": 2579.1387130002477
+   },
+   "R": {
+    "correct": 15,
+    "median_ms": 2224.8102010003095
+   },
+   "A": {
+    "correct": 13,
+    "median_ms": 3721.500947000095
+   }
+  }
+ },
+ "median_after_plan_ms": null
+}

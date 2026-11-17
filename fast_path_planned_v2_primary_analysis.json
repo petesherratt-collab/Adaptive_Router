@@ -1,0 +1,213 @@
+{
+ "status": "COMPLETED",
+ "label": "primary",
+ "task_clusters": 7,
+ "arms": {
+  "A": {
+   "jobs": 105,
+   "correct": 98,
+   "unanswered": 0,
+   "median_ms": 4274.518118999822,
+   "p90_ms": 5953.896107600008,
+   "mean_ms": 4355.155750352379
+  },
+  "R": {
+   "jobs": 105,
+   "correct": 102,
+   "unanswered": 0,
+   "median_ms": 2468.9231400000153,
+   "p90_ms": 3471.8550468000108,
+   "mean_ms": 2551.870637457153
+  },
+  "C": {
+   "jobs": 105,
+   "correct": 104,
+   "unanswered": 0,
+   "median_ms": 1534.3133370000146,
+   "p90_ms": 3692.2383654000005,
+   "mean_ms": 2090.4781457809595
+  }
+ },
+ "arm_c_routes": {
+  "plan": {
+   "jobs": 84,
+   "correct": 84,
+   "median_ms": 1261.412516000064
+  },
+  "race": {
+   "jobs": 21,
+   "correct": 20,
+   "median_ms": 2399.523450999993
+  }
+ },
+ "primary_c_vs_r": {
+  "time_ratio": 0.6214504259537237,
+  "time_ratio_interval_95": [
+   0.41163336084397545,
+   0.9191254064733622
+  ],
+  "correctness_difference": 0.01904761904761909,
+  "correctness_interval_95": [
+   -0.01904761904761909,
+   0.06666666666666665
+  ]
+ },
+ "c_vs_a": {
+  "time_ratio": 0.35894416499959125,
+  "time_ratio_interval_95": [
+   0.22917544340879284,
+   0.5869153210454935
+  ],
+  "correctness_difference": 0.05714285714285716,
+  "correctness_interval_95": [
+   0.0,
+   0.13333333333333341
+  ]
+ },
+ "r_vs_a": {
+  "time_ratio": 0.577590987163182,
+  "time_ratio_interval_95": [
+   0.5106157223788836,
+   0.664816567581331
+  ],
+  "correctness_difference": 0.03809523809523807,
+  "correctness_interval_95": [
+   -0.01904761904761909,
+   0.12380952380952381
+  ]
+ },
+ "time_criterion_met": true,
+ "correctness_criterion_met": true,
+ "decision": "SUPPORTED",
+ "shapes_with_plan_adopted": 7,
+ "first_plan_job_index": {
+  "expense_claims": 2,
+  "survey_scores": 2,
+  "bank_statement": 2,
+  "playlist": 2,
+  "shipment_tracking": 3,
+  "pick_list": 3,
+  "timesheet": 7
+ },
+ "plan_attempt_outcomes": {
+  "ADOPTED": 12,
+  "REJECTED": 1
+ },
+ "plan_step_kinds": {
+  "function": 74,
+  "judgement": 7
+ },
+ "plan_function_steps_promoted": 70,
+ "plan_demotions": 0,
+ "wrong_job_examples": 0,
+ "plan_step_routes": {
+  "judgement:model": 84,
+  "function:model": 152,
+  "function:code": 689
+ },
+ "per_shape": {
+  "expense_claims": {
+   "C": {
+    "correct": 15,
+    "median_ms": 1086.1207330000298
+   },
+   "R": {
+    "correct": 14,
+    "median_ms": 2209.0888600000085
+   },
+   "A": {
+    "correct": 15,
+    "median_ms": 4346.760149999995
+   }
+  },
+  "shipment_tracking": {
+   "R": {
+    "correct": 15,
+    "median_ms": 2004.355280000027
+   },
+   "A": {
+    "correct": 15,
+    "median_ms": 3575.817809
+   },
+   "C": {
+    "correct": 15,
+    "median_ms": 1417.0262960000173
+   }
+  },
+  "survey_scores": {
+   "C": {
+    "correct": 15,
+    "median_ms": 989.4194549999611
+   },
+   "A": {
+    "correct": 13,
+    "median_ms": 6069.382797000003
+   },
+   "R": {
+    "correct": 13,
+    "median_ms": 3259.394823999969
+   }
+  },
+  "timesheet": {
+   "C": {
+    "correct": 15,
+    "median_ms": 3398.9004209999507
+   },
+   "A": {
+    "correct": 11,
+    "median_ms": 4192.221711000002
+   },
+   "R": {
+    "correct": 15,
+    "median_ms": 3418.527757999982
+   }
+  },
+  "bank_statement": {
+   "C": {
+    "correct": 15,
+    "median_ms": 1288.3404660000224
+   },
+   "R": {
+    "correct": 15,
+    "median_ms": 2178.8120229999777
+   },
+   "A": {
+    "correct": 15,
+    "median_ms": 4085.7346829999415
+   }
+  },
+  "playlist": {
+   "A": {
+    "correct": 15,
+    "median_ms": 4625.919939000028
+   },
+   "R": {
+    "correct": 15,
+    "median_ms": 2509.8022130000572
+   },
+   "C": {
+    "correct": 15,
+    "median_ms": 1549.8206890000574
+   }
+  },
+  "pick_list": {
+   "C": {
+    "correct": 14,
+    "median_ms": 1996.0612170000331
+   },
+   "R": {
+    "correct": 15,
+    "median_ms": 2048.6939010000924
+   },
+   "A": {
+    "correct": 14,
+    "median_ms": 3058.2883209999636
+   }
+  }
+ },
+ "median_after_plan_ms": {
+  "A": 4507.737052500033,
+  "R": 2357.9188435000447,
+  "C": 1261.412516000064
+ }
+}
