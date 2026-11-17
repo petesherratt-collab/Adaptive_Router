@@ -3676,3 +3676,28 @@ explains format errors. Full suite passed.
 | `fast_path_real_bench.py` | `cb24a842075f25b52d4fd601be560f88b7f150ab85f769e544c1a182c5471425` |
 | `real_tasks/README.md` | `c6ec342711818564d90ed4e4e1adb003ea4fc2acafe205c60d73e7df58351e9c` |
 | `real_tasks/example_invoice_check.json` | `5a9940bddd45ba86f013aa70f8a56e2dede4ee13cb00f14b670e71bc8bdcd1bd` |
+
+---
+
+## 2026-11-17 — Ceiling arm, frozen before its run
+
+The owner pointed out that no run had a code-only arm and specified a ceiling
+arm: hand-written code for the mechanical work, reading steps raced as arm C
+races its judgement steps, drained arrival, per-arm metering, and the reading
+of a perfect score stated in advance. Added `fast_path_ceiling_v1.py`
+(reading steps for the seven fresh shapes) and arm D in
+`run_fast_path_planned_v1.py` (`--ceiling`) and in the analysis
+(`ceiling`: reading accuracy, C against D, medians of the first three and the
+later jobs). Recorded as follow-up 4 in `FAST_PATH_PLANNED_V2_PLAN.md`. The
+owner chose a full paired run (about $4 of $7.65). Full suite passed.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_ceiling_v1.py` | `a166f9e727199adffc9bb6ecf9137f28732c74c0375c7f21c291ba14c6c669e7` |
+| `run_fast_path_planned_v1.py` | `47ae8affb3032d303bced2227b32a90885521661729a579ac558b9b33d58522d` |
+| `analyze_fast_path_planned_v1.py` | `e9f83ace806fd733628076e6382ddb3fd08bdb0701788ab5aff7a16dfb5453d9` |
+| `planner.py` | `941d7f2baaa04caa7f92b5ae369760e3a10f6a0acdf2e925c87b6807aa3dccb3` |
+| `fast_path.py` | `fe034b1b0fc35799017548e5dd7d9f090659676e756c32af9153b962d4f956f2` |
+| `pipeline.py` | `fecc96aee7349fbf2229dad47207c7467a76c884fec281dd596d35185f528e83` |
+| `config_fast_path.json` | `eff69a362c563b90abce44cd08e442cac38beb0df66f9aa898e35573c1c1b066` |
+| `FAST_PATH_PLANNED_V2_PLAN.md` | `347ca922f14c51d948bda3682bb00050997da80ec426db8a056c036eaa6decd8` |

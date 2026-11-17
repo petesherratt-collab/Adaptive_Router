@@ -90,3 +90,39 @@ first time.
    (0.75) of the median race time for that task. Run with jobs back to back
    (`--arrival immediate`) and `job_agreement_min` 4, as in follow-up 2, so
    the two runs differ only in the shadow rule.
+
+4. `ceiling`: written down before the run, at the owner's request and to the
+   owner's specification.
+
+   **Arm D is a ceiling, not a baseline.** It stands for a programmer having
+   already written the job. Its mechanical work is the benchmark's reference
+   function, the same code that produces the correct answers, so those steps
+   are correct by definition and the arm's overall accuracy says nothing about
+   them. A 105/105 from arm D must not be read as code beating models. Only two
+   results from it are informative:
+
+   - how long its jobs take, especially the first few of each shape, against
+     arm C, which has to learn its code;
+   - how accurate its reading steps are.
+
+   Its reading steps (`fast_path_ceiling_v1.py`, written from the task
+   descriptions) are answered exactly as arm C answers its judgement steps:
+   the same race roster, through `FastPathRouter.handle` with learning off,
+   first usable answer wins. Neither arm uses agreement to choose a judgement
+   answer. The only intended difference between C and D is hand-written
+   versus learned code. A reading answer the reference code cannot use makes
+   the job wrong.
+
+   Arrival is drained between jobs, as in the frozen fresh-jobs run, and
+   `plan_shadow` is off and `job_agreement_min` unset, as they were then. The
+   code has changed since in one way that matters only under load: live and
+   background work now use separate pools. Calls and tokens are metered per
+   arm. The comparison of interest is arm C's learning cost against arm D's
+   near-zero one: the price of not having a programmer.
+
+   This run does not test the research endpoint's rule that a model-based
+   approach must beat ordinary code. That needs a version with keyword rules
+   for the reading steps, fair only on text nobody has seen: the rules are
+   written from the task descriptions alone, their file's hash is recorded,
+   and only then are the tasks' texts opened. That version is reserved for
+   the owner's real tasks.
