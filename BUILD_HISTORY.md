@@ -3789,3 +3789,34 @@ before the run: about $17.40.
 | `planner.py` | `941d7f2baaa04caa7f92b5ae369760e3a10f6a0acdf2e925c87b6807aa3dccb3` |
 | `fast_path.py` | `fe034b1b0fc35799017548e5dd7d9f090659676e756c32af9153b962d4f956f2` |
 | `FAST_PATH_PLANNED_V2_PLAN.md` | `fb200f5655592fe5d6bcaa505740eb60ab755b3d9549096e0b9185510d1ee01a` |
+
+---
+
+## 2026-11-17 — Follow-up 6: long stream, cheaper learning
+
+Label `long_stream`: four shapes, 40 jobs each, back to back, `max_probes` 4,
+`job_agreement_min` 4, shadow plans, separate pools, ceiling arm. 7,025
+provider calls, 7 invalid responses, no unanswered job.
+
+| Arm | Correct | Median ms | Calls | Prompt tokens | Completion tokens |
+|---|---:|---:|---:|---:|---:|
+| A | 143/160 | 4014 | 160 | 81,152 | 47,835 |
+| R | 149/160 | 2755 | 800 | 449,463 | 604,715 |
+| C | 151/160 | 2239 | 5,265 | 1,451,151 | 1,221,962 |
+| D | 160/160 | 836 | 800 | 140,799 | 30,938 |
+
+- Live from job index 19 (`timesheet`, after 6 shadow runs), 24
+  (`survey_scores`, after 3), 33 (`shipment_tracking`, after 12).
+  `expense_claims` stayed in shadow: 17 of 20 function steps promoted, shadow
+  runs 2.8 to 15.2 s against a race median of 2651 ms.
+- Arm C routes: 44 plan jobs (43 correct, median 1602 ms), 116 race jobs
+  (108 correct, median 2661 ms). After each shape went live: C 1678, 1789,
+  845 ms; R 3110, 3261, 1900 ms; D 836, 819, 831 ms.
+- C/R 0.813 (0.696 to 1.000); C minus R +0.012 (0.000 to +0.037).
+  D reading 160/160; C/D 2.678.
+- 9 plan attempts: 6 adopted, 3 rejected (1 plan, 2 refinements).
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v2_long.jsonl` | `844adab42aada6d993f03a276a5d9ab75c4b68e5bf8d037636834fdcafe4cc6c` |
+| `fast_path_planned_v2_long_analysis.json` | `5c6d921486826f87ea02d5c07631ee6ace1ee0e9814823e0d24a62e5daf47fe7` |

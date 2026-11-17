@@ -703,6 +703,33 @@ back-to-back conditions of follow-up 3, with the ceiling arm for reference.
 Evidence: `fast_path_planned_v2_isolated.jsonl`,
 `fast_path_planned_v2_isolated_analysis.json`.
 
+Follow-up 6, descriptive: a longer stream with cheaper learning, jobs back
+to back: four shapes, 40 jobs each, edge-case probes cut from 12 to 4 per
+step, everything else as follow-up 5. **Plans went live under steady traffic
+for three of the four shapes.**
+
+| Arm | Correct | Median ms | 90th pct ms | Model calls | Tokens |
+|---|---:|---:|---:|---:|---:|
+| A. One direct call | 143/160 | 4014 | 6108 | 160 | 128,987 |
+| R. Whole-task race | 149/160 | 2755 | 3739 | 800 | 1,054,178 |
+| C. Planning router | 151/160 | 2239 | 3502 | 5,265 | 2,673,113 |
+| D. Ceiling | 160/160 | 836 | 1057 | 800 | 171,737 |
+
+- Plans went live at job 20 (`timesheet`), 25 (`survey_scores`) and 34
+  (`shipment_tracking`). From that point on, arm C's medians were 1678, 1789
+  and 845 ms against the race's 3110, 3261 and 1900 ms. `expense_claims` never
+  went live: three of its twenty function steps stayed on the models, so its
+  shadow runs (about 3 to 5 s) never beat three-quarters of the race.
+- Before going live, arm C's answers came from the race, as intended.
+- C/R 0.81 over all 160 jobs (interval 0.70 to 1.00, four task clusters).
+- One plan-served answer was wrong (`survey_scores`, job 34); eight wrong
+  answers came from the race route, as in arm R.
+- Cheaper learning narrowed the price: arm C made 6.6 times the race's calls
+  and 2.5 times its tokens, against 17 and 5 times in the majority run.
+
+Evidence: `fast_path_planned_v2_long.jsonl`,
+`fast_path_planned_v2_long_analysis.json`.
+
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
 hardened boundary against adversarial code.
