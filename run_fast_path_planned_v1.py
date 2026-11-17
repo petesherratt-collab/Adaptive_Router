@@ -122,11 +122,24 @@ def ceiling_answer(shape, reading, inputs, router):
         return True, None, label
 
 
+def code_only_answer(shape, rules, inputs):
+    """Arm E: no model at all. The reading step is the hand-written keyword
+    rule, everything else the benchmark's reference code.
+
+    Returns ``(value, label)``; a rule that raises leaves the job wrong."""
+    field, label_name, _ = shape["reading"]
+    try:
+        label = rules[shape["name"]](inputs[field])
+        return shape["reference"](inputs, {label_name: label}), label
+    except Exception:
+        return None, None
+
+
 def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_key,
-              workdir, should_stop=lambda: False, arrival="drained", ceiling=None):
+              workdir, should_stop=lambda: False, arrival="drained", ceiling=None, code_only=None):
     base = Path(workdir) / shape["name"]
-    arms = ARMS + (("D",) if ceiling else ())
-    meters = {arm: UsageMeter(remote_fn) for arm in arms}
+    arms = ARMS + (("D",) if ceiling else ()) + (("E",) if code_only else ())
+    meters = {arm: UsageMeter(remote_fn) for arm in arms if arm != "E"}
     reading = ceiling[shape["name"]] if ceiling else None
     ceiling_router = fast_path.FastPathRouter(
         {"remote": remote_config, "fast_path": {**settings, "synthesis_enabled": False}},
@@ -160,6 +173,10 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
                 answered, value, label = ceiling_answer(shape, reading, inputs, ceiling_router)
                 route = "ceiling"
                 reading_correct = answered and label == labels.get(reading["label"])
+            elif arm == "E":
+                value, label = code_only_answer(shape, code_only, inputs)
+                answered, route = True, "code_only"
+                reading_correct = label == labels.get(shape["reading"][1])
             elif arm == "R":
                 model, value = racing.race_prompt(prompt)
                 answered, route = model is not None, "race"
@@ -232,13 +249,14 @@ def shape_summary(shape, instances, golds, record, learning):
 
 
 def execute(shapes, bench, remote_config, settings, remote_fn, api_key, workers, write,
-            monitor=None, arrival="drained", ceiling=None):
+            monitor=None, arrival="drained", ceiling=None, code_only=None):
     should_stop = monitor.tripped if monitor is not None else (lambda: False)
 
     def job(shape):
         instances = bench.stream(shape)
         return run_shape(shape, instances, bench.gold(shape, instances), remote_config,
-                         settings, remote_fn, api_key, workdir, should_stop, arrival, ceiling)
+                         settings, remote_fn, api_key, workdir, should_stop, arrival, ceiling,
+                         code_only)
 
     with tempfile.TemporaryDirectory() as workdir, ThreadPoolExecutor(workers) as pool:
         for rows, summary in pool.map(job, shapes):
@@ -256,6 +274,7 @@ def main():
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--arrival", choices=("drained", "immediate"), default="drained")
     parser.add_argument("--ceiling", help="module of hand-written reading steps; adds arm D")
+    parser.add_argument("--code-only", help="module of keyword reading RULES; adds arm E (no model)")
     parser.add_argument("--limit-shapes", type=int)
     parser.add_argument("--limit-jobs", type=int)
     parser.add_argument("--jobs", type=int, help="jobs per shape, drawn from the bench's seeded stream")
@@ -280,6 +299,7 @@ def main():
     override = override or None
     bench = load_bench(args.bench)
     ceiling = load_bench(args.ceiling).READING if args.ceiling else None
+    code_only = load_bench(args.code_only).RULES if args.code_only else None
     shapes = bench.SHAPES[: args.limit_shapes] if args.limit_shapes else bench.SHAPES
     if args.jobs:
         full_stream = bench.stream
@@ -304,11 +324,13 @@ def main():
             "arm_order_seed": ARM_ORDER_SEED, "workers": args.workers, "arrival": args.arrival,
             "ceiling": ({"name": Path(args.ceiling).name, "sha256": sha256_file(args.ceiling)}
                         if args.ceiling else None),
+            "code_only": ({"name": Path(args.code_only).name, "sha256": sha256_file(args.code_only)}
+                          if args.code_only else None),
             "files": {name: sha256_file(ROOT / name) for name in HASHED_FILES},
         })
         monitor = ProviderMonitor(remote.generate)
         status = execute(shapes, bench, remote_config, settings, monitor, api_key,
-                         args.workers, write, monitor, args.arrival, ceiling)
+                         args.workers, write, monitor, args.arrival, ceiling, code_only)
         write({"record_type": "footer", "status": status, "provider": monitor.report()})
     if status == "COMPLETED":
         partial.rename(output)

@@ -102,6 +102,19 @@ class AnalysisTests(unittest.TestCase):
     def test_not_supported_when_no_faster(self):
         self.assertEqual(analysis.analyse(self.kinds(2500.0), replicates=200)["decision"], "NOT_SUPPORTED")
 
+    def test_code_only_summary(self):
+        kinds = self.kinds(800.0)
+        for s in range(5):
+            for i in range(4):
+                row = job(f"s{s}", i, "E", 0.1, "code_only", correct=i != 0)
+                row["reading_correct"] = i != 0
+                kinds["job"].append(row)
+        summary = analysis.analyse(kinds, replicates=200)["code_only"]
+        self.assertEqual((summary["reading_correct"], summary["jobs"]), (15, 20))
+        self.assertAlmostEqual(summary["r_vs_e"]["correctness_difference"], 0.25)
+        self.assertIsNone(summary["d_vs_e"])
+        self.assertIsNone(analysis.analyse(self.kinds(800.0), replicates=50)["code_only"])
+
 
 if __name__ == "__main__":
     unittest.main()
@@ -185,3 +198,30 @@ class ShippedCeilingTests(unittest.TestCase):
             self.assertIn(reading["field"], inputs)
             self.assertIn(reading["label"], labels)
             self.assertEqual(shape["reference"](inputs, labels), fresh.gold(shape, [(inputs, labels)])[0]["result"])
+
+
+class CodeOnlyArmTests(unittest.TestCase):
+    def test_arm_e_makes_no_call_and_scores_its_reading(self):
+        bench_ = tiny_bench(4)
+        shape = dict(bench_.SHAPES[0])
+        shape["reading"] = ("text", "size", ["short", "long"])
+        shape["reference"] = lambda inputs, labels: inputs["n"] * 3
+        # The planted label: "short" for n < 3.
+        instances = [({"n": n, "text": "a" * n}, {"size": "short" if n < 3 else "long"})
+                     for n in range(1, 5)]
+        bench_.stream = lambda s: instances
+        rules = {"tiny": lambda text: "short" if len(text) < 2 else "long"}
+        rows = []
+        runner.execute([shape], bench_, {"model": "x"}, dict(SETTINGS), FakeRemote(plans=[GOOD_PLAN]),
+                       "k", 1, rows.append, code_only=rules)
+        e_rows = [r for r in rows if r["record_type"] == "job" and r["arm"] == "E"]
+        self.assertEqual(len(e_rows), 4)
+        self.assertTrue(all(r["correct"] and r["route"] == "code_only" for r in e_rows))
+        self.assertEqual([r["reading_correct"] for r in sorted(e_rows, key=lambda r: r["index"])],
+                         [True, False, True, True])
+        usage = next(r for r in rows if r["record_type"] == "shape")["usage"]
+        self.assertNotIn("E", usage)
+
+    def test_a_failing_rule_makes_the_job_wrong(self):
+        shape = {"name": "s", "reading": ("t", "x", ["a"]), "reference": lambda i, l: 1}
+        self.assertEqual(runner.code_only_answer(shape, {"s": lambda t: 1 / 0}, {"t": ""}), (None, None))

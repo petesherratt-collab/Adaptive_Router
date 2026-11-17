@@ -3913,7 +3913,7 @@ the two. A cheaper pair by price (for example `openai/gpt-6-luna` with
 
 ## 2026-11-17 — V3 reading texts generated and hand-checked (before any rule is scored)
 
-`make_bench_v3_prose.py` (hash above) wrote 12 texts per label, 312 in all,
+`make_bench_v3_prose.py` (hash above) wrote 12 texts per label, 324 in all,
 with one call per shape to `mistralai/mistral-large-4-0`. The assistant read
 every text against its planted label before any rule or model saw it:
 none excluded, 7 borderline texts kept with reasons (recorded in the file).
@@ -3924,3 +3924,37 @@ formality texts mostly do not use the label word.
 | File | SHA-256 |
 |---|---|
 | `fast_path_planned_bench_v3_prose.json` | `efaf393f643cb108d10ecd0bd170856f5cf5149a249c01a5c6341044b9005cf4` |
+
+---
+
+## 2026-11-17 — Code-only rules scored on unseen text; V3 run frozen (stage 2)
+
+Handoff item 2. `score_code_only_v1.py` scored the frozen keyword rules on the
+hand-checked texts, with no provider call: 293 of 324 distinct texts (90.4%),
+220 of 240 jobs on the 30-job stream. Perfect on urgency and site, weakest on
+library requests (39/48) and diets (29/36). Details in `code_only_v1_scores.json`
+and `FAST_PATH_PLANNED_V3_PLAN.md`.
+
+Runner and analysis gain arm E (code only: rules plus reference code, no
+model, never metered) and its summary (reading accuracy per shape; R, C and D
+against E). Stage 2 of `FAST_PATH_PLANNED_V3_PLAN.md` frozen: 8 shapes, 20
+jobs each, arms A, R, C, D, E, drained arrival, plans live on adoption. Full
+suite passed (568 tests). Credit at the freeze: about $8.75.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path.py` | `01262b2e97fc24c494340a4224e81782ca85eae88510219d9d171b90ad087d89` |
+| `planner.py` | `941d7f2baaa04caa7f92b5ae369760e3a10f6a0acdf2e925c87b6807aa3dccb3` |
+| `pipeline.py` | `fecc96aee7349fbf2229dad47207c7467a76c884fec281dd596d35185f528e83` |
+| `sandbox.py` | `b132f5d8175e60916baa0550c09d2f5d34e247e99bd390eee07510f596a9dcff` |
+| `remote.py` | `4efc49ab45e68d09f026e75fca9e3aff2780fac8682b3b27f7fa983eda51afc2` |
+| `config_fast_path.json` | `785e0a8b2ba76b6be33d5ebdfb2c4b3533f27b70cbd16a77ef9bd9c01b3f42df` |
+| `run_fast_path_planned_v1.py` | `6913fe3d017e0a9ba31f27ad37a29bd3295833439f036db8bc6697d6f20fe44e` |
+| `analyze_fast_path_planned_v1.py` | `548f0ab690bd0b5cfcf16b2a72a11e15daa9010c56aaed449d1106c6525792d3` |
+| `fast_path_planned_bench_v3.py` | `5248a055c80d11e9d55b3280102ac23dd844d055fdd4476597386e7a4fbfbc70` |
+| `fast_path_planned_bench_v3_prose.json` | `efaf393f643cb108d10ecd0bd170856f5cf5149a249c01a5c6341044b9005cf4` |
+| `fast_path_ceiling_v3.py` | `4420adde077c3d03c186f207a6b77f6d71c05a937d5c6360cd9806a90a6959a6` |
+| `fast_path_code_only_v1.py` | `843a14b6496b675c01ea8f1f43a9c1916209142a93bd6c63ca3dea7bc101a9f5` |
+| `score_code_only_v1.py` | `77140d74e9838a11c80e643453490b7ffc8573e8d749abc31be0fe4946fa7088` |
+| `code_only_v1_scores.json` | `690ca3e75ff2c9142781976a2bec4816042f22130fcf695b550f726c444e5c3f` |
+| `FAST_PATH_PLANNED_V3_PLAN.md` | `468c2348cd0b51cb37cef479ec123c57ef78948e32185f13cc4774861abb1514` |
