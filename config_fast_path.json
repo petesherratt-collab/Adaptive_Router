@@ -30,6 +30,7 @@
     "plan_audit_rate": 0.1,
     "plan_retries": 1,
     "refine_after_jobs": 4,
-    "max_refinements": 1
+    "max_refinements": 1,
+    "job_agreement_min": null
   }
 }

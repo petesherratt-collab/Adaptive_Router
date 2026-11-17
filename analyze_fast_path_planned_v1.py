@@ -92,6 +92,12 @@ def analyse(kinds, replicates=BOOTSTRAP_REPLICATES):
         "plan_demotions": sum(len(s.get("plan_demotions", [])) for s in shapes),
         "wrong_job_examples": sum(s.get("wrong_examples", 0) for s in shapes),
         "plan_step_routes": dict(steps),
+        "usage_per_arm": {
+            arm: {key: sum(s.get("usage", {}).get(arm, {}).get(key, 0) for s in shapes)
+                  for key in ("calls", "prompt_tokens", "completion_tokens")}
+            for arm in ARMS
+        } if any("usage" in s for s in shapes) else None,
+        "arrival": header.get("arrival", "drained"),
         "per_shape": {
             shape: {arm: {"correct": sum(r["correct"] for r in rows),
                           "median_ms": statistics.median(r["answer_ms"] for r in rows)}

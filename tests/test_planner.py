@@ -292,6 +292,45 @@ if __name__ == "__main__":
 REFINED_PLAN = json.loads(json.dumps(GOOD_PLAN).replace('"twice"', '"doubled"'))
 
 
+class MajorityTests(PlannerTestCase):
+    def three_racers(self, **overrides):
+        # Racer "c" always dissents.
+        remote = FakeRemote(plans=[GOOD_PLAN], task_answer=lambda model, i: (
+            -1 if model == "c" else i["n"] * 2 + len(i["text"])))
+        return remote, self.build(remote, race_models=["a", "b", "c"], **overrides)
+
+    def test_unanimity_blocks_examples_when_one_racer_dissents(self):
+        remote, router = self.three_racers()
+        for n in (1, 2, 3):
+            router.handle(request(n, "ab"))
+            router.drain()
+        self.assertEqual(self.record(router)["examples"], [])
+        self.assertEqual(remote.count("Plan how to compute"), 0)
+
+    def test_majority_rule_forms_examples_and_plans(self):
+        remote, router = self.three_racers(job_agreement_min=2)
+        for n in (1, 2):
+            router.handle(request(n, "ab"))
+            router.drain()
+        record = self.record(router)
+        self.assertEqual([e["expected"] for e in record["examples"]], [4, 6])
+        self.assertIsNotNone(record["plan"])
+
+    def test_majority_needs_a_clear_lead(self):
+        from concurrent.futures import Future
+
+        def done(value):
+            future = Future()
+            future.set_result({"valid": True, "value": value})
+            return future
+        tie = [done(1), done(1), done(2), done(2)]
+        self.assertEqual(PlanningRouter._agreement(tie, 2, 2)[0], False)
+        lead = [done(1), done(1), done(1), done(2)]
+        self.assertEqual(PlanningRouter._agreement(lead, 2, 3)[:2], (True, 1))
+        self.assertEqual(PlanningRouter._agreement(lead, 2, 4)[0], False)
+        self.assertEqual(PlanningRouter._agreement(lead, 2)[0], False)
+
+
 class RefinementTests(PlannerTestCase):
     def build_refining(self, plans, **overrides):
         remote = FakeRemote(plans=plans)

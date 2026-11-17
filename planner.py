@@ -321,16 +321,31 @@ class PlanningRouter:
         self.orchestrator.close()
 
     @staticmethod
-    def _agreement(futures, quorum):
+    def _agreement(futures, quorum, minimum=None):
+        """Return ``(agreed, value, distinct answers)``.
+
+        By default every valid answer must be identical, with at least
+        ``quorum`` of them. With ``minimum`` set, an answer given by at least
+        ``minimum`` racers, and by more racers than any other answer, counts
+        as agreed even if others dissent.
+        """
         answers = [f.result() for f in futures]
         valid = [a for a in answers if a["valid"]]
-        distinct = {sandbox.canonical(a["value"]) for a in valid}
-        if len(valid) >= quorum and len(distinct) == 1:
-            return True, valid[0]["value"], len(distinct)
-        return False, None, len(distinct)
+        counts = {}
+        for answer in valid:
+            key = sandbox.canonical(answer["value"])
+            counts.setdefault(key, [0, answer["value"]])[0] += 1
+        if len(valid) >= quorum and len(counts) == 1:
+            return True, valid[0]["value"], 1
+        if minimum and counts:
+            ranked = sorted(counts.values(), key=lambda c: -c[0])
+            if ranked[0][0] >= minimum and (len(ranked) == 1 or ranked[0][0] > ranked[1][0]):
+                return True, ranked[0][1], len(counts)
+        return False, None, len(counts)
 
     def _observe(self, request, futures):
-        agreed, value, distinct = self._agreement(futures, self.settings["agreement_quorum"])
+        agreed, value, distinct = self._agreement(futures, self.settings["agreement_quorum"],
+                                                   self.settings.get("job_agreement_min"))
         with self.store.lock():
             record = self.store.get(request.template)
             if agreed:
@@ -343,7 +358,8 @@ class PlanningRouter:
         self._maybe_plan(request.template)
 
     def _audit(self, request, futures, served, plan_sha):
-        agreed, value, _ = self._agreement(futures, self.settings["agreement_quorum"])
+        agreed, value, _ = self._agreement(futures, self.settings["agreement_quorum"],
+                                                   self.settings.get("job_agreement_min"))
         if not agreed or sandbox.canonical(value) == sandbox.canonical(served):
             return
         with self.store.lock():

@@ -62,3 +62,21 @@ prediction is made beyond that.
 `run_fast_path_planned_v1.py --bench fast_path_planned_bench_v2.py`, four
 shapes at a time. Stops on HTTP 401 or 402 or sustained provider failure.
 Provider credit at the freeze: about $23.40.
+
+## Follow-up runs (descriptive), 2026-11-17
+
+The owner asked to work through the next steps in order. These runs reuse the
+V2 jobs, so they are descriptive and do not change the primary result.
+
+1. `majority`: `job_agreement_min` 4. A whole-task answer becomes a job example
+   when at least four of the five racers give it and no other answer is as
+   common, instead of requiring every valid answer to match. Aimed at shapes
+   such as `timesheet`, where disagreement delayed the plan to job 8. The
+   cost to watch is wrong job examples and wrong plans adopted.
+2. `immediate`: jobs arrive back to back, with no pause for background work
+   (`--arrival immediate`), using whichever agreement rule the first follow-up
+   supports.
+
+Both runs record, per arm, every provider call and token, background work
+included, so the cost of the planning router's learning is measured for the
+first time.

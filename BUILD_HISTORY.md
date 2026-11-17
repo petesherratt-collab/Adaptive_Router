@@ -3520,3 +3520,30 @@ invalid responses, no unanswered job. Decision: `SUPPORTED`.
 |---|---|
 | `fast_path_planned_v2_primary.jsonl` | `58419c3b641273822f1f819655c587323985239af8dd46bd01f8f246993f8139` |
 | `fast_path_planned_v2_primary_analysis.json` | `062baa8b50c49431c45d6e4d1d8e6feb93f8effd881af8469ec7d4a310e9fbf2` |
+
+---
+
+## 2026-11-17 — Majority agreement, usage metering, immediate arrival
+
+The owner asked to work through the listed next steps in order. Step 1 (real
+tasks) waits on tasks from the owner; steps 2 and 3 start now.
+
+- `PlanningRouter._agreement` takes an optional minimum: with
+  `job_agreement_min` set, an answer given by at least that many racers, and by
+  more than any other answer, counts as agreed. Default `null` keeps
+  unanimity.
+- `run_fast_path_planned_v1.py` wraps each arm's provider calls in a
+  `UsageMeter` and writes calls and tokens per arm to each shape summary; the
+  analysis sums them. `--arrival immediate` stops draining background work
+  between jobs.
+- Follow-up runs recorded in `FAST_PATH_PLANNED_V2_PLAN.md`.
+
+Full suite passed (549 tests).
+
+| Changed file | SHA-256 |
+|---|---|
+| `config_fast_path.json` | `0943897831b3793de717042cbda97a4470d49c327821ed079f7c97ac349bf41a` |
+| `planner.py` | `98e5917acce35e5fbdef78d30b0904c1e1f2c18d370d5aca35ba4725fb73ce4e` |
+| `run_fast_path_planned_v1.py` | `c27f73ab4e5f4fe9e751e7842848c612de2212c1e1b761ec4e17a149e9270f78` |
+| `analyze_fast_path_planned_v1.py` | `644089f209b8eec130d250a2631f91c49e1f3a057f477120bd9b054afe964c4a` |
+| `FAST_PATH_PLANNED_V2_PLAN.md` | `360a1786e7e0132b40724ba353645ca96585efa970f12e8221d385fe6137c85b` |

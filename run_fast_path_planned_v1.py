@@ -51,16 +51,38 @@ def load_bench(path):
     return module
 
 
+class UsageMeter:
+    """Wrap a remote call and add up calls and tokens, background work included."""
+
+    def __init__(self, remote_fn):
+        self.remote_fn = remote_fn
+        self.calls = self.prompt_tokens = self.completion_tokens = 0
+        self._lock = threading.Lock()
+
+    def __call__(self, prompt, config, api_key):
+        result = self.remote_fn(prompt, config, api_key)
+        with self._lock:
+            self.calls += 1
+            self.prompt_tokens += getattr(result, "prompt_tokens", None) or 0
+            self.completion_tokens += getattr(result, "completion_tokens", None) or 0
+        return result
+
+    def report(self):
+        return {"calls": self.calls, "prompt_tokens": self.prompt_tokens,
+                "completion_tokens": self.completion_tokens}
+
+
 def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_key,
-              workdir, should_stop=lambda: False):
+              workdir, should_stop=lambda: False, arrival="drained"):
     base = Path(workdir) / shape["name"]
+    meters = {arm: UsageMeter(remote_fn) for arm in ARMS}
     learning = fast_path.FastPathRouter({"remote": remote_config, "fast_path": settings},
                                         base / "store", base / "runs.jsonl",
-                                        remote_fn=remote_fn, api_key=api_key)
+                                        remote_fn=meters["C"], api_key=api_key)
     racing = fast_path.FastPathRouter({"remote": remote_config,
                                        "fast_path": {**settings, "synthesis_enabled": False}},
                                       base / "race_store", base / "race_runs.jsonl",
-                                      remote_fn=remote_fn, api_key=api_key)
+                                      remote_fn=meters["R"], api_key=api_key)
     planning = planner.PlanningRouter(learning, base / "templates", base / "tasks.jsonl")
     order_rng = random.Random(f"{ARM_ORDER_SEED}:{shape['name']}")
     rows = []
@@ -75,7 +97,7 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
             started = time.perf_counter()
             error, model, route, steps = None, None, None, None
             if arm == "A":
-                answered, value, error = direct(prompt, remote_config, settings, remote_fn, api_key)
+                answered, value, error = direct(prompt, remote_config, settings, meters["A"], api_key)
                 model, route = BASELINE_MODEL, "direct"
             elif arm == "R":
                 model, value = racing.race_prompt(prompt)
@@ -90,7 +112,7 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
                              for s in result["steps"]]
             answer_ms = (time.perf_counter() - started) * 1000
             background_ms = 0.0
-            if arm == "C":
+            if arm == "C" and arrival == "drained":
                 started = time.perf_counter()
                 planning.drain()
                 background_ms = (time.perf_counter() - started) * 1000
@@ -102,12 +124,13 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
                 "value": value if answered else None, "steps": steps,
             })
     template = planner.template_key(shape["description"], instances[0][0])
-    record = planning.store.get(template)
     planning.close()
+    record = planning.store.get(template)
     learning.close()
     racing.close()
     summary = shape_summary(shape, instances, golds, record, learning)
     summary["jobs_completed"] = len(rows) // len(ARMS)
+    summary["usage"] = {arm: meter.report() for arm, meter in meters.items()}
     return rows, summary
 
 
@@ -141,13 +164,13 @@ def shape_summary(shape, instances, golds, record, learning):
 
 
 def execute(shapes, bench, remote_config, settings, remote_fn, api_key, workers, write,
-            monitor=None):
+            monitor=None, arrival="drained"):
     should_stop = monitor.tripped if monitor is not None else (lambda: False)
 
     def job(shape):
         instances = bench.stream(shape)
         return run_shape(shape, instances, bench.gold(shape, instances), remote_config,
-                         settings, remote_fn, api_key, workdir, should_stop)
+                         settings, remote_fn, api_key, workdir, should_stop, arrival)
 
     with tempfile.TemporaryDirectory() as workdir, ThreadPoolExecutor(workers) as pool:
         for rows, summary in pool.map(job, shapes):
@@ -163,6 +186,7 @@ def main():
     parser.add_argument("--label", default="primary")
     parser.add_argument("--set", dest="override", metavar="NAME=VALUE")
     parser.add_argument("--workers", type=int, default=4)
+    parser.add_argument("--arrival", choices=("drained", "immediate"), default="drained")
     parser.add_argument("--limit-shapes", type=int)
     parser.add_argument("--limit-jobs", type=int)
     args = parser.parse_args()
@@ -202,12 +226,12 @@ def main():
             "bench": {"name": Path(args.bench).name, "sha256": sha256_file(args.bench)},
             "shapes": len(shapes), "stream_seed": bench.STREAM_SEED,
             "jobs_per_shape": args.limit_jobs or bench.STREAM_LENGTH,
-            "arm_order_seed": ARM_ORDER_SEED, "workers": args.workers,
+            "arm_order_seed": ARM_ORDER_SEED, "workers": args.workers, "arrival": args.arrival,
             "files": {name: sha256_file(ROOT / name) for name in HASHED_FILES},
         })
         monitor = ProviderMonitor(remote.generate)
         status = execute(shapes, bench, remote_config, settings, monitor, api_key,
-                         args.workers, write, monitor)
+                         args.workers, write, monitor, args.arrival)
         write({"record_type": "footer", "status": status, "provider": monitor.report()})
     if status == "COMPLETED":
         partial.rename(output)

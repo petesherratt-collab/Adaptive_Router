@@ -48,6 +48,20 @@ class RunnerTests(unittest.TestCase):
         self.assertTrue(summary["plan_adopted"])
         self.assertEqual((summary["examples"], summary["wrong_examples"]), (2, 0))
         self.assertEqual(sum(s["promoted"] for s in summary["plan_steps"]), 3)
+        usage = summary["usage"]
+        self.assertEqual(usage["A"]["calls"], 6)
+        self.assertEqual(usage["R"]["calls"], 12)
+        # Arm C pays for planning, trials and learning on top of its races.
+        self.assertGreater(usage["C"]["calls"], usage["R"]["calls"])
+
+    def test_immediate_arrival_does_not_wait_for_background_work(self):
+        rows = []
+        runner.execute(tiny_bench().SHAPES, tiny_bench(), {"model": "x"}, dict(SETTINGS),
+                       FakeRemote(plans=[GOOD_PLAN]), "k", 1, rows.append, None, "immediate")
+        jobs = [r for r in rows if r["record_type"] == "job"]
+        self.assertTrue(all(r["background_ms"] == 0.0 for r in jobs))
+        self.assertTrue(all(r["correct"] for r in jobs))
+        self.assertTrue(next(r for r in rows if r["record_type"] == "shape")["plan_adopted"])
 
 
 def job(shape, index, arm, ms, route="race", correct=True):
