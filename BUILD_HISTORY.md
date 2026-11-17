@@ -3641,3 +3641,38 @@ C 2834 ms; C 90th percentile 13,753 ms. C/R 1.157 (1.065 to 1.279); C minus R
 |---|---|
 | `fast_path_planned_v2_shadow.jsonl` | `1759f1f78dd41e9f2c88921840a1658f860ff8fda26d98d3605790dedb71bd5b` |
 | `fast_path_planned_v2_shadow_analysis.json` | `7d8ba0651ceab2b9addb08e9e0822dcf8de88edc5acb95234f8c7d01d1c5b775` |
+
+---
+
+## 2026-11-17 — Live/background isolation and the real-tasks format (no provider calls)
+
+The owner chose to keep the remaining credit (about $7.65) for a test on real
+tasks. Meanwhile, two fixes for the second back-to-back flaw, tested against
+fake models only:
+
+- `FastPathRouter` has a separate background model pool
+  (`background_model_workers`, default as large as the live pool) and a
+  `background_context`; everything submitted through `_submit` runs in it.
+  `pipeline.Orchestrator(background=True)` runs a job's steps on the
+  background pool. `PlanningRouter` uses such an orchestrator for plan trials
+  and shadow runs, and runs its own background work in the same context. A
+  test checks that whole-task answers run on live threads and every step run
+  on background threads.
+- `PlanningRouter` allows one shadow run per task at a time; a run that would
+  queue is skipped and counted in `shadow_skipped`.
+
+These are not yet measured on live traffic.
+
+For the owner's tasks: `real_tasks/` with a README describing the JSON format,
+a made-up `example_invoice_check.json`, and `fast_path_real_bench.py`, which
+loads every non-example file as a job shape for the planned-jobs runner and
+explains format errors. Full suite passed.
+
+| Changed file | SHA-256 |
+|---|---|
+| `fast_path.py` | `fe034b1b0fc35799017548e5dd7d9f090659676e756c32af9153b962d4f956f2` |
+| `pipeline.py` | `fecc96aee7349fbf2229dad47207c7467a76c884fec281dd596d35185f528e83` |
+| `planner.py` | `941d7f2baaa04caa7f92b5ae369760e3a10f6a0acdf2e925c87b6807aa3dccb3` |
+| `fast_path_real_bench.py` | `cb24a842075f25b52d4fd601be560f88b7f150ab85f769e544c1a182c5471425` |
+| `real_tasks/README.md` | `c6ec342711818564d90ed4e4e1adb003ea4fc2acafe205c60d73e7df58351e9c` |
+| `real_tasks/example_invoice_check.json` | `5a9940bddd45ba86f013aa70f8a56e2dede4ee13cb00f14b670e71bc8bdcd1bd` |

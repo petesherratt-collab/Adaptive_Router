@@ -18,6 +18,7 @@ correctness.
 from __future__ import annotations
 
 import ast
+import contextlib
 import collections
 from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from datetime import datetime, timezone
@@ -363,10 +364,22 @@ class FastPathRouter:
         self.api_key = (
             api_key if api_key is not None else os.getenv("OPENROUTER_API_KEY")
         )
+        # Live answers and background learning use separate pools, so learning
+        # can never queue ahead of a request someone is waiting on. The
+        # background pool is smaller, which also caps the provider load that
+        # learning adds.
         self._models = ThreadPoolExecutor(
-            max_workers=max(4, 4 * len(self.settings["race_models"]))
+            max_workers=max(4, 4 * len(self.settings["race_models"])),
+            thread_name_prefix="live-model",
         )
-        self._background = ThreadPoolExecutor(max_workers=4)
+        self._background_models = ThreadPoolExecutor(
+            max_workers=self.settings.get(
+                "background_model_workers", max(4, 4 * len(self.settings["race_models"]))
+            ),
+            thread_name_prefix="background-model",
+        )
+        self._local = threading.local()
+        self._background = ThreadPoolExecutor(max_workers=4, thread_name_prefix="background")
         self._pending = []
         self._synthesising = set()
         self._log_lock = threading.Lock()
@@ -440,6 +453,23 @@ class FastPathRouter:
             return self._finish(log, started, None, "none", RACE_NO_VALID_ANSWER)
         return self._finish(log, started, value, "model", MODEL_RACE_WON, model=winner)
 
+    @contextlib.contextmanager
+    def background_context(self):
+        """Model calls made inside this block use the background pool."""
+        previous = getattr(self._local, "background", False)
+        self._local.background = True
+        try:
+            yield
+        finally:
+            self._local.background = previous
+
+    def _pool(self):
+        return self._background_models if getattr(self._local, "background", False) else self._models
+
+    def _in_background(self, fn, *args):
+        with self.background_context():
+            return fn(*args)
+
     def start_prompt_race(self, prompt):
         """Send ``prompt`` to every race model. Returns ``{future: model}``.
 
@@ -447,7 +477,7 @@ class FastPathRouter:
         "total_ms"}``. Nothing is stored or learned.
         """
         return {
-            self._models.submit(self._ask, model, prompt): model
+            self._pool().submit(self._ask, model, prompt): model
             for model in self.settings["race_models"]
         }
 
@@ -458,7 +488,7 @@ class FastPathRouter:
         usable answer.
         """
         futures = {
-            self._models.submit(self._ask, model, prompt): model
+            self._pool().submit(self._ask, model, prompt): model
             for model in self.settings["race_models"]
         }
         return self._first_valid(futures)
@@ -486,7 +516,7 @@ class FastPathRouter:
     def _start_race(self, request):
         prompt = build_answer_prompt(request.spec, request.signature, request.args)
         return {
-            self._models.submit(self._ask, model, prompt): model
+            self._pool().submit(self._ask, model, prompt): model
             for model in self.settings["race_models"]
         }
 
@@ -529,7 +559,7 @@ class FastPathRouter:
     # ---- background -----------------------------------------------------
 
     def _submit(self, fn, *args):
-        self._pending.append(self._background.submit(fn, *args))
+        self._pending.append(self._background.submit(self._in_background, fn, *args))
 
     def drain(self):
         """Wait for background observation and synthesis to finish."""
@@ -540,6 +570,7 @@ class FastPathRouter:
         """Finish background work and release worker threads."""
         self.drain()
         self._models.shutdown(wait=True)
+        self._background_models.shutdown(wait=True)
         self._background.shutdown(wait=True)
 
     def _observe(self, request, futures, request_id):
@@ -702,7 +733,7 @@ class FastPathRouter:
             prompt = build_answer_prompt(spec, signature, args)
             batches.append(
                 [
-                    self._models.submit(self._ask, model, prompt)
+                    self._pool().submit(self._ask, model, prompt)
                     for model in self.settings["race_models"]
                 ]
             )

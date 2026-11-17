@@ -389,6 +389,45 @@ class ShadowTests(PlannerTestCase):
         self.assertEqual(record["demotions"][0]["reason"], "SHADOW_MISMATCH")
 
 
+class IsolationTests(PlannerTestCase):
+    def test_learning_runs_on_background_threads_and_answers_on_live_ones(self):
+        import threading
+        threads = {"task": set(), "step": set()}
+        remote = FakeRemote(plans=[GOOD_PLAN])
+
+        def call(prompt, config, api_key):
+            name = threading.current_thread().name.split("_")[0]
+            if prompt.startswith("Carry out the task"):
+                threads["task"].add(name)
+            elif not prompt.startswith(("Plan how", "Write a Python", "List boundary")):
+                threads["step"].add(name)
+            return remote(prompt, config, api_key)
+        router = self.build(call, plan_shadow=True, plan_live_ratio=0.0)
+        for n in range(1, 5):
+            router.handle(request(n, "a" * n))
+            router.drain()
+        # Whole-task answers are live; every step run (trials, shadow runs) is learning.
+        self.assertEqual(threads["task"], {"live-model"})
+        self.assertEqual(threads["step"], {"background-model"})
+
+    def test_only_one_shadow_run_per_task_at_a_time(self):
+        remote = FakeRemote(plans=[GOOD_PLAN])
+
+        def call(prompt, config, api_key):
+            if not prompt.startswith(("Carry out", "Plan how", "Write a Python", "List boundary")):
+                time.sleep(0.2)
+            return remote(prompt, config, api_key)
+        router = self.build(call, plan_shadow=True, plan_live_ratio=0.0, synthesis_enabled=False)
+        for n in (1, 2):
+            router.handle(request(n, "ab"))
+            router.drain()
+        for n in range(3, 8):
+            router.handle(request(n, "ab"))
+        router.drain()
+        self.assertGreaterEqual(router.shadow_skipped, 3)
+        self.assertLessEqual(len(self.record(router)["plan"]["shadow_ms"]), 2)
+
+
 class RefinementTests(PlannerTestCase):
     def build_refining(self, plans, **overrides):
         remote = FakeRemote(plans=plans)

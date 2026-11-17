@@ -116,8 +116,12 @@ def load_job(path):
 
 
 class Orchestrator:
-    def __init__(self, router, log_path="fast_path_jobs.jsonl", max_parallel_steps=8):
+    def __init__(self, router, log_path="fast_path_jobs.jsonl", max_parallel_steps=8,
+                 background=False):
+        """``background=True`` runs every step's model calls on the router's
+        background pool, for work nobody is waiting on."""
         self.router = router
+        self.background = background
         self.log_path = Path(log_path)
         self._pool = ThreadPoolExecutor(max_workers=max_parallel_steps)
         self._log_lock = threading.Lock()
@@ -126,6 +130,12 @@ class Orchestrator:
         self._pool.shutdown(wait=True)
 
     def _run_step(self, step, values, job_started):
+        if self.background:
+            with self.router.background_context():
+                return self._run_step_now(step, values, job_started)
+        return self._run_step_now(step, values, job_started)
+
+    def _run_step_now(self, step, values, job_started):
         started = time.perf_counter()
         args = [values[name] if how == "ref" else name for how, name in step.arguments]
         result = self.router.handle(

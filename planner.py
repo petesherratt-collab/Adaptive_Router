@@ -257,6 +257,12 @@ class PlanningRouter:
         self.settings = router.settings
         self.store = TemplateStore(store_dir)
         self.orchestrator = pipeline.Orchestrator(router, Path(log_path).with_suffix(".jobs.jsonl"))
+        # Plan trials and shadow runs: nobody waits on them, so they use the
+        # background pool and never delay a live answer.
+        self.background_orchestrator = pipeline.Orchestrator(
+            router, Path(log_path).with_suffix(".background.jsonl"), background=True)
+        self._shadowing = set()
+        self.shadow_skipped = 0
         self.log_path = Path(log_path)
         self._background = ThreadPoolExecutor(max_workers=4)
         self._pending = []
@@ -298,7 +304,16 @@ class PlanningRouter:
                 record["race_ms"] = (record.get("race_ms", []) + [race_ms])[-20:]
         self._submit(self._observe, request, futures)
         if plan is not None:
-            self._submit(self._shadow, request, futures, plan["sha256"])
+            # One shadow run per task at a time: a run that would only queue
+            # behind another is skipped rather than piling up.
+            with self.store.lock():
+                busy = request.template in self._shadowing
+                if not busy:
+                    self._shadowing.add(request.template)
+                else:
+                    self.shadow_skipped += 1
+            if not busy:
+                self._submit(self._shadow_once, request, futures, plan["sha256"])
         if model is None:
             return self._finish(request, request_id, started, None, NO_ANSWER, None, steps)
         return self._finish(request, request_id, started, value, RACE_ROUTE, model, steps)
@@ -316,7 +331,7 @@ class PlanningRouter:
     # ---- background -----------------------------------------------------
 
     def _submit(self, fn, *args):
-        self._pending.append(self._background.submit(fn, *args))
+        self._pending.append(self._background.submit(self.router._in_background, fn, *args))
 
     def drain(self):
         while self._pending:
@@ -327,6 +342,7 @@ class PlanningRouter:
         self.drain()
         self._background.shutdown(wait=True)
         self.orchestrator.close()
+        self.background_orchestrator.close()
 
     @staticmethod
     def _agreement(futures, quorum, minimum=None):
@@ -370,6 +386,13 @@ class PlanningRouter:
         return {"document": document, "sha256": sha, "mode": mode, "jobs": 0, "shadow_ms": [],
                 "adopted_at": datetime.now(timezone.utc).isoformat(), **extra}
 
+    def _shadow_once(self, request, futures, plan_sha):
+        try:
+            self._shadow(request, futures, plan_sha)
+        finally:
+            with self.store.lock():
+                self._shadowing.discard(request.template)
+
     def _shadow(self, request, futures, plan_sha):
         """Run a shadow plan on a live job's inputs, off the answer path.
 
@@ -384,7 +407,7 @@ class PlanningRouter:
                 return
             document = plan["document"]
         started = time.perf_counter()
-        result = self.orchestrator.run(with_inputs(document, request.inputs))
+        result = self.background_orchestrator.run(with_inputs(document, request.inputs))
         shadow_ms = (time.perf_counter() - started) * 1000
         agreed, value, _ = self._agreement(futures, self.settings["agreement_quorum"],
                                            self.settings.get("job_agreement_min"))
@@ -564,7 +587,7 @@ class PlanningRouter:
         # function steps start learning.
         passed = 0
         for example in checked:
-            result = self.orchestrator.run(with_inputs(document, example["inputs"]))
+            result = self.background_orchestrator.run(with_inputs(document, example["inputs"]))
             self.router.drain()
             if (result["reason"] == pipeline.JOB_COMPLETED
                     and sandbox.canonical(result["value"]) == sandbox.canonical(example["expected"])):
