@@ -3843,3 +3843,21 @@ them. Full suite passed (562 tests). Recorded as follow-up 7 in
 | `run_fast_path_planned_v1.py` | `e6696d96bfd20d1278b1ea98e58055fcde34b9f49ab10dc716b35548a3d684ce` |
 | `analyze_fast_path_planned_v1.py` | `7f8c08f7b4eebddbb7c46be623be2e1456f36140b2161d3daea51a9ea7cf497e` |
 | `FAST_PATH_PLANNED_V2_PLAN.md` | `e43d80fd7cb1e73b73dda43f198d1068c11d4c07e1aa96413e4f3c143222c2d9` |
+
+---
+
+## 2026-11-17 — Planned jobs V3 stage 1 frozen: new shapes and code-only rules, before any text exists
+
+Handoff items 2 and 4 share one benchmark (`FAST_PATH_PLANNED_V3_PLAN.md`):
+8 new, more varied job shapes, and keyword reading rules for a code-only arm,
+written from the descriptions alone. Recorded here before the reading texts
+are generated, so the rules cannot have been fitted to them. Follow-up 7 was
+running meanwhile; nothing here touches its files.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v3.py` | `5248a055c80d11e9d55b3280102ac23dd844d055fdd4476597386e7a4fbfbc70` |
+| `fast_path_code_only_v1.py` | `843a14b6496b675c01ea8f1f43a9c1916209142a93bd6c63ca3dea7bc101a9f5` |
+| `fast_path_ceiling_v3.py` | `4420adde077c3d03c186f207a6b77f6d71c05a937d5c6360cd9806a90a6959a6` |
+| `make_bench_v3_prose.py` | `ac306989534241c9f413f870596520193bbb9159ed60011396cfa7cafebed868` |
+| `FAST_PATH_PLANNED_V3_PLAN.md` | `e19b8177286dd2ee196342082ea2d94d02994489eaada0e01792e45f04e46809` |
