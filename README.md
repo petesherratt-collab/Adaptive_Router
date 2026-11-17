@@ -451,8 +451,9 @@ criteria: `NOT_SUPPORTED`, narrowly on time.
   reproduced 1 of 3 agreed answers, another 0 of 3. Both shapes adopted a
   correct plan on the second attempt.
 - `order_batch` never got a plan: both planner replies were refused by the
-  plan validator for a malformed step signature. That is a strictness of the
-  validator, not a wrong plan, and that shape stayed on the race.
+  plan validator for a malformed step signature, and that shape stayed on the
+  race. The plan text was not kept, so whether the plans were otherwise sound
+  is unknown.
 - The planner wrote 26 steps in all, 19 function and 7 judgement. Every
   judgement step read prose (tone, topic, intent, language); 16 function steps
   were promoted to code. No plan was dropped by the audit.
