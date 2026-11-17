@@ -3861,3 +3861,50 @@ running meanwhile; nothing here touches its files.
 | `fast_path_ceiling_v3.py` | `4420adde077c3d03c186f207a6b77f6d71c05a937d5c6360cd9806a90a6959a6` |
 | `make_bench_v3_prose.py` | `ac306989534241c9f413f870596520193bbb9159ed60011396cfa7cafebed868` |
 | `FAST_PATH_PLANNED_V3_PLAN.md` | `e19b8177286dd2ee196342082ea2d94d02994489eaada0e01792e45f04e46809` |
+
+---
+
+## 2026-11-17 — Follow-up 7: cheaper learning with a two-model learning roster
+
+Label `lean_learning`: as follow-up 6 plus `learning_models`
+`["google/gemini-3.8-flash", "openai/gpt-5.6-luna"]`. 4,866 provider calls
+(follow-up 6: 7,025), 3 HTTP 429 and 2 invalid responses, no unanswered job.
+
+| Arm | Correct | Median ms | Calls | Prompt tokens | Completion tokens |
+|---|---:|---:|---:|---:|---:|
+| A | 143/160 | 3631 | 160 | 81,152 | 47,431 |
+| R | 148/160 | 2830 | 800 | 449,450 | 604,161 |
+| C | 148/160 | 2759 | 3,106 | 951,053 | 1,100,486 |
+| D | 160/160 | 854 | 800 | 140,795 | 30,229 |
+
+- Arm C by purpose: whole-task races 720 calls, step and probe answers 2,217,
+  probe proposals 74, synthesis 85, plans 10. Learning calls (everything but
+  the whole-task race) about 2,386, against about 4,465 in follow-up 6.
+- Money did not fall: about $4.45 for this run against about $4.15 for
+  follow-up 6. The learning pair includes the roster's most expensive model
+  per token (`google/gemini-3.8-flash`, $0.75 and $3.75 per million prompt and
+  completion tokens; `openai/gpt-6-luna` and `anthropic/claude-haiku-5.5` are
+  $0.10 and $0.50), so fewer calls did not mean less spend. Cost is not an
+  objective, but the remaining credit is a limit.
+- Plans live: `expense_claims` from job 30 (after 9 shadow runs, all 15
+  function steps promoted; it never went live in follow-up 6),
+  `survey_scores` from job 34 (after 13). `shipment_tracking` stayed in shadow
+  (25 of 26 function steps promoted; the unpromoted `action` step kept shadow
+  runs at 2.1 to 4.4 s against a race median of 2.0 s). `timesheet` lost its
+  plan to a shadow mismatch and had no attempts left. 16 plan-served jobs (all
+  correct, median 1029 ms) against 44 in follow-up 6.
+- C/R 0.975 (0.936 to 1.034); C minus R 0.000 (-0.050 to +0.038). Wrong job
+  examples 0. D reading 160/160.
+
+Reading: the learning roster cut learning calls by about half, as intended,
+but neither time nor money improved in this run. Which plans the planner
+writes, and whether one step resists promotion, varied more between the two
+runs than anything the roster changed. One run per setting cannot separate
+the two. A cheaper pair by price (for example `openai/gpt-6-luna` with
+`deepseek/deepseek-v4.1-flash`, 240 of 251 agreed in the development data,
+1 agreed and wrong) is untested.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v2_lean.jsonl` | `ad843e7d6aa69c10b862c52c289604854abe19893f222f6b4b1055d49bd58a11` |
+| `fast_path_planned_v2_lean_analysis.json` | `c1cf18797b379ae53ad9dd2fd0c4955d47e8ec78c4fa7bfc352cce8644d8ee71` |
