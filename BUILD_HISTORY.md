@@ -3770,3 +3770,22 @@ so the shadow rule never lets a plan serve.
 |---|---|
 | `fast_path_planned_v2_isolated.jsonl` | `1bea144dbcab2988276bbc10bde692b6318952477cb897ea96fcd585c27233e1` |
 | `fast_path_planned_v2_isolated_analysis.json` | `dc7e98daa6d7f08adf2628a8140d2c29ba7afaa80020720dd7638821e7ae50f8` |
+
+---
+
+## 2026-11-17 — Write-up and spreadsheet brought up to date; follow-up 6 recorded
+
+The owner has no real tasks to supply, so the real-task test is dropped. The
+shared write-up gained a section on live traffic and the ceiling and corrected
+limits; the spreadsheet gained five follow-up rows and a Ceiling sheet.
+`run_fast_path_planned_v1.py` now takes several `--set` overrides and
+`--jobs N`. Follow-up 6 (`long_stream`) recorded before its run. Credit
+before the run: about $17.40.
+
+| File | SHA-256 |
+|---|---|
+| `run_fast_path_planned_v1.py` | `53676003b38dcc69536957ffc7c3bb79515c75da06cd7ea7276fceb204c4a7e1` |
+| `config_fast_path.json` | `eff69a362c563b90abce44cd08e442cac38beb0df66f9aa898e35573c1c1b066` |
+| `planner.py` | `941d7f2baaa04caa7f92b5ae369760e3a10f6a0acdf2e925c87b6807aa3dccb3` |
+| `fast_path.py` | `fe034b1b0fc35799017548e5dd7d9f090659676e756c32af9153b962d4f956f2` |
+| `FAST_PATH_PLANNED_V2_PLAN.md` | `fb200f5655592fe5d6bcaa505740eb60ab755b3d9549096e0b9185510d1ee01a` |

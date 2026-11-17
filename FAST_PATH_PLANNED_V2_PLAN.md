@@ -134,3 +134,15 @@ first time.
    shadow run in flight. The ceiling arm D is added for reference. The
    question is whether arm C's race answers are no longer slowed by learning,
    and whether shadow plans now reach live mode.
+
+6. `long_stream`: does a plan ever go live under steady traffic? Follow-up 5
+   showed learning cannot finish within 15 back-to-back jobs. This run gives
+   it a longer stream and cheaper learning: the first four shapes
+   (`expense_claims`, `shipment_tracking`, `survey_scores`, `timesheet`),
+   40 jobs each (`--jobs 40`; the first 15 of each are the jobs of the earlier
+   runs), jobs back to back, `job_agreement_min` 4, shadow plans and separate
+   pools as in follow-up 5, the ceiling arm for reference, and `max_probes`
+   lowered from 12 to 4 to cut the probing that dominates learning. Readings:
+   whether and when each plan goes live, arm C's median over the jobs after
+   that point against arms R and D, arm C's answers before it (which should
+   match R), and calls and tokens per arm.

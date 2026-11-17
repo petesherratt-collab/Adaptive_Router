@@ -224,12 +224,13 @@ def main():
     parser.add_argument("--bench", default=str(ROOT / "fast_path_planned_bench_v1.py"))
     parser.add_argument("--output", required=True, help="observations JSONL (must not exist)")
     parser.add_argument("--label", default="primary")
-    parser.add_argument("--set", dest="override", metavar="NAME=VALUE")
+    parser.add_argument("--set", dest="override", metavar="NAME=VALUE", action="append", default=[])
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--arrival", choices=("drained", "immediate"), default="drained")
     parser.add_argument("--ceiling", help="module of hand-written reading steps; adds arm D")
     parser.add_argument("--limit-shapes", type=int)
     parser.add_argument("--limit-jobs", type=int)
+    parser.add_argument("--jobs", type=int, help="jobs per shape, drawn from the bench's seeded stream")
     args = parser.parse_args()
     output = Path(args.output)
     partial = output.with_name(output.name + ".partial")
@@ -241,16 +242,20 @@ def main():
         parser.error("OPENROUTER_API_KEY is not set")
     remote_config = json.loads((ROOT / "config.json").read_text(encoding="utf-8"))["remote"]
     settings = json.loads((ROOT / "config_fast_path.json").read_text(encoding="utf-8"))["fast_path"]
-    override = None
-    if args.override:
-        name, value = parse_override(args.override)
+    override = []
+    for text in args.override:
+        name, value = parse_override(text)
         if name not in settings:
             parser.error(f"unknown fast_path setting: {name}")
-        override = {"name": name, "from": settings[name], "to": value}
+        override.append({"name": name, "from": settings[name], "to": value})
         settings[name] = value
+    override = override or None
     bench = load_bench(args.bench)
     ceiling = load_bench(args.ceiling).READING if args.ceiling else None
     shapes = bench.SHAPES[: args.limit_shapes] if args.limit_shapes else bench.SHAPES
+    if args.jobs:
+        full_stream = bench.stream
+        bench.stream = lambda shape: full_stream(shape, length=args.jobs)
     if args.limit_jobs:
         full = bench.stream
         bench.stream = lambda shape: full(shape)[: args.limit_jobs]
@@ -267,7 +272,7 @@ def main():
             "baseline_model": BASELINE_MODEL, "settings": settings,
             "bench": {"name": Path(args.bench).name, "sha256": sha256_file(args.bench)},
             "shapes": len(shapes), "stream_seed": bench.STREAM_SEED,
-            "jobs_per_shape": args.limit_jobs or bench.STREAM_LENGTH,
+            "jobs_per_shape": args.limit_jobs or args.jobs or bench.STREAM_LENGTH,
             "arm_order_seed": ARM_ORDER_SEED, "workers": args.workers, "arrival": args.arrival,
             "ceiling": ({"name": Path(args.ceiling).name, "sha256": sha256_file(args.ceiling)}
                         if args.ceiling else None),
