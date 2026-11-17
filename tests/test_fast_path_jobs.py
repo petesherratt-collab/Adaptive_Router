@@ -64,6 +64,16 @@ class BenchTests(unittest.TestCase):
         bench.self_verify()
         self.assertEqual((len(bench.SHAPES), bench.STREAM_LENGTH), (12, 20))
 
+    def test_large_bench_self_verifies(self):
+        import fast_path_jobs_bench_v2_large as large
+
+        large.self_verify()
+        self.assertEqual(len(large.SHAPES), 7)
+        self.assertNotEqual(large.STREAM_SEED, bench.STREAM_SEED)
+        log = large.stream(next(s for s in large.SHAPES if s["name"] == "log_triage"))[0][0]["log"]
+        stamps = [line.split()[0] for line in log.split("\n")]
+        self.assertEqual(stamps, sorted(stamps))
+
     def test_gold_walks_the_plan(self):
         shape = next(s for s in bench.SHAPES if s["name"] == "dial_code")
         instances = [({"note": "Our office in Porto needs the delivery.", "local": "91234567"},
@@ -166,6 +176,14 @@ class AnalysisTests(unittest.TestCase):
         self.assertEqual(result["steps_arm_c"]["function:code"]["steps"], 24)
         self.assertEqual(result["function_steps_promoted"], 6)
         self.assertEqual(result["jobs_fully_on_code_for_functions"], 24)
+
+    def test_baseline_can_be_the_whole_job_race(self):
+        # C at 1400 ms against R at 1500 ms: ratio 0.93, inside a 1.0 limit.
+        result = analysis.analyse(synthetic(1400.0), replicates=200, baseline="R", time_limit=1.0)
+        self.assertEqual(result["primary"]["baseline"], "R")
+        self.assertAlmostEqual(result["primary"]["time_ratio"], 1400 / 1500)
+        self.assertEqual(result["decision"], "SUPPORTED")
+        self.assertAlmostEqual(result["primary_c_vs_a"]["time_ratio"], 0.7)
 
     def test_not_supported_when_slower_than_the_limit(self):
         result = analysis.analyse(synthetic(1600.0), replicates=200)

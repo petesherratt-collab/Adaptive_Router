@@ -79,7 +79,9 @@ def pair(grouped, first, second, replicates):
     }
 
 
-def analyse(kinds, replicates=BOOTSTRAP_REPLICATES):
+def analyse(kinds, replicates=BOOTSTRAP_REPLICATES, baseline="A", time_limit=TIME_RATIO_LIMIT):
+    """``baseline`` is the arm C is judged against; ``time_limit`` the bound
+    the time ratio's upper interval must lie below."""
     jobs = kinds.get("job", [])
     shapes = kinds.get("shape", [])
     header = kinds["header"][0]
@@ -96,13 +98,14 @@ def analyse(kinds, replicates=BOOTSTRAP_REPLICATES):
         result["decision"] = "NOT_ANALYSED"
         return result
     grouped = by_shape(jobs)
-    primary = pair(grouped, "C", "A", replicates)
-    time_met = primary["time_ratio_interval_95"][1] < TIME_RATIO_LIMIT
+    primary = pair(grouped, "C", baseline, replicates)
+    time_met = primary["time_ratio_interval_95"][1] < time_limit
     correctness_met = primary["correctness_interval_95"][0] > CORRECTNESS_MARGIN
     functions = [f for s in shapes for f in s["function_steps"]]
     c_jobs = [r for r in jobs if r["arm"] == "C"]
     result.update({
-        "primary_c_vs_a": primary,
+        "primary_c_vs_a": pair(grouped, "C", "A", replicates),
+        "primary": {"baseline": baseline, "time_limit": time_limit, **primary},
         "time_criterion_met": time_met,
         "correctness_criterion_met": correctness_met,
         "decision": "SUPPORTED" if time_met and correctness_met else "NOT_SUPPORTED",
@@ -133,8 +136,11 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("observations")
     parser.add_argument("--output")
+    parser.add_argument("--baseline", choices=ARMS, default="A")
+    parser.add_argument("--time-limit", type=float, default=TIME_RATIO_LIMIT)
     args = parser.parse_args()
-    text = json.dumps(analyse(load(args.observations)), indent=1)
+    result = analyse(load(args.observations), baseline=args.baseline, time_limit=args.time_limit)
+    text = json.dumps(result, indent=1)
     if args.output:
         Path(args.output).write_text(text + "\n", encoding="utf-8")
     print(text)
