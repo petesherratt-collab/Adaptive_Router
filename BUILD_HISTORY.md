@@ -3886,9 +3886,9 @@ Label `lean_learning`: as follow-up 6 plus `learning_models`
   completion tokens; `openai/gpt-6-luna` and `anthropic/claude-haiku-5.5` are
   $0.10 and $0.50), so fewer calls did not mean less spend. Cost is not an
   objective, but the remaining credit is a limit.
-- Plans live: `expense_claims` from job 30 (after 9 shadow runs, all 15
-  function steps promoted; it never went live in follow-up 6),
-  `survey_scores` from job 34 (after 13). `shipment_tracking` stayed in shadow
+- Plans live: `expense_claims` from job index 30 (after 9 shadow runs, all
+  15 function steps promoted; it never went live in follow-up 6),
+  `survey_scores` from job index 34 (after 13). `shipment_tracking` stayed in shadow
   (25 of 26 function steps promoted; the unpromoted `action` step kept shadow
   runs at 2.1 to 4.4 s against a race median of 2.0 s). `timesheet` lost its
   plan to a shadow mismatch and had no attempts left. 16 plan-served jobs (all

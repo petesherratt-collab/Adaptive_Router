@@ -730,6 +730,39 @@ for three of the four shapes.**
 Evidence: `fast_path_planned_v2_long.jsonl`,
 `fast_path_planned_v2_long_analysis.json`.
 
+Follow-up 7, descriptive (2026-11-17, handoff item 1): cheaper learning by
+asking fewer models. Same jobs and settings as follow-up 6, plus a learning
+roster: function steps learned in the background (step races in plan trials
+and shadow runs, and probe answers) ask two models,
+`google/gemini-3.8-flash` and `openai/gpt-5.6-luna`, instead of five; an
+example still needs both to agree. Live answers and judgement steps keep all
+five. The pair was the most often agreeing pair from different providers in
+the development data. Calls are now metered by purpose.
+
+| Arm | Correct | Median ms | Model calls | Tokens |
+|---|---:|---:|---:|---:|
+| A. One direct call | 143/160 | 3631 | 160 | 128,583 |
+| R. Whole-task race | 148/160 | 2830 | 800 | 1,053,611 |
+| C. Planning router | 148/160 | 2759 | 3,106 | 2,051,539 |
+| D. Ceiling | 160/160 | 854 | 800 | 171,024 |
+
+- **Learning calls fell by about half** (about 2,390 against 4,470; arm C's
+  total 3,106 against 5,265). Of arm C's calls, 720 were whole-task races, 2,217
+  step and probe answers, 85 syntheses, 74 probe proposals and 10 plans.
+- **Neither time nor money improved.** Plans went live for two shapes, not
+  three: `expense_claims` (job 31, which never went live in follow-up 6) and
+  `survey_scores` (job 35). `shipment_tracking` stayed in shadow with one step of
+  26 unpromoted; `timesheet` lost its plan to a shadow mismatch. C/R 0.97
+  (interval 0.94 to 1.03). The run cost about $4.45 against $4.15, because the
+  learning pair includes the roster's most expensive model per token.
+- Which plans the planner writes, and whether one step resists promotion,
+  varied more between follow-ups 6 and 7 than anything the roster changed. A
+  pair chosen for price (`openai/gpt-6-luna` with `deepseek/deepseek-v4.1-flash`)
+  is untested.
+
+Evidence: `fast_path_planned_v2_lean.jsonl`,
+`fast_path_planned_v2_lean_analysis.json`.
+
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
 hardened boundary against adversarial code.
