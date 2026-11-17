@@ -1,0 +1,213 @@
+{
+ "status": "COMPLETED",
+ "label": "planned_v1_steer",
+ "task_clusters": 7,
+ "arms": {
+  "A": {
+   "jobs": 105,
+   "correct": 95,
+   "unanswered": 0,
+   "median_ms": 3674.5170479999842,
+   "p90_ms": 5782.516788999977,
+   "mean_ms": 3904.165520561904
+  },
+  "R": {
+   "jobs": 105,
+   "correct": 104,
+   "unanswered": 0,
+   "median_ms": 2429.2265079999993,
+   "p90_ms": 3013.963129600029,
+   "mean_ms": 2434.938668219048
+  },
+  "C": {
+   "jobs": 105,
+   "correct": 105,
+   "unanswered": 0,
+   "median_ms": 1369.5704360000036,
+   "p90_ms": 4352.446449799993,
+   "mean_ms": 2224.9669820476097
+  }
+ },
+ "arm_c_routes": {
+  "plan": {
+   "jobs": 88,
+   "correct": 88,
+   "median_ms": 1058.3336619999955
+  },
+  "race": {
+   "jobs": 17,
+   "correct": 17,
+   "median_ms": 2420.690976000003
+  }
+ },
+ "primary_c_vs_r": {
+  "time_ratio": 0.5637886921988108,
+  "time_ratio_interval_95": [
+   0.39693223499508434,
+   1.0906231224767988
+  ],
+  "correctness_difference": 0.00952380952380949,
+  "correctness_interval_95": [
+   0.0,
+   0.02857142857142858
+  ]
+ },
+ "c_vs_a": {
+  "time_ratio": 0.37272120883081816,
+  "time_ratio_interval_95": [
+   0.24857521677346706,
+   0.7126576876110234
+  ],
+  "correctness_difference": 0.09523809523809523,
+  "correctness_interval_95": [
+   0.03809523809523807,
+   0.16190476190476188
+  ]
+ },
+ "r_vs_a": {
+  "time_ratio": 0.6611008946936882,
+  "time_ratio_interval_95": [
+   0.6097277558286225,
+   0.7749489812561419
+  ],
+  "correctness_difference": 0.08571428571428574,
+  "correctness_interval_95": [
+   0.01904761904761909,
+   0.16190476190476188
+  ]
+ },
+ "time_criterion_met": false,
+ "correctness_criterion_met": true,
+ "decision": "NOT_SUPPORTED",
+ "shapes_with_plan_adopted": 7,
+ "first_plan_job_index": {
+  "invoice_audit": 2,
+  "log_triage": 2,
+  "thread_digest": 2,
+  "grade_report": 2,
+  "stock_reorder": 2,
+  "order_batch": 3,
+  "meeting_actions": 4
+ },
+ "plan_attempt_outcomes": {
+  "ADOPTED": 12,
+  "REJECTED": 1
+ },
+ "plan_step_kinds": {
+  "function": 83,
+  "judgement": 8
+ },
+ "plan_function_steps_promoted": 79,
+ "plan_demotions": 0,
+ "wrong_job_examples": 0,
+ "plan_step_routes": {
+  "judgement:model": 101,
+  "function:model": 168,
+  "function:code": 768
+ },
+ "per_shape": {
+  "invoice_audit": {
+   "C": {
+    "correct": 15,
+    "median_ms": 1147.4322269999675
+   },
+   "A": {
+    "correct": 13,
+    "median_ms": 5521.947695999984
+   },
+   "R": {
+    "correct": 15,
+    "median_ms": 3024.093031999996
+   }
+  },
+  "log_triage": {
+   "A": {
+    "correct": 14,
+    "median_ms": 3992.3338110000086
+   },
+   "R": {
+    "correct": 15,
+    "median_ms": 2427.7290160000007
+   },
+   "C": {
+    "correct": 15,
+    "median_ms": 944.848305999983
+   }
+  },
+  "order_batch": {
+   "A": {
+    "correct": 15,
+    "median_ms": 4521.798837999995
+   },
+   "C": {
+    "correct": 15,
+    "median_ms": 3899.780819000057
+   },
+   "R": {
+    "correct": 15,
+    "median_ms": 2683.3756480000375
+   }
+  },
+  "thread_digest": {
+   "R": {
+    "correct": 15,
+    "median_ms": 1644.8619100000315
+   },
+   "C": {
+    "correct": 15,
+    "median_ms": 1015.5218379999837
+   },
+   "A": {
+    "correct": 15,
+    "median_ms": 2305.4065200000196
+   }
+  },
+  "grade_report": {
+   "C": {
+    "correct": 15,
+    "median_ms": 829.2309920000207
+   },
+   "R": {
+    "correct": 15,
+    "median_ms": 2529.7450670000217
+   },
+   "A": {
+    "correct": 11,
+    "median_ms": 4085.3704209999933
+   }
+  },
+  "stock_reorder": {
+   "C": {
+    "correct": 15,
+    "median_ms": 1675.1804470000025
+   },
+   "A": {
+    "correct": 13,
+    "median_ms": 3459.8518310000372
+   },
+   "R": {
+    "correct": 15,
+    "median_ms": 2414.714977000017
+   }
+  },
+  "meeting_actions": {
+   "A": {
+    "correct": 14,
+    "median_ms": 2636.7298520000304
+   },
+   "R": {
+    "correct": 14,
+    "median_ms": 2315.7443249999687
+   },
+   "C": {
+    "correct": 15,
+    "median_ms": 1679.4545819998348
+   }
+  }
+ },
+ "median_after_plan_ms": {
+  "A": 3810.598140499991,
+  "R": 2457.6860044999194,
+  "C": 1058.3336619999955
+ }
+}

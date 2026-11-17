@@ -494,6 +494,38 @@ split the work, which varied between runs more than either fix changed it.
 Evidence: `fast_path_planned_v1_fixes.jsonl`,
 `fast_path_planned_v1_fixes_analysis.json`.
 
+A third descriptive run steered the planner toward small function steps that
+return simple values, and added speed feedback: after a plan has served four
+jobs, the planner is told which of its function steps became code and which
+are still answered by models, and asked to split the slow ones. A revision is
+adopted only if it passes the same trial. Decision: `NOT_SUPPORTED` on the
+interval, but the clearest speed result of the three runs.
+
+| Arm | Correct | Median ms | 90th pct ms | Mean ms |
+|---|---:|---:|---:|---:|
+| A. One direct call | 95/105 | 3675 | 5783 | 3904 |
+| R. Whole-task race | 104/105 | 2429 | 3014 | 2435 |
+| C. Planning router | 105/105 | 1370 | 4352 | 2225 |
+
+- C against R: time ratio 0.56 (interval 0.40 to 1.09); correctness +1.0
+  point (0.0 to +2.9). No wrong answer in arm C.
+- Plans were much finer: 83 function steps across seven plans, against 16 to
+  19 before, and 79 of them were promoted to code. 768 function-step
+  executions ran as code, against 130 in the second run.
+- On the last five jobs of each shape the medians were A 3723, R 2375,
+  C 969 ms. Plan-served jobs had a median of 1058 ms.
+- Speed feedback revised five of seven plans after four jobs; all five
+  revisions passed their trial and were adopted. Their separate effect is not
+  isolated: this run changed the prompt as well.
+- The cost of small steps is a slow first plan job: with ten or more steps all
+  still on the models, it took 4 to 8 s. `order_batch`, which ended with a
+  16-step plan, three steps still on the models, stayed slower than the race
+  (median 3.9 s against 2.7 s) and is what widened the interval past 1.0.
+- 26 provider rate-limit responses (HTTP 429) occurred, absorbed by retries.
+
+Evidence: `fast_path_planned_v1_steer.jsonl`,
+`fast_path_planned_v1_steer_analysis.json`.
+
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
 hardened boundary against adversarial code.

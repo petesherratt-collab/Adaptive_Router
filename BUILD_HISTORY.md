@@ -3436,3 +3436,31 @@ passed. Credit before the run: about $7.05.
 | `config_fast_path.json` | `64b85380071e693613b97697d31a48111ceab67fd0a9de5f907f520be124cca9` |
 | `planner.py` | `06e432f3159fb0bd76c568ca2e163c9d143e7b2eae93979e2b7831fe7c7f7231` |
 | `FAST_PATH_PLANNED_V1_PLAN.md` | `c499d3c22ddced01be3e183e01ae6eb65d301cb77a09cb322b3b085c46726262` |
+
+---
+
+## 2026-11-17 — Planned jobs V1, third run: steering and speed feedback
+
+Label `planned_v1_steer`: 9,088 provider calls, 4 invalid responses, 26 HTTP
+429 responses, no unanswered job. Decision: `NOT_SUPPORTED`.
+
+| Arm | Correct | Median ms | Mean ms |
+|---|---:|---:|---:|
+| A. Direct | 95/105 | 3675 | 3904 |
+| R. Whole-task race | 104/105 | 2429 | 2435 |
+| C. Planning router | 105/105 | 1370 | 2225 |
+
+- C/R 0.564 (0.397 to 1.091); C minus R +0.010 (0.000 to +0.029).
+  C/A 0.373 (0.249 to 0.713).
+- 13 plan attempts: 12 adopted, 1 rejected by trial (meeting_actions, 1 of 2).
+  5 of them were speed refinements, all adopted, each after 4 jobs.
+- Final plans: 83 function steps (79 promoted), 8 judgement. Step executions:
+  768 function on code, 168 function on the race, 101 judgement.
+- Last five jobs per shape: medians A 3723, R 2375, C 969 ms.
+- `order_batch` C median 3900 ms against R 2683 ms: a 16-step plan with three
+  function steps never promoted.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v1_steer.jsonl` | `b3f728f19cd548383af279e7826edd29ed7addfc8734ee75ee8335dbfa52ff05` |
+| `fast_path_planned_v1_steer_analysis.json` | `9e912b76017943b20bc99fbd86d793af0b61607cc03a0cbe3883b96571ce0dbb` |
