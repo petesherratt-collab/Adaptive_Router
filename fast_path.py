@@ -445,7 +445,7 @@ class FastPathRouter:
                 )
             self._demote(request.shape, "RUNTIME_FAILURE")
 
-        futures = self._start_race(request)
+        futures = self._start_race(request, learn)
         winner, value = self._first_valid(futures)
         if learn:
             self._submit(self._observe, request, futures, request_id)
@@ -513,11 +513,21 @@ class FastPathRouter:
             "total_ms": total_ms,
         }
 
-    def _start_race(self, request):
+    def _roster(self, learn=True):
+        """Models to ask. Background learning of a function step (step races
+        nobody waits on, and probe answers) may use a smaller
+        ``learning_models`` roster; anything someone is waiting on, and every
+        judgement step, uses the full race roster."""
+        learning = self.settings.get("learning_models")
+        if learn and learning and getattr(self._local, "background", False):
+            return learning
+        return self.settings["race_models"]
+
+    def _start_race(self, request, learn=True):
         prompt = build_answer_prompt(request.spec, request.signature, request.args)
         return {
             self._pool().submit(self._ask, model, prompt): model
-            for model in self.settings["race_models"]
+            for model in self._roster(learn)
         }
 
     def _ask(self, model, prompt):
@@ -723,7 +733,7 @@ class FastPathRouter:
         return [], "PROBE_REPLY_INVALID"
 
     def answer_probes(self, spec, signature, probes):
-        """Race every model on each probe. Returns ``(agreed examples, disagreed)``.
+        """Race the learning roster on each probe. Returns ``(agreed examples, disagreed)``.
 
         An example is kept only when at least ``agreement_quorum`` models gave
         a valid answer and all valid answers are identical.
@@ -734,7 +744,7 @@ class FastPathRouter:
             batches.append(
                 [
                     self._pool().submit(self._ask, model, prompt)
-                    for model in self.settings["race_models"]
+                    for model in self._roster()
                 ]
             )
         agreed, disagreed = [], 0

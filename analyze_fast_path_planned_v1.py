@@ -115,6 +115,7 @@ def analyse(kinds, replicates=BOOTSTRAP_REPLICATES):
                   for key in ("calls", "prompt_tokens", "completion_tokens")}
             for arm in ARMS
         } if any("usage" in s for s in shapes) else None,
+        "usage_by_purpose": usage_by_purpose(shapes),
         "arrival": header.get("arrival", "drained"),
         "ceiling": ceiling_summary(jobs, grouped, replicates),
         "per_shape": {
@@ -130,6 +131,19 @@ def analyse(kinds, replicates=BOOTSTRAP_REPLICATES):
         } if first_plan else None,
     })
     return result
+
+
+def usage_by_purpose(shapes):
+    """Calls and tokens per arm and purpose, for runs that metered purposes."""
+    totals = {}
+    for shape in shapes:
+        for arm, usage in shape.get("usage", {}).items():
+            for purpose, counts in usage.get("by_purpose", {}).items():
+                entry = totals.setdefault(arm, {}).setdefault(
+                    purpose, {"calls": 0, "prompt_tokens": 0, "completion_tokens": 0})
+                for key in entry:
+                    entry[key] += counts.get(key, 0)
+    return totals or None
 
 
 def main():

@@ -3820,3 +3820,26 @@ provider calls, 7 invalid responses, no unanswered job.
 |---|---|
 | `fast_path_planned_v2_long.jsonl` | `844adab42aada6d993f03a276a5d9ab75c4b68e5bf8d037636834fdcafe4cc6c` |
 | `fast_path_planned_v2_long_analysis.json` | `5c6d921486826f87ea02d5c07631ee6ace1ee0e9814823e0d24a62e5daf47fe7` |
+
+---
+
+## 2026-11-17 — Follow-up 7 frozen: cheaper learning (handoff item 1)
+
+New session, working through the handoff's open items in order at the owner's
+request. `FastPathRouter` gains an optional `learning_models` roster: function
+steps learned in the background (step races in plan trials and shadow runs,
+and probe answers) ask only these models; live answers, live plan steps and
+judgement steps keep the full roster. Default `null` keeps earlier behaviour.
+`UsageMeter` now meters calls and tokens by purpose, and the analysis reports
+them. Full suite passed (562 tests). Recorded as follow-up 7 in
+`FAST_PATH_PLANNED_V2_PLAN.md`. Credit before the run: about $13.25.
+
+| File | SHA-256 |
+|---|---|
+| `fast_path.py` | `01262b2e97fc24c494340a4224e81782ca85eae88510219d9d171b90ad087d89` |
+| `planner.py` | `941d7f2baaa04caa7f92b5ae369760e3a10f6a0acdf2e925c87b6807aa3dccb3` |
+| `pipeline.py` | `fecc96aee7349fbf2229dad47207c7467a76c884fec281dd596d35185f528e83` |
+| `config_fast_path.json` | `785e0a8b2ba76b6be33d5ebdfb2c4b3533f27b70cbd16a77ef9bd9c01b3f42df` |
+| `run_fast_path_planned_v1.py` | `e6696d96bfd20d1278b1ea98e58055fcde34b9f49ab10dc716b35548a3d684ce` |
+| `analyze_fast_path_planned_v1.py` | `7f8c08f7b4eebddbb7c46be623be2e1456f36140b2161d3daea51a9ea7cf497e` |
+| `FAST_PATH_PLANNED_V2_PLAN.md` | `e43d80fd7cb1e73b73dda43f198d1068c11d4c07e1aa96413e4f3c143222c2d9` |

@@ -51,25 +51,53 @@ def load_bench(path):
     return module
 
 
+PURPOSES = (
+    ("Carry out the task below", "whole_task"),
+    ("Work out what the function described below returns", "step_answer"),
+    ("Plan how to compute", "plan"),
+    ("Write a Python function", "synthesis"),
+    ("List boundary and edge-case inputs", "probe_proposal"),
+)
+
+
+def purpose_of(prompt):
+    """Name what a provider call was for, from the start of its prompt.
+    ``step_answer`` covers step races and probe answers alike."""
+    for prefix, name in PURPOSES:
+        if prompt.startswith(prefix):
+            return name
+    return "other"
+
+
 class UsageMeter:
-    """Wrap a remote call and add up calls and tokens, background work included."""
+    """Wrap a remote call and add up calls and tokens, background work
+    included, in total and by purpose."""
 
     def __init__(self, remote_fn):
         self.remote_fn = remote_fn
         self.calls = self.prompt_tokens = self.completion_tokens = 0
+        self.by_purpose = {}
         self._lock = threading.Lock()
 
     def __call__(self, prompt, config, api_key):
         result = self.remote_fn(prompt, config, api_key)
+        prompt_tokens = getattr(result, "prompt_tokens", None) or 0
+        completion_tokens = getattr(result, "completion_tokens", None) or 0
         with self._lock:
             self.calls += 1
-            self.prompt_tokens += getattr(result, "prompt_tokens", None) or 0
-            self.completion_tokens += getattr(result, "completion_tokens", None) or 0
+            self.prompt_tokens += prompt_tokens
+            self.completion_tokens += completion_tokens
+            entry = self.by_purpose.setdefault(
+                purpose_of(prompt), {"calls": 0, "prompt_tokens": 0, "completion_tokens": 0})
+            entry["calls"] += 1
+            entry["prompt_tokens"] += prompt_tokens
+            entry["completion_tokens"] += completion_tokens
         return result
 
     def report(self):
         return {"calls": self.calls, "prompt_tokens": self.prompt_tokens,
-                "completion_tokens": self.completion_tokens}
+                "completion_tokens": self.completion_tokens,
+                "by_purpose": {k: dict(v) for k, v in sorted(self.by_purpose.items())}}
 
 
 def ceiling_answer(shape, reading, inputs, router):

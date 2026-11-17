@@ -34,6 +34,7 @@
     "job_agreement_min": null,
     "plan_shadow": true,
     "plan_live_window": 2,
-    "plan_live_ratio": 0.75
+    "plan_live_ratio": 0.75,
+    "learning_models": null
   }
 }

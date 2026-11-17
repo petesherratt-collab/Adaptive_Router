@@ -53,6 +53,15 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(usage["R"]["calls"], 12)
         # Arm C pays for planning, trials and learning on top of its races.
         self.assertGreater(usage["C"]["calls"], usage["R"]["calls"])
+        purposes = usage["C"]["by_purpose"]
+        self.assertEqual(sum(p["calls"] for p in purposes.values()), usage["C"]["calls"])
+        self.assertEqual(set(purposes), {"whole_task", "plan", "step_answer", "synthesis"})
+        self.assertEqual(set(usage["R"]["by_purpose"]), {"whole_task"})
+
+    def test_purpose_of_prompts(self):
+        self.assertEqual(runner.purpose_of("Carry out the task below and"), "whole_task")
+        self.assertEqual(runner.purpose_of("List boundary and edge-case inputs for"), "probe_proposal")
+        self.assertEqual(runner.purpose_of("something else"), "other")
 
     def test_immediate_arrival_does_not_wait_for_background_work(self):
         rows = []
