@@ -3618,3 +3618,26 @@ Shape summaries record the plan's mode and shadow timings. Full suite passed
 | `planner.py` | `8e76fbb9146c106d61f9c4884fa75db7969349f5188980734952215451959f00` |
 | `run_fast_path_planned_v1.py` | `6aeca26a05da142d6d7efe4400b805127f1bdc4cfe5bc550cd3c7d118efdc9f2` |
 | `FAST_PATH_PLANNED_V2_PLAN.md` | `74b138f3b7f80426ba0b54da58cf77c9e3a83d00fbee078fa0787797c650a612` |
+
+---
+
+## 2026-11-17 — Follow-up 3: shadow plans under back-to-back arrival
+
+Label `shadow`: 7,946 provider calls, 108 HTTP 429 and 12 invalid responses,
+no unanswered job. Correct A 98, R 101, C 98 of 105. Medians A 4020, R 2451,
+C 2834 ms; C 90th percentile 13,753 ms. C/R 1.157 (1.065 to 1.279); C minus R
+-0.029 (-0.067 to 0.000).
+
+- All 105 arm-C jobs answered by the race; no plan reached live mode.
+  Recorded shadow-run times 6.2 to 43.4 s; race medians per shape 2.2 to
+  4.5 s. One plan dropped on a shadow mismatch (`playlist`).
+- 14 plan attempts: 12 adopted into shadow, 2 refinements rejected. Final
+  plans 87 function steps, 30 promoted.
+- Last five jobs per shape: A 4147, R 2506, C 7967 ms.
+- Cause found in code: `FastPathRouter._models` is one pool used by the live
+  race and by all background work, so background calls delay live ones.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v2_shadow.jsonl` | `1759f1f78dd41e9f2c88921840a1658f860ff8fda26d98d3605790dedb71bd5b` |
+| `fast_path_planned_v2_shadow_analysis.json` | `7d8ba0651ceab2b9addb08e9e0822dcf8de88edc5acb95234f8c7d01d1c5b775` |

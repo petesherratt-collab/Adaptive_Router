@@ -611,6 +611,35 @@ its steps run as code.
 Evidence: `fast_path_planned_v2_immediate.jsonl`,
 `fast_path_planned_v2_immediate_analysis.json`.
 
+Follow-up 3, descriptive: the shadow fix, under the same back-to-back
+conditions. **The fix did its narrow job and exposed a second flaw.**
+
+| Arm | Correct | Median ms | 90th pct ms | Mean ms |
+|---|---:|---:|---:|---:|
+| A. One direct call | 98/105 | 4020 | 5420 | 4092 |
+| R. Whole-task race | 101/105 | 2451 | 3380 | 2611 |
+| C. Planning router | 98/105 | 2834 | 13753 | 5364 |
+
+- No slow plan served a job: every arm-C answer came from the race. But no
+  plan ever went live either. Recorded shadow runs took 6 to 43 seconds,
+  against race medians of 2 to 4.5 seconds.
+- Arm C's own race answers were slower than arm R's, with a 90th percentile of
+  13.8 s, and the gap grew over the run (last five jobs per shape: C 7967 ms
+  against R 2506 ms). The live race in arm C shares one thread pool with the
+  background work (shadow runs, plan trials, probes, step races), so live calls
+  queued behind background calls. The run also drew 108 rate-limit (HTTP 429)
+  responses, against 7 in follow-up 2.
+- C/R 1.16 (1.07 to 1.28); correctness -2.9 points (-6.7 to 0.0). All seven
+  arm-C wrong answers came from the race route.
+
+The second flaw: background learning must not compete with the answer path
+for the same workers or provider capacity. A fix would give live requests
+their own pool and limit background work to one shadow run per task at a
+time, dropping shadow runs that would queue.
+
+Evidence: `fast_path_planned_v2_shadow.jsonl`,
+`fast_path_planned_v2_shadow_analysis.json`.
+
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
 hardened boundary against adversarial code.
