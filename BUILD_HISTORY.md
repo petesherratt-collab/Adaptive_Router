@@ -3233,3 +3233,34 @@ value.
 |---|---|
 | `fast_path_jobs_v1_saturation.jsonl` | `fecc89582efef69ececedb5437178e36dd45a18ea1557f03da730744da56a129` |
 | `fast_path_jobs_v1_saturation_analysis.json` | `a52be2a75b5284f4b171ace998b81e5c83b89c3b4abfa5a091ee213dc673eb04` |
+
+---
+
+## 2026-11-17 — Fast-path jobs V2 (larger jobs) freeze
+
+`FAST_PATH_JOBS_V2_LARGE_PLAN.md` freezes one four-arm run on
+`fast_path_jobs_bench_v2_large.py`: 7 job shapes of 7 steps each, 15 jobs per
+shape, long structured inputs. The primary comparison is the step pipeline
+over the fast path against the whole-job race, the arm it could not beat in
+V1. Settings changes since jobs V1: `answer_max_tokens` 1024 to 4096 for every
+arm, and the saturation rule enabled. `analyze_fast_path_jobs_v1.py` gained
+`--baseline` and `--time-limit`. No provider call has touched this benchmark.
+Provider credit at the freeze: about $16.70.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_jobs_bench_v2_large.py` | `0821ca5e659feaa0980daef76d31117332ab643ab193bfc0f19cf15b12726f3e` |
+| `fast_path_jobs_bench_v1.py` | `68e092a8990939b876baabb7a4c611bae7ac07c1558b977d95cfd0dfa4fd13b4` |
+| `config_fast_path.json` | `7713a63fad7297eb16192b97500b52dbd0400cecb5476f52d7dbad110dc2494c` |
+| `fast_path.py` | `5ec148e775d334871f20e9bccfb7b919c4a150e73679b39339f2272e21c64a04` |
+| `pipeline.py` | `bca87fc09cb826de1b6e5376b4eb38102ac0d5f5025662181d87bb472eed679d` |
+| `sandbox.py` | `b132f5d8175e60916baa0550c09d2f5d34e247e99bd390eee07510f596a9dcff` |
+| `remote.py` | `4efc49ab45e68d09f026e75fca9e3aff2780fac8682b3b27f7fa983eda51afc2` |
+| `run_fast_path_timing_v1.py` | `c1c242d8da450dd037848596648b0ec763f737ef957ddc0e22f703d7aea61ea5` |
+| `run_fast_path_jobs_v1.py` | `3a06f6a10e00169adae33ac43c4a669e333785968b9ae6de3426e05382d2b109` |
+| `analyze_fast_path_timing_v1.py` | `b01b8fab99b0f3724d7789bf2caa87e51e59137e6da49dc50fd998e792523b9a` |
+| `analyze_fast_path_jobs_v1.py` | `46aaf4797fc1844c9b084737604334ba284cc8ddcc1a97737be831a3e74268e7` |
+| `FAST_PATH_JOBS_V2_LARGE_PLAN.md` | `ebde07340a4fedcc1fdd2f0deab9561303905e6fefcb9fdbe3c1f2de0c0bba57` |
+
+Verification: full unit suite passed; benchmark self-verify passed;
+`git diff --check` passed.

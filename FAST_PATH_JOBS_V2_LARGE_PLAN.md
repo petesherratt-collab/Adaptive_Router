@@ -1,6 +1,6 @@
 # Fast-path jobs V2 plan: larger jobs
 
-**Status:** DRAFT. Not frozen; no run is authorized yet.
+**Status:** FROZEN 2026-11-17. One primary run is authorized.
 
 **Runtime policy authority:** none. Runtime v0.3 is unchanged.
 
