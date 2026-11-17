@@ -3879,7 +3879,9 @@ Label `lean_learning`: as follow-up 6 plus `learning_models`
 
 - Arm C by purpose: whole-task races 720 calls, step and probe answers 2,217,
   probe proposals 74, synthesis 85, plans 10. Learning calls (everything but
-  the whole-task race) about 2,386, against about 4,465 in follow-up 6.
+  the whole-task race) about 2,386, against an estimated 4,660 in follow-up 6
+  (not metered by purpose; its 116 race-routed jobs and a few audits account
+  for about 600 of its 5,265 calls).
 - Money did not fall: about $4.45 for this run against about $4.15 for
   follow-up 6. The learning pair includes the roster's most expensive model
   per token (`google/gemini-3.8-flash`, $0.75 and $3.75 per million prompt and

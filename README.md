@@ -746,8 +746,9 @@ the development data. Calls are now metered by purpose.
 | C. Planning router | 148/160 | 2759 | 3,106 | 2,051,539 |
 | D. Ceiling | 160/160 | 854 | 800 | 171,024 |
 
-- **Learning calls fell by about half** (about 2,390 against 4,470; arm C's
-  total 3,106 against 5,265). Of arm C's calls, 720 were whole-task races, 2,217
+- **Learning calls fell by about half**: about 2,390, against an estimated
+  4,660 in follow-up 6 (which did not meter purposes; its 116 race-routed jobs
+  and a few audits account for about 600 whole-task calls of its 5,265). Of arm C's calls, 720 were whole-task races, 2,217
   step and probe answers, 85 syntheses, 74 probe proposals and 10 plans.
 - **Neither time nor money improved.** Plans went live for two shapes, not
   three: `expense_claims` (job 31, which never went live in follow-up 6) and
