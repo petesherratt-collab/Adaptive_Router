@@ -108,6 +108,10 @@ def build_plan_prompt(description, inputs):
         "intent, or which name or place a sentence mentions.",
         "Use judgement steps only where code could not decide. Keep each judgement step to reading one "
         "input and returning a short label or name; do every calculation and all formatting in function steps.",
+        "Make function steps small. Each should do one thing that a short function of about ten lines could "
+        "do: parse an input into a list, compute one number, pick one item, or format the final text. Return a "
+        "simple value (a number, a string or a list), not an object that bundles several results. Several small "
+        "steps are better than one large one.",
         "",
         "Each step is an object with exactly these keys:",
         "- \"id\": a short name of letters, digits and underscores, different from the input names;",
@@ -152,6 +156,25 @@ def _normalise_steps(steps):
             step = {**step, "task": task}
         tidy.append(step)
     return tidy
+
+
+def build_refine_prompt(description, inputs, document, fast, slow, jobs):
+    """Ask for a finer plan, saying which function steps became code and which
+    are still answered by language models after ``jobs`` uses."""
+    plan = json.dumps({"steps": document["steps"], "output": document["output"]}, indent=1)
+    return (
+        build_plan_prompt(description, inputs)
+        + "\n\nA plan for this task is already in use and gives correct results:\n"
+        + plan
+        + f"\n\nAfter {jobs} uses, these function steps run as verified code and are fast: "
+        + (", ".join(fast) or "none")
+        + ". These function steps are still answered by language models, which is slow: "
+        + ", ".join(slow)
+        + ". A step becomes code sooner when it is small and returns a simple value. Revise the plan: "
+        "split each slow step into smaller function steps that each do one simple thing, keep the fast "
+        "steps and the judgement steps as they are where you can, and keep the final result exactly the "
+        "same. Reply with the whole revised plan in the same JSON form, JSON only."
+    )
 
 
 def parse_plan(text, inputs):
@@ -253,6 +276,12 @@ class PlanningRouter:
             result = self.orchestrator.run(with_inputs(plan["document"], request.inputs))
             steps = result["steps"]
             if result["reason"] == pipeline.JOB_COMPLETED:
+                with self.store.lock():
+                    current = self.store.get(request.template)["plan"]
+                    if current is not None and current["sha256"] == plan["sha256"]:
+                        current["jobs"] = current.get("jobs", 0) + 1
+                        self.store.save(request.template)
+                self._submit(self._maybe_refine, request.template)
                 if should_shadow(request_id, self.settings.get("plan_audit_rate", 0.0),
                                  self.settings.get("audit_salt", "")):
                     futures = self.router.start_prompt_race(
@@ -336,7 +365,8 @@ class PlanningRouter:
                 record["plan"] is not None
                 or template in self._planning
                 or len(record["examples"]) < self.settings["plan_examples"]
-                or sum(a["outcome"] != "REMOTE_ERROR" for a in record["plan_attempts"])
+                or sum(a["outcome"] != "REMOTE_ERROR" for a in record["plan_attempts"]
+                       if a.get("kind") != "refine")
                 >= self.settings["max_plan_attempts"]
             ):
                 return
@@ -358,7 +388,62 @@ class PlanningRouter:
             with self.store.lock():
                 self._planning.discard(template)
 
-    def propose_plan(self, description, inputs):
+    def _step_speeds(self, document):
+        """Split a plan's function steps into those promoted to code and the rest."""
+        fast, slow = [], []
+        for step in document["steps"]:
+            if step["kind"] != "function":
+                continue
+            stored = self.router.store.get(
+                fast_path.shape_key(step["task"]["spec"], step["task"]["signature"]))
+            (fast if stored and stored["function"] else slow).append(step["id"])
+        return fast, slow
+
+    def _maybe_refine(self, template):
+        """Feedback on speed: after ``refine_after_jobs`` uses, ask the planner
+        to split the function steps that are still answered by models. The
+        revised plan must pass the same trial before it replaces the old one."""
+        with self.store.lock():
+            record = self.store.get(template)
+            plan = record["plan"]
+            if (
+                plan is None
+                or template in self._planning
+                or plan.get("jobs", 0) < self.settings.get("refine_after_jobs", 0)
+                or not self.settings.get("max_refinements", 0)
+                or sum(a.get("kind") == "refine" and a["outcome"] != "REMOTE_ERROR"
+                       for a in record["plan_attempts"]) >= self.settings["max_refinements"]
+            ):
+                return
+            fast, slow = self._step_speeds(plan["document"])
+            if not slow:
+                return
+            self._planning.add(template)
+            description, examples = record["description"], list(record["examples"])
+            old_sha, jobs = plan["sha256"], plan.get("jobs", 0)
+        try:
+            prompt = build_refine_prompt(description, examples[0]["inputs"], plan["document"],
+                                         fast, slow, jobs)
+            attempt = self._plan(description, examples, prompt)
+            attempt.update({"kind": "refine", "refines": old_sha, "slow_steps": slow,
+                            "fast_steps": fast, "after_jobs": jobs})
+            with self.store.lock():
+                record = self.store.get(template)
+                record["plan_attempts"].append({k: v for k, v in attempt.items() if k != "document"})
+                current = record["plan"]
+                if (attempt["outcome"] == "ADOPTED" and current is not None
+                        and current["sha256"] == old_sha):
+                    record["plan"] = {"document": attempt["document"], "sha256": attempt["sha256"],
+                                      "adopted_at": datetime.now(timezone.utc).isoformat(),
+                                      "refined_from": old_sha, "jobs": 0}
+                self.store.save(template)
+            self._log({"record_type": "plan_refinement", "template": template,
+                       **{k: v for k, v in attempt.items() if k != "document"}})
+        finally:
+            with self.store.lock():
+                self._planning.discard(template)
+
+    def propose_plan(self, description, inputs, prompt=None):
         """Ask the planner model for a plan.
 
         Returns ``(document, reason, ms, refused)``. A reply the validator
@@ -370,7 +455,8 @@ class PlanningRouter:
             "model": self.settings["planner_model"],
             "max_tokens": self.settings["planner_max_tokens"],
         }
-        prompt = build_plan_prompt(description, inputs)
+        first = prompt or build_plan_prompt(description, inputs)
+        prompt = first
         started, refused = time.perf_counter(), []
         for _ in range(1 + self.settings.get("plan_retries", 1)):
             try:
@@ -384,16 +470,16 @@ class PlanningRouter:
                 return document, None, (time.perf_counter() - started) * 1000, refused
             refused.append({"reason": reason, "reply": result.text[:6000]})
             prompt = (
-                build_plan_prompt(description, inputs)
+                first
                 + "\n\nYour previous reply was refused by the plan checker with this reason: "
                 + reason
                 + ". Reply again with the whole corrected plan, JSON only."
             )
         return None, refused[-1]["reason"], (time.perf_counter() - started) * 1000, refused
 
-    def _plan(self, description, examples):
+    def _plan(self, description, examples, prompt=None):
         checked = examples[: self.settings["plan_examples"]]
-        document, reason, ms, refused = self.propose_plan(description, checked[0]["inputs"])
+        document, reason, ms, refused = self.propose_plan(description, checked[0]["inputs"], prompt)
         attempt = {"model": self.settings["planner_model"], "plan_ms": ms, "refused": refused}
         if document is None:
             outcome = "REMOTE_ERROR" if reason and reason.startswith("OPENROUTER") else "INVALID_PLAN"

@@ -90,3 +90,20 @@ jobs. Both runs are descriptive; the rerun is labelled `planned_v1_fixes`.
    after two agreed whole-task answers instead of three.
 
 Everything else, including the criteria and analysis, is unchanged.
+
+## Amendment 2 (2026-11-17): third run, steering and speed feedback
+
+At the owner's request, a third descriptive run on the same jobs, label
+`planned_v1_steer`, with two further changes:
+
+1. The planner's instructions ask for small function steps, each doing one
+   thing a short function could do and returning a simple value rather than
+   an object bundling several results.
+2. Speed feedback (`refine_after_jobs` 4, `max_refinements` 1): after a plan
+   has served four jobs, if any of its function steps is still answered by
+   models rather than code, the planner is shown the plan, told which steps
+   became code and which did not, and asked to split the slow ones. The
+   revised plan replaces the old one only if it passes the same trial against
+   the agreed answers. A revised step with new wording starts learning afresh.
+
+Criteria and analysis are unchanged.

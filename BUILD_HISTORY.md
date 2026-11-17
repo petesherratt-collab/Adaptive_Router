@@ -3416,3 +3416,23 @@ unanswered job. Decision: `NOT_SUPPORTED`.
 |---|---|
 | `fast_path_planned_v1_fixes.jsonl` | `c3b5a6c06db7198bc5bd107bbd4cc975683543d88119efbd4089932d8d6a75a2` |
 | `fast_path_planned_v1_fixes_analysis.json` | `e8c413b24886d668478d1f8afc34ce7638dc70d52fc83c965a239e24541f08c5` |
+
+---
+
+## 2026-11-17 — Planner steering and speed feedback
+
+The owner asked to steer the planner to smaller steps and asked whether any
+feedback mechanism existed. Until now feedback covered correctness only (the
+plan trial and the audit). Added: small-step guidance in `build_plan_prompt`;
+`build_refine_prompt` and `PlanningRouter._maybe_refine`, which after
+`refine_after_jobs` plan-served jobs reports to the planner which function
+steps became code and which are still on the models, and adopts a revised plan
+only if it passes the trial. Refinement attempts carry `kind: refine` and do
+not count toward `max_plan_attempts`. Recorded as amendment 2. Full suite
+passed. Credit before the run: about $7.05.
+
+| Changed file | SHA-256 |
+|---|---|
+| `config_fast_path.json` | `64b85380071e693613b97697d31a48111ceab67fd0a9de5f907f520be124cca9` |
+| `planner.py` | `06e432f3159fb0bd76c568ca2e163c9d143e7b2eae93979e2b7831fe7c7f7231` |
+| `FAST_PATH_PLANNED_V1_PLAN.md` | `c499d3c22ddced01be3e183e01ae6eb65d301cb77a09cb322b3b085c46726262` |

@@ -287,3 +287,61 @@ class PlanningTests(PlannerTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+REFINED_PLAN = json.loads(json.dumps(GOOD_PLAN).replace('"twice"', '"doubled"'))
+
+
+class RefinementTests(PlannerTestCase):
+    def build_refining(self, plans, **overrides):
+        remote = FakeRemote(plans=plans)
+        settings = {"synthesis_enabled": False, "refine_after_jobs": 2, "max_refinements": 1,
+                    **overrides}
+        return remote, self.build(remote, **settings)
+
+    def run_jobs(self, router, count, start=1):
+        served = []
+        for n in range(start, start + count):
+            served.append(router.handle(request(n, "a" * n)))
+            router.drain()
+        return served
+
+    def test_slow_steps_are_reported_and_a_passing_revision_replaces_the_plan(self):
+        remote, router = self.build_refining([GOOD_PLAN, REFINED_PLAN])
+        served = self.run_jobs(router, 5)
+        self.assertEqual([s["route"] for s in served], ["race", "race", "plan", "plan", "plan"])
+        record = self.record(router)
+        refine = [a for a in record["plan_attempts"] if a.get("kind") == "refine"]
+        self.assertEqual(len(refine), 1)
+        self.assertEqual((refine[0]["outcome"], refine[0]["after_jobs"]), ("ADOPTED", 2))
+        self.assertEqual(refine[0]["slow_steps"], ["twice", "size", "total"])
+        self.assertEqual(record["plan"]["refined_from"], record["plan_attempts"][0]["sha256"])
+        self.assertIn("doubled", {s["id"] for s in served[-1]["steps"]})
+        prompt = [p for _, p in remote.calls if p.startswith("Plan how to compute")][1]
+        self.assertIn("still answered by language models, which is slow: twice, size, total", prompt)
+        self.assertIn("run as verified code and are fast: none", prompt)
+
+    def test_failing_revision_keeps_the_old_plan_and_refinement_is_bounded(self):
+        remote, router = self.build_refining([GOOD_PLAN, BAD_PLAN, REFINED_PLAN])
+        self.run_jobs(router, 7)
+        record = self.record(router)
+        refine = [a for a in record["plan_attempts"] if a.get("kind") == "refine"]
+        self.assertEqual([a["outcome"] for a in refine], ["REJECTED"])
+        self.assertEqual(record["plan"]["sha256"], record["plan_attempts"][0]["sha256"])
+        self.assertEqual(remote.count("Plan how to compute"), 2)
+
+    def test_no_refinement_when_every_function_step_is_code(self):
+        remote, router = self.build_refining([GOOD_PLAN, REFINED_PLAN], synthesis_enabled=True)
+        self.run_jobs(router, 8)
+        record = self.record(router)
+        self.assertFalse(any(a.get("kind") == "refine" for a in record["plan_attempts"]))
+
+    def test_refinement_is_off_by_default(self):
+        remote, router = self.build_refining([GOOD_PLAN, REFINED_PLAN], max_refinements=0)
+        self.run_jobs(router, 5)
+        self.assertEqual(remote.count("Plan how to compute"), 1)
+
+    def test_planner_is_steered_to_small_steps(self):
+        prompt = planner.build_plan_prompt(DESCRIPTION, {"n": 1, "text": "a"})
+        self.assertIn("Make function steps small", prompt)
+        self.assertIn("not an object that bundles several results", prompt)
