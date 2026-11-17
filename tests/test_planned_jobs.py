@@ -82,3 +82,12 @@ class AnalysisTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class FreshBenchTests(unittest.TestCase):
+    def test_fresh_bench_self_verifies(self):
+        import fast_path_planned_bench_v2 as fresh
+
+        fresh.self_verify()
+        self.assertEqual(len(fresh.SHAPES), 7)
+        self.assertEqual(fresh.SHAPES[0]["output"], "result")

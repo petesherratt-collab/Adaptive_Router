@@ -3464,3 +3464,29 @@ Label `planned_v1_steer`: 9,088 provider calls, 4 invalid responses, 26 HTTP
 |---|---|
 | `fast_path_planned_v1_steer.jsonl` | `b3f728f19cd548383af279e7826edd29ed7addfc8734ee75ee8335dbfa52ff05` |
 | `fast_path_planned_v1_steer_analysis.json` | `9e912b76017943b20bc99fbd86d793af0b61607cc03a0cbe3883b96571ce0dbb` |
+
+---
+
+## 2026-11-17 — Planned jobs V2 freeze: prospective test on fresh jobs
+
+The owner added credit and asked to continue. `fast_path_planned_bench_v2.py`
+adds 7 new job shapes with plain-language descriptions and reference
+functions qualified by hand-worked tests. `FAST_PATH_PLANNED_V2_PLAN.md`
+freezes one prospective run of the planning router (steering and speed
+feedback on) against the whole-task race. No provider call has touched these
+jobs.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v2.py` | `a48b7995948e089d53ca40cf8b241e6111e78c273f5fa39853c742250091b4fb` |
+| `config_fast_path.json` | `64b85380071e693613b97697d31a48111ceab67fd0a9de5f907f520be124cca9` |
+| `fast_path.py` | `b51396aac1deb7a14fdb12dfb365065f5e9099e21e7f4640e0d24ca08cc88302` |
+| `pipeline.py` | `bca87fc09cb826de1b6e5376b4eb38102ac0d5f5025662181d87bb472eed679d` |
+| `planner.py` | `06e432f3159fb0bd76c568ca2e163c9d143e7b2eae93979e2b7831fe7c7f7231` |
+| `sandbox.py` | `b132f5d8175e60916baa0550c09d2f5d34e247e99bd390eee07510f596a9dcff` |
+| `remote.py` | `4efc49ab45e68d09f026e75fca9e3aff2780fac8682b3b27f7fa983eda51afc2` |
+| `run_fast_path_planned_v1.py` | `d5d24d842885037df4dc6464c7641db73b9dca69ac7770371647d4513951de0d` |
+| `analyze_fast_path_planned_v1.py` | `5c57588248bbaa6358262b95c9383654d9db9d590f3396486688533852dc4d99` |
+| `FAST_PATH_PLANNED_V2_PLAN.md` | `274701454f923abf1e9ef14e695c00c102043100fa0275554c03698fbc8ba1af` |
+
+Verification: full unit suite passed; benchmark self-verify passed.
