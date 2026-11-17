@@ -3301,3 +3301,42 @@ against arm R: `SUPPORTED`.
 |---|---|
 | `fast_path_jobs_v2_large_primary.jsonl` | `0e42c2f0c90dbefb0cc78061b3f45ee0b32ba347e0fef566f927582871de77c6` |
 | `fast_path_jobs_v2_large_primary_analysis.json` | `845504cdf1b601a00fd5693a0225520fae8a5bbcf965e31976e7ce34e855b777` |
+
+---
+
+## 2026-11-17 — The router writes its own plans: build and freeze
+
+The owner chose model-written plans as the next step. `planner.py` adds a
+`PlanningRouter`: whole-task racing until a template has `plan_examples`
+agreed answers, a planner model writing a step plan from the description and
+input names, adoption only when the plan reproduces every agreed answer in a
+trial run through the step pipeline, and an audit that drops a plan when a
+fresh race agrees on something else. `FastPathRouter.start_prompt_race`
+exposes every racer's answer. New settings: `planner_model`
+(`openai/gpt-6-luna`), `planner_max_tokens` 8192, `plan_examples` 3,
+`max_plan_attempts` 2, `plan_audit_rate` 0.1.
+
+`fast_path_planned_bench_v1.py` gives each of the seven large-job shapes one
+plain-language description. A live smoke run on two shapes, seven jobs each,
+adopted a plan for both on the first attempt; every answer in every arm but one
+direct call was correct. Not evidence.
+
+`FAST_PATH_PLANNED_V1_PLAN.md` freezes one descriptive run. Provider credit at
+the freeze: about $11.60.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v1.py` | `f45bae98a0d8b305ece27c5d831f4db09190d7327ad6d96933d3e8502132dda2` |
+| `fast_path_jobs_bench_v2_large.py` | `0821ca5e659feaa0980daef76d31117332ab643ab193bfc0f19cf15b12726f3e` |
+| `config_fast_path.json` | `ce3fb332fa510b89fa0db96087f2850b5fbf79e1540d8c6a07a51893893c9a4a` |
+| `fast_path.py` | `b51396aac1deb7a14fdb12dfb365065f5e9099e21e7f4640e0d24ca08cc88302` |
+| `pipeline.py` | `bca87fc09cb826de1b6e5376b4eb38102ac0d5f5025662181d87bb472eed679d` |
+| `planner.py` | `9f9236703e29acf82912f6c081a2c0fa678cc03b4d641a71d099c827cda44139` |
+| `sandbox.py` | `b132f5d8175e60916baa0550c09d2f5d34e247e99bd390eee07510f596a9dcff` |
+| `remote.py` | `4efc49ab45e68d09f026e75fca9e3aff2780fac8682b3b27f7fa983eda51afc2` |
+| `run_fast_path_planned_v1.py` | `d5d24d842885037df4dc6464c7641db73b9dca69ac7770371647d4513951de0d` |
+| `analyze_fast_path_planned_v1.py` | `5c57588248bbaa6358262b95c9383654d9db9d590f3396486688533852dc4d99` |
+| `FAST_PATH_PLANNED_V1_PLAN.md` | `e15a816f68e86d7abd4b6a49906c0b1467a9cdde2a369efb443d253240b8fc8d` |
+
+Verification: full unit suite passed (536 tests); description self-verify
+passed; `git diff --check` passed.
