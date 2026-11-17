@@ -3293,8 +3293,9 @@ against arm R: `SUPPORTED`.
 - Three wrong stored examples, all probe answers where the reference is
   weaker than or silent relative to the specification: a negative amount in
   `invoice_audit.summary`, a quoted CSV field in `order_batch.rows`, a hyphen
-  in a name in `meeting_actions.actions`. The last contributed to one rejected
-  synthesis attempt before a later attempt was promoted.
+  in a name in `meeting_actions.actions`. In that step one synthesis attempt
+  was rejected at 13 of 14 before a later one was promoted; which example it
+  failed was not recorded.
 
 | Artifact | SHA-256 |
 |---|---|
