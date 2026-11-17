@@ -3701,3 +3701,30 @@ owner chose a full paired run (about $4 of $7.65). Full suite passed.
 | `pipeline.py` | `fecc96aee7349fbf2229dad47207c7467a76c884fec281dd596d35185f528e83` |
 | `config_fast_path.json` | `eff69a362c563b90abce44cd08e442cac38beb0df66f9aa898e35573c1c1b066` |
 | `FAST_PATH_PLANNED_V2_PLAN.md` | `347ca922f14c51d948bda3682bb00050997da80ec426db8a056c036eaa6decd8` |
+
+---
+
+## 2026-11-17 — Follow-up 4: ceiling arm result
+
+Label `ceiling`: 9,337 provider calls, 8 invalid responses, no unanswered job.
+
+| Arm | Correct | Median ms | Calls | Prompt tokens | Completion tokens |
+|---|---:|---:|---:|---:|---:|
+| A | 96/105 | 3891 | 105 | 50,566 | 28,193 |
+| R | 98/105 | 2360 | 525 | 281,438 | 362,227 |
+| C | 104/105 | 2146 | 8,182 | 1,833,042 | 1,290,226 |
+| D | 105/105 | 834 | 525 | 91,516 | 18,679 |
+
+- D reading steps correct 105/105. C/D 2.574 (1.590 to 3.534).
+- Medians, first three jobs per shape: R 2385, C 2533, D 834; later jobs:
+  R 2347, C 1956, D 838; last five: A 3908, R 2491, C 1198, D 870.
+- Arm C, same settings as the frozen run: C/R 0.909 (0.535 to 1.245);
+  correctness +0.057 (+0.010 to +0.133). All 7 shapes planned; 13 attempts all
+  adopted; 80 function steps, 72 promoted. One wrong C answer, from the race.
+- Not recorded as a decision: the frozen run's decision stands, and this
+  descriptive re-run shows its time margin varies widely between runs.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v2_ceiling.jsonl` | `b708475aa1d2f8c6989791cdd53269935e788bb8980b503cbfaa62001e5840a7` |
+| `fast_path_planned_v2_ceiling_analysis.json` | `f37b88d4a74ef0b10233655a29f4c655162b28576f330b88061c38f78ab81afc` |

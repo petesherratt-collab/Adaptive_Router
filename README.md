@@ -640,6 +640,41 @@ time, dropping shadow runs that would queue.
 Evidence: `fast_path_planned_v2_shadow.jsonl`,
 `fast_path_planned_v2_shadow_analysis.json`.
 
+Follow-up 4, descriptive: a ceiling arm D, specified by the owner before the
+run. D stands for a programmer having already written the job: the benchmark's
+reference code does the mechanical work and only the reading step goes to
+models, raced exactly as arm C races its judgement steps. D's mechanical work
+is correct by definition, so **its accuracy says nothing about code against
+models**; only its time and its reading accuracy inform. Drained arrival, as in
+the frozen run.
+
+| Arm | Correct | Median ms | 90th pct ms | Mean ms | Model calls | Tokens |
+|---|---:|---:|---:|---:|---:|---:|
+| A. One direct call | 96/105 | 3891 | 5585 | 4042 | 105 | 78,759 |
+| R. Whole-task race | 98/105 | 2360 | 3502 | 2486 | 525 | 643,665 |
+| C. Planning router | 104/105 | 2146 | 4257 | 2519 | 8,182 | 3,123,268 |
+| D. Ceiling | 105/105 | 834 | 1043 | 846 | 525 | 110,195 |
+
+- D's reading steps were right on all 105 jobs. On these unambiguous texts the
+  reading is not where the ceiling loses anything.
+- C took 2.57 times D's median time (interval 1.59 to 3.53). Over each
+  shape's first three jobs, C 2533 ms against D 834 ms; over the later jobs,
+  1956 against 838; over the last five, 1198 against 870. Once learned, the
+  planning router gets within about 1.4 times the ceiling.
+- The price of not having a programmer: C made 16 times D's calls and used 28
+  times its tokens, nearly all of it learning.
+- **The re-run of arm C, under the same settings as the frozen fresh-jobs run,
+  was not as fast:** C/R 0.91 (interval 0.54 to 1.25) against 0.62 in the
+  frozen run. With seven task shapes, run-to-run variation is large, and the
+  frozen run's margin should be read with that in mind.
+
+This does not test the rule that a model-based approach must beat ordinary
+code; that needs keyword rules for the reading steps, written before the text
+is seen, and is reserved for the owner's real tasks.
+
+Evidence: `fast_path_planned_v2_ceiling.jsonl`,
+`fast_path_planned_v2_ceiling_analysis.json`.
+
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
 hardened boundary against adversarial code.
