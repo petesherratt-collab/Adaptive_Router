@@ -3208,3 +3208,28 @@ is smaller than that count.
 |---|---|
 | `fast_path_jobs_v1_primary.jsonl` | `a9b35987181a775c74ebadcf61280313bc9a88a0bd810cb6fc63efcde5eb30f5` |
 | `fast_path_jobs_v1_primary_analysis.json` | `ed636371abc96d88aee1f7ce3a66d9198a655830c6e506e70ac71d7ed4cca349` |
+
+---
+
+## 2026-11-17 — Saturation rule and jobs V1 rerun
+
+`fast_path.py` gained `_gate_minimum`: a shape whose last `saturation_window`
+agreed inputs were all already stored may go to synthesis, and pass the gate,
+with as few as `saturation_min_examples` examples. Each agreed observation
+updates `repeat_streak`. Settings 5 and 2. Promotions under the rule carry
+`gate.saturated`.
+
+Descriptive rerun of jobs V1, label `saturation`: 10,700 provider calls, 8
+invalid responses, no unanswered job. Correct A 233, R 239, B 240, C 240 of
+240; medians 2205, 1071, 2266, 963 ms. C/A 0.437 (0.381 to 0.568); C/R 0.900
+(0.797 to 1.298). 28 of 29 function steps promoted, all gold-correct; two
+under saturation. `shipping_estimate.zone` was not promoted: one probe
+example, unanimous across five models, contradicts the reference, and both
+synthesis attempts were rejected at 12 of 13 examples. One wrong stored
+example in total. The runner now records wrong examples with the reference
+value.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_jobs_v1_saturation.jsonl` | `fecc89582efef69ececedb5437178e36dd45a18ea1557f03da730744da56a129` |
+| `fast_path_jobs_v1_saturation_analysis.json` | `a52be2a75b5284f4b171ace998b81e5c83b89c3b4abfa5a091ee213dc673eb04` |

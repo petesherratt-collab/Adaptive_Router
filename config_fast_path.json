@@ -8,7 +8,7 @@
       "deepseek/deepseek-v4.1-flash"
     ],
     "synthesis_model": "openai/gpt-6-luna",
-    "answer_max_tokens": 1024,
+    "answer_max_tokens": 4096,
     "synthesis_max_tokens": 1024,
     "agreement_quorum": 2,
     "min_gate_examples": 8,

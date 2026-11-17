@@ -165,7 +165,7 @@ def shape_summary(shape, instances, golds, router, kinds):
                     r["ok"] and same(r["value"], w) for r, w in zip(run.results, wanted)
                 )
                 entry["function_source"] = function["source"]
-            wrong = 0
+            wrong, wrong_list = 0, []
             if record["examples"]:
                 check = sandbox.run_function(
                     step["reference"], [e["args"] for e in record["examples"]], timeout_seconds=10.0
@@ -173,9 +173,11 @@ def shape_summary(shape, instances, golds, router, kinds):
                 for example, result in zip(record["examples"], check.results if check.ok else []):
                     if result["ok"] and not same(result["value"], example["expected"]):
                         wrong += 1
+                        wrong_list.append({**example, "reference": result["value"]})
             entry.update({
                 "promoted": function is not None, "examples": len(record["examples"]),
-                "wrong_examples": wrong, "probes": record.get("probes"),
+                "wrong_examples": wrong, "wrong_example_detail": wrong_list,
+                "probes": record.get("probes"),
                 "synthesis_attempts": record["synthesis_attempts"], "demotions": record["demotions"],
             })
         steps.append(entry)

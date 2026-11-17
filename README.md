@@ -348,6 +348,39 @@ unambiguous, the jobs small, learning was drained between jobs, and there are
 Evidence: `fast_path_jobs_v1_primary.jsonl`,
 `fast_path_jobs_v1_primary_analysis.json`.
 
+### Jobs V1 rerun with the saturation rule (descriptive, 2026-11-17)
+
+Two lookup steps in jobs V1 could never be promoted because their whole input
+domain (three and four values) was smaller than `min_gate_examples`. With
+`saturation_window` 5 and `saturation_min_examples` 2, a step whose last five
+agreed inputs were all already known may be promoted on fewer examples; the
+gate still requires every stored example. Same benchmark, rerun, descriptive.
+
+| Arm | Correct | Median ms | 90th pct ms | Mean ms |
+|---|---:|---:|---:|---:|
+| A. One direct whole-job call | 233/240 | 2205 | 3187 | 2269 |
+| R. Whole-job race | 239/240 | 1071 | 1372 | 1090 |
+| B. Step pipeline, race only | 240/240 | 2266 | 2914 | 2282 |
+| C. Step pipeline, fast path | 240/240 | 963 | 2081 | 1204 |
+
+- `store_aisle.aisle` and `greeting.hello` were promoted under the saturation
+  rule on 3 and 4 examples, both gold-correct. Those shapes' arm-C medians fell
+  from 1714 and 1844 ms to 930 and 1267 ms.
+- C against A: time ratio 0.44 (interval 0.38 to 0.57). Under the V1 plan's
+  criteria this would pass, but the run is descriptive and does not replace
+  the frozen result.
+- C against R: time ratio 0.90 (interval 0.80 to 1.30), correctness +0.4
+  points. Still not distinguishable from the whole-job race.
+- **A unanimous wrong probe answer blocked a correct function.** In
+  `shipping_estimate.zone`, all five models agreed on an answer to one probe
+  input that the reference contradicts. Both synthesised functions matched 12
+  of 13 examples and were rejected, so the step was never promoted. The input
+  was not recorded; the runner now records wrong examples in full. This is the
+  false-rejection risk of probing observed for the first time.
+
+Evidence: `fast_path_jobs_v1_saturation.jsonl`,
+`fast_path_jobs_v1_saturation_analysis.json`.
+
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
 hardened boundary against adversarial code.
