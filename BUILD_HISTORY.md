@@ -3264,3 +3264,39 @@ Provider credit at the freeze: about $16.70.
 
 Verification: full unit suite passed; benchmark self-verify passed;
 `git diff --check` passed.
+
+---
+
+## 2026-11-17 — Fast-path jobs V2 (larger jobs) result
+
+The frozen run completed in one attempt: 8,357 provider calls, 20 invalid
+responses, no unanswered job. Decision under the frozen criteria, arm C
+against arm R: `SUPPORTED`.
+
+| Arm | Correct | Median ms | Mean ms |
+|---|---:|---:|---:|
+| A. Direct whole job | 99/105 | 3786 | 3969 |
+| R. Whole-job race | 105/105 | 2791 | 2800 |
+| B. Pipeline, race only | 104/105 | 5317 | 5531 |
+| C. Pipeline, fast path | 105/105 | 1129 | 2155 |
+
+- C/R 0.405 (0.340 to 0.877); correctness 0.000 (0.000 to 0.000).
+- C/A 0.298 (0.228 to 0.660); +0.057. R/A 0.737. B/A 1.405 (1.087 to 1.812).
+- Arm A errors: `stock_reorder` 5, `grade_report` 1. Arm B: one wrong job,
+  first wrong step a function step on the race.
+- 39 of 41 function steps promoted. `thread_digest.span`: both synthesised
+  functions rejected by the gate. `stock_reorder.order_line`: one unanimous
+  example in fifteen jobs, never synthesised.
+- `log_triage.worst` is reported gold-wrong by the analysis; it fails only the
+  benchmark's hand-written tests, whose log lines lack the 'HH:MM:SS' field the
+  specification requires. It matched gold on every stream input.
+- Three wrong stored examples, all probe answers where the reference is
+  weaker than or silent relative to the specification: a negative amount in
+  `invoice_audit.summary`, a quoted CSV field in `order_batch.rows`, a hyphen
+  in a name in `meeting_actions.actions`. The last contributed to one rejected
+  synthesis attempt before a later attempt was promoted.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_jobs_v2_large_primary.jsonl` | `0e42c2f0c90dbefb0cc78061b3f45ee0b32ba347e0fef566f927582871de77c6` |
+| `fast_path_jobs_v2_large_primary_analysis.json` | `845504cdf1b601a00fd5693a0225520fae8a5bbcf965e31976e7ce34e855b777` |

@@ -381,6 +381,51 @@ gate still requires every stored example. Same benchmark, rerun, descriptive.
 Evidence: `fast_path_jobs_v1_saturation.jsonl`,
 `fast_path_jobs_v1_saturation_analysis.json`.
 
+### Jobs V2: larger jobs (prospective, 2026-11-17)
+
+[`FAST_PATH_JOBS_V2_LARGE_PLAN.md`](FAST_PATH_JOBS_V2_LARGE_PLAN.md) froze one
+four-arm run on 7 job shapes of 7 steps each, 15 jobs per shape, with long
+structured inputs, judging the pipeline against the whole-job race. Decision:
+`SUPPORTED`.
+
+| Arm | Correct | Median ms | 90th pct ms | Mean ms |
+|---|---:|---:|---:|---:|
+| A. One direct whole-job call | 99/105 | 3786 | 5642 | 3969 |
+| R. Whole-job race | 105/105 | 2791 | 3504 | 2800 |
+| B. Step pipeline, race only | 104/105 | 5317 | 7573 | 5531 |
+| C. Step pipeline, fast path | 105/105 | 1129 | 5314 | 2155 |
+
+- Primary, C against R: time ratio 0.41 (95% interval 0.34 to 0.88), wholly
+  below 1.0. Correctness difference 0.0 (both 105/105).
+- C against A: time ratio 0.30 (0.23 to 0.66); correctness +5.7 points.
+- B against A: 1.41. Decomposition without code remains a cost, larger here
+  because there are more steps.
+- After the fifth job of each shape, medians were A 3577, R 2711, B 5302,
+  C 1020 ms.
+- Arm C made no wrong step: 459 function steps on code (median 31 ms), 156 on
+  the race, 120 judgement steps, all correct. No judgement step was stored.
+- 39 of 41 function steps were promoted. Not promoted:
+  `thread_digest.span`, where the gate rejected both synthesised functions
+  (3 of 15 and 3 of 16 examples matched), and `stock_reorder.order_line`,
+  where the five models agreed unanimously on only one answer in fifteen jobs,
+  so it never had enough examples. That shape stayed at 2.7 s.
+- One promoted function is counted gold-wrong: `log_triage.worst`. It is
+  correct on every request input but fails the benchmark's own hand-written
+  tests, which use lines like '1 ERROR b: x' that do not follow the
+  specification's 'HH:MM:SS' format. This is a flaw in the tests, not in the
+  function.
+- Three stored probe examples contradict the reference. In each, the probe
+  input lies where the reference is weaker than the specification or the
+  specification is silent: a negative total (the reference's euro formatting
+  is wrong below zero), a quoted CSV field, and a name containing a hyphen.
+  None blocked a promotion and none lies in the request stream.
+
+Limits: 7 task clusters; constructed jobs with unambiguous judgement texts;
+learning drained between jobs; benchmark not owner-reviewed before the freeze.
+
+Evidence: `fast_path_jobs_v2_large_primary.jsonl`,
+`fast_path_jobs_v2_large_primary_analysis.json`.
+
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
 hardened boundary against adversarial code.
