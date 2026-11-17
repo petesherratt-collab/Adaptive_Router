@@ -460,6 +460,40 @@ criteria: `NOT_SUPPORTED`, narrowly on time.
 
 Evidence: `fast_path_planned_v1.jsonl`, `fast_path_planned_v1_analysis.json`.
 
+A second descriptive run applied two fixes: the plan validator tidies minor
+signature slips and returns a refusal to the planner for one retry, and plans
+are written after two agreed answers instead of three. Decision: still
+`NOT_SUPPORTED` on time.
+
+| Arm | Correct | Median ms | 90th pct ms | Mean ms |
+|---|---:|---:|---:|---:|
+| A. One direct call | 101/105 | 3736 | 6011 | 3941 |
+| R. Whole-task race | 102/105 | 2391 | 3077 | 2419 |
+| C. Planning router | 103/105 | 2009 | 3532 | 2249 |
+
+- C against R: time ratio 0.84 (interval 0.72 to 1.09), correctness +1.0
+  point (interval -1.9 to +3.8). Not better than the first run's 0.79.
+- All seven shapes got a plan, every one on its first attempt, and plans now
+  served from the third or fourth job: 88 of 105 jobs ran on a plan.
+- The validator fix was never exercised: no plan was refused in this run.
+  `order_batch` got a plan because the planner happened to write a valid one.
+- The plans were coarser: 16 function steps in place of 19, several of them
+  large ("parse every line and compute all the statistics", "format the whole
+  result"), and only 12 promoted by the end. 80 function-step executions still
+  went to the models, against 36 in the first run. Plan-served jobs had a
+  median of 1862 ms, against 1553 ms before.
+- Two wrong answers in arm C: one whole-task race answer before any plan
+  (the same kind of error arm R made), and one plan job whose final formatting
+  step, still on the models, returned null. The audit then dropped that plan,
+  and a second plan for the shape was adopted.
+
+The two runs together say that a model-written plan can be verified and used
+safely, but how much it speeds a job up depends on how the planner happens to
+split the work, which varied between runs more than either fix changed it.
+
+Evidence: `fast_path_planned_v1_fixes.jsonl`,
+`fast_path_planned_v1_fixes_analysis.json`.
+
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
 hardened boundary against adversarial code.

@@ -3387,3 +3387,32 @@ Credit before the rerun: about $9.45.
 | `config_fast_path.json` | `b3ca27f9c3e828074293a51cc5a1530e73302998998a8d084dbcb99fef9cf06a` |
 | `planner.py` | `8366396755502fcd320ffa6a22860afdb0ab5d5dd1375e051eb53a05aaa986a5` |
 | `FAST_PATH_PLANNED_V1_PLAN.md` | `38a2e1a14014fa7791391cde991ee3f9c83acdd0dd9780627ace3c44a8193f5e` |
+
+---
+
+## 2026-11-17 — Planned jobs V1 rerun with fixes
+
+Label `planned_v1_fixes`: 3,060 provider calls, 2 invalid responses, no
+unanswered job. Decision: `NOT_SUPPORTED`.
+
+| Arm | Correct | Median ms | Mean ms |
+|---|---:|---:|---:|
+| A. Direct | 101/105 | 3736 | 3941 |
+| R. Whole-task race | 102/105 | 2391 | 2419 |
+| C. Planning router | 103/105 | 2009 | 2249 |
+
+- C/R 0.841 (0.716 to 1.087); C minus R +0.010 (-0.019 to +0.038).
+- 8 plan attempts, all adopted on first try (one shape twice, after an audit
+  demotion). No refused plan, so the validator fix and retry were not used.
+- Plan steps 16 function (12 promoted), 8 judgement. Step executions: 130
+  function on code, 80 function on the race, 101 judgement.
+- Arm C routes: 88 plan jobs (87 correct, median 1862 ms), 17 race jobs
+  (16 correct, median 2487 ms). After adoption: A 3709, R 2391, C 1867 ms.
+- Wrong in C: `meeting_actions` job 0 on the race (overdue count 2 for 4);
+  `invoice_audit` job 5 on a plan, final model step returned null. The audit
+  then dropped that plan; a second plan was adopted.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v1_fixes.jsonl` | `c3b5a6c06db7198bc5bd107bbd4cc975683543d88119efbd4089932d8d6a75a2` |
+| `fast_path_planned_v1_fixes_analysis.json` | `e8c413b24886d668478d1f8afc34ce7638dc70d52fc83c965a239e24541f08c5` |
