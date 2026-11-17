@@ -113,3 +113,15 @@ and purpose.
 --set plan_shadow=false --label v3_primary`. Stops on HTTP 401 or 402 or
 sustained provider failure. Credit at the freeze: about $8.75; the run is
 expected to cost about $4.5.
+
+## Result (2026-11-17)
+
+**Primary: NOT SUPPORTED.** C/R median-time ratio 1.06 (95% interval 0.68 to
+1.44); correctness C minus R +1.9 points (+0.6 to +3.7). The planner was more
+accurate than the race but not faster overall: one shape got no plan, and two
+kept three unpromoted steps (date arithmetic, floor lookups) that ran on the
+models in a chain. Over the last five jobs per shape C was faster (1186 against
+1834 ms), as plans finished learning.
+
+**Code-only test:** E 148/160. C and D beat it on correctness (intervals above
+zero); R did not (-0.6 to +9.4 points). Full figures in `BUILD_HISTORY.md`.

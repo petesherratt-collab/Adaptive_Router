@@ -3960,3 +3960,47 @@ suite passed (568 tests). Credit at the freeze: about $8.75.
 | `score_code_only_v1.py` | `77140d74e9838a11c80e643453490b7ffc8573e8d749abc31be0fe4946fa7088` |
 | `code_only_v1_scores.json` | `690ca3e75ff2c9142781976a2bec4816042f22130fcf695b550f726c444e5c3f` |
 | `FAST_PATH_PLANNED_V3_PLAN.md` | `468c2348cd0b51cb37cef479ec123c57ef78948e32185f13cc4774861abb1514` |
+
+---
+
+## 2026-11-17 — Planned jobs V3 primary result (prospective; handoff items 2 and 4)
+
+Label `v3_primary`: 8 fresh shapes, 20 jobs each, arms A, R, C, D, E, drained
+arrival, plans live on adoption. 10,153 provider calls, 14 invalid responses,
+no unanswered job. Cost about $2.43.
+
+| Arm | Correct | Median ms | Last five ms | Calls | Prompt tokens | Completion tokens |
+|---|---:|---:|---:|---:|---:|---:|
+| A | 153/160 | 3086 | 3210 | 160 | 68,026 | 28,327 |
+| R | 155/160 | 1957 | 1834 | 800 | 375,371 | 420,438 |
+| C | 158/160 | 2078 | 1186 | 8,393 | 1,833,375 | 1,185,950 |
+| D | 160/160 | 872 | 870 | 800 | 154,682 | 40,847 |
+| E | 148/160 | 0.16 | 0.15 | 0 | 0 | 0 |
+
+**Primary decision: NOT SUPPORTED.** C/R 1.062 (0.684 to 1.440): the time
+criterion fails. C minus R +0.019 (+0.006 to +0.037): the correctness
+criterion holds.
+
+- Plans adopted for 7 of 8 shapes, all from job index 2; 126 plan-served jobs,
+  all correct (median 1861 ms). `fleet_fuel` had both plans rejected and ran
+  on the race throughout (its two wrong C answers came from the race). 15 plan
+  attempts: 12 adopted, 3 rejected. 70 function steps, 62 promoted. No wrong
+  job example, no demotion.
+- Shapes where C was slower than R, with the reason in their records:
+  `library_loans` (3343 against 2036 ms; three date-arithmetic steps,
+  `overdue`, `days`, `most_title`, never promoted and raced in a chain),
+  `room_bookings` (2264 against 1885; three floor-lookup steps unpromoted),
+  `fleet_fuel` (no plan), and `ticket_queue` and `event_rsvps` before their
+  steps were promoted. Where every step was promoted, C ran at about 0.8 to
+  1.1 s against the race's 1.6 to 2.7 s.
+- Ceiling: D reading 160/160; C/D 2.38 (1.54 to 3.33).
+- Code-only test (fixed in advance): E 148/160, exactly as stage 1 predicted.
+  C minus E +0.063 (+0.013 to +0.113): **C beats code**. D minus E +0.075
+  (+0.038 to +0.119): **models read better than the rules**. R minus E +0.044
+  (-0.006 to +0.094): the race does **not** clear the bar. E is about 10,000
+  times faster than any model arm.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v3_primary.jsonl` | `0c9a5b7835e658c6d9fade95c3929aefc479839acbb3ab8455f4629fe356fb57` |
+| `fast_path_planned_v3_primary_analysis.json` | `2af7cea26a5e75b1508169ad63c389a59ae392237ca47c16e3040a87cac0e67d` |

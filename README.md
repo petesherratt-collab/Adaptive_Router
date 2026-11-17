@@ -764,6 +764,50 @@ the development data. Calls are now metered by purpose.
 Evidence: `fast_path_planned_v2_lean.jsonl`,
 `fast_path_planned_v2_lean_analysis.json`.
 
+### Planned jobs V3: fresh, more varied jobs and a code-only arm (prospective, 2026-11-17)
+
+Eight new job shapes (`fast_path_planned_bench_v3.py`), with more varied inputs
+(text lines, JSON arrays of numbers and objects, dates) and eight different
+readings (urgency, department, diet, vehicle issue, library request, site,
+delivery country, formality). A fifth arm, **E, uses no model at all**: keyword
+rules read the prose and the reference code does the rest. To make that fair,
+the rules (`fast_path_code_only_v1.py`) were written from the task descriptions
+and their hash recorded **before the texts existed**. The texts were then
+written by a model outside the roster (`mistralai/mistral-large-4-0`) and
+hand-checked against their labels. Plan: `FAST_PATH_PLANNED_V3_PLAN.md`.
+
+| Arm | Correct | Median ms | Last five per shape, ms | Model calls |
+|---|---:|---:|---:|---:|
+| A. One direct call | 153/160 | 3086 | 3210 | 160 |
+| R. Whole-task race | 155/160 | 1957 | 1834 | 800 |
+| C. Planning router | 158/160 | 2078 | 1186 | 8,393 |
+| D. Ceiling (models read, reference code) | 160/160 | 872 | 870 | 800 |
+| E. Code only (rules read, reference code) | 148/160 | 0.16 | 0.15 | 0 |
+
+- **Primary result: not supported.** C/R 1.06 (interval 0.68 to 1.44); C was
+  1.9 points more accurate than R (0.6 to 3.7). The V2 result did not
+  replicate on time. `fleet_fuel` got no plan (both rejected). `library_loans`
+  and `room_bookings` each kept three function steps (date arithmetic, floor
+  lookups) on the models, chained, so their plans ran slower than the race.
+  Shapes whose steps all became code ran in about 0.8 to 1.1 s against the
+  race's 1.6 to 2.7 s, and over the last five jobs C was clearly faster.
+- **Code against models.** The rules read 148 of 160 texts right (the same
+  number stage 1 predicted offline: 293 of 324 distinct texts). Models reading
+  the same jobs (D) got 160. The planning router beat code-only on correctness
+  (+6.3 points, interval +1.3 to +11.3); the plain whole-task race did not
+  (+4.4, interval -0.6 to +9.4). Code-only answered about 10,000 times faster.
+  Rules failed on complaints with no complaint word, places missing from
+  their lists, negations ("I'm not vegan") and meetings described only by
+  subject.
+
+Evidence: `fast_path_planned_v3_primary.jsonl`,
+`fast_path_planned_v3_primary_analysis.json`, `code_only_v1_scores.json`.
+
+The owner's `evolab` repository gained the matching code-only condition (branch
+`ccr-23487558-3yzwx4`, amendment 0.1-G): a scripted client that reads only the
+public task scored Brier loss 0 on all nine sealed development tasks at
+minimum evidence cost, which no model condition beat.
+
 The sandbox (separate process, stripped builtins, module allowlist, resource
 limits, best-effort network namespace) guards against accidents. It is not a
 hardened boundary against adversarial code.
