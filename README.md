@@ -875,6 +875,39 @@ frozen before the texts existed. Plan: `FAST_PATH_WRITE_ONCE_V2_PLAN.md`.
 Evidence: `fast_path_write_once_v2_primary.jsonl`,
 `fast_path_write_once_v2_primary_analysis.json`.
 
+### Write once with edge-case probes, fresh unseen jobs (prospective, 2026-11-18)
+
+Write-once now also checks each program against up to six edge-case jobs
+(rounding at halves, ties, empty lists, thresholds) proposed by a probe model
+and answered by the race; a program is adopted only if it reproduces every
+agreed answer. Eight more unseen job shapes (`fast_path_planned_bench_v5.py`),
+several built around half-cent rounding and thresholds, 30 jobs each. Plan:
+`FAST_PATH_WRITE_ONCE_V3_PLAN.md`.
+
+| Arm | Correct | Median ms | Model calls |
+|---|---:|---:|---:|
+| R. Whole-task race | 233/240 | 1925 | 1,200 |
+| D. Ceiling | 240/240 | 931 | 1,200 |
+| W. Write once | 240/240 | 948 | 1,385 |
+| **P. Write once with probes** | **238/240** | **961** | **1,866** |
+
+- **Supported**: P took 0.50 of the race's time (interval 0.45 to 0.58) and
+  was 2.1 points more accurate (0.0 to +5.4). All 222 program answers were
+  right; its two misses came from the race before adoption. It matched the
+  hand-written ceiling's speed.
+- The probes rejected nothing (46 agreed, 0 failed), and write-once without
+  probes was also perfect, so this run shows the probes are cheap (about a
+  third more calls, no extra answer time), not that they help.
+- **Jobs back to back** (same jobs, R and P only): P took 0.65 of the race's
+  time (0.54 to 0.74), -0.8 points (-1.7 to 0.0). Programs went live after 11
+  to 22 jobs, because writing and checking a program takes longer than a
+  dozen jobs arriving; once live, every answer was right at about 0.9 s.
+
+Evidence: `fast_path_write_once_v3_primary.jsonl`,
+`fast_path_write_once_v3_primary_analysis.json`,
+`fast_path_write_once_v3_immediate.jsonl`,
+`fast_path_write_once_v3_immediate_analysis.json`.
+
 The owner's `evolab` repository gained the matching code-only condition (branch
 `ccr-23487558-3yzwx4`, amendment 0.1-G): a scripted client that reads only the
 public task scored Brier loss 0 on all nine sealed development tasks at

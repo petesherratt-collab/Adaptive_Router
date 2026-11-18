@@ -4302,3 +4302,34 @@ their only motivating case.
 |---|---|
 | `fast_path_write_once_v3_primary.jsonl` | `76081c55e7814211f0c9081f4e766b0fbf7841bad5718eadf2354f7519b8c4db` |
 | `fast_path_write_once_v3_primary_analysis.json` | `81fa6f983f79fe6bc3a560f7eda06db971ca8ea27194f551468bab0df33bd9da` |
+
+---
+
+## 2026-11-18 — Write-once V3 run 2: jobs back to back (descriptive)
+
+Label `write_once_v3_immediate`: the same V5 jobs, arms R and P,
+`--arrival immediate`. 3,036 provider calls, 2 invalid responses. Cost about
+$2.11.
+
+| Arm | Correct | Median ms | Last five ms | Calls |
+|---|---:|---:|---:|---:|
+| R | 239/240 | 1966 | 1889 | 1,200 |
+| P | 237/240 | 1273 | 931 | 1,836 |
+
+- P/R 0.647 (0.536 to 0.743); P minus R -0.008 (-0.017 to 0.000).
+- Programs went live at job index 10 to 21 (median 13), against 2 to 4 with
+  drained arrival: writing a program, trying it and running its probes takes
+  longer than ten jobs arriving back to back. Until then the race answered.
+- 129 program-served jobs, all correct (median 914 ms against the race's 2,015
+  ms over the same jobs); the 3 wrong P answers came from the race. Probes:
+  47 agreed, 0 failed.
+
+Reading: under live traffic write-once still saves about a third of the time
+over 30 jobs, and once live it runs at the ceiling's speed. Its start-up cost
+is a fixed delay of about a dozen jobs, far shorter than the planning
+router's 20 to 35 jobs, or never, in follow-ups 5 to 7.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_write_once_v3_immediate.jsonl` | `d0d63ebb366187b8a0f8369a191df4a1e3938f2e28431ab8c906a35005e5c84e` |
+| `fast_path_write_once_v3_immediate_analysis.json` | `b6d19846fb7561793213740b89dbfa352b84eccebd62add2c672037e00b0fc3c` |

@@ -60,3 +60,8 @@ wrong program answers. Expected cost about $1.50.
 +2.1 points (0.0 to +5.4); every program answer right. The probes rejected no
 program (0 of 46 agreed probes failed), and write once without probes was also
 right on all 240 jobs. Details in `BUILD_HISTORY.md`.
+
+## Run 2 result (2026-11-18)
+
+Back to back: 0.65 of the race's time (0.54 to 0.74), -0.8 points (-1.7 to
+0.0). Programs went live at jobs 11 to 22; every program answer was right.

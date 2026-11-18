@@ -7,7 +7,7 @@ the planned-jobs part) and `BUILD_HISTORY.md` (every freeze, hash and result).
 
 - Work branch `ccr-23487558-3yzwx4` (this repo and `evolab`); not merged.
 - Full suite: `python -m unittest discover -s tests` (568 tests, passing).
-- OpenRouter credit left: about $7.80 (after a top-up to $10.51).
+- OpenRouter credit left: about $7.45.
 - Conventions unchanged: freeze and hash before provider calls; never
   overwrite evidence; promotion and adoption by execution, never by a model.
 
@@ -37,10 +37,18 @@ the planned-jobs part) and `BUILD_HISTORY.md` (every freeze, hash and result).
    (structured list outputs); an optional repair (`repair_attempts`) did worse.
 7. Shared write-up and spreadsheet updated with everything above.
 
+8. Write-once on unseen jobs: V4 (prospective) not supported on correctness
+   (a half-cent rounding rule, also missed by the planner); edge-case probes
+   added (`program_probes`); V5 (prospective) **supported**: 0.50 of the
+   race's time, +2.1 points, level with the ceiling; back to back 0.65,
+   programs live after 11 to 22 jobs. Probes have caught nothing yet.
+
 ## Open items
 
-- Test write-once prospectively (unseen jobs) and with jobs back to back;
-  then decide whether it replaces the planner as the multi-step path.
+- Write-once now has two prospective tests (one failed on a rounding rule, one
+  passed) and a back-to-back run: the case for replacing the planner with it
+  is strong. Next: make it the multi-step path in code, shorten its start-up
+  under live traffic, and find a job a model cannot write whole.
 - Jobs a model cannot write whole are where step learning could still matter;
   none has been found yet.
 - A learning pair chosen for price (`openai/gpt-6-luna` +
