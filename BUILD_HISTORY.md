@@ -4175,3 +4175,53 @@ against R and W/C, C/R pairs. Credit at the freeze: about $7.75.
 | `fast_path_ceiling_v4.py` | `bcab5bb6034e1849397ad116d8e39030cc06673a749ff0691a8373c2bce61e82` |
 | `fast_path_code_only_v2.py` | `37be79b8d1ff4bc45cb49e623612a280f3c658ba745e86bf27a4a0709c993ae2` |
 | `FAST_PATH_WRITE_ONCE_V2_PLAN.md` | `3b413a2b037f3accb4ce57e6e77dc53c5a3deafae21596c8e76019550558a7ec` |
+
+---
+
+## 2026-11-18 — Write-once V2 run 1 result (prospective)
+
+Label `write_once_v2_primary`: V4 jobs (8 unseen shapes, 20 each), arms R, C,
+D, E, W, drained. 14,206 provider calls, 40 invalid responses, no unanswered
+job. **Cost about $5.62, against an estimate of $3.80** (arm C made 11,627
+calls).
+
+| Arm | Correct | Median ms | Last five ms | Calls |
+|---|---:|---:|---:|---:|
+| R | 153/160 | 2296 | 2416 | 800 |
+| C | 150/160 | 1753 | 1074 | 11,627 |
+| D | 159/160 | 912 | 926 | 800 |
+| E | 127/160 | 0.14 | 0.16 | 0 |
+| W | 151/160 | 963 | 910 | 979 |
+
+**Primary decision: NOT SUPPORTED.** W/R 0.419 (0.352 to 0.468): the time
+criterion holds. W minus R -0.013 (-0.100 to +0.050): the correctness
+criterion fails.
+
+- W adopted a program for every shape at its first attempt (job index 2 or
+  3). 139 program-served jobs, 132 correct. Of the 7 wrong: 5 were code, all
+  in `wine_orders`, where the program rounded the discounted value instead
+  of the discount, which differs only when the discount ends in exactly half
+  a cent, a case neither trial example contained. An audit caught the first
+  such program and dropped it; the second had the same fault. 2 were
+  readings (a cot request, a conference-room note), under the program's own
+  reading specs.
+- C's plans made the same rounding error on the same `wine_orders` jobs
+  (C 14/20 there). The whole-task race got all 20 right.
+- W against C: 0.55 of C's time (0.42 to 0.80), correctness +0.006 (0.000 to
+  +0.019), with 1/12 of the calls. C against R: 0.76 (0.48 to 0.99),
+  correctness -0.019 (-0.106 to +0.044).
+- W against D: 1.06 of the ceiling's time (0.99 to 1.12), -0.050 (-0.125 to
+  0.000). W and C against E: W +0.150 (-0.025 to +0.319); neither interval is
+  wholly above zero, because the rules were right on `wine_orders` where the
+  code-based arms were not.
+
+Reading: on unseen jobs writing the job once was again about twice as fast as
+the race and beat step learning on time, calls and correctness, but code
+checked against two agreed answers can carry an edge-case rule error that the
+race does not make. The two-example trial is too thin for rounding rules; the
+probes the fast path uses for single steps would be the natural guard.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_write_once_v2_primary.jsonl` | `9223f62d65cd58aac9c43c1d89965da514c30ad2016ce2b6b2e2c3cebb40092e` |
+| `fast_path_write_once_v2_primary_analysis.json` | `951ff93341bbe09b1c0abfaae39b223bf95efc64c84200102398682f710a91d4` |

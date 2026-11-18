@@ -60,3 +60,12 @@ traffic. Readings: W against R, first program job per shape. Expected cost
 about $1.30.
 
 Stop rules as before (HTTP 401/402 or sustained provider failure).
+
+## Run 1 result (2026-11-18)
+
+**Not supported.** Write-once took 0.42 of the race's time (0.35 to 0.47) but
+was 1.3 points less accurate (interval -10.0 to +5.0), failing the -2-point
+bound. Five of its seven wrong program answers were one rounding error in
+`wine_orders` that two trial examples could not expose; the planning router's
+plans made the same error. Write-once beat the planning router on time
+(0.55), calls (1/12) and correctness. Cost $5.62 against $3.80 estimated.

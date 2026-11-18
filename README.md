@@ -845,6 +845,36 @@ because the planner wrote different plans. Plan:
 `FAST_PATH_REPAIR_V1_PLAN.md`; evidence: `fast_path_repair_v1.jsonl`,
 `fast_path_repair_v1_analysis.json`.
 
+### Write once on unseen jobs (prospective, 2026-11-18)
+
+Eight unseen job shapes (`fast_path_planned_bench_v4.py`), with keyword rules
+frozen before the texts existed. Plan: `FAST_PATH_WRITE_ONCE_V2_PLAN.md`.
+
+| Arm | Correct | Median ms | Model calls |
+|---|---:|---:|---:|
+| R. Whole-task race | 153/160 | 2296 | 800 |
+| C. Planning router | 150/160 | 1753 | 11,627 |
+| D. Ceiling | 159/160 | 912 | 800 |
+| E. Code only (keyword rules) | 127/160 | 0.14 | 0 |
+| **W. Write once** | **151/160** | **963** | **979** |
+
+- **Not supported**: write-once took 0.42 of the race's time (interval 0.35 to
+  0.47), but its accuracy interval against the race (-10 to +5 points) crossed
+  the -2-point bound.
+- Every program was adopted at its first attempt. Five of its seven wrong
+  answers came from one rule in `wine_orders`: it rounded the discounted value
+  rather than the discount, which differs only when a discount ends in half a
+  cent. The two examples it was checked against had no such case. The
+  planning router's plans made the same error; the race made none.
+- Against the planning router, write-once was again better on every count:
+  0.55 of its time, a twelfth of its calls, slightly more accurate.
+- Lesson: checking a whole program against two agreed answers is too thin for
+  rounding and tie rules. Edge-case probes, which already guard single steps,
+  are the obvious addition.
+
+Evidence: `fast_path_write_once_v2_primary.jsonl`,
+`fast_path_write_once_v2_primary_analysis.json`.
+
 The owner's `evolab` repository gained the matching code-only condition (branch
 `ccr-23487558-3yzwx4`, amendment 0.1-G): a scripted client that reads only the
 public task scored Brier loss 0 on all nine sealed development tasks at
