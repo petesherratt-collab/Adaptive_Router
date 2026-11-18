@@ -7,7 +7,7 @@ the planned-jobs part) and `BUILD_HISTORY.md` (every freeze, hash and result).
 
 - Work branch `ccr-23487558-3yzwx4` (this repo and `evolab`); not merged.
 - Full suite: `python -m unittest discover -s tests` (568 tests, passing).
-- OpenRouter credit left: about $7.45.
+- OpenRouter credit left: about $4.20.
 - Conventions unchanged: freeze and hash before provider calls; never
   overwrite evidence; promotion and adoption by execution, never by a model.
 
@@ -43,12 +43,21 @@ the planned-jobs part) and `BUILD_HISTORY.md` (every freeze, hash and result).
    race's time, +2.1 points, level with the ceiling; back to back 0.65,
    programs live after 11 to 22 jobs. Probes have caught nothing yet.
 
+9. Write-once made the multi-step path (`main.py --task-json`, on-disk
+   programs, per-item readings, probes on, `write_early` built but unmeasured;
+   planner marked superseded).
+10. Hard jobs (V6, ~7.4 readings per job, prospective): write-once as accurate
+    as the race but 1.11 of its time (per-item reading races wait on the
+    slowest); the planner was worst (-22 points, 18,178 calls). Run cost $12.90
+    against $6 estimated. Run B (back to back, early writing) dropped.
+
 ## Open items
 
-- Write-once now has two prospective tests (one failed on a rounding rule, one
-  passed) and a back-to-back run: the case for replacing the planner with it
-  is strong. Next: make it the multi-step path in code, shorten its start-up
-  under live traffic, and find a job a model cannot write whole.
+- Batch a job's readings into one call per reading (list in, list of labels
+  out) to remove the max-of-N wait on many-reading jobs; then measure it and
+  `write_early` together, without the planner (about $3 to $4).
+- Cost estimates have been unreliable (twice about double); price new runs
+  from the last comparable run plus 50%.
 - Jobs a model cannot write whole are where step learning could still matter;
   none has been found yet.
 - A learning pair chosen for price (`openai/gpt-6-luna` +

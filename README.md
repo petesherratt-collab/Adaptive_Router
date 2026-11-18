@@ -908,6 +908,48 @@ Evidence: `fast_path_write_once_v3_primary.jsonl`,
 `fast_path_write_once_v3_immediate.jsonl`,
 `fast_path_write_once_v3_immediate_analysis.json`.
 
+### Write-once becomes the multi-step path (2026-11-18)
+
+`write_once.WriteOnceRouter` is now the way to answer a plain-language
+multi-step task: `python main.py --task-json task.json` (a
+`fast_path_task_v1` document). Programs are kept in `fast_path_programs/`
+between runs, edge-case probes are on by default (`program_probes` 6), and a
+reading may be made on every item of a list (`"each": true`). Early writing
+(`write_early`) is implemented and tested but off by default: it was never
+measured, because the run that would have measured it was dropped to save
+credit. `planner.py` is kept, marked superseded.
+
+### Hard jobs: many readings per job (prospective, 2026-11-18)
+
+Eight unseen job shapes (`fast_path_planned_bench_v6.py`), each a list of 4 to
+12 records with a short text to read on every record (review topic, incident
+severity, expense category, allergen, ...), about 7.4 readings per job. These
+were built as the jobs most likely to defeat writing the whole job once, and
+the only kind where step-by-step planning might still win. Plan:
+`FAST_PATH_HARD_JOBS_V1_PLAN.md`.
+
+| Arm | Correct | Median ms | 90th pct ms | Model calls |
+|---|---:|---:|---:|---:|
+| R. Whole-task race | 143/160 | 2245 | 3202 | 800 |
+| C. Planning router | 108/160 | 2891 | 19,741 | 18,178 |
+| D. Ceiling (reference code, every item raced) | 140/160 | 1806 | 3130 | 5,895 |
+| P. Write once with probes | 143/160 | 2492 | 3941 | 5,934 |
+
+- **Not supported**: write-once was as accurate as the race but slower (1.11
+  of its time, interval 1.02 to 1.20). Each item's reading is its own race, so
+  a job waits for the slowest of about seven races, where the whole-task race
+  waits for one. Batching a job's readings into one call is the obvious fix;
+  it is untested.
+- **The planning router did worst**, on exactly the jobs meant to favour it:
+  22 points less accurate than write-once, with median times of 12 to 18 s on
+  three shapes and three times write-once's calls.
+- `incident_log` was hard for every arm (7 or 8 of 20): one misread severity
+  among seven notes flips its escalation rule.
+- The run cost about $12.90 against an estimate of $6, almost all of it the
+  planning router.
+
+Evidence: `fast_path_hard_v1_primary.jsonl`, `fast_path_hard_v1_primary_analysis.json`.
+
 The owner's `evolab` repository gained the matching code-only condition (branch
 `ccr-23487558-3yzwx4`, amendment 0.1-G): a scripted client that reads only the
 public task scored Brier loss 0 on all nine sealed development tasks at
