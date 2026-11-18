@@ -36,6 +36,8 @@
     "plan_live_window": 2,
     "plan_live_ratio": 0.75,
     "learning_models": null,
-    "repair_attempts": 0
+    "repair_attempts": 0,
+    "program_probes": 6,
+    "write_early": false
   }
 }

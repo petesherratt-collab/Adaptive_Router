@@ -1,27 +1,36 @@
-"""Write the job once: the competitor the planning router has to beat.
+"""Write the job once: the multi-step path.
 
-A request is a plain-language task description plus named inputs, as for
-``planner.PlanningRouter``. Per task template:
+A request is a plain-language task description plus named inputs
+(``fast_path_task_v1``, as for ``planner.PlanningRouter``). Per task template:
 
 1. Until a program is adopted, each request is answered by racing the whole
    task across the roster; agreed answers become job examples, by the same
    rule the planner uses.
 2. Once ``plan_examples`` examples exist, one model call (``planner_model``)
    writes the whole job from the description and one request's inputs (no
-   answer is shown): a list of reading steps, each a short judgement over one
-   input with a fixed label set, and one Python function
-   ``solve(inputs, readings)`` that does everything else.
-3. The program is run on the stored examples, its reading steps raced exactly
-   as the planner races judgement steps. It is adopted only if it reproduces
-   every agreed answer. At most ``max_plan_attempts`` programs are tried.
+   answer is shown): a list of reading steps, each a short judgement with a
+   fixed label set, and one Python function ``solve(inputs, readings)`` that
+   does everything else. A reading is over one text input, or over every item
+   of a list of texts (or of a text field of a list of objects), giving one
+   label or a list of labels.
+3. The program is run on the stored examples, its readings raced exactly as
+   the planner races judgement steps. With ``program_probes`` set, it must
+   also reproduce the race's agreed answers on up to that many edge-case jobs
+   proposed by ``probe_model``. It is adopted only if it reproduces every
+   agreed answer. At most ``max_plan_attempts`` programs are tried.
 
-Afterwards each request races only the reading steps, in parallel, and runs the
+With ``write_early`` set, the first program is written (and probed) as soon as
+a template is first seen, in parallel with the race; it is tried against the
+examples the moment they exist. This shortens the start-up under live traffic.
+
+Afterwards each request races only the readings, in parallel, and runs the
 code in the sandbox. A ``plan_audit_rate`` sample is checked against a fresh
 whole-task race; an agreed mismatch drops the program. No model judges the
-code: adoption is by execution, as everywhere else in this project.
+code: adoption is by execution, as everywhere else in this project. With a
+``store_dir``, templates and programs are kept on disk between processes.
 
-This is what a programmer with a coding model would do. It learns nothing step
-by step, so after adoption it should run at about the ceiling arm's speed.
+This superseded the planning router as the multi-step path after the
+write-once experiments of 2026-11-18 (README, "Write the job once").
 """
 
 from __future__ import annotations
@@ -29,6 +38,8 @@ from __future__ import annotations
 from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import json
+import os
+from pathlib import Path
 import threading
 import time
 import uuid
@@ -39,6 +50,8 @@ import sandbox
 from shadow import should_shadow
 
 PROGRAM_ROUTE = "program"
+READING_KEYS = {"id", "input", "spec", "labels"}
+READING_OPTIONAL = {"each", "field"}
 
 
 def build_program_prompt(description, inputs):
@@ -56,11 +69,14 @@ def build_program_prompt(description, inputs):
         "Split the work in two:",
         "- \"readings\": the parts that need reading meaning from prose (tone, topic, intent, language, "
         "which place or thing a text refers to, and so on). Each reading takes exactly one input and "
-        "returns one label from a fixed list. Use as few as possible, none if code can do everything.",
+        "returns one label from a fixed list. Use as few as possible, none if code can do everything. "
+        "If the input is a list of texts, add \"each\": true, and if it is a list of objects whose text "
+        "is under one key, add \"each\": true and \"field\": \"<that key>\": the reading is then made "
+        "on every item and gives a list of labels in item order.",
         "- \"code\": Python source defining solve(inputs, readings), where inputs is a dict of the "
-        "inputs above and readings maps each reading's id to its label. It must return the task's final "
-        "result in exactly the requested form and do everything else: parsing, arithmetic, counting, "
-        "rounding, lookups and formatting.",
+        "inputs above and readings maps each reading's id to its label (or list of labels). It must "
+        "return the task's final result in exactly the requested form and do everything else: parsing, "
+        "arithmetic, counting, rounding, lookups and formatting.",
         "",
         f"Code rules: pure Python; you may import only {modules}; no classes, no file or network access, "
         "no names beginning with an underscore; helper functions are allowed.",
@@ -70,6 +86,18 @@ def build_program_prompt(description, inputs):
         "\"labels\": [\"...\"]}], \"code\": \"<python source>\"}",
     ]
     return "\n".join(lines)
+
+
+def _texts(reading, inputs):
+    """The texts a reading is made on: one string, or a list for ``each``."""
+    value = inputs[reading["input"]]
+    if not reading.get("each"):
+        return value if isinstance(value, str) else None
+    if not isinstance(value, list):
+        return None
+    field = reading.get("field")
+    items = [item.get(field) if (field and isinstance(item, dict)) else item for item in value]
+    return items if all(isinstance(item, str) for item in items) else None
 
 
 def parse_program(text, inputs):
@@ -86,13 +114,15 @@ def parse_program(text, inputs):
     if not isinstance(readings, list):
         return None, "PROGRAM_READINGS_INVALID"
     for reading in readings:
-        if (not isinstance(reading, dict) or set(reading) != {"id", "input", "spec", "labels"}
+        if (not isinstance(reading, dict) or not READING_KEYS <= set(reading)
+                or set(reading) - READING_KEYS - READING_OPTIONAL
                 or not isinstance(reading["id"], str) or not reading["id"].isidentifier()
                 or reading["id"] in seen or reading["input"] not in inputs
-                or not isinstance(inputs[reading["input"]], str)
                 or not isinstance(reading["spec"], str) or not reading["spec"].strip()
                 or not isinstance(reading["labels"], list) or not reading["labels"]
-                or not all(isinstance(label, str) for label in reading["labels"])):
+                or not all(isinstance(label, str) for label in reading["labels"])
+                or ("field" in reading and not isinstance(reading["field"], str))
+                or _texts(reading, inputs) is None):
             return None, "PROGRAM_READINGS_INVALID"
         seen.add(reading["id"])
     accepted, reason = sandbox.check_source(fast_path._unfence(value["code"]) + "\n")
@@ -149,15 +179,53 @@ def parse_job_probes(text, inputs, fixed, limit):
     return probes[:limit]
 
 
+def _new_record(request):
+    return {"template": request.template, "description": request.description,
+            "input_names": sorted(request.inputs), "examples": [], "program": None,
+            "candidate": None, "attempts": [], "demotions": [], "disagreements": 0, "jobs": 0}
+
+
 class WriteOnceRouter:
-    def __init__(self, router):
+    def __init__(self, router, store_dir=None):
         self.router = router
         self.settings = router.settings
+        self.store_dir = Path(store_dir) if store_dir else None
         self._records = {}
+        self._busy = {}  # template -> "writing" | "early"; not persisted
         self._lock = threading.RLock()
         self._background = ThreadPoolExecutor(max_workers=4)
         self._readers = ThreadPoolExecutor(max_workers=8)
+        self._items = ThreadPoolExecutor(max_workers=32)
         self._pending = []
+
+    # ---- store ----------------------------------------------------------
+
+    def _record(self, request):
+        with self._lock:
+            record = self._records.get(request.template)
+            if record is None and self.store_dir is not None:
+                path = self.store_dir / f"{request.template}.json"
+                try:
+                    record = json.loads(path.read_text("utf-8"))
+                except (OSError, ValueError):
+                    record = None
+            created = record is None
+            if created:
+                record = _new_record(request)
+            self._records[request.template] = record
+            if created:
+                self._save(request.template)
+            return record, created
+
+    def _save(self, template):
+        if self.store_dir is None:
+            return
+        with self._lock:
+            self.store_dir.mkdir(parents=True, exist_ok=True)
+            path = self.store_dir / f"{template}.json"
+            temporary = path.with_suffix(".tmp")
+            temporary.write_text(json.dumps(self._records[template], indent=1), encoding="utf-8")
+            os.replace(temporary, path)
 
     # ---- hot path -------------------------------------------------------
 
@@ -165,12 +233,13 @@ class WriteOnceRouter:
         if not isinstance(request, planner.TaskRequest):
             request = planner.TaskRequest.from_mapping(request)
         started = time.perf_counter()
+        record, created = self._record(request)
         with self._lock:
-            record = self._records.setdefault(request.template, {
-                "description": request.description, "examples": [], "program": None,
-                "attempts": [], "demotions": [], "disagreements": 0, "jobs": 0,
-            })
             program = record["program"]
+        if created and program is None and self.settings.get("write_early"):
+            with self._lock:
+                self._busy[request.template] = "early"
+            self._submit(self._early, request)
         if program is not None:
             ok, value, readings = self.run_program(program, request.inputs)
             if ok:
@@ -194,28 +263,41 @@ class WriteOnceRouter:
         return {"value": value, "route": route, "model": model, "readings": readings,
                 "total_ms": (time.perf_counter() - started) * 1000}
 
+    def _read(self, spec, text):
+        return self.router.handle({
+            "schema_version": fast_path.SCHEMA_VERSION,
+            "task": {"spec": spec, "signature": "def solve(text: str) -> str:"},
+            "args": [text],
+        }, learn=False)
+
     def run_program(self, program, inputs, background=False):
-        """Race every reading in parallel, then run the code. Returns
-        ``(ok, value, readings)``. ``background=True`` (trials and probes) puts
-        the reading races on the background pool."""
-        def read(reading):
+        """Race every reading in parallel (each item of an ``each`` reading
+        too), then run the code. Returns ``(ok, value, readings)``.
+        ``background=True`` (trials and probes) puts the races on the
+        background pool."""
+        def in_context(fn, *args):
             if background:
                 with self.router.background_context():
-                    return read_now(reading)
-            return read_now(reading)
+                    return fn(*args)
+            return fn(*args)
 
-        def read_now(reading):
-            result = self.router.handle({
-                "schema_version": fast_path.SCHEMA_VERSION,
-                "task": {"spec": reading["spec"], "signature": "def solve(text: str) -> str:"},
-                "args": [inputs[reading["input"]]],
-            }, learn=False)
-            return reading["id"], result
+        def read(reading):
+            texts = _texts(reading, inputs)
+            if texts is None:
+                return reading["id"], None
+            if not reading.get("each"):
+                result = in_context(self._read, reading["spec"], texts)
+                return reading["id"], None if result["route"] == "none" else result["value"]
+            results = list(self._items.map(lambda t: in_context(self._read, reading["spec"], t), texts))
+            if any(r["route"] == "none" for r in results):
+                return reading["id"], None
+            return reading["id"], [r["value"] for r in results]
+
         readings = {}
-        for reading_id, result in self._readers.map(read, program["readings"]):
-            if result["route"] == "none":
+        for reading_id, value in self._readers.map(read, program["readings"]):
+            if value is None:
                 return False, None, readings
-            readings[reading_id] = result["value"]
+            readings[reading_id] = value
         run = sandbox.run_function(program["code"], [[inputs, readings]],
                                    self.settings["sandbox_timeout_seconds"])
         if not (run.ok and run.results[0]["ok"]):
@@ -236,6 +318,11 @@ class WriteOnceRouter:
         self.drain()
         self._background.shutdown(wait=True)
         self._readers.shutdown(wait=True)
+        self._items.shutdown(wait=True)
+
+    def _attempts_left(self, record):
+        used = sum(a["outcome"] != "REMOTE_ERROR" for a in record["attempts"])
+        return used < self.settings["max_plan_attempts"]
 
     def _observe(self, request, futures):
         agreed, value, distinct = planner.PlanningRouter._agreement(
@@ -248,28 +335,83 @@ class WriteOnceRouter:
                     record["examples"].append({"inputs": request.inputs, "expected": value})
             elif distinct > 1:
                 record["disagreements"] += 1
-            ready = (record["program"] is None and not record.get("writing")
+            self._save(request.template)
+            ready = (record["program"] is None and request.template not in self._busy
                      and len(record["examples"]) >= self.settings["plan_examples"]
-                     and sum(a["outcome"] != "REMOTE_ERROR" for a in record["attempts"])
-                     < self.settings["max_plan_attempts"])
-            if ready:
-                record["writing"] = True
-                examples = list(record["examples"][: self.settings["plan_examples"]])
-        if ready:
-            try:
+                     and self._attempts_left(record))
+            if not ready:
+                return
+            self._busy[request.template] = "writing"
+            examples = list(record["examples"][: self.settings["plan_examples"]])
+            candidate, record["candidate"] = record["candidate"], None
+        try:
+            if candidate is not None:
+                attempt = self._judge_candidate(candidate, examples)
+            else:
                 attempt = self._write(request.description, examples)
-                with self._lock:
-                    record["attempts"].append({k: v for k, v in attempt.items() if k != "program"})
-                    if attempt["outcome"] == "ADOPTED":
-                        record["program"] = attempt["program"]
-            finally:
-                with self._lock:
-                    record["writing"] = False
+            self._record_attempt(request.template, attempt)
+        finally:
+            with self._lock:
+                self._busy.pop(request.template, None)
 
-    def _write(self, description, examples):
+    def _record_attempt(self, template, attempt):
+        with self._lock:
+            record = self._records[template]
+            record["attempts"].append({k: v for k, v in attempt.items() if k != "program"})
+            if attempt["outcome"] == "ADOPTED":
+                record["program"] = attempt["program"]
+            self._save(template)
+
+    def _early(self, request):
+        """Write and probe the first program at once, without examples. It is
+        tried against the examples when they exist (in ``_observe``)."""
+        try:
+            attempt = self._compose(request.description, request.inputs)
+            if attempt.get("program") is not None and self.settings.get("program_probes", 0):
+                attempt["probes"] = self._probe(request.description, request.inputs, attempt["program"])
+            attempt["early"] = True
+            with self._lock:
+                record = self._records[request.template]
+                if attempt.get("program") is None or (attempt.get("probes") or {}).get("failed"):
+                    if (attempt.get("probes") or {}).get("failed"):
+                        attempt.update({"outcome": "REJECTED", "rejected_program": attempt["program"]})
+                    record["attempts"].append({k: v for k, v in attempt.items() if k != "program"})
+                else:
+                    record["candidate"] = attempt
+                self._save(request.template)
+        finally:
+            with self._lock:
+                self._busy.pop(request.template, None)
+            # Examples may already be waiting for this candidate.
+            self._try_candidate(request)
+
+    def _try_candidate(self, request):
+        with self._lock:
+            record = self._records[request.template]
+            if (record["program"] is not None or record["candidate"] is None
+                    or request.template in self._busy
+                    or len(record["examples"]) < self.settings["plan_examples"]):
+                return
+            self._busy[request.template] = "writing"
+            examples = list(record["examples"][: self.settings["plan_examples"]])
+            candidate, record["candidate"] = record["candidate"], None
+        try:
+            self._record_attempt(request.template, self._judge_candidate(candidate, examples))
+        finally:
+            with self._lock:
+                self._busy.pop(request.template, None)
+
+    def _judge_candidate(self, candidate, examples):
+        passed = self._trial(candidate["program"], examples)
+        outcome = "ADOPTED" if passed == len(examples) else "REJECTED"
+        return {**candidate, "outcome": outcome, "trial": {"examples": len(examples), "passed": passed},
+                **({"rejected_program": candidate["program"]} if outcome == "REJECTED" else {})}
+
+    def _compose(self, description, inputs):
+        """One model call for a program. Returns an attempt dict with a
+        ``program`` or a failure outcome."""
         config = {**self.router.remote_config, "model": self.settings["planner_model"],
                   "max_tokens": self.settings["planner_max_tokens"]}
-        inputs = examples[0]["inputs"]
         started = time.perf_counter()
         try:
             result = self.router.remote_fn(build_program_prompt(description, inputs), config,
@@ -284,21 +426,32 @@ class WriteOnceRouter:
             return {"outcome": "INVALID_PROGRAM", "reason": reason, "write_ms": write_ms,
                     "reply": result.text[:6000]}
         program["sha256"] = hashlib.sha256(program["code"].encode("utf-8")).hexdigest()
+        return {"outcome": "WRITTEN", "write_ms": write_ms, "sha256": program["sha256"],
+                "readings": len(program["readings"]), "code_lines": program["code"].count("\n"),
+                "probes": None, "program": program}
+
+    def _trial(self, program, examples):
         passed = 0
         for example in examples:
             ok, value, _ = self.run_program(program, example["inputs"], background=True)
             passed += ok and sandbox.canonical(value) == sandbox.canonical(example["expected"])
+        return passed
+
+    def _write(self, description, examples):
+        attempt = self._compose(description, examples[0]["inputs"])
+        program = attempt.get("program")
+        if program is None:
+            return attempt
+        passed = self._trial(program, examples)
         outcome = "ADOPTED" if passed == len(examples) else "REJECTED"
-        probes = None
         if outcome == "ADOPTED" and self.settings.get("program_probes", 0):
-            probes = self._probe(description, inputs, program)
-            if probes["failed"]:
+            attempt["probes"] = self._probe(description, examples[0]["inputs"], program)
+            if attempt["probes"]["failed"]:
                 outcome = "REJECTED"
-        return {"outcome": outcome, "write_ms": write_ms, "sha256": program["sha256"],
-                "readings": len(program["readings"]), "code_lines": program["code"].count("\n"),
-                "trial": {"examples": len(examples), "passed": passed}, "probes": probes,
-                "program": program,
-                **({"rejected_program": program} if outcome == "REJECTED" else {})}
+        attempt.update({"outcome": outcome, "trial": {"examples": len(examples), "passed": passed}})
+        if outcome == "REJECTED":
+            attempt["rejected_program"] = program
+        return attempt
 
     def _probe(self, description, inputs, program):
         """Edge-case jobs: the probe model proposes inputs (prose inputs held
@@ -307,9 +460,12 @@ class WriteOnceRouter:
         program; the probes only add agreed examples."""
         limit = self.settings["program_probes"]
         fixed = sorted({r["input"] for r in program["readings"]})
+        summary = {"proposed": 0, "agreed": 0, "failed": 0, "error": None, "failures": []}
+        if not [n for n in inputs if n not in fixed]:
+            summary["error"] = "NO_PROBE_INPUTS"
+            return summary
         config = {**self.router.remote_config, "model": self.settings["probe_model"],
                   "max_tokens": self.settings["probe_max_tokens"]}
-        summary = {"proposed": 0, "agreed": 0, "failed": 0, "error": None, "failures": []}
         try:
             result = self.router.remote_fn(build_job_probe_prompt(description, inputs, fixed, limit),
                                            config, self.router.api_key)
@@ -344,6 +500,7 @@ class WriteOnceRouter:
             if record["program"] is not None and record["program"]["sha256"] == sha:
                 record["demotions"].append({"sha256": sha, "reason": "AUDIT_MISMATCH"})
                 record["program"] = None
+                self._save(request.template)
 
     def summary(self, template):
         with self._lock:

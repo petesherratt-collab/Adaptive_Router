@@ -208,3 +208,95 @@ class RunnerProbeArmTests(unittest.TestCase):
         jobs = [r for r in rows if r["record_type"] == "job"]
         self.assertTrue(all(r["correct"] for r in jobs))
         self.assertEqual(set(summary["usage"]), {"R", "P"})
+
+
+LIST_DESCRIPTION = "Count the reviews whose text is positive and add n."
+LIST_PROGRAM = {"readings": [{"id": "tone", "input": "reviews", "each": True, "field": "text",
+                              "labels": ["up", "down"],
+                              "spec": "Classify the review text as 'up' or 'down'."}],
+                "code": "def solve(inputs, readings):\n    return inputs['n'] + readings['tone'].count('up')\n"}
+
+
+class ListFake(Fake):
+    def __call__(self, prompt, config, api_key):
+        if prompt.startswith("Carry out the task"):
+            self.calls.append(prompt[:20])
+            i = job_inputs(prompt)
+            value = i["n"] + sum("great" in r["text"] for r in i["reviews"])
+            return RemoteResult(True, text=f"ANSWER: {value}", model=config["model"], total_ms=1.0)
+        return super().__call__(prompt, config, api_key)
+
+
+def list_request(n, texts):
+    return {"schema_version": "fast_path_task_v1", "description": LIST_DESCRIPTION,
+            "inputs": {"n": n, "reviews": [{"stars": 3, "text": t} for t in texts]}}
+
+
+class ListReadingTests(WriteOnceTests):
+    def test_each_reading_reads_every_item(self):
+        fake = ListFake([LIST_PROGRAM])
+        router = self.build(fake)
+        texts = [["great", "awful"], ["great", "great", "meh"], ["bad"], ["great"]]
+        results = []
+        for n, t in enumerate(texts, start=1):
+            results.append(router.handle(list_request(n, t)))
+            router.drain()
+        self.assertEqual([r["route"] for r in results], ["race", "race", "program", "program"])
+        self.assertEqual(results[2]["value"], 3)
+        self.assertEqual(results[3]["readings"], {"tone": ["up"]})
+        self.assertEqual(results[3]["value"], 5)
+
+    def test_each_reading_shape_is_checked(self):
+        inputs = list_request(1, ["a"])["inputs"]
+        no_each = {**LIST_PROGRAM, "readings": [{k: v for k, v in LIST_PROGRAM["readings"][0].items()
+                                                 if k not in ("each", "field")}]}
+        self.assertEqual(write_once.parse_program(json.dumps(no_each), inputs)[1], "PROGRAM_READINGS_INVALID")
+        wrong_field = {**LIST_PROGRAM, "readings": [{**LIST_PROGRAM["readings"][0], "field": "stars"}]}
+        self.assertEqual(write_once.parse_program(json.dumps(wrong_field), inputs)[1],
+                         "PROGRAM_READINGS_INVALID")
+        self.assertIsNotNone(write_once.parse_program(json.dumps(LIST_PROGRAM), inputs)[0])
+
+
+class StoreAndEarlyTests(WriteOnceTests):
+    def test_program_survives_a_new_router(self):
+        import tempfile
+        from pathlib import Path
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        fake = Fake([GOOD])
+        fast = self.build(fake).router
+        first = write_once.WriteOnceRouter(fast, Path(tmp.name) / "programs")
+        for n in (1, 2):
+            first.handle(request(n))
+            first.drain()
+        first.close()
+        second = write_once.WriteOnceRouter(fast, Path(tmp.name) / "programs")
+        self.addCleanup(second.close)
+        self.assertEqual(second.handle(request(5))["route"], "program")
+
+    def test_early_write_starts_on_first_sight_and_adopts_after_two_examples(self):
+        fake = Fake([GOOD])
+        router = self.build(fake, write_early=True)
+        router.handle(request(1))
+        router.drain()
+        record = next(iter(router._records.values()))
+        # Written before any second example exists; held as a candidate.
+        self.assertIsNotNone(record["candidate"])
+        self.assertIsNone(record["program"])
+        router.handle(request(2))
+        router.drain()
+        self.assertIsNotNone(record["program"])
+        self.assertTrue(record["attempts"][0]["early"])
+        self.assertEqual(router.handle(request(3))["route"], "program")
+        self.assertEqual(sum(c.startswith("Write a program") for c in fake.calls), 1)
+
+    def test_failed_early_candidate_falls_back_to_a_normal_write(self):
+        fake = Fake([WRONG, GOOD])
+        router = self.build(fake, write_early=True)
+        routes = []
+        for n in range(1, 6):
+            routes.append(router.handle(request(n))["route"])
+            router.drain()
+        record = next(iter(router._records.values()))
+        self.assertEqual([a["outcome"] for a in record["attempts"]], ["REJECTED", "ADOPTED"])
+        self.assertEqual(routes[-1], "program")

@@ -1,5 +1,10 @@
 """Model-written plans for multi-step jobs.
 
+SUPERSEDED (2026-11-18) by ``write_once.WriteOnceRouter``, which writes the
+whole job once and beat this step-by-step planner on speed, calls and
+correctness in every comparison (README, "Write the job once"). Kept for the
+record and for jobs a model cannot write whole.
+
 A request gives a plain-language task description and named inputs. Requests
 with the same description and the same input names and types share a
 *template*. Per template the router works in two stages:

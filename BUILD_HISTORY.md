@@ -4333,3 +4333,27 @@ router's 20 to 35 jobs, or never, in follow-ups 5 to 7.
 |---|---|
 | `fast_path_write_once_v3_immediate.jsonl` | `d0d63ebb366187b8a0f8369a191df4a1e3938f2e28431ab8c906a35005e5c84e` |
 | `fast_path_write_once_v3_immediate_analysis.json` | `b6d19846fb7561793213740b89dbfa352b84eccebd62add2c672037e00b0fc3c` |
+
+---
+
+## 2026-11-18 — Write-once becomes the multi-step path (no provider calls)
+
+At the owner's request (steps 1 to 3, with the planner on hard jobs; balance
+about $17.39):
+
+- `write_once.py`: programs and templates kept on disk (`store_dir`); readings
+  may be made on every item of a list of texts or of a text field of a list of
+  objects (`"each": true`, `"field"`), giving a list of labels; optional
+  `write_early`: the first program is written and probed when a template is
+  first seen, in parallel with the race, and tried on the examples as soon as
+  they exist. Default behaviour otherwise unchanged.
+- `main.py --task-json PATH` answers a plain-language `fast_path_task_v1`
+  document through `WriteOnceRouter` (programs in `fast_path_programs/`).
+- `config_fast_path.json`: `program_probes` 6 (probes on by default),
+  `write_early` false until tested.
+- `planner.py` marked superseded; kept for the record and for jobs a model
+  cannot write whole.
+- The runner pins arm W to no probes and no early writing, so earlier runs
+  remain comparable, and gains arm Q (`--early`: probes plus early writing).
+
+Full suite passed.
