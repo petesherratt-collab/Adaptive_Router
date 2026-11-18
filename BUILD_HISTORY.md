@@ -4145,3 +4145,11 @@ Amendment before any text was kept: the first generation stopped at
 by design, saved nothing; the three shapes it had received were never read.
 `make_bench_v4_prose.py` now retries a failed call (up to three attempts)
 instead of stopping. The prompt is unchanged. New hash: `25f1ab5b6a1c8dbfa8c392e409f68669d386a662d04e50a7ef8d3b1f30c4ffc2`.
+
+V4 texts generated (12 per label, 348 in all) and hand-checked before any
+rule or model read them: 1 excluded (`flight_delays` information[3], which
+fits rebook too), 2 borderline kept with reasons.
+
+| File | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v4_prose.json` | `8b12829bdf1e69825d610c06940eaf6f7ede074b2894c47b843b4399ff3d4b7d` |
