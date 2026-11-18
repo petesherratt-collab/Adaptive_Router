@@ -18,7 +18,7 @@ import statistics
 from analyze_fast_path_planned_v1 import pair
 from analyze_fast_path_timing_v1 import BOOTSTRAP_REPLICATES, by_shape, load, percentile
 
-ARMS = ("A", "R", "C", "D", "E", "W", "P")
+ARMS = ("A", "R", "C", "D", "E", "W", "P", "Q")
 
 
 def arm_table(jobs):
@@ -67,6 +67,17 @@ def analyse(kinds, replicates=BOOTSTRAP_REPLICATES, reference=None, primary_arm=
         "p_vs_w": pair(grouped, "P", "W", replicates) if {"P", "W"} <= present else None,
         "p_vs_d": pair(grouped, "P", "D", replicates) if {"P", "D"} <= present else None,
         "probe_summaries": [a.get("probes") for a in attempts],
+        "q_vs_r": pair(grouped, "Q", "R", replicates) if {"Q", "R"} <= present else None,
+        "q_vs_p": pair(grouped, "Q", "P", replicates) if {"Q", "P"} <= present else None,
+        "c_vs_p": pair(grouped, "C", "P", replicates) if {"C", "P"} <= present else None,
+        "first_program_by_arm": {
+            arm: {shape: min((r["index"] for r in jobs if r["arm"] == arm and r["shape"] == shape
+                              and r["route"] == "program"), default=None)
+                  for shape in grouped}
+            for arm in ("W", "P", "Q") if arm in present},
+        "c_first_plan": {shape: min((r["index"] for r in jobs if r["arm"] == "C" and r["shape"] == shape
+                                     and r["route"] == "plan"), default=None)
+                         for shape in grouped} if "C" in present else None,
         "w_vs_d": pair(grouped, "W", "D", replicates) if {"W", "D"} <= present else None,
         "w_vs_e": pair(grouped, "W", "E", replicates) if {"W", "E"} <= present else None,
         "w_vs_c": pair(grouped, "W", "C", replicates) if {"W", "C"} <= present else None,
