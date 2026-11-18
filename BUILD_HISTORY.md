@@ -4381,3 +4381,25 @@ with no text. `make_bench_v6_prose.py` now allows 32,000 tokens and 600 s
 per call and saves each finished shape to a `.partial` file so a failure
 loses nothing. The four shapes received before the stop were never read and
 were discarded. The prompt is unchanged. New hash: `bdb51a320dc06bd1b32c1db58bb0281bb5df70db947286a6eceb6f17330da2ba`.
+
+---
+
+## 2026-11-18 — Hard jobs V1: texts hand-checked; runs frozen
+
+V6 texts generated (336) and hand-checked before any model read them: 13
+excluded (two-allergen dishes), 4 borderline kept. Runs frozen in
+`FAST_PATH_HARD_JOBS_V1_PLAN.md`. Credit at the freeze: about $17.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `write_once.py` | `16dbbae4096222fe95fb1633a1695e3556b31f7f643b72a16aa64111c769c1bd` |
+| `run_fast_path_planned_v1.py` | `3e8741cc2701aa89eda9a94594a98fc3316fab0914c8e08dc6d6d0967f1944df` |
+| `analyze_write_once_v1.py` | `8db4c3af8d0cac541af6dcc8806b56da042e2d440e7fbfe9480051be27ed1cfc` |
+| `config_fast_path.json` | `2b94990b93115c29f80ca8035518f396d186dba1a8d353b2546d56d55c599577` |
+| `fast_path.py` | `753fef2c26534cabd0f6efbc7a2da0baf64b0ba3e2ac2572e2cd4217e2886caa` |
+| `planner.py` | `b1a43bc1efee80936362e291cd31369d039c948ead3b1acbd9deb66fc4cf8e2d` |
+| `pipeline.py` | `fecc96aee7349fbf2229dad47207c7467a76c884fec281dd596d35185f528e83` |
+| `fast_path_planned_bench_v6.py` | `c4250db625cdce4dbd385314163ec0fcfc096666c27cba5bc8c67f61159f196d` |
+| `fast_path_planned_bench_v6_prose.json` | `7e0ada753a1f1bbf589739d9fec3a640e81d2ec2eacb6a698f18a8c8a51ca1cb` |
+| `fast_path_ceiling_v6.py` | `20fda45f20174a57dc9e3cbfd15130a6d8a8601054a9fec4f215e59d14a24084` |
+| `FAST_PATH_HARD_JOBS_V1_PLAN.md` | `1ac6a9fa516e5b9b69dfe8a4c2f7e91dae579a501e4b5fc417185a13933e72ea` |

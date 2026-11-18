@@ -27,3 +27,36 @@ take a list; without that, write-once could not express these jobs at all.
 `applicant_screen`, `delivery_feedback`, `listing_filter`),
 `fast_path_ceiling_v6.py` (every item raced), `make_bench_v6_prose.py`
 (12 texts per label, `mistralai/mistral-large-4-0`). No keyword-rules arm.
+
+## Stage 1 result
+
+Texts: 12 per label, 336 in all. 13 `menu_check` texts excluded after the hand
+check: dishes with a second allergen fit two labels, and the description
+gives no priority. 4 borderline texts kept with reasons. Jobs average about
+7.4 readings each.
+
+## Stage 2: the runs (frozen before any job is sent)
+
+Both runs use `fast_path_planned_bench_v6.py`, all 8 shapes, the first 20
+jobs of each stream (160 jobs). Settings as committed (`program_probes` 6,
+`plan_shadow` set false so plans serve once adopted, as in earlier planner
+runs).
+
+**Run A, primary, prospective, drained arrival.** Arms R (whole-task race), C
+(planning router), D (ceiling: every item raced, reference code), P (write
+once with probes).
+
+- **Primary:** P against R, shape-cluster bootstrap, 10,000 replicates, seed
+  20261116. Supported only if the median-time ratio's 95% interval lies
+  wholly below 1.0 and the correctness difference's wholly above -2 points.
+- **Key secondary:** C against P on time and correctness. Step-by-step
+  learning "wins" on hard jobs only if C is more accurate than P (interval
+  wholly above zero) or faster (time-ratio interval wholly below 1.0).
+- Also: P against D, first program and first plan job per shape, attempts and
+  reasons for rejection, probe outcomes (probes are skipped where every input
+  is read), wrong program answers split into code and reading, calls and
+  tokens per arm. Expected cost about $6.
+
+**Run B, jobs back to back.** Arms R, P and Q (write once with probes, written
+early). Readings: first program job per shape for P and Q, Q against P and
+against R. Expected cost about $2.
