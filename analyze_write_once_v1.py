@@ -63,6 +63,8 @@ def analyse(kinds, replicates=BOOTSTRAP_REPLICATES, reference=None):
         "w_vs_r": pair(grouped, "W", "R", replicates),
         "w_vs_d": pair(grouped, "W", "D", replicates) if "D" in present else None,
         "w_vs_e": pair(grouped, "W", "E", replicates) if "E" in present else None,
+        "w_vs_c": pair(grouped, "W", "C", replicates) if "C" in present else None,
+        "c_vs_r": pair(grouped, "C", "R", replicates) if "C" in present else None,
         "first_program_job_index": first,
         "shapes_with_program": len(first),
         "w_routes": {route: {"jobs": v["jobs"], "correct": v["correct"],
@@ -77,6 +79,11 @@ def analyse(kinds, replicates=BOOTSTRAP_REPLICATES, reference=None):
                                 for k in ("calls", "prompt_tokens", "completion_tokens")}
                           for arm in sorted(present - {"E"})},
     })
+    primary = result["w_vs_r"]
+    time_met = primary["time_ratio_interval_95"][1] < 1.0
+    correct_met = primary["correctness_interval_95"][0] > -0.02
+    result.update({"time_criterion_met": time_met, "correctness_criterion_met": correct_met,
+                   "decision": "SUPPORTED" if time_met and correct_met else "NOT_SUPPORTED"})
     if reference:
         ref = [r for r in reference.get("job", []) if r["arm"] == "C"]
         result["reference_c_from_earlier_run"] = {

@@ -4139,3 +4139,9 @@ At the owner's request (estimated cost about $5.20 of $7.80). Plan:
 | `fast_path_ceiling_v4.py` | `bcab5bb6034e1849397ad116d8e39030cc06673a749ff0691a8373c2bce61e82` |
 | `make_bench_v4_prose.py` | `0a6a4b5080b9bda60858b56532757a94cb7f87252d526f5a9096a7c58b578f01` |
 | `FAST_PATH_WRITE_ONCE_V2_PLAN.md` | `81c5829758ad8fbee89ba77399972b7542d75f80f8ce8ade15ed63d176b93dc9` |
+
+Amendment before any text was kept: the first generation stopped at
+`energy_meter` on a provider failure (`OPENROUTER_RESPONSE_INVALID`) and,
+by design, saved nothing; the three shapes it had received were never read.
+`make_bench_v4_prose.py` now retries a failed call (up to three attempts)
+instead of stopping. The prompt is unchanged. New hash: `25f1ab5b6a1c8dbfa8c392e409f68669d386a662d04e50a7ef8d3b1f30c4ffc2`.

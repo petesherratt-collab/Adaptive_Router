@@ -74,10 +74,12 @@ def main():
     texts, prompts = {}, {}
     for shape, (_, _, values) in READINGS.items():
         prompts[shape] = build_prompt(shape)
-        for attempt in range(2):
+        for attempt in range(3):
             result = remote.generate(prompts[shape], config, api_key)
             if not result.success:
-                raise SystemExit(f"{shape}: {result.error}")
+                # A provider failure is retried; the prompt never changes.
+                print(f"{shape}: attempt {attempt + 1} failed: {result.error}")
+                continue
             try:
                 reply = fast_path.strict_json(fast_path._unfence(result.text))
             except ValueError:
