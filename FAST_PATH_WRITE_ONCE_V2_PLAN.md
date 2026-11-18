@@ -29,3 +29,34 @@ to back.
 Then the texts are generated, hand-checked against their labels before any
 rule or model reads them (exclusions recorded with reasons), hashed, and the
 rules scored offline.
+
+## Stage 1 result (no provider cost)
+
+Texts: 360 generated, 1 excluded after the hand check. Keyword rules v2:
+308 of 359 texts (85.8%), 127 of the 160 stream labels used below. Weakest:
+`exam_marks` effort (18 of 36), `parcel_lockers` issue (40 of 48).
+
+## Stage 2: the runs (frozen before any job is sent)
+
+**Run 1, primary, prospective.** `fast_path_planned_bench_v4.py`, all 8
+shapes, the first 20 jobs of each stream. Arms R (whole-task race), C
+(planning router), D (ceiling, `fast_path_ceiling_v4.py`), E (code only,
+`fast_path_code_only_v2.py`) and W (write once). Settings as committed with
+`plan_shadow` false (as in the V3 primary run); drained arrival.
+
+- **Primary:** W against R, shape-cluster bootstrap, 10,000 replicates,
+  seed 20261116. Supported only if the median-time ratio's 95% interval lies
+  wholly below 1.0 and the correctness difference's wholly above -2 points.
+- **Secondary, fixed now:** W against C (is write-once better than step
+  learning on unseen jobs?), W against D (gap to the ceiling), W and C against
+  E (does a model-based arm beat ordinary code on correctness; intervals
+  wholly above zero), C against R, first program job per shape, attempts,
+  wrong program answers, demotions, calls and tokens per arm.
+- Expected cost about $3.80.
+
+**Run 2, descriptive.** The same jobs with arms R and W only, jobs back to back
+(`--arrival immediate`), to see whether write-once adoption survives live
+traffic. Readings: W against R, first program job per shape. Expected cost
+about $1.30.
+
+Stop rules as before (HTTP 401/402 or sustained provider failure).

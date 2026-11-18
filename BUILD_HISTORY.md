@@ -4146,10 +4146,32 @@ by design, saved nothing; the three shapes it had received were never read.
 `make_bench_v4_prose.py` now retries a failed call (up to three attempts)
 instead of stopping. The prompt is unchanged. New hash: `25f1ab5b6a1c8dbfa8c392e409f68669d386a662d04e50a7ef8d3b1f30c4ffc2`.
 
-V4 texts generated (12 per label, 348 in all) and hand-checked before any
+V4 texts generated (12 per label, 360 in all) and hand-checked before any
 rule or model read them: 1 excluded (`flight_delays` information[3], which
 fits rebook too), 2 borderline kept with reasons.
 
 | File | SHA-256 |
 |---|---|
 | `fast_path_planned_bench_v4_prose.json` | `8b12829bdf1e69825d610c06940eaf6f7ede074b2894c47b843b4399ff3d4b7d` |
+
+---
+
+## 2026-11-18 — Write-once V2 stage 2 frozen
+
+Rules v2 scored offline: 308/359 texts, 127/160 stream labels. Runs frozen in
+`FAST_PATH_WRITE_ONCE_V2_PLAN.md`; the analysis gains a decision for W
+against R and W/C, C/R pairs. Credit at the freeze: about $7.75.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `write_once.py` | `4f222c320a16269357d5aa45fa11a7e7f08edf196496b2aab026fe4e911f0ce2` |
+| `run_fast_path_planned_v1.py` | `949b6dae148988ab4d55a8394aac1c343c29b2ccb0b082a01e744a99151541c7` |
+| `analyze_write_once_v1.py` | `766c1365f4e2e1c8e5d552bcd6c4e9689ffd8fb5e2445c3adbc80700a150670f` |
+| `config_fast_path.json` | `6d994e62ef672619a88aeb909032ea9681766decf274152e2b64d99d027cda10` |
+| `fast_path.py` | `753fef2c26534cabd0f6efbc7a2da0baf64b0ba3e2ac2572e2cd4217e2886caa` |
+| `planner.py` | `941d7f2baaa04caa7f92b5ae369760e3a10f6a0acdf2e925c87b6807aa3dccb3` |
+| `fast_path_planned_bench_v4.py` | `7bdc4dc5a86c3e1710e3076c9ccf8f87fd7236ec6cd5851995caf550cfe2679d` |
+| `fast_path_planned_bench_v4_prose.json` | `8b12829bdf1e69825d610c06940eaf6f7ede074b2894c47b843b4399ff3d4b7d` |
+| `fast_path_ceiling_v4.py` | `bcab5bb6034e1849397ad116d8e39030cc06673a749ff0691a8373c2bce61e82` |
+| `fast_path_code_only_v2.py` | `37be79b8d1ff4bc45cb49e623612a280f3c658ba745e86bf27a4a0709c993ae2` |
+| `FAST_PATH_WRITE_ONCE_V2_PLAN.md` | `3b413a2b037f3accb4ce57e6e77dc53c5a3deafae21596c8e76019550558a7ec` |
