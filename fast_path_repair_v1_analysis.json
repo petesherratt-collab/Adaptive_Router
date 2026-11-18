@@ -1,0 +1,198 @@
+{
+ "label": "repair_v1",
+ "status": "COMPLETED",
+ "shapes": {
+  "room_bookings": {
+   "R": {
+    "correct": 20,
+    "jobs": 20,
+    "median_ms": 1920.195817999911,
+    "last_five_median_ms": 1846.519791999981
+   },
+   "C": {
+    "correct": 20,
+    "jobs": 20,
+    "median_ms": 1434.2943819999618,
+    "last_five_median_ms": 1367.3568030001206
+   },
+   "plan_attempts": [
+    {
+     "kind": null,
+     "outcome": "ADOPTED",
+     "steps": 8
+    },
+    {
+     "kind": "refine",
+     "outcome": "ADOPTED",
+     "steps": 13
+    }
+   ],
+   "function_steps": 12,
+   "promoted": 11,
+   "stuck_steps": {
+    "room_duration_pairs": {
+     "examples": 28,
+     "disagreements": 0,
+     "example_conflicts": 0,
+     "probes": {
+      "model": "google/gemini-3.8-flash",
+      "error": null,
+      "proposed": 12,
+      "agreed": 12,
+      "disagreed": 0,
+      "added": 12,
+      "conflicts": 0
+     },
+     "attempts": [
+      {
+       "outcome": "REJECTED",
+       "gate": "EXAMPLE_MISMATCH",
+       "passed": 12,
+       "examples": 15,
+       "repair": false,
+       "error": null
+      },
+      {
+       "outcome": "REJECTED",
+       "gate": "EXAMPLE_MISMATCH",
+       "passed": 12,
+       "examples": 16,
+       "repair": false,
+       "error": null
+      },
+      {
+       "outcome": "REJECTED",
+       "gate": "EXAMPLE_MISMATCH",
+       "passed": 6,
+       "examples": 17,
+       "repair": true,
+       "error": null
+      }
+     ]
+    }
+   },
+   "repairs": [
+    {
+     "step": "room_duration_pairs",
+     "outcome": "REJECTED",
+     "gate": "EXAMPLE_MISMATCH",
+     "passed": 6,
+     "examples": 17,
+     "repair": true,
+     "error": null
+    }
+   ]
+  },
+  "library_loans": {
+   "R": {
+    "correct": 20,
+    "jobs": 20,
+    "median_ms": 2061.5371590000677,
+    "last_five_median_ms": 1942.4380619998374
+   },
+   "C": {
+    "correct": 20,
+    "jobs": 20,
+    "median_ms": 982.5032399999145,
+    "last_five_median_ms": 809.6707310000966
+   },
+   "plan_attempts": [
+    {
+     "kind": null,
+     "outcome": "ADOPTED",
+     "steps": 9
+    },
+    {
+     "kind": "refine",
+     "outcome": "ADOPTED",
+     "steps": 11
+    }
+   ],
+   "function_steps": 10,
+   "promoted": 10,
+   "stuck_steps": {},
+   "repairs": []
+  },
+  "event_rsvps": {
+   "R": {
+    "correct": 20,
+    "jobs": 20,
+    "median_ms": 1792.5580360000595,
+    "last_five_median_ms": 1582.9281960000117
+   },
+   "C": {
+    "correct": 20,
+    "jobs": 20,
+    "median_ms": 1826.3464010000234,
+    "last_five_median_ms": 1242.3217059999843
+   },
+   "plan_attempts": [
+    {
+     "kind": null,
+     "outcome": "ADOPTED",
+     "steps": 8
+    },
+    {
+     "kind": "refine",
+     "outcome": "ADOPTED",
+     "steps": 13
+    }
+   ],
+   "function_steps": 12,
+   "promoted": 11,
+   "stuck_steps": {
+    "maybe_entries": {
+     "examples": 28,
+     "disagreements": 0,
+     "example_conflicts": 0,
+     "probes": {
+      "model": "google/gemini-3.8-flash",
+      "error": null,
+      "proposed": 12,
+      "agreed": 12,
+      "disagreed": 0,
+      "added": 12,
+      "conflicts": 0
+     },
+     "attempts": [
+      {
+       "outcome": "REJECTED",
+       "gate": "EXAMPLE_MISMATCH",
+       "passed": 12,
+       "examples": 15,
+       "repair": false,
+       "error": null
+      },
+      {
+       "outcome": "REJECTED",
+       "gate": "EXAMPLE_MISMATCH",
+       "passed": 12,
+       "examples": 16,
+       "repair": false,
+       "error": null
+      },
+      {
+       "outcome": "REJECTED",
+       "gate": "EXAMPLE_MISMATCH",
+       "passed": 10,
+       "examples": 17,
+       "repair": true,
+       "error": null
+      }
+     ]
+    }
+   },
+   "repairs": [
+    {
+     "step": "maybe_entries",
+     "outcome": "REJECTED",
+     "gate": "EXAMPLE_MISMATCH",
+     "passed": 10,
+     "examples": 17,
+     "repair": true,
+     "error": null
+    }
+   ]
+  }
+ }
+}

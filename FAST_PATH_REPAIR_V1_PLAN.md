@@ -32,3 +32,10 @@ V3 primary run's C on the same shapes (descriptive).
 Readings: per stuck step, why it was stuck (from the diagnostics); repairs
 tried and promoted; plan-served medians against R; any wrong promoted
 function. Expected cost about $1.
+
+## Result (2026-11-18)
+
+Stuck steps had ample agreed examples and failed on mismatches (12 of 15 or
+16). Both repairs were rejected, matching fewer examples than the blind
+attempts. The shapes' speed changes came from different plans, not repair.
+Details in `BUILD_HISTORY.md`.

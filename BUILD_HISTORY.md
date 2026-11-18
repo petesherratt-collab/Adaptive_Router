@@ -4086,3 +4086,41 @@ fake models; full suite passed. Plan: `FAST_PATH_REPAIR_V1_PLAN.md`.
 | `config_fast_path.json` | `6d994e62ef672619a88aeb909032ea9681766decf274152e2b64d99d027cda10` |
 | `run_fast_path_planned_v1.py` | `949b6dae148988ab4d55a8394aac1c343c29b2ccb0b082a01e744a99151541c7` |
 | `FAST_PATH_REPAIR_V1_PLAN.md` | `7a1c0af0ef0a668468a87cffb193d27a2225d90d198ee79b7824478d1bf9742c` |
+
+---
+
+## 2026-11-18 — Repair V1 result (descriptive)
+
+Label `repair_v1`: `library_loans`, `room_bookings`, `event_rsvps`, 20 jobs
+each, arms R and C, `repair_attempts` 1. 4,375 provider calls, 6 invalid
+responses. Cost about $1.47.
+
+| Shape | C median (this run) | C median (V3 primary) | R median | C promoted |
+|---|---:|---:|---:|---:|
+| `library_loans` | 983 | 3343 | 2062 | 10/10 |
+| `room_bookings` | 1434 | 2264 | 1920 | 11/12 |
+| `event_rsvps` | 1826 | 1795 | 1793 | 11/12 |
+
+- **Why steps stay on the models** (new diagnostics): each stuck step had
+  plenty of agreed examples (28, with 12 agreed probes and no racer
+  disagreement) and failed the gate on mismatches: 12 of 15 and 12 of 16
+  examples matched on both blind attempts.
+- **The repair did not help.** Two repairs were tried
+  (`room_duration_pairs`, `maybe_entries`); shown two failing cases, the
+  rewritten code matched fewer examples (6 of 17 and 10 of 17). Neither was
+  promoted. No repair was needed in `library_loans`.
+- The speed gains against the V3 primary run come from the planner writing
+  different plans this time (every `library_loans` step was promoted), not
+  from repair. Run-to-run variation in plans again dominates.
+- All 60 C answers and all 60 R answers correct.
+
+Reading: the stuck steps return structured values (lists of pairs or rows)
+whose exact form the racers agree on but the code writer does not reproduce
+from the spec. The fix would lie in the plan's step specs or in agreeing on a
+canonical form, not in showing failures to the code writer. Given the
+write-once result, this line is not worth pursuing further now.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_repair_v1.jsonl` | `59ae3d512287e934e14e7088be503382d27114f120f981aeb852ea2e08082f7c` |
+| `fast_path_repair_v1_analysis.json` | `d31a159f21e2d3d393eedaea30ad464298040585ecc99e221a8e68e6b43978dd` |

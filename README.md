@@ -835,6 +835,16 @@ jobs, so descriptive. Plan: `FAST_PATH_WRITE_ONCE_V1_PLAN.md`.
 
 Evidence: `fast_path_write_once_v1.jsonl`, `fast_path_write_once_v1_analysis.json`.
 
+Repair V1 (descriptive, 2026-11-18): on the three shapes whose plans kept
+steps on the models, new per-step diagnostics show why: each stuck step had
+28 agreed examples and no disagreement, but the code written for it matched
+only 12 of 15 or 16. An optional repair attempt (`repair_attempts`, off by
+default) that shows the code writer two failing cases did worse (6 and 10 of
+17) and promoted nothing. The shapes ran faster than in the V3 run only
+because the planner wrote different plans. Plan:
+`FAST_PATH_REPAIR_V1_PLAN.md`; evidence: `fast_path_repair_v1.jsonl`,
+`fast_path_repair_v1_analysis.json`.
+
 The owner's `evolab` repository gained the matching code-only condition (branch
 `ccr-23487558-3yzwx4`, amendment 0.1-G): a scripted client that reads only the
 public task scored Brier loss 0 on all nine sealed development tasks at
