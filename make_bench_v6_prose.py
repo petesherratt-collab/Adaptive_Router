@@ -68,10 +68,17 @@ def main():
     if PROSE_PATH.exists():
         raise SystemExit(f"{PROSE_PATH.name} exists; it is never overwritten")
     remote_config = json.loads(Path("config.json").read_text(encoding="utf-8"))["remote"]
-    config = {**remote_config, "model": WRITER_MODEL, "max_tokens": 8192}
+    # The writer reasons before answering; 8192 tokens ran out on one shape.
+    config = {**remote_config, "model": WRITER_MODEL, "max_tokens": 32000, "timeout_seconds": 600}
     api_key = os.environ["OPENROUTER_API_KEY"]
+    partial = PROSE_PATH.with_name(PROSE_PATH.name + ".partial")
     texts, prompts = {}, {}
+    if partial.exists():
+        saved = json.loads(partial.read_text(encoding="utf-8"))
+        texts, prompts = saved["texts"], saved["prompts"]
     for shape, (*_, values) in READINGS.items():
+        if shape in texts:
+            continue
         prompts[shape] = build_prompt(shape)
         for attempt in range(3):
             result = remote.generate(prompts[shape], config, api_key)
@@ -91,6 +98,8 @@ def main():
         else:
             raise SystemExit(f"{shape}: no usable reply")
         print(shape, {label: len(v) for label, v in texts[shape].items()})
+        partial.write_text(json.dumps({"texts": texts, "prompts": prompts}, ensure_ascii=False), encoding="utf-8")
+    partial.unlink(missing_ok=True)
     PROSE_PATH.write_text(json.dumps({
         "writer_model": WRITER_MODEL, "per_label": PER_LABEL, "prompts": prompts,
         "texts": texts, "excluded": [], "hand_check": None,

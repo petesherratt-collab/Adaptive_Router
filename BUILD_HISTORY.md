@@ -4373,3 +4373,11 @@ item of a list when the reading has an `item_field`. Full suite passed.
 | `write_once.py` | `16dbbae4096222fe95fb1633a1695e3556b31f7f643b72a16aa64111c769c1bd` |
 | `run_fast_path_planned_v1.py` | `3e8741cc2701aa89eda9a94594a98fc3316fab0914c8e08dc6d6d0967f1944df` |
 | `FAST_PATH_HARD_JOBS_V1_PLAN.md` | `51ea61289d06b139da5c24fa88534e676831ad977d23e81a3292f87a1fb0a68b` |
+
+Amendment before any V6 text was kept: generation stopped at `menu_check`
+after three `OPENROUTER_RESPONSE_INVALID` replies. The raw reply showed why:
+the writer now reasons before answering and ran out of its 8,192-token limit
+with no text. `make_bench_v6_prose.py` now allows 32,000 tokens and 600 s
+per call and saves each finished shape to a `.partial` file so a failure
+loses nothing. The four shapes received before the stop were never read and
+were discarded. The prompt is unchanged. New hash: `bdb51a320dc06bd1b32c1db58bb0281bb5df70db947286a6eceb6f17330da2ba`.
