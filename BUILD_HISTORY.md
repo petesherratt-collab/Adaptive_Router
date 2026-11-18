@@ -4004,3 +4004,29 @@ criterion holds.
 |---|---|
 | `fast_path_planned_v3_primary.jsonl` | `0c9a5b7835e658c6d9fade95c3929aefc479839acbb3ab8455f4629fe356fb57` |
 | `fast_path_planned_v3_primary_analysis.json` | `2af7cea26a5e75b1508169ad63c389a59ae392237ca47c16e3040a87cac0e67d` |
+
+---
+
+## 2026-11-18 — Write-once arm frozen (next step 1 of 3)
+
+At the owner's request (credit topped up to about $10.50), the competitor the
+planning router has to beat: `write_once.py`, a router that has one model
+write the whole job once and keeps it only if it reproduces two agreed answers.
+The runner gains arm W and `--arms`; `analyze_write_once_v1.py` analyses it.
+Full suite passed. Plan: `FAST_PATH_WRITE_ONCE_V1_PLAN.md`.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `write_once.py` | `4f222c320a16269357d5aa45fa11a7e7f08edf196496b2aab026fe4e911f0ce2` |
+| `run_fast_path_planned_v1.py` | `3f27601a162bfe3ed8e5ff59ce7f11e6054126ef864fdf3fe3759f520a864751` |
+| `analyze_write_once_v1.py` | `a4eaf4b591bdabe17cf571d1328bd402fb5c2406ed2820e5d249867c7267f3df` |
+| `analyze_fast_path_planned_v1.py` | `ac7a63d137d0f2eb21923e26e1bcd7738bda574b54f2d7288708a0c934d230a5` |
+| `config_fast_path.json` | `785e0a8b2ba76b6be33d5ebdfb2c4b3533f27b70cbd16a77ef9bd9c01b3f42df` |
+| `fast_path.py` | `01262b2e97fc24c494340a4224e81782ca85eae88510219d9d171b90ad087d89` |
+| `planner.py` | `941d7f2baaa04caa7f92b5ae369760e3a10f6a0acdf2e925c87b6807aa3dccb3` |
+| `sandbox.py` | `b132f5d8175e60916baa0550c09d2f5d34e247e99bd390eee07510f596a9dcff` |
+| `fast_path_planned_bench_v3.py` | `5248a055c80d11e9d55b3280102ac23dd844d055fdd4476597386e7a4fbfbc70` |
+| `fast_path_planned_bench_v3_prose.json` | `efaf393f643cb108d10ecd0bd170856f5cf5149a249c01a5c6341044b9005cf4` |
+| `fast_path_ceiling_v3.py` | `4420adde077c3d03c186f207a6b77f6d71c05a937d5c6360cd9806a90a6959a6` |
+| `fast_path_code_only_v1.py` | `843a14b6496b675c01ea8f1f43a9c1916209142a93bd6c63ca3dea7bc101a9f5` |
+| `FAST_PATH_WRITE_ONCE_V1_PLAN.md` | `bd40c172c69c19b40591e83a736a702f8ee31617d2dbfe61922450edd0b792a1` |

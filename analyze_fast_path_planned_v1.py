@@ -18,7 +18,7 @@ from analyze_fast_path_timing_v1 import BOOTSTRAP_REPLICATES, bootstrap, by_shap
 
 TIME_RATIO_LIMIT = 1.0
 CORRECTNESS_MARGIN = -0.02
-ARMS = ("A", "R", "C", "D", "E")
+ARMS = ("A", "R", "C", "D", "E", "W")
 
 
 def pair(grouped, first, second, replicates):
