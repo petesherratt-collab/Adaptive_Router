@@ -4357,3 +4357,19 @@ about $17.39):
   remain comparable, and gains arm Q (`--early`: probes plus early writing).
 
 Full suite passed.
+
+---
+
+## 2026-11-18 — Hard jobs V1 stage 1 frozen, before any text exists
+
+Plan: `FAST_PATH_HARD_JOBS_V1_PLAN.md`. The runner's ceiling arm reads every
+item of a list when the reading has an `item_field`. Full suite passed.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v6.py` | `c4250db625cdce4dbd385314163ec0fcfc096666c27cba5bc8c67f61159f196d` |
+| `fast_path_ceiling_v6.py` | `20fda45f20174a57dc9e3cbfd15130a6d8a8601054a9fec4f215e59d14a24084` |
+| `make_bench_v6_prose.py` | `e7d3d885d45e52b17ad259184948de63df7b1d041f5afcf9f0c9b97f0b4ef498` |
+| `write_once.py` | `16dbbae4096222fe95fb1633a1695e3556b31f7f643b72a16aa64111c769c1bd` |
+| `run_fast_path_planned_v1.py` | `3e8741cc2701aa89eda9a94594a98fc3316fab0914c8e08dc6d6d0967f1944df` |
+| `FAST_PATH_HARD_JOBS_V1_PLAN.md` | `51ea61289d06b139da5c24fa88534e676831ad977d23e81a3292f87a1fb0a68b` |

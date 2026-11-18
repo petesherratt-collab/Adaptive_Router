@@ -103,20 +103,32 @@ class UsageMeter:
 
 def ceiling_answer(shape, reading, inputs, router):
     """Arm D: the reading step raced exactly as arm C races its judgement
-    steps, then the benchmark's own reference code for everything else.
+    steps, then the benchmark's own reference code for everything else. With
+    ``item_field`` the reading is made on every item of a list input, each
+    raced in parallel, giving a list of labels.
 
     Returns ``(answered, value, label)``. A label the reference code cannot use
     makes the job wrong, not unanswered.
     """
-    result = router.handle(
-        {"schema_version": fast_path.SCHEMA_VERSION,
-         "task": {"spec": reading["spec"], "signature": reading["signature"]},
-         "args": [inputs[reading["field"]]]},
-        learn=False,
-    )
-    if result["route"] == "none":
-        return False, None, None
-    label = result["value"]
+    def read(text):
+        return router.handle(
+            {"schema_version": fast_path.SCHEMA_VERSION,
+             "task": {"spec": reading["spec"], "signature": reading["signature"]},
+             "args": [text]},
+            learn=False,
+        )
+    if reading.get("item_field"):
+        texts = [item[reading["item_field"]] for item in inputs[reading["field"]]]
+        with ThreadPoolExecutor(max(1, len(texts))) as pool:
+            results = list(pool.map(read, texts))
+        if any(r["route"] == "none" for r in results):
+            return False, None, None
+        label = [r["value"] for r in results]
+    else:
+        result = read(inputs[reading["field"]])
+        if result["route"] == "none":
+            return False, None, None
+        label = result["value"]
     try:
         return True, shape["reference"](inputs, {reading["label"]: label}), label
     except Exception:
