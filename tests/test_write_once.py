@@ -138,3 +138,73 @@ class RunnerArmsTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+EDGE_WRONG = {"readings": GOOD["readings"],
+              "code": "def solve(inputs, readings):\n    if inputs['n'] == 0:\n        return -1\n"
+                      "    return inputs['n'] * 2 + len(inputs['text']) + (1 if readings['mood'] == 'up' else 0)\n"}
+
+
+class ProbeFake(Fake):
+    def __call__(self, prompt, config, api_key):
+        if prompt.startswith("List edge-case inputs for testing a program"):
+            self.calls.append(prompt[:20])
+            self.probe_prompt = prompt
+            return RemoteResult(True, text=json.dumps([{"n": 0, "text": ""}, {"n": 1, "text": "a"},
+                                                       {"n": "bad", "text": ""}]), model=config["model"])
+        return super().__call__(prompt, config, api_key)
+
+
+class ProbeTests(WriteOnceTests):
+    def run_jobs(self, programs, probes=4):
+        fake = ProbeFake(programs)
+        router = self.build(fake, program_probes=probes, probe_model="p", probe_max_tokens=64)
+        for n in range(1, 6):
+            router.handle(request(n))
+            router.drain()
+        return fake, router.summary(next(iter(router._records)))
+
+    def test_probe_rejects_a_program_wrong_only_on_an_edge(self):
+        fake, summary = self.run_jobs([EDGE_WRONG, GOOD])
+        first, second = summary["attempts"]
+        self.assertEqual(first["outcome"], "REJECTED")
+        self.assertEqual(first["trial"], {"examples": 2, "passed": 2})
+        self.assertEqual((first["probes"]["proposed"], first["probes"]["failed"]), (2, 1))
+        self.assertEqual(second["outcome"], "ADOPTED")
+        self.assertTrue(summary["adopted"])
+        # The prose input is held at the example's value and not shown as a probe key.
+        self.assertNotIn('"note"', fake.probe_prompt.split("Reply with one JSON array")[1])
+
+    def test_probes_off_by_default(self):
+        fake = ProbeFake([EDGE_WRONG])
+        router = self.build(fake)
+        for n in range(1, 4):
+            router.handle(request(n))
+            router.drain()
+        self.assertTrue(router.summary(next(iter(router._records)))["adopted"])
+        self.assertFalse(any(c.startswith("List edge") for c in fake.calls))
+
+    def test_parse_job_probes(self):
+        inputs = request(1)["inputs"]
+        got = write_once.parse_job_probes(json.dumps([{"n": 2, "text": "x"}, {"n": 2, "text": "x"},
+                                                      {"n": 3}, {"n": 4, "text": 5}]),
+                                          inputs, ["note"], 6)
+        self.assertEqual(got, [{"n": 2, "text": "x", "note": inputs["note"]}])
+
+
+class RunnerProbeArmTests(unittest.TestCase):
+    def test_arm_p_runs_with_probes(self):
+        instances = [({"n": n, "text": "ab" * n, "note": "great"}, {}) for n in range(1, 6)]
+        shape = {"name": "tiny", "description": DESCRIPTION, "output": "out"}
+        bench = types.SimpleNamespace(SHAPES=[shape], stream=lambda s: instances,
+                                      gold=lambda s, inst: [{"out": i["n"] * 4 + 1} for i, _ in inst])
+        rows = []
+        runner.execute([shape], bench, {"model": "x"},
+                       {**SETTINGS, "probe_model": "p", "probe_max_tokens": 64}, ProbeFake([EDGE_WRONG, GOOD]),
+                       "k", 1, rows.append, only=("R", "P"), probes=4)
+        summary = next(r for r in rows if r["record_type"] == "shape")
+        self.assertEqual([a["outcome"] for a in summary["write_once_probed"]["attempts"]],
+                         ["REJECTED", "ADOPTED"])
+        jobs = [r for r in rows if r["record_type"] == "job"]
+        self.assertTrue(all(r["correct"] for r in jobs))
+        self.assertEqual(set(summary["usage"]), {"R", "P"})

@@ -101,6 +101,54 @@ def parse_program(text, inputs):
     return {"readings": readings, "code": fast_path._unfence(value["code"]) + "\n"}, None
 
 
+def build_job_probe_prompt(description, inputs, fixed, limit):
+    lines = [
+        "List edge-case inputs for testing a program that carries out the task below.",
+        "",
+        f"Task: {description}",
+        "",
+        "One example of the inputs:",
+    ]
+    lines += [f"- {name} (JSON): {json.dumps(value)}" for name, value in inputs.items()
+              if name not in fixed]
+    lines += [
+        "",
+        f"Give up to {limit} different input sets, each valid under the task's description and in the "
+        "same format as the example. Each should test a case a careless program could get wrong: "
+        "rounding at exactly half, ties, empty or single-item lists, values exactly on a threshold the "
+        "task mentions, zero amounts, and any special case the task names. Keep each set small.",
+        "",
+        "Reply with one JSON array of objects, each with exactly the keys "
+        + ", ".join(json.dumps(n) for n in inputs if n not in fixed) + ". Reply with the JSON only.",
+    ]
+    return "\n".join(lines)
+
+
+def parse_job_probes(text, inputs, fixed, limit):
+    """Valid, distinct probe input sets of the example's shape, prose inputs
+    filled in from the example."""
+    try:
+        value = fast_path.strict_json(fast_path._unfence(text))
+    except (ValueError, TypeError, RecursionError):
+        return []
+    if not isinstance(value, list):
+        return []
+    wanted = {n for n in inputs if n not in fixed}
+    kinds = {n: planner.JSON_TYPE_NAMES.get(type(v)) for n, v in inputs.items()}
+    probes, seen = [], set()
+    for item in value:
+        if not isinstance(item, dict) or set(item) != wanted:
+            continue
+        if any(planner.JSON_TYPE_NAMES.get(type(item[n])) != kinds[n] for n in wanted):
+            continue
+        probe = {n: (inputs[n] if n in fixed else item[n]) for n in inputs}
+        key = sandbox.canonical(probe)
+        if key not in seen:
+            seen.add(key)
+            probes.append(probe)
+    return probes[:limit]
+
+
 class WriteOnceRouter:
     def __init__(self, router):
         self.router = router
@@ -146,10 +194,17 @@ class WriteOnceRouter:
         return {"value": value, "route": route, "model": model, "readings": readings,
                 "total_ms": (time.perf_counter() - started) * 1000}
 
-    def run_program(self, program, inputs):
+    def run_program(self, program, inputs, background=False):
         """Race every reading in parallel, then run the code. Returns
-        ``(ok, value, readings)``."""
+        ``(ok, value, readings)``. ``background=True`` (trials and probes) puts
+        the reading races on the background pool."""
         def read(reading):
+            if background:
+                with self.router.background_context():
+                    return read_now(reading)
+            return read_now(reading)
+
+        def read_now(reading):
             result = self.router.handle({
                 "schema_version": fast_path.SCHEMA_VERSION,
                 "task": {"spec": reading["spec"], "signature": "def solve(text: str) -> str:"},
@@ -231,13 +286,53 @@ class WriteOnceRouter:
         program["sha256"] = hashlib.sha256(program["code"].encode("utf-8")).hexdigest()
         passed = 0
         for example in examples:
-            ok, value, _ = self.run_program(program, example["inputs"])
+            ok, value, _ = self.run_program(program, example["inputs"], background=True)
             passed += ok and sandbox.canonical(value) == sandbox.canonical(example["expected"])
         outcome = "ADOPTED" if passed == len(examples) else "REJECTED"
+        probes = None
+        if outcome == "ADOPTED" and self.settings.get("program_probes", 0):
+            probes = self._probe(description, inputs, program)
+            if probes["failed"]:
+                outcome = "REJECTED"
         return {"outcome": outcome, "write_ms": write_ms, "sha256": program["sha256"],
                 "readings": len(program["readings"]), "code_lines": program["code"].count("\n"),
-                "trial": {"examples": len(examples), "passed": passed}, "program": program,
+                "trial": {"examples": len(examples), "passed": passed}, "probes": probes,
+                "program": program,
                 **({"rejected_program": program} if outcome == "REJECTED" else {})}
+
+    def _probe(self, description, inputs, program):
+        """Edge-case jobs: the probe model proposes inputs (prose inputs held
+        at the example's values), the whole-task race answers them, and the
+        program must reproduce every agreed answer. No model judges the
+        program; the probes only add agreed examples."""
+        limit = self.settings["program_probes"]
+        fixed = sorted({r["input"] for r in program["readings"]})
+        config = {**self.router.remote_config, "model": self.settings["probe_model"],
+                  "max_tokens": self.settings["probe_max_tokens"]}
+        summary = {"proposed": 0, "agreed": 0, "failed": 0, "error": None, "failures": []}
+        try:
+            result = self.router.remote_fn(build_job_probe_prompt(description, inputs, fixed, limit),
+                                           config, self.router.api_key)
+        except Exception as exc:
+            summary["error"] = type(exc).__name__
+            return summary
+        if not result.success:
+            summary["error"] = result.error
+            return summary
+        probes = parse_job_probes(result.text, inputs, fixed, limit)
+        summary["proposed"] = len(probes)
+        races = [self.router.start_prompt_race(planner.build_task_prompt(description, p)) for p in probes]
+        for probe, futures in zip(probes, races):
+            agreed, value, _ = planner.PlanningRouter._agreement(
+                futures, self.settings["agreement_quorum"], self.settings.get("job_agreement_min"))
+            if not agreed:
+                continue
+            summary["agreed"] += 1
+            ok, got, _ = self.run_program(program, probe, background=True)
+            if not (ok and sandbox.canonical(got) == sandbox.canonical(value)):
+                summary["failed"] += 1
+                summary["failures"].append({"inputs": probe, "expected": value, "got": got})
+        return summary
 
     def _audit(self, request, futures, served, sha):
         agreed, value, _ = planner.PlanningRouter._agreement(

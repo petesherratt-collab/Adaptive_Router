@@ -4225,3 +4225,20 @@ probes the fast path uses for single steps would be the natural guard.
 |---|---|
 | `fast_path_write_once_v2_primary.jsonl` | `9223f62d65cd58aac9c43c1d89965da514c30ad2016ce2b6b2e2c3cebb40092e` |
 | `fast_path_write_once_v2_primary_analysis.json` | `951ff93341bbe09b1c0abfaae39b223bf95efc64c84200102398682f710a91d4` |
+
+---
+
+## 2026-11-18 — Write-once V3 stage 1 frozen: probes and fresh unseen jobs
+
+Owner topped up to about $13 and chose: edge-case probes for write-once
+(`program_probes`, arm P in the runner), then a fresh prospective test with
+jobs drained and back to back. Estimated cost about $4.20. Full suite passed.
+Plan: `FAST_PATH_WRITE_ONCE_V3_PLAN.md`.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v5.py` | `917d653eac9cdd9b07b6b9509af298b4ae00e04e878fdf8551fe341dbbf44c55` |
+| `fast_path_ceiling_v5.py` | `9e74e0302fff403da8c00ac6d1b35faec3edbd3ad96ea50f797fd687e8ebe620` |
+| `make_bench_v5_prose.py` | `6a4143b8d034e9c83570bbc9732d21f46631e37a7390d4f78dfcd31ce42e15d1` |
+| `write_once.py` | `a9add6feeab325a90b7c9c9afc79b0d819d11f98ef9405c4fcaf8c4772a62d7f` |
+| `FAST_PATH_WRITE_ONCE_V3_PLAN.md` | `96e824456c8c3ce0724a5c839026b5ab4b0e549057609d4b6484e41164f56886` |
