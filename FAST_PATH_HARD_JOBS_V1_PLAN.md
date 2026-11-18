@@ -60,3 +60,10 @@ once with probes).
 **Run B, jobs back to back.** Arms R, P and Q (write once with probes, written
 early). Readings: first program job per shape for P and Q, Q against P and
 against R. Expected cost about $2.
+
+## Run A result (2026-11-18)
+
+**Not supported.** Write once with probes: 1.11 of the race's time (1.02 to
+1.20), correctness equal (-3.8 to +3.8 points). The planning router was the
+least accurate arm (-21.9 points against write once) and cost three times its
+calls. Run A cost $12.90 against $6 estimated; run B awaits the owner.

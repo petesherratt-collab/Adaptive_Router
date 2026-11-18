@@ -4403,3 +4403,50 @@ excluded (two-allergen dishes), 4 borderline kept. Runs frozen in
 | `fast_path_planned_bench_v6_prose.json` | `7e0ada753a1f1bbf589739d9fec3a640e81d2ec2eacb6a698f18a8c8a51ca1cb` |
 | `fast_path_ceiling_v6.py` | `20fda45f20174a57dc9e3cbfd15130a6d8a8601054a9fec4f215e59d14a24084` |
 | `FAST_PATH_HARD_JOBS_V1_PLAN.md` | `1ac6a9fa516e5b9b69dfe8a4c2f7e91dae579a501e4b5fc417185a13933e72ea` |
+
+---
+
+## 2026-11-18 — Hard jobs V1 run A result (prospective)
+
+Label `hard_v1_primary`: V6 jobs (8 shapes, 20 each, about 7.4 readings per
+job), arms R, C, D, P, drained. 30,807 provider calls, 208 invalid responses.
+**Cost about $12.90, against an estimate of $6** (arm C: 18,178 calls and
+8.4 million tokens). Run B is not started; the owner is asked first.
+
+| Arm | Correct | Median ms | 90th pct ms | Calls |
+|---|---:|---:|---:|---:|
+| R | 143/160 | 2245 | 3202 | 800 |
+| C | 108/160 | 2891 | 19741 | 18,178 |
+| D | 140/160 | 1806 | 3130 | 5,895 |
+| P | 143/160 | 2492 | 3941 | 5,934 |
+
+**Primary decision: NOT SUPPORTED.** P/R 1.110 (1.017 to 1.195): slower than
+the race. P minus R 0.000 (-0.038 to +0.038): the correctness bound also fails.
+
+- **The planning router did not win where it was expected to: it did worst.**
+  C against P: correctness -0.219 (-0.388 to -0.075), time 1.16 (0.93 to
+  5.56), with three times P's calls. Its plans were wrong on most jobs of
+  `applicant_screen` (6/20), `expense_lines` (9/20) and `review_digest`
+  (16/20), and its unpromoted steps gave 12 to 18 s medians on three shapes.
+- **Why write-once lost time here:** each reading of each item is its own
+  race, run in parallel, so a job waits for the slowest of about seven races;
+  the whole-task race waits for one. With one reading per job (V3 to V5) this
+  did not arise. P was 1.38 times the ceiling's time even though both read
+  per item: P also waited on the race before adoption and on program checks.
+- Write-once adopted programs for 7 of 8 shapes (job index 2 to 4);
+  `expense_lines` had both programs rejected on the trial and ran on the race
+  throughout. 117 program-served jobs, 106 correct; most wrong answers were in
+  `incident_log`, which every arm found hard (R 7/20, D 8/20, P 8/20, C 6/20):
+  one misread severity among about seven notes flips the escalation rule.
+- Probes ran only where some input is not read (3 shapes); none failed.
+
+Reading: on jobs with many readings per job, writing the job once keeps its
+accuracy but loses its speed advantage, because per-item reading races add a
+max-of-N wait. Step-by-step planning does not help; it is the least accurate
+and by far the most expensive arm. Batching a job's readings into one call is
+the obvious next fix.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_hard_v1_primary.jsonl` | `8b772f509b9f5866205a91a603c4bb844b6e041b1a9ba03cd514fdcccd7634fc` |
+| `fast_path_hard_v1_primary_analysis.json` | `8399c67bbcff543a6e23842cee47474e100fc8055cb7d90076834b4d2cb3f5ac` |
