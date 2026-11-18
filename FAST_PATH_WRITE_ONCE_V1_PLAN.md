@@ -47,3 +47,11 @@ Expectation, stated now: most shapes adopt a program at job index 2 and then
 run near D's ~0.9 s. The risk is programs that fail the two-example trial on
 fiddly rules (rounding, ties, date arithmetic), leaving those shapes on the
 race. Expected cost about $1.
+
+## Result (2026-11-18)
+
+As expected, and more cleanly: all 8 shapes adopted a program at the first
+attempt (job index 2 to 5), and W then ran at 1.1 times the ceiling's time and
+0.52 times the race's (interval 0.42 to 0.61), 156/160 correct, with 948 calls
+against the planning router's 8,393 on the same jobs. Details in
+`BUILD_HISTORY.md`.

@@ -803,6 +803,38 @@ hand-checked against their labels. Plan: `FAST_PATH_PLANNED_V3_PLAN.md`.
 Evidence: `fast_path_planned_v3_primary.jsonl`,
 `fast_path_planned_v3_primary_analysis.json`, `code_only_v1_scores.json`.
 
+### Write the job once (descriptive, 2026-11-18)
+
+The obvious competitor to step-by-step learning: arm W (`write_once.py`) races
+the whole task until two answers agree, then asks one model to write the whole
+job (reading steps with fixed labels, plus one Python function for everything
+else) from the description alone. The program is kept only if it reproduces
+both agreed answers; after that, only its reading steps go to models. Same V3
+jobs, so descriptive. Plan: `FAST_PATH_WRITE_ONCE_V1_PLAN.md`.
+
+| Arm | Correct | Median ms | Model calls |
+|---|---:|---:|---:|
+| R. Whole-task race | 155/160 | 1963 | 800 |
+| D. Ceiling (reference code) | 160/160 | 925 | 800 |
+| E. Code only (keyword rules) | 148/160 | 0.17 | 0 |
+| **W. Write once** | **156/160** | **1018** | **948** |
+| C. Planning router (V3 primary run) | 158/160 | 2078 | 8,393 |
+
+- **All eight programs were adopted at the first attempt**, from job 3 to
+  job 6, and none was later dropped. 133 of 134 program-served answers were
+  right; the one miss was a reading of the borderline "No steak or salmon"
+  text, not the code.
+- W took 0.52 times the race's median time (interval 0.42 to 0.61) and 1.1
+  times the hand-written ceiling's, with about a ninth of the planning
+  router's calls.
+- **This is the most important result of the fast-path work so far.** On jobs
+  like these, writing the job once and checking it by execution beats learning
+  it step by step on speed, coverage and cost, and gets within 10% of a
+  programmer's version. The planning router's step learning would only earn
+  its place on jobs a model cannot write whole.
+
+Evidence: `fast_path_write_once_v1.jsonl`, `fast_path_write_once_v1_analysis.json`.
+
 The owner's `evolab` repository gained the matching code-only condition (branch
 `ccr-23487558-3yzwx4`, amendment 0.1-G): a scripted client that reads only the
 public task scored Brier loss 0 on all nine sealed development tasks at

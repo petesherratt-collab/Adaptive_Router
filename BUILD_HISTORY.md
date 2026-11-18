@@ -4030,3 +4030,43 @@ Full suite passed. Plan: `FAST_PATH_WRITE_ONCE_V1_PLAN.md`.
 | `fast_path_ceiling_v3.py` | `4420adde077c3d03c186f207a6b77f6d71c05a937d5c6360cd9806a90a6959a6` |
 | `fast_path_code_only_v1.py` | `843a14b6496b675c01ea8f1f43a9c1916209142a93bd6c63ca3dea7bc101a9f5` |
 | `FAST_PATH_WRITE_ONCE_V1_PLAN.md` | `bd40c172c69c19b40591e83a736a702f8ee31617d2dbfe61922450edd0b792a1` |
+
+---
+
+## 2026-11-18 — Write-once arm result (descriptive)
+
+Label `write_once_v1`: V3 jobs (8 shapes, 20 each), arms R, D, E, W, drained.
+2,548 provider calls, 3 invalid responses, no unanswered job. Cost about $1.23.
+
+| Arm | Correct | Median ms | Last five ms | Calls | Prompt tokens | Completion tokens |
+|---|---:|---:|---:|---:|---:|---:|
+| R | 155/160 | 1963 | 1866 | 800 | 374,422 | 415,263 |
+| D | 160/160 | 925 | 925 | 800 | 154,688 | 45,288 |
+| E | 148/160 | 0.17 | 0.17 | 0 | 0 | 0 |
+| W | 156/160 | 1018 | 1002 | 948 | 227,352 | 147,728 |
+| C (V3 primary, other run) | 158/160 | 2078 | 1186 | 8,393 | 1,833,375 | 1,185,950 |
+
+- **Every shape adopted a program at its first attempt**, at job index 2
+  (four shapes), 3 (two), 4 and 5. Each program had one reading step and 16
+  to 50 lines of code. No demotion. 134 program-served jobs, 133 correct
+  (median 977 ms); the one wrong answer was a reading, not code: the
+  borderline `recipe_scaling` text flagged in the hand check ("No steak or
+  salmon...") read as 'any' under the program's own, vaguer reading spec.
+  The three other wrong W answers came from the race before adoption.
+- W/R 0.519 (0.423 to 0.613); W minus R +0.006 (-0.013 to +0.025).
+  W/D 1.10 (1.05 to 1.22); W minus D -0.025 (-0.050 to -0.006).
+  W minus E +0.050 (-0.006 to +0.106).
+- Against the planning router on the same jobs (other run, descriptive): W
+  answered faster (1018 against 2078 ms median), went to code on every shape
+  where C left `fleet_fuel` unplanned and three shapes with unpromoted steps,
+  and made 948 calls against 8,393.
+
+Reading: writing the job once, checked against two agreed answers, beat
+learning it step by step on every measure except a small correctness margin,
+and came within 10% of the hand-written ceiling. The planning router's
+step-by-step learning is not justified on jobs like these.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_write_once_v1.jsonl` | `a3415cfecea27dcf7ccc726b0ed61d0d7f6f5a6c11442d11cd8e10545815ee82` |
+| `fast_path_write_once_v1_analysis.json` | `5dcff012e82474c5a625c91b411ae6d00f981c4e57c2a09636924e89c4fd2151` |
