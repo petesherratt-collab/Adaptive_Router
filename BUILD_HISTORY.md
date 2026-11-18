@@ -4124,3 +4124,18 @@ write-once result, this line is not worth pursuing further now.
 |---|---|
 | `fast_path_repair_v1.jsonl` | `59ae3d512287e934e14e7088be503382d27114f120f981aeb852ea2e08082f7c` |
 | `fast_path_repair_v1_analysis.json` | `d31a159f21e2d3d393eedaea30ad464298040585ecc99e221a8e68e6b43978dd` |
+
+---
+
+## 2026-11-18 — Write-once V2 stage 1 frozen: unseen jobs and rules before any text exists
+
+At the owner's request (estimated cost about $5.20 of $7.80). Plan:
+`FAST_PATH_WRITE_ONCE_V2_PLAN.md`.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v4.py` | `7bdc4dc5a86c3e1710e3076c9ccf8f87fd7236ec6cd5851995caf550cfe2679d` |
+| `fast_path_code_only_v2.py` | `37be79b8d1ff4bc45cb49e623612a280f3c658ba745e86bf27a4a0709c993ae2` |
+| `fast_path_ceiling_v4.py` | `bcab5bb6034e1849397ad116d8e39030cc06673a749ff0691a8373c2bce61e82` |
+| `make_bench_v4_prose.py` | `0a6a4b5080b9bda60858b56532757a94cb7f87252d526f5a9096a7c58b578f01` |
+| `FAST_PATH_WRITE_ONCE_V2_PLAN.md` | `81c5829758ad8fbee89ba77399972b7542d75f80f8ce8ade15ed63d176b93dc9` |
