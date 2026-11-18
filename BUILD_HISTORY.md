@@ -4262,3 +4262,43 @@ Credit at the freeze: about $11.90.
 | `fast_path_planned_bench_v5_prose.json` | `408e3b4b22cae81fda3246b7cce7a6059ea3f500c938d601dc5f1be43d1fd5a4` |
 | `fast_path_ceiling_v5.py` | `9e74e0302fff403da8c00ac6d1b35faec3edbd3ad96ea50f797fd687e8ebe620` |
 | `FAST_PATH_WRITE_ONCE_V3_PLAN.md` | `40cf04c1428e0635b3cfe1318808c3d05923ae515c19c65fbbdefb494b417e12` |
+
+---
+
+## 2026-11-18 — Write-once V3 run 1 result (prospective)
+
+Label `write_once_v3_primary`: V5 jobs (8 unseen shapes, 30 each), arms R, D, W,
+P (write once with 6 edge-case probes), drained. 5,651 provider calls, 2
+invalid responses. Cost about $2.34.
+
+| Arm | Correct | Median ms | Calls | Prompt tokens | Completion tokens |
+|---|---:|---:|---:|---:|---:|
+| R | 233/240 | 1925 | 1,200 | 519,379 | 556,581 |
+| D | 240/240 | 931 | 1,200 | 229,928 | 74,583 |
+| W | 240/240 | 948 | 1,385 | 312,361 | 159,795 |
+| P | 238/240 | 961 | 1,866 | 451,967 | 266,605 |
+
+**Primary decision: SUPPORTED.** P/R 0.499 (0.449 to 0.577); P minus R +0.021
+(0.000 to +0.054).
+
+- P adopted a program for every shape at its first attempt (job index 2, and
+  4 for `shared_bills`). 222 program-served jobs, all correct; its two wrong
+  answers came from the race before adoption. Probes: 48 proposed, 46 agreed
+  by the racers, **0 failed**: no program was rejected by a probe.
+- W (no probes) was also right on all 240 jobs; two of its first programs
+  (`train_fares`, `reading_challenge`) failed the two-example trial and the
+  second attempts were adopted. W/R 0.493 (0.456 to 0.529), +0.029 (+0.004 to
+  +0.063).
+- P against W: time 1.01 (0.96 to 1.12), correctness -0.008 (-0.025 to 0.000),
+  about 35% more calls. P against D: 1.03 (0.98 to 1.14).
+
+Reading: on fresh unseen jobs written with rounding, tie and threshold rules,
+writing the job once was twice as fast as the race, at least as accurate, and
+level with the hand-written ceiling. The probes caught nothing here, so this
+run shows they are cheap, not that they help; the V4 rounding failure remains
+their only motivating case.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_write_once_v3_primary.jsonl` | `76081c55e7814211f0c9081f4e766b0fbf7841bad5718eadf2354f7519b8c4db` |
+| `fast_path_write_once_v3_primary_analysis.json` | `81fa6f983f79fe6bc3a560f7eda06db971ca8ea27194f551468bab0df33bd9da` |

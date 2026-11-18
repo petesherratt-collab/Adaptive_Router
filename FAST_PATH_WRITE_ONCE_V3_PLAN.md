@@ -53,3 +53,10 @@ once with `program_probes` 6). Settings as committed; drained arrival.
 **Run 2, descriptive.** The same jobs, arms R and P, jobs back to back
 (`--arrival immediate`). Readings: P against R, first program job per shape,
 wrong program answers. Expected cost about $1.50.
+
+## Run 1 result (2026-11-18)
+
+**Supported.** Write once with probes: 0.50 of the race's time (0.45 to 0.58),
++2.1 points (0.0 to +5.4); every program answer right. The probes rejected no
+program (0 of 46 agreed probes failed), and write once without probes was also
+right on all 240 jobs. Details in `BUILD_HISTORY.md`.
