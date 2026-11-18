@@ -4070,3 +4070,19 @@ step-by-step learning is not justified on jobs like these.
 |---|---|
 | `fast_path_write_once_v1.jsonl` | `a3415cfecea27dcf7ccc726b0ed61d0d7f6f5a6c11442d11cd8e10545815ee82` |
 | `fast_path_write_once_v1_analysis.json` | `5dcff012e82474c5a625c91b411ae6d00f981c4e57c2a09636924e89c4fd2151` |
+
+---
+
+## 2026-11-18 — Repair V1 frozen (next step 2 of 3)
+
+`repair_attempts` (default 0) and per-step learning diagnostics, tested with
+fake models; full suite passed. Plan: `FAST_PATH_REPAIR_V1_PLAN.md`.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path.py` | `753fef2c26534cabd0f6efbc7a2da0baf64b0ba3e2ac2572e2cd4217e2886caa` |
+| `planner.py` | `941d7f2baaa04caa7f92b5ae369760e3a10f6a0acdf2e925c87b6807aa3dccb3` |
+| `pipeline.py` | `fecc96aee7349fbf2229dad47207c7467a76c884fec281dd596d35185f528e83` |
+| `config_fast_path.json` | `6d994e62ef672619a88aeb909032ea9681766decf274152e2b64d99d027cda10` |
+| `run_fast_path_planned_v1.py` | `949b6dae148988ab4d55a8394aac1c343c29b2ccb0b082a01e744a99151541c7` |
+| `FAST_PATH_REPAIR_V1_PLAN.md` | `7a1c0af0ef0a668468a87cffb193d27a2225d90d198ee79b7824478d1bf9742c` |
