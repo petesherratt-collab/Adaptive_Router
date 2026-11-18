@@ -679,16 +679,27 @@ class FastPathRouter:
             early_probe = needs_probes and len(record["examples"]) >= self.settings.get(
                 "probe_after_examples", self.settings["min_gate_examples"]
             )
+            used = sum(
+                attempt["outcome"] != "REMOTE_ERROR" for attempt in record["synthesis_attempts"]
+            )
+            repair = None
+            if used >= self.settings["max_synthesis_attempts"]:
+                # Optional repair: once the blind attempts are spent, a candidate
+                # that failed only on mismatching examples may be shown up to two
+                # of them and rewritten. It must still pass every example.
+                last = record["synthesis_attempts"][-1] if record["synthesis_attempts"] else {}
+                if (
+                    used < self.settings["max_synthesis_attempts"] + self.settings.get("repair_attempts", 0)
+                    and last.get("gate", {}).get("reason") == "EXAMPLE_MISMATCH"
+                    and last.get("rejected_source")
+                ):
+                    repair = last["rejected_source"]
             if (
                 not self.settings.get("synthesis_enabled", True)
                 or record["function"] is not None
                 or shape in self._synthesising
                 or not (enough or early_probe)
-                or sum(
-                    attempt["outcome"] != "REMOTE_ERROR"
-                    for attempt in record["synthesis_attempts"]
-                )
-                >= self.settings["max_synthesis_attempts"]
+                or (used >= self.settings["max_synthesis_attempts"] and repair is None)
             ):
                 return
             self._synthesising.add(shape)
@@ -701,7 +712,7 @@ class FastPathRouter:
             with self.store.lock():
                 ready = self._gate_minimum(self.store.get(shape)) is not None
             if ready:
-                attempt = self._synthesise(shape, spec, signature)
+                attempt = self._synthesise(shape, spec, signature, repair)
         finally:
             with self.store.lock():
                 self._synthesising.discard(shape)
@@ -781,7 +792,29 @@ class FastPathRouter:
         summary["ms"] = (time.perf_counter() - started) * 1000
         self._log({"record_type": "fast_path_probe", "shape": shape, **summary})
 
-    def _synthesise(self, shape, spec, signature):
+    def _repair_prompt(self, shape, spec, signature, previous):
+        """The synthesis prompt plus up to two examples the previous candidate
+        got wrong. Returns ``(prompt, shown)``."""
+        with self.store.lock():
+            examples = list(self.store.get(shape)["examples"])
+        run = sandbox.run_function(previous, [e["args"] for e in examples],
+                                   self.settings["sandbox_timeout_seconds"])
+        wrong = []
+        if run.ok:
+            for example, result in zip(examples, run.results):
+                if not (result["ok"] and sandbox.canonical(result["value"])
+                        == sandbox.canonical(example["expected"])):
+                    wrong.append((example, result.get("value") if result["ok"] else result.get("error")))
+        lines = [build_synthesis_prompt(spec, signature), "",
+                 "A previous implementation gave wrong results. Some failing cases:"]
+        for example, got in wrong[:2]:
+            lines.append(f"- arguments {json.dumps(example['args'])}: expected "
+                         f"{json.dumps(example['expected'])}, got {json.dumps(got)}")
+        lines.append("Write a corrected, general implementation of the specification. Do not "
+                     "special-case these inputs. Reply with the Python source only.")
+        return "\n".join(lines), len(wrong[:2])
+
+    def _synthesise(self, shape, spec, signature, repair=None):
         model = self.settings["synthesis_model"]
         config = {
             **self.remote_config,
@@ -789,10 +822,11 @@ class FastPathRouter:
             "max_tokens": self.settings["synthesis_max_tokens"],
         }
         started = time.perf_counter()
+        prompt, shown = build_synthesis_prompt(spec, signature), 0
+        if repair is not None:
+            prompt, shown = self._repair_prompt(shape, spec, signature, repair)
         try:
-            result = self.remote_fn(
-                build_synthesis_prompt(spec, signature), config, self.api_key
-            )
+            result = self.remote_fn(prompt, config, self.api_key)
         except Exception as exc:
             result = remote.RemoteResult(False, error=type(exc).__name__)
         attempt = {"model": model, "outcome": "REMOTE_ERROR", "error": result.error}
@@ -815,6 +849,10 @@ class FastPathRouter:
                     "outcome": "PROMOTED" if passed else "REJECTED",
                     "gate": detail,
                 }
+                if repair is not None:
+                    attempt["repair"] = {"examples_shown": shown}
+                if not passed:
+                    attempt["rejected_source"] = source[:20000]
                 if passed:
                     record["function"] = {
                         "source": source,

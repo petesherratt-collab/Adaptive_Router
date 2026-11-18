@@ -251,6 +251,19 @@ def shape_summary(shape, instances, golds, record, learning):
                 stored = learning.store.get(fast_path.shape_key(step["task"]["spec"],
                                                                 step["task"]["signature"]))
                 entry["promoted"] = bool(stored and stored["function"])
+                if stored:
+                    entry["learning"] = {
+                        "examples": len(stored["examples"]),
+                        "disagreements": stored.get("disagreements", 0),
+                        "example_conflicts": stored.get("example_conflicts", 0),
+                        "probes": stored.get("probes"),
+                        "attempts": [{"outcome": a["outcome"],
+                                      "gate": a.get("gate", {}).get("reason"),
+                                      "passed": a.get("gate", {}).get("passed"),
+                                      "examples": a.get("gate", {}).get("examples"),
+                                      "repair": "repair" in a, "error": a.get("error")}
+                                     for a in stored["synthesis_attempts"]],
+                    }
             plan_steps.append(entry)
     return {
         "record_type": "shape", "shape": shape["name"],
@@ -295,6 +308,7 @@ def main():
     parser.add_argument("--code-only", help="module of keyword reading RULES; adds arm E (no model)")
     parser.add_argument("--write-once", action="store_true", help="add arm W (write the job once)")
     parser.add_argument("--arms", help="comma-separated arms to run, e.g. R,D,E,W (default: all)")
+    parser.add_argument("--shapes", help="comma-separated shape names to run (default: all)")
     parser.add_argument("--limit-shapes", type=int)
     parser.add_argument("--limit-jobs", type=int)
     parser.add_argument("--jobs", type=int, help="jobs per shape, drawn from the bench's seeded stream")
@@ -321,6 +335,12 @@ def main():
     ceiling = load_bench(args.ceiling).READING if args.ceiling else None
     code_only = load_bench(args.code_only).RULES if args.code_only else None
     shapes = bench.SHAPES[: args.limit_shapes] if args.limit_shapes else bench.SHAPES
+    if args.shapes:
+        wanted = args.shapes.split(",")
+        unknown = set(wanted) - {s["name"] for s in shapes}
+        if unknown:
+            parser.error(f"unknown shapes: {sorted(unknown)}")
+        shapes = [s for s in shapes if s["name"] in wanted]
     if args.jobs:
         full_stream = bench.stream
         bench.stream = lambda shape: full_stream(shape, length=args.jobs)
