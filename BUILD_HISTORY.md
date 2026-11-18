@@ -4242,3 +4242,23 @@ Plan: `FAST_PATH_WRITE_ONCE_V3_PLAN.md`.
 | `make_bench_v5_prose.py` | `6a4143b8d034e9c83570bbc9732d21f46631e37a7390d4f78dfcd31ce42e15d1` |
 | `write_once.py` | `a9add6feeab325a90b7c9c9afc79b0d819d11f98ef9405c4fcaf8c4772a62d7f` |
 | `FAST_PATH_WRITE_ONCE_V3_PLAN.md` | `96e824456c8c3ce0724a5c839026b5ab4b0e549057609d4b6484e41164f56886` |
+
+---
+
+## 2026-11-18 — Write-once V3: texts hand-checked; runs frozen
+
+V5 texts generated (324) and hand-checked before any model read them: 3
+excluded, 4 borderline kept. Runs frozen in `FAST_PATH_WRITE_ONCE_V3_PLAN.md`.
+Credit at the freeze: about $11.90.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `write_once.py` | `a9add6feeab325a90b7c9c9afc79b0d819d11f98ef9405c4fcaf8c4772a62d7f` |
+| `run_fast_path_planned_v1.py` | `40c154947af6d6a8c62f25230f70e2cc99e2d1fa5b515fe6f4a4690fc646e30a` |
+| `analyze_write_once_v1.py` | `4f52663c636a2d17a76bbc1edf9da6dde1e49ba102e94e5ac1e7e97353946cbf` |
+| `config_fast_path.json` | `6d994e62ef672619a88aeb909032ea9681766decf274152e2b64d99d027cda10` |
+| `fast_path.py` | `753fef2c26534cabd0f6efbc7a2da0baf64b0ba3e2ac2572e2cd4217e2886caa` |
+| `fast_path_planned_bench_v5.py` | `917d653eac9cdd9b07b6b9509af298b4ae00e04e878fdf8551fe341dbbf44c55` |
+| `fast_path_planned_bench_v5_prose.json` | `408e3b4b22cae81fda3246b7cce7a6059ea3f500c938d601dc5f1be43d1fd5a4` |
+| `fast_path_ceiling_v5.py` | `9e74e0302fff403da8c00ac6d1b35faec3edbd3ad96ea50f797fd687e8ebe620` |
+| `FAST_PATH_WRITE_ONCE_V3_PLAN.md` | `40cf04c1428e0635b3cfe1318808c3d05923ae515c19c65fbbdefb494b417e12` |

@@ -28,3 +28,28 @@ attempt is written blind, as before.
 ties or thresholds. `fast_path_ceiling_v5.py`; `make_bench_v5_prose.py`
 (12 texts per label, `mistralai/mistral-large-4-0`). No keyword-rules arm this
 time, to save effort; the code-only comparison stands on V3 and V4.
+
+## Stage 1 result
+
+Texts: 12 per label, 324 in all; 3 excluded after the hand check (water notes
+that do not say what was sampled), 4 borderline kept with reasons.
+
+## Stage 2: the runs (frozen before any job is sent)
+
+**Run 1, primary, prospective.** `fast_path_planned_bench_v5.py`, 8 shapes,
+the first 30 jobs of each stream (240 jobs). Arms R (whole-task race), D
+(ceiling, `fast_path_ceiling_v5.py`), W (write once, no probes) and P (write
+once with `program_probes` 6). Settings as committed; drained arrival.
+
+- **Primary:** P against R, shape-cluster bootstrap, 10,000 replicates, seed
+  20261116. Supported only if the median-time ratio's 95% interval lies
+  wholly below 1.0 and the correctness difference's wholly above -2 points.
+- **Secondary:** P against W (do probes help correctness, at what time and
+  call cost?), W against R, P against D; per shape, attempts rejected by
+  probes, probes proposed and agreed, wrong program answers split into code
+  and reading, first program job, calls and tokens per arm.
+- Expected cost about $2.50.
+
+**Run 2, descriptive.** The same jobs, arms R and P, jobs back to back
+(`--arrival immediate`). Readings: P against R, first program job per shape,
+wrong program answers. Expected cost about $1.50.
