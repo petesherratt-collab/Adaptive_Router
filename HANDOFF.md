@@ -56,6 +56,15 @@ the planned-jobs part) and `BUILD_HISTORY.md` (every freeze, hash and result).
 - Batch a job's readings into one call per reading (list in, list of labels
   out) to remove the max-of-N wait on many-reading jobs; then measure it and
   `write_early` together, without the planner (about $3 to $4).
+- Adaptive race width (idea from the SAGE preprint, cited second-hand in a
+  RAG survey the owner shared on 2026-11-19; not verified against the paper):
+  race 2 or 3 models on reading steps that usually agree and all 5 only where
+  they do not, chosen by a cheap rule from past agreement, with no extra model
+  calls. Aim: fewer calls and a shorter slowest-race wait on many-reading jobs.
+- Disagreement gate (from the same survey's "refuse without evidence"
+  pattern): when the racers disagree on a reading or a whole-task answer,
+  return the answer flagged as uncertain instead of silently. On the hard jobs
+  this would have flagged many `incident_log` errors.
 - Cost estimates have been unreliable (twice about double); price new runs
   from the last comparable run plus 50%.
 - Jobs a model cannot write whole are where step learning could still matter;
