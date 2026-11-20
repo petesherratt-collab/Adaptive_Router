@@ -4477,3 +4477,20 @@ records each answer's `uncertain` flag; the analysis reports B against R and
 P and accuracy of flagged against unflagged answers. Pull requests opened for
 both repositories (Adaptive_Router #19, evolab #1). Full suite passed (618
 tests).
+
+---
+
+## 2026-11-20 — Reading fixes V1 frozen
+
+Plan: `FAST_PATH_READING_FIXES_V1_PLAN.md`. Credit at the freeze: about $14.20.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `write_once.py` | `a131c3afe9eb3407cc67f14915ab0d1920f11fee86542ae66072d64c0bab4ba1` |
+| `run_fast_path_planned_v1.py` | `cb5052f891bba36b1e1ae7b2e75593102d0b16807204bfe4ad455c2278a274a1` |
+| `analyze_write_once_v1.py` | `5db4340d3b6a9b29ace42df11fed5e25c78b036c5e984314d2f0db6358f82f2a` |
+| `config_fast_path.json` | `2b94990b93115c29f80ca8035518f396d186dba1a8d353b2546d56d55c599577` |
+| `fast_path.py` | `753fef2c26534cabd0f6efbc7a2da0baf64b0ba3e2ac2572e2cd4217e2886caa` |
+| `fast_path_planned_bench_v6.py` | `c4250db625cdce4dbd385314163ec0fcfc096666c27cba5bc8c67f61159f196d` |
+| `fast_path_planned_bench_v6_prose.json` | `7e0ada753a1f1bbf589739d9fec3a640e81d2ec2eacb6a698f18a8c8a51ca1cb` |
+| `FAST_PATH_READING_FIXES_V1_PLAN.md` | `2b19740dfc253faf71b3e7480b2e8736d1a95f788d1146d37fec5382d1ed153d` |
