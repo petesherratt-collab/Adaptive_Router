@@ -35,7 +35,7 @@ write-once experiments of 2026-11-18 (README, "Write the job once").
 
 from __future__ import annotations
 
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import hashlib
 import json
 import os
@@ -192,6 +192,7 @@ class WriteOnceRouter:
         self.store_dir = Path(store_dir) if store_dir else None
         self._records = {}
         self._busy = {}  # template -> "writing" | "early"; not persisted
+        self._width = {}  # reading key -> agreement streak and wins (adaptive_width)
         self._lock = threading.RLock()
         self._background = ThreadPoolExecutor(max_workers=4)
         self._readers = ThreadPoolExecutor(max_workers=8)
@@ -241,7 +242,7 @@ class WriteOnceRouter:
                 self._busy[request.template] = "early"
             self._submit(self._early, request)
         if program is not None:
-            ok, value, readings = self.run_program(program, request.inputs)
+            ok, value, readings, uncertain = self.run_program_flagged(program, request.inputs)
             if ok:
                 with self._lock:
                     record["jobs"] += 1
@@ -251,17 +252,36 @@ class WriteOnceRouter:
                     futures = self.router.start_prompt_race(
                         planner.build_task_prompt(request.description, request.inputs))
                     self._submit(self._audit, request, futures, value, program["sha256"])
-                return self._finish(started, value, PROGRAM_ROUTE, None, readings)
+                return self._finish(started, value, PROGRAM_ROUTE, None, readings, uncertain)
         futures = self.router.start_prompt_race(planner.build_task_prompt(request.description, request.inputs))
-        model, value = fast_path.FastPathRouter._first_valid(futures)
+        model, value, uncertain = self._race_answer(futures)
         self._submit(self._observe, request, futures)
         if model is None:
             return self._finish(started, None, planner.NO_ANSWER, None, None)
-        return self._finish(started, value, planner.RACE_ROUTE, model, None)
+        return self._finish(started, value, planner.RACE_ROUTE, model, None, uncertain)
 
-    def _finish(self, started, value, route, model, readings):
+    def _race_answer(self, futures):
+        """First valid whole-task answer; with ``uncertainty_gate``, also wait
+        for a second and flag the answer if they differ."""
+        if not self.settings.get("uncertainty_gate"):
+            model, value = fast_path.FastPathRouter._first_valid(futures)
+            return model, value, False
+        first = None
+        for future in as_completed(futures):
+            answer = future.result()
+            if not answer["valid"]:
+                continue
+            if first is None:
+                first = answer
+                continue
+            return first["model"], first["value"], sandbox.canonical(answer["value"]) != sandbox.canonical(first["value"])
+        if first is None:
+            return None, None, False
+        return first["model"], first["value"], True
+
+    def _finish(self, started, value, route, model, readings, uncertain=False):
         return {"value": value, "route": route, "model": model, "readings": readings,
-                "total_ms": (time.perf_counter() - started) * 1000}
+                "uncertain": uncertain, "total_ms": (time.perf_counter() - started) * 1000}
 
     def _read(self, spec, text):
         return self.router.handle({
@@ -270,39 +290,121 @@ class WriteOnceRouter:
             "args": [text],
         }, learn=False)
 
-    def run_program(self, program, inputs, background=False):
-        """Race every reading in parallel (each item of an ``each`` reading
-        too), then run the code. Returns ``(ok, value, readings)``.
-        ``background=True`` (trials and probes) puts the races on the
-        background pool."""
-        def in_context(fn, *args):
-            if background:
-                with self.router.background_context():
-                    return fn(*args)
-            return fn(*args)
+    # Readings with the optional fixes of 2026-11-19: ``batch_readings`` (one
+    # race reads every item of a list), ``uncertainty_gate`` (wait for a
+    # second answer and flag disagreement) and ``adaptive_width`` (race fewer
+    # models on a reading that keeps agreeing).
 
+    def _width_models(self, key):
+        models = list(self.settings["race_models"])
+        width = self.settings.get("adaptive_width")
+        if not width:
+            return models
+        with self._lock:
+            stats = self._width.setdefault(key, {"streak": 0, "wins": {}})
+            if stats["streak"] < width["after"]:
+                return models
+            ranked = sorted(models, key=lambda m: (-stats["wins"].get(m, 0), models.index(m)))
+        return ranked[: max(2, width["width"])]
+
+    def _note_width(self, key, futures, winner):
+        """Background: wait for every racer, then update the agreement streak
+        and win counts that ``_width_models`` uses."""
+        answers = [f.result() for f in futures]
+        valid = [a for a in answers if a["valid"]]
+        agreed = len(valid) >= 2 and len({sandbox.canonical(a["value"]) for a in valid}) == 1
+        with self._lock:
+            stats = self._width.setdefault(key, {"streak": 0, "wins": {}})
+            stats["streak"] = stats["streak"] + 1 if agreed else 0
+            if winner:
+                stats["wins"][winner] = stats["wins"].get(winner, 0) + 1
+
+    def _race_reading(self, spec, signature, arg, check):
+        """Race one reading. Returns ``(ok, value, uncertain)``. An answer
+        counts only if ``check`` accepts it."""
+        key = hashlib.sha256(json.dumps([spec, signature]).encode()).hexdigest()
+        prompt = fast_path.build_answer_prompt(spec, signature, [arg])
+        models = self._width_models(key)
+        futures = {self.router._pool().submit(self.router._ask, m, prompt): m for m in models}
+        gate = self.settings.get("uncertainty_gate")
+        first = second = None
+        winner = None
+        for future in as_completed(futures):
+            answer = future.result()
+            if not (answer["valid"] and check(answer["value"])):
+                continue
+            if first is None:
+                first, winner = answer["value"], answer["model"]
+                if not gate:
+                    break
+            else:
+                second = answer["value"]
+                break
+        if self.settings.get("adaptive_width"):
+            self._submit(self._note_width, key, list(futures), winner)
+        if first is None:
+            return False, None, False
+        uncertain = bool(gate) and (second is None or sandbox.canonical(second) != sandbox.canonical(first))
+        return True, first, uncertain
+
+    def _reading_value(self, reading, texts):
+        """``(ok, value, uncertain)`` for one reading of a program."""
+        labels = set(reading["labels"])
+        fixes = any(self.settings.get(k) for k in ("batch_readings", "uncertainty_gate", "adaptive_width"))
+        if not reading.get("each"):
+            if not fixes:
+                result = self._read(reading["spec"], texts)
+                return result["route"] != "none", result["value"], False
+            return self._race_reading(reading["spec"], "def solve(text: str) -> str:", texts,
+                                      lambda v: isinstance(v, str))
+        if self.settings.get("batch_readings"):
+            spec = (reading["spec"] + " Apply this to every text in the list, in order, and return a list "
+                    "with exactly one label per text.")
+            return self._race_reading(
+                spec, "def solve(texts: list) -> list:", texts,
+                lambda v: isinstance(v, list) and len(v) == len(texts) and all(x in labels for x in v))
+        if not fixes:
+            results = list(self._items.map(lambda t: self._read(reading["spec"], t), texts))
+            if any(r["route"] == "none" for r in results):
+                return False, None, False
+            return True, [r["value"] for r in results], False
+        results = list(self._items.map(
+            lambda t: self._race_reading(reading["spec"], "def solve(text: str) -> str:", t,
+                                         lambda v: isinstance(v, str)), texts))
+        if not all(ok for ok, _, _ in results):
+            return False, None, False
+        return True, [v for _, v, _ in results], any(u for _, _, u in results)
+
+    def run_program(self, program, inputs, background=False):
+        """Race every reading in parallel, then run the code. Returns
+        ``(ok, value, readings)``; see ``run_program_flagged``."""
+        ok, value, readings, _ = self.run_program_flagged(program, inputs, background)
+        return ok, value, readings
+
+    def run_program_flagged(self, program, inputs, background=False):
+        """As ``run_program``, plus whether any reading was uncertain (racers
+        disagreed, with ``uncertainty_gate``). ``background=True`` (trials and
+        probes) puts the races on the background pool."""
         def read(reading):
             texts = _texts(reading, inputs)
             if texts is None:
-                return reading["id"], None
-            if not reading.get("each"):
-                result = in_context(self._read, reading["spec"], texts)
-                return reading["id"], None if result["route"] == "none" else result["value"]
-            results = list(self._items.map(lambda t: in_context(self._read, reading["spec"], t), texts))
-            if any(r["route"] == "none" for r in results):
-                return reading["id"], None
-            return reading["id"], [r["value"] for r in results]
+                return reading["id"], (False, None, False)
+            if background:
+                with self.router.background_context():
+                    return reading["id"], self._reading_value(reading, texts)
+            return reading["id"], self._reading_value(reading, texts)
 
-        readings = {}
-        for reading_id, value in self._readers.map(read, program["readings"]):
-            if value is None:
-                return False, None, readings
+        readings, uncertain = {}, False
+        for reading_id, (ok, value, flag) in self._readers.map(read, program["readings"]):
+            if not ok:
+                return False, None, readings, uncertain
             readings[reading_id] = value
+            uncertain = uncertain or flag
         run = sandbox.run_function(program["code"], [[inputs, readings]],
                                    self.settings["sandbox_timeout_seconds"])
         if not (run.ok and run.results[0]["ok"]):
-            return False, None, readings
-        return True, run.results[0]["value"], readings
+            return False, None, readings, uncertain
+        return True, run.results[0]["value"], readings, uncertain
 
     # ---- background -----------------------------------------------------
 

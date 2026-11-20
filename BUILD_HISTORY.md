@@ -4450,3 +4450,30 @@ the obvious next fix.
 |---|---|
 | `fast_path_hard_v1_primary.jsonl` | `8b772f509b9f5866205a91a603c4bb844b6e041b1a9ba03cd514fdcccd7634fc` |
 | `fast_path_hard_v1_primary_analysis.json` | `8399c67bbcff543a6e23842cee47474e100fc8055cb7d90076834b4d2cb3f5ac` |
+
+---
+
+## 2026-11-20 — Reading fixes for many-reading jobs (no provider calls)
+
+At the owner's request, the three open items from the hard-jobs result, all
+opt-in settings of `WriteOnceRouter` (defaults unchanged), tested with fake
+models only:
+
+- `batch_readings`: a reading over a list is one race whose answer is a list
+  of labels; an answer of the wrong length or with an unknown label is not
+  used and the race waits for the next. Aim: remove the wait for the slowest
+  of about seven per-item races.
+- `uncertainty_gate`: readings and whole-task answers wait for a second valid
+  answer and are flagged `uncertain` when the two differ (or only one comes).
+  The answer is still returned; the flag goes with it.
+- `adaptive_width` (`{"width": 2, "after": 5}`): after five races of a reading
+  in which every valid answer agreed, race only the two models that won it
+  most often; any disagreement restores the full roster. Idea from the SAGE
+  preprint as summarised in the RAG survey the owner shared; not verified
+  against the paper.
+
+The runner gains arm B (`--fixes`: write once with probes plus all three) and
+records each answer's `uncertain` flag; the analysis reports B against R and
+P and accuracy of flagged against unflagged answers. Pull requests opened for
+both repositories (Adaptive_Router #19, evolab #1). Full suite passed (618
+tests).

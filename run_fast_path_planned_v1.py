@@ -38,6 +38,7 @@ import write_once
 
 ROOT = Path(__file__).resolve().parent
 ARMS = ("A", "R", "C")
+READING_FIXES = {"batch_readings": True, "uncertainty_gate": True, "adaptive_width": {"width": 2, "after": 5}}
 ARM_ORDER_SEED = 20261117
 HASHED_FILES = (
     "config_fast_path.json", "fast_path.py", "pipeline.py", "planner.py", "sandbox.py", "remote.py",
@@ -150,13 +151,13 @@ def code_only_answer(shape, rules, inputs):
 
 def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_key,
               workdir, should_stop=lambda: False, arrival="drained", ceiling=None, code_only=None,
-              only=None, write_arm=False, probes=0, early=False):
+              only=None, write_arm=False, probes=0, early=False, fixes=False):
     base = Path(workdir) / shape["name"]
     arms = (ARMS + (("D",) if ceiling else ()) + (("E",) if code_only else ()) + (("W",) if write_arm else ())
-            + (("P",) if probes else ()) + (("Q",) if early else ()))
+            + (("P",) if probes else ()) + (("Q",) if early else ()) + (("B",) if fixes else ()))
     if only:
         arms = tuple(arm for arm in arms if arm in only)
-    meters = {arm: UsageMeter(remote_fn) for arm in ("A", "R", "C", "D", "W", "P", "Q")}
+    meters = {arm: UsageMeter(remote_fn) for arm in ("A", "R", "C", "D", "W", "P", "Q", "B")}
     reading = ceiling[shape["name"]] if ceiling else None
     ceiling_router = fast_path.FastPathRouter(
         {"remote": remote_config, "fast_path": {**settings, "synthesis_enabled": False}},
@@ -188,6 +189,13 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
         base / "early_store", base / "early_runs.jsonl",
         remote_fn=meters["Q"], api_key=api_key) if "Q" in arms else None
     early_writer = write_once.WriteOnceRouter(early_router) if early_router else None
+    fixed_router = fast_path.FastPathRouter(
+        {"remote": remote_config, "fast_path": {**settings, "synthesis_enabled": False,
+                                                "program_probes": probes, "write_early": False,
+                                                **READING_FIXES}},
+        base / "fixed_store", base / "fixed_runs.jsonl",
+        remote_fn=meters["B"], api_key=api_key) if "B" in arms else None
+    fixed_writer = write_once.WriteOnceRouter(fixed_router) if fixed_router else None
     order_rng = random.Random(f"{ARM_ORDER_SEED}:{shape['name']}")
     rows = []
     for index, ((inputs, labels), gold) in enumerate(zip(instances, golds)):
@@ -201,6 +209,7 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
             started = time.perf_counter()
             error, model, route, steps = None, None, None, None
             reading_correct = None
+            uncertain = None
             if arm == "A":
                 answered, value, error = direct(prompt, remote_config, settings, meters["A"], api_key)
                 model, route = BASELINE_MODEL, "direct"
@@ -212,11 +221,12 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
                 value, label = code_only_answer(shape, code_only, inputs)
                 answered, route = True, "code_only"
                 reading_correct = label == labels.get(shape["reading"][1])
-            elif arm in ("W", "P", "Q"):
-                result = {"W": writer, "P": prober, "Q": early_writer}[arm].handle({"schema_version": planner.SCHEMA_VERSION,
+            elif arm in ("W", "P", "Q", "B"):
+                result = {"W": writer, "P": prober, "Q": early_writer, "B": fixed_writer}[arm].handle({"schema_version": planner.SCHEMA_VERSION,
                                         "description": shape["description"], "inputs": inputs})
                 value, route, model = result["value"], result["route"], result["model"]
                 answered = route != planner.NO_ANSWER
+                uncertain = result.get("uncertain")
             elif arm == "R":
                 model, value = racing.race_prompt(prompt)
                 answered, route = model is not None, "race"
@@ -230,9 +240,9 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
                              for s in result["steps"]]
             answer_ms = (time.perf_counter() - started) * 1000
             background_ms = 0.0
-            if arm in ("C", "W", "P", "Q") and arrival == "drained":
+            if arm in ("C", "W", "P", "Q", "B") and arrival == "drained":
                 started = time.perf_counter()
-                {"C": planning, "W": writer, "P": prober, "Q": early_writer}[arm].drain()
+                {"C": planning, "W": writer, "P": prober, "Q": early_writer, "B": fixed_writer}[arm].drain()
                 background_ms = (time.perf_counter() - started) * 1000
             rows.append({
                 "record_type": "job", "shape": shape["name"], "index": index, "arm": arm,
@@ -240,7 +250,7 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
                 "answered": answered, "error": error, "model": model, "route": route,
                 "correct": answered and same(value, expected),
                 "value": value if answered else None, "steps": steps,
-                "reading_correct": reading_correct,
+                "reading_correct": reading_correct, "uncertain": uncertain,
             })
     template = planner.template_key(shape["description"], instances[0][0])
     planning.close()
@@ -260,6 +270,10 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
         early_writer.close()
         summary["write_once_early"] = early_writer.summary(template)
         early_router.close()
+    if fixed_writer is not None:
+        fixed_writer.close()
+        summary["write_once_fixed"] = fixed_writer.summary(template)
+        fixed_router.close()
     if ceiling_router is not None:
         ceiling_router.close()
     summary["jobs_completed"] = len(rows) // len(arms)
@@ -314,14 +328,15 @@ def shape_summary(shape, instances, golds, record, learning):
 
 
 def execute(shapes, bench, remote_config, settings, remote_fn, api_key, workers, write,
-            monitor=None, arrival="drained", ceiling=None, code_only=None, only=None, write_arm=False, probes=0, early=False):
+            monitor=None, arrival="drained", ceiling=None, code_only=None, only=None, write_arm=False, probes=0, early=False,
+            fixes=False):
     should_stop = monitor.tripped if monitor is not None else (lambda: False)
 
     def job(shape):
         instances = bench.stream(shape)
         return run_shape(shape, instances, bench.gold(shape, instances), remote_config,
                          settings, remote_fn, api_key, workdir, should_stop, arrival, ceiling,
-                         code_only, only, write_arm, probes, early)
+                         code_only, only, write_arm, probes, early, fixes)
 
     with tempfile.TemporaryDirectory() as workdir, ThreadPoolExecutor(workers) as pool:
         for rows, summary in pool.map(job, shapes):
@@ -345,6 +360,8 @@ def main():
                         help="add arm P: write once, checked also on this many edge-case jobs")
     parser.add_argument("--early", action="store_true",
                         help="add arm Q: as P, but the program is written on first sight")
+    parser.add_argument("--fixes", action="store_true",
+                        help="add arm B: as P, with batched readings, the uncertainty gate and adaptive width")
     parser.add_argument("--arms", help="comma-separated arms to run, e.g. R,D,E,W (default: all)")
     parser.add_argument("--shapes", help="comma-separated shape names to run (default: all)")
     parser.add_argument("--limit-shapes", type=int)
@@ -402,7 +419,7 @@ def main():
             "arm_order_seed": ARM_ORDER_SEED, "workers": args.workers, "arrival": args.arrival,
             "ceiling": ({"name": Path(args.ceiling).name, "sha256": sha256_file(args.ceiling)}
                         if args.ceiling else None),
-            "arms": args.arms, "write_once": args.write_once, "probes": args.probes, "early": args.early,
+            "arms": args.arms, "write_once": args.write_once, "probes": args.probes, "early": args.early, "fixes": args.fixes,
             "code_only": ({"name": Path(args.code_only).name, "sha256": sha256_file(args.code_only)}
                           if args.code_only else None),
             "files": {name: sha256_file(ROOT / name) for name in HASHED_FILES},
@@ -411,7 +428,7 @@ def main():
         status = execute(shapes, bench, remote_config, settings, monitor, api_key,
                          args.workers, write, monitor, args.arrival, ceiling, code_only,
                          tuple(args.arms.split(",")) if args.arms else None, args.write_once, args.probes,
-                         args.early)
+                         args.early, args.fixes)
         write({"record_type": "footer", "status": status, "provider": monitor.report()})
     if status == "COMPLETED":
         partial.rename(output)
