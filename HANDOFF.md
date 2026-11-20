@@ -7,7 +7,7 @@ the planned-jobs part) and `BUILD_HISTORY.md` (every freeze, hash and result).
 
 - Work branch `ccr-23487558-3yzwx4` (this repo and `evolab`); not merged.
 - Full suite: `python -m unittest discover -s tests` (568 tests, passing).
-- OpenRouter credit left: about $4.20.
+- OpenRouter credit left: about $11.20.
 - Conventions unchanged: freeze and hash before provider calls; never
   overwrite evidence; promotion and adoption by execution, never by a model.
 
@@ -51,20 +51,17 @@ the planned-jobs part) and `BUILD_HISTORY.md` (every freeze, hash and result).
     slowest); the planner was worst (-22 points, 18,178 calls). Run cost $12.90
     against $6 estimated. Run B (back to back, early writing) dropped.
 
+11. Reading fixes (descriptive, hard jobs): batched readings plus narrow
+    races cut calls to a seventh but did not beat the race on time and lost
+    3.8 points; the uncertainty flag separated answers well (flagged 3/17
+    right, unflagged 135/143). Pull requests: Adaptive_Router #19, evolab #1.
+
 ## Open items
 
-- Batch a job's readings into one call per reading (list in, list of labels
-  out) to remove the max-of-N wait on many-reading jobs; then measure it and
-  `write_early` together, without the planner (about $3 to $4).
-- Adaptive race width (idea from the SAGE preprint, cited second-hand in a
-  RAG survey the owner shared on 2026-11-19; not verified against the paper):
-  race 2 or 3 models on reading steps that usually agree and all 5 only where
-  they do not, chosen by a cheap rule from past agreement, with no extra model
-  calls. Aim: fewer calls and a shorter slowest-race wait on many-reading jobs.
-- Disagreement gate (from the same survey's "refuse without evidence"
-  pattern): when the racers disagree on a reading or a whole-task answer,
-  return the answer flagged as uncertain instead of silently. On the hard jobs
-  this would have flagged many `incident_log` errors.
+- Keep the uncertainty gate; test batching and narrow racing separately (the
+  hard-jobs run could not tell which one cost accuracy), or drop them.
+- Use the flag: route flagged answers to a fallback (the full race, or a
+  person) and measure the accuracy of what is served unflagged.
 - Cost estimates have been unreliable (twice about double); price new runs
   from the last comparable run plus 50%.
 - Jobs a model cannot write whole are where step learning could still matter;

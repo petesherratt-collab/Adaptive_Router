@@ -950,6 +950,27 @@ the only kind where step-by-step planning might still win. Plan:
 
 Evidence: `fast_path_hard_v1_primary.jsonl`, `fast_path_hard_v1_primary_analysis.json`.
 
+### Reading fixes on the hard jobs (descriptive, 2026-11-20)
+
+Three opt-in fixes for write-once (`batch_readings`, `uncertainty_gate`,
+`adaptive_width`), together as arm B, on the same hard jobs. Plan:
+`FAST_PATH_READING_FIXES_V1_PLAN.md`.
+
+| Arm | Correct | Median ms | Model calls |
+|---|---:|---:|---:|
+| R. Whole-task race | 144/160 | 2261 | 800 |
+| P. Write once | 147/160 | 2595 | 5,862 |
+| B. Write once with the fixes | 138/160 | 2289 | 840 |
+
+- B needed a seventh of P's calls and was faster than P, but no faster than
+  the race (1.01 of its time) and 3.8 points less accurate than it: reading a
+  job's notes in one call, on fewer models, misread incident severities more.
+- **The uncertainty flag is the keeper.** Answers B flagged (racers
+  disagreed) were right 3 times in 17; unflagged answers 135 times in 143. It
+  caught 14 of B's 22 wrong answers.
+
+Evidence: `fast_path_reading_fixes_v1.jsonl`, `fast_path_reading_fixes_v1_analysis.json`.
+
 The owner's `evolab` repository gained the matching code-only condition (branch
 `ccr-23487558-3yzwx4`, amendment 0.1-G): a scripted client that reads only the
 public task scored Brier loss 0 on all nine sealed development tasks at

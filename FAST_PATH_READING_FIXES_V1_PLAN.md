@@ -30,3 +30,10 @@ P and B, drained arrival, settings as committed with `plan_shadow` false and
 
 **Expected cost:** about $6 (last hard run's R and P shares, plus B, plus 50%).
 Stop rules as before.
+
+## Result (2026-11-20)
+
+Not restored: B took 1.01 of the race's time (0.79 to 1.27) and was 3.8
+points less accurate (-8.8 to -0.6), with a seventh of P's calls. The
+uncertainty flag separated answers well: flagged 3/17 right, unflagged
+135/143. Cost $2.97.

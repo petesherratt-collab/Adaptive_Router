@@ -4494,3 +4494,41 @@ Plan: `FAST_PATH_READING_FIXES_V1_PLAN.md`. Credit at the freeze: about $14.20.
 | `fast_path_planned_bench_v6.py` | `c4250db625cdce4dbd385314163ec0fcfc096666c27cba5bc8c67f61159f196d` |
 | `fast_path_planned_bench_v6_prose.json` | `7e0ada753a1f1bbf589739d9fec3a640e81d2ec2eacb6a698f18a8c8a51ca1cb` |
 | `FAST_PATH_READING_FIXES_V1_PLAN.md` | `2b19740dfc253faf71b3e7480b2e8736d1a95f788d1146d37fec5382d1ed153d` |
+
+---
+
+## 2026-11-20 — Reading fixes V1 result (descriptive)
+
+Label `reading_fixes_v1`: V6 hard jobs (8 shapes, 20 each), arms R, P, B,
+drained. 7,502 provider calls, 10 invalid responses. Cost about $2.97
+(estimate $6).
+
+| Arm | Correct | Median ms | 90th pct ms | Calls | Prompt tokens | Completion tokens |
+|---|---:|---:|---:|---:|---:|---:|
+| R | 144/160 | 2261 | 3030 | 800 | 413,521 | 448,822 |
+| P | 147/160 | 2595 | 4223 | 5,862 | 1,335,069 | 623,493 |
+| B | 138/160 | 2289 | 3564 | 840 | 359,045 | 311,282 |
+
+- **Speed and calls:** B used 840 calls against P's 5,862 (a seventh) and
+  cut P's time to 0.88 (0.73 to 1.10), but was no faster than the race: B/R
+  1.01 (0.79 to 1.27). The speed advantage is not restored.
+- **Accuracy fell:** B minus R -0.038 (-0.088 to -0.006); B minus P -0.056
+  (-0.156 to +0.019). Most of the loss is `incident_log` (B 4/20, P 11/20,
+  R 8/20) and `expense_lines` (B 17, P 20): reading all items in one call,
+  or on two models, reads severities less well than racing each item. This run
+  cannot separate batching from the narrower race.
+- **The uncertainty flag works:** 17 of B's answers were flagged and only 3
+  of those were right (18%); unflagged answers were right 135 of 143 times
+  (94%). The flag caught 14 of B's 22 wrong answers (64%).
+- Programs adopted: B 8 of 8 shapes (one invalid first program); P 7 of 8
+  (`menu_check` rejected twice).
+
+Reading: batching and narrow races make write-once cheap on many-reading jobs
+but cost accuracy and do not beat the race on time. The uncertainty gate is
+the useful part: it separates answers that are almost always right from ones
+that are mostly wrong.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_reading_fixes_v1.jsonl` | `9fd275219631ea37ee68b7b201614594ca8d53c955d37822218df9c67cbe2e4c` |
+| `fast_path_reading_fixes_v1_analysis.json` | `4025ba86ccc29d08dade79070043e185b7a8a6ab7ac552b8c3e7ebdf4432782a` |
