@@ -1,0 +1,306 @@
+{
+ "texts": {
+  "correct": 293,
+  "total": 324
+ },
+ "stream": {
+  "correct": 220,
+  "total": 240
+ },
+ "per_shape_texts": {
+  "ticket_queue": {
+   "texts": 24,
+   "correct": 24,
+   "confusion": {
+    "routine->routine": 12,
+    "urgent->urgent": 12
+   },
+   "misses": []
+  },
+  "room_bookings": {
+   "texts": 48,
+   "correct": 43,
+   "confusion": {
+    "engineering->engineering": 11,
+    "engineering->sales": 1,
+    "finance->finance": 12,
+    "legal->legal": 9,
+    "legal->sales": 3,
+    "sales->legal": 1,
+    "sales->sales": 11
+   },
+   "misses": [
+    {
+     "label": "sales",
+     "got": "legal",
+     "text": "Need a meeting room for a contract negotiation with our biggest prospect next Tuesday morning."
+    },
+    {
+     "label": "engineering",
+     "got": "sales",
+     "text": "Need the boardroom for a post-mortem on last week's outage, Wednesday at 3pm."
+    },
+    {
+     "label": "legal",
+     "got": "sales",
+     "text": "Can I get the boardroom for a review of the acquisition agreement on Wednesday at 3pm?"
+    },
+    {
+     "label": "legal",
+     "got": "sales",
+     "text": "Can we get a meeting room for a review of the discrimination claim on Tuesday afternoon?"
+    },
+    {
+     "label": "legal",
+     "got": "sales",
+     "text": "Need a space for terms of service update review with the product team, Wednesday at 2."
+    }
+   ]
+  },
+  "recipe_scaling": {
+   "texts": 36,
+   "correct": 29,
+   "confusion": {
+    "any->any": 12,
+    "vegan->any": 2,
+    "vegan->vegan": 10,
+    "vegetarian->any": 4,
+    "vegetarian->vegan": 1,
+    "vegetarian->vegetarian": 7
+   },
+   "misses": [
+    {
+     "label": "vegan",
+     "got": "any",
+     "text": "I don't eat anything from animals, so please skip the butter, cheese, and eggs in my portion."
+    },
+    {
+     "label": "vegan",
+     "got": "any",
+     "text": "Thanks for the invite! I don't consume any animal products, so veggies and grains are perfect."
+    },
+    {
+     "label": "vegetarian",
+     "got": "any",
+     "text": "Just a note that I skip all meat and fish, but dairy and eggs are more than welcome."
+    },
+    {
+     "label": "vegetarian",
+     "got": "any",
+     "text": "No flesh of any kind, but I do eat dairy products like milk, butter, and cheese."
+    },
+    {
+     "label": "vegetarian",
+     "got": "vegan",
+     "text": "I don't eat any meat or fish, but I'm not vegan, so dairy is okay."
+    },
+    {
+     "label": "vegetarian",
+     "got": "any",
+     "text": "No steak or salmon for me, but I'll gladly have the cheesy pasta or omelet."
+    },
+    {
+     "label": "vegetarian",
+     "got": "any",
+     "text": "I skip all meat and fish, but I'm not opposed to butter, cream, or eggs."
+    }
+   ]
+  },
+  "fleet_fuel": {
+   "texts": 48,
+   "correct": 47,
+   "confusion": {
+    "brakes->brakes": 12,
+    "engine->engine": 12,
+    "none->none": 12,
+    "tyres->brakes": 1,
+    "tyres->tyres": 11
+   },
+   "misses": [
+    {
+     "label": "tyres",
+     "got": "brakes",
+     "text": "Tyres are squealing when I go round corners, sounds like they're slipping on the wet."
+    }
+   ]
+  },
+  "library_loans": {
+   "texts": 48,
+   "correct": 39,
+   "confusion": {
+    "complain->complain": 4,
+    "complain->renew": 4,
+    "complain->reserve": 3,
+    "complain->return": 1,
+    "renew->renew": 12,
+    "reserve->reserve": 12,
+    "return->renew": 1,
+    "return->return": 11
+   },
+   "misses": [
+    {
+     "label": "return",
+     "got": "renew",
+     "text": "I'll be dropping off the three books I borrowed at the front desk this afternoon."
+    },
+    {
+     "label": "complain",
+     "got": "reserve",
+     "text": "The book I reserved was given to someone else even though I was first in line. That's not fair."
+    },
+    {
+     "label": "complain",
+     "got": "reserve",
+     "text": "My reserved book was marked as lost even though I returned it last week."
+    },
+    {
+     "label": "complain",
+     "got": "return",
+     "text": "I was charged a fine for a book I returned on time. Please fix this."
+    },
+    {
+     "label": "complain",
+     "got": "renew",
+     "text": "The library was freezing cold today and no one would adjust the heating."
+    },
+    {
+     "label": "complain",
+     "got": "renew",
+     "text": "Someone tore pages out of the magazine I was reading—there should be better monitoring."
+    },
+    {
+     "label": "complain",
+     "got": "renew",
+     "text": "I emailed about my missing book two weeks ago and haven't heard back."
+    },
+    {
+     "label": "complain",
+     "got": "reserve",
+     "text": "The online catalog says the book is available but the shelf is empty. Waste of my trip."
+    },
+    {
+     "label": "complain",
+     "got": "renew",
+     "text": "The Wi-Fi has been down all morning and I couldn't get any work done."
+    }
+   ]
+  },
+  "sensor_alerts": {
+   "texts": 48,
+   "correct": 48,
+   "confusion": {
+    "east->east": 12,
+    "north->north": 12,
+    "south->south": 12,
+    "west->west": 12
+   },
+   "misses": []
+  },
+  "invoice_vat": {
+   "texts": 48,
+   "correct": 41,
+   "confusion": {
+    "Ireland->Ireland": 9,
+    "Ireland->UK": 3,
+    "Italy->Italy": 11,
+    "Italy->UK": 1,
+    "Spain->Spain": 9,
+    "Spain->UK": 3,
+    "UK->UK": 12
+   },
+   "misses": [
+    {
+     "label": "Ireland",
+     "got": "UK",
+     "text": "Please use An Post for the delivery if possible."
+    },
+    {
+     "label": "Ireland",
+     "got": "UK",
+     "text": "Drop at the student housing in Maynooth, County Kildare, W23 XK45."
+    },
+    {
+     "label": "Ireland",
+     "got": "UK",
+     "text": "Send to my apartment in Dún Laoghaire, A96 K7P1, thanks."
+    },
+    {
+     "label": "Spain",
+     "got": "UK",
+     "text": "Leave with the porter in our building on the Costa del Sol, 29640 Fuengirola."
+    },
+    {
+     "label": "Spain",
+     "got": "UK",
+     "text": "Send to my villa in Marbella, 29600. The gate is open."
+    },
+    {
+     "label": "Spain",
+     "got": "UK",
+     "text": "Please use Correos if possible, gracias."
+    },
+    {
+     "label": "Italy",
+     "got": "UK",
+     "text": "Please use Poste Italiane for delivery."
+    }
+   ]
+  },
+  "event_rsvps": {
+   "texts": 24,
+   "correct": 22,
+   "confusion": {
+    "casual->casual": 11,
+    "casual->formal": 1,
+    "formal->casual": 1,
+    "formal->formal": 11
+   },
+   "misses": [
+    {
+     "label": "formal",
+     "got": "casual",
+     "text": "It would be a privilege to have you join us for the anniversary celebration. Please respond by Friday. We hope you can attend."
+    },
+    {
+     "label": "casual",
+     "got": "formal",
+     "text": "Low-key dinner at my place on Sunday."
+    }
+   ]
+  }
+ },
+ "per_shape_stream": {
+  "ticket_queue": {
+   "jobs": 30,
+   "correct": 30
+  },
+  "room_bookings": {
+   "jobs": 30,
+   "correct": 28
+  },
+  "recipe_scaling": {
+   "jobs": 30,
+   "correct": 25
+  },
+  "fleet_fuel": {
+   "jobs": 30,
+   "correct": 27
+  },
+  "library_loans": {
+   "jobs": 30,
+   "correct": 24
+  },
+  "sensor_alerts": {
+   "jobs": 30,
+   "correct": 30
+  },
+  "invoice_vat": {
+   "jobs": 30,
+   "correct": 28
+  },
+  "event_rsvps": {
+   "jobs": 30,
+   "correct": 28
+  }
+ }
+}

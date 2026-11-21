@@ -481,3 +481,55 @@ class RefinementTests(PlannerTestCase):
         prompt = planner.build_plan_prompt(DESCRIPTION, {"n": 1, "text": "a"})
         self.assertIn("Make function steps small", prompt)
         self.assertIn("not an object that bundles several results", prompt)
+
+
+class LearningRosterTests(PlannerTestCase):
+    def models_by_purpose(self, remote):
+        seen = {}
+        for model, prompt in remote.calls:
+            purpose = "task" if prompt.startswith("Carry out the task") else (
+                "step" if prompt.startswith("Work out what") else "other")
+            seen.setdefault(purpose, set()).add(model)
+        return seen
+
+    def test_background_learning_uses_the_learning_roster(self):
+        remote = FakeRemote(plans=[GOOD_PLAN])
+        router = self.build(remote, race_models=["a", "b", "c"], learning_models=["a", "b"],
+                            plan_shadow=True, plan_live_ratio=0.0)
+        for n in range(1, 6):
+            router.handle(request(n, "a" * n))
+            router.drain()
+        seen = self.models_by_purpose(remote)
+        self.assertEqual(seen["task"], {"a", "b", "c"})
+        # Plan trials and shadow runs learn on two models only.
+        self.assertEqual(seen["step"], {"a", "b"})
+        self.assertTrue(all(r["function"] for r in router.router.store.shapes()))
+
+    def test_live_steps_and_judgements_keep_the_full_roster(self):
+        remote = FakeRemote()
+        router = self.build(remote, race_models=["a", "b", "c"], learning_models=["a", "b"])
+        fast = router.router
+        step = {"schema_version": "fast_path_request_v1",
+                "task": {"spec": DOUBLE, "signature": "def solve(n: int) -> int:"}, "args": [3]}
+        fast.handle(step)
+        fast.drain()
+        live = {m for m, p in remote.calls if p.startswith("Work out what")}
+        self.assertEqual(live, {"a", "b", "c"})
+        remote.calls.clear()
+        with fast.background_context():
+            fast.handle({**step, "args": [4]}, learn=False)
+        self.assertEqual({m for m, _ in remote.calls}, {"a", "b", "c"})
+        remote.calls.clear()
+        with fast.background_context():
+            fast.handle({**step, "args": [5]})
+        fast.drain()
+        self.assertEqual({m for m, _ in remote.calls if m != "writer"}, {"a", "b"})
+
+    def test_without_a_learning_roster_nothing_changes(self):
+        remote = FakeRemote(plans=[GOOD_PLAN])
+        router = self.build(remote, race_models=["a", "b", "c"], plan_shadow=True,
+                            plan_live_ratio=0.0)
+        for n in range(1, 4):
+            router.handle(request(n, "a" * n))
+            router.drain()
+        self.assertEqual(self.models_by_purpose(remote)["step"], {"a", "b", "c"})

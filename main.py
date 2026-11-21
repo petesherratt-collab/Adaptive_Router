@@ -15,11 +15,13 @@ from fast_path import (
 )
 from local import model_residency
 from pipeline import JobError, Orchestrator, load_job, render_job
+from planner import TaskRequest, TaskRequestError
 from probe import run_probe
 from router import Router
 from runtime_contracts import RuntimeContractError, load_runtime_request
 from stats import read_runs, render_report
 from telemetry import collect_system_metrics
+from write_once import WriteOnceRouter
 
 
 ROOT = Path(__file__).resolve().parent
@@ -140,6 +142,11 @@ def build_parser():
         help="run one multi-step fast_path_job_v1 JSON document",
     )
     mode.add_argument(
+        "--task-json",
+        metavar="PATH",
+        help="answer one plain-language fast_path_task_v1 JSON document (write-once path)",
+    )
+    mode.add_argument(
         "--fast-status",
         action="store_true",
         help="list recorded fast-path task shapes",
@@ -177,6 +184,24 @@ def main():
         print(render_job(orchestrator.run(job)))
         # The answer is already printed; learning happens afterwards.
         orchestrator.close()
+        fast_router.close()
+        return
+    if args.task_json:
+        try:
+            task = TaskRequest.from_mapping(json.loads(Path(args.task_json).read_text(encoding="utf-8")))
+        except (OSError, ValueError, TaskRequestError) as exc:
+            parser.error(f"invalid task: {exc}")
+        fast_router = FastPathRouter(
+            load_fast_path_config(config),
+            ROOT / "fast_path_store",
+            ROOT / "fast_path_runs.jsonl",
+        )
+        tasks = WriteOnceRouter(fast_router, ROOT / "fast_path_programs")
+        result = tasks.handle(task)
+        print(f"[route: {result['route'].upper()} | {result['total_ms']:.0f} ms]")
+        print(json.dumps(result["value"]) if result["route"] != "none" else "No answer was returned.")
+        # The answer is already printed; learning and program writing happen afterwards.
+        tasks.close()
         fast_router.close()
         return
     if args.fast_request_json:

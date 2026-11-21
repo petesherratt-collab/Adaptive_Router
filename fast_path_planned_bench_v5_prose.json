@@ -1,0 +1,420 @@
+{
+ "writer_model": "mistralai/mistral-large-4-0",
+ "per_label": 12,
+ "prompts": {
+  "car_park": "Write short messages for a test set. The messages are notes left by drivers at a car park, from which the driver's permit can be told.\n\nWrite 12 different messages for each of these labels:\n- resident: the driver lives locally and holds a resident permit\n- visitor: the driver is visiting and holds no permit\n- staff: the driver works at the site and holds a staff permit\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"resident\", \"visitor\", \"staff\", each mapping to an array of 12 strings.",
+  "gym_classes": "Write short messages for a test set. The messages are notes from gym members about what they want from their training.\n\nWrite 12 different messages for each of these labels:\n- strength: the member wants to build strength or muscle\n- cardio: the member wants fitness and stamina\n- flexibility: the member wants flexibility and mobility\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"strength\", \"cardio\", \"flexibility\", each mapping to an array of 12 strings.",
+  "shared_bills": "Write short messages for a test set. The messages are notes from a housemate in a shared house about how to split the bills.\n\nWrite 12 different messages for each of these labels:\n- equal: everyone pays the same share\n- weighted: shares are weighted, for example by room size or use\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"equal\", \"weighted\", each mapping to an array of 12 strings.",
+  "plant_watering": "Write short messages for a test set. The messages are notes from a gardener about the weather and the season.\n\nWrite 12 different messages for each of these labels:\n- summer: it is summer\n- winter: it is winter\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"summer\", \"winter\", each mapping to an array of 12 strings.",
+  "train_fares": "Write short messages for a test set. The messages are notes about when a group will travel by train.\n\nWrite 12 different messages for each of these labels:\n- peak: travelling at a weekday peak time\n- offpeak: travelling at a weekday off-peak time\n- weekend: travelling at the weekend\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"peak\", \"offpeak\", \"weekend\", each mapping to an array of 12 strings.",
+  "reading_challenge": "Write short messages for a test set. The messages are notes from a book club organiser announcing this month's reading challenge.\n\nWrite 12 different messages for each of these labels:\n- mystery: the challenge is mystery or crime books\n- romance: the challenge is romance books\n- history: the challenge is history books\n- science: the challenge is science books\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"mystery\", \"romance\", \"history\", \"science\", each mapping to an array of 12 strings.",
+  "lab_ph": "Write short messages for a test set. The messages are notes from a laboratory technician about a batch of samples.\n\nWrite 12 different messages for each of these labels:\n- water: the samples are water\n- soil: the samples are soil\n- blood: the samples are blood\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"water\", \"soil\", \"blood\", each mapping to an array of 12 strings.",
+  "donation_match": "Write short messages for a test set. The messages are appeal notes from a charity drive.\n\nWrite 12 different messages for each of these labels:\n- disaster: the appeal is for disaster relief\n- education: the appeal is for education\n- health: the appeal is for health care\n- animals: the appeal is for animal welfare\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"disaster\", \"education\", \"health\", \"animals\", each mapping to an array of 12 strings."
+ },
+ "texts": {
+  "car_park": {
+   "resident": [
+    "Just nipped home to grab my wallet – resident permit for Flat 3B is on file with the office.",
+    "I live on Maple Grove, permit number R-8842 displayed. Back in twenty minutes.",
+    "Local resident here, permit registered to my address on Elm Street. See you shortly.",
+    "Popped back to my flat upstairs to feed the cat. Resident permit in the glovebox.",
+    "Resident of this building, permit R-2210. Out for a quick walk with the dog.",
+    "Living in 7C, permit on dash as usual. Just running an errand.",
+    "Homeowner here – resident permit displayed. Will be back before six.",
+    "I reside at 14 Oak Lane, permit number R-5567. Thanks for understanding.",
+    "Quick trip to my apartment to drop off shopping. Resident permit visible.",
+    "Local resident, permit registered to my house on Birch Road. Back soon.",
+    "Flat 2A resident here, permit in the usual spot. Just popped out.",
+    "I live just around the corner on Pine Street, resident permit R-9901 on file."
+   ],
+   "visitor": [
+    "Visiting my daughter in Flat 5B – no permit, just here for the afternoon.",
+    "Guest of the tenant in 8A. No parking permit held, will move if needed.",
+    "Here to see the dentist upstairs, no permit. Leaving in an hour.",
+    "Visiting a friend who lives here – no permit on me, sorry about that.",
+    "Here to visit the optician on the second floor, no permit. Appointment at 3pm.",
+    "No permit – just dropping off a package for the resident of 2C.",
+    "Here as a guest of 11B, no resident or staff permit. Back in two hours.",
+    "Visiting my mum in the care home on site, no permit. Please don't tow!",
+    "Here to visit the physiotherapy clinic upstairs, no permit. Appointment at 3pm.",
+    "No permit held – visiting my brother in 6D for the weekend.",
+    "Just here to pick up a parcel, no permit. Five minutes only.",
+    "Guest of resident 9A, no permit of my own. Thanks for your patience."
+   ],
+   "staff": [
+    "Staff permit S-441 – working the night shift in the kitchen until 2am.",
+    "I work in reception on the second floor, staff badge displayed. On duty now.",
+    "Employee of the bookshop downstairs, permit S-102. Shift ends at six.",
+    "Staff member here, permit number 8890. Just popped out to move my van.",
+    "Working in the accounts department today, staff permit on the dash.",
+    "On shift at the café until 5pm, staff permit S-77 visible.",
+    "I'm the site manager, staff permit displayed. Back in ten minutes.",
+    "Nurse on duty at the clinic upstairs, staff permit 3345. Thanks!",
+    "Working late in the IT office, staff badge and permit shown. See you tomorrow.",
+    "Staff permit ST-12 – covering the front desk today.",
+    "Employee here, permit S-909. Just nipping to the bank, back at my desk in 15.",
+    "Working the early shift at the gym, staff permit displayed. Cheers."
+   ]
+  },
+  "gym_classes": {
+   "strength": [
+    "I want to be able to deadlift twice my bodyweight by the end of the year.",
+    "Looking to pack on some serious muscle mass, especially in my upper body.",
+    "My goal is to increase my bench press by 50 pounds over the next six months.",
+    "I need a program focused on heavy compound lifts and progressive overload.",
+    "Want to get stronger overall—squats, deadlifts, and overhead press are my priorities.",
+    "Trying to build more muscle in my legs and glutes this year.",
+    "I care about lifting heavier each week, not just going through the motions.",
+    "Help me put on 10 pounds of lean muscle before summer hits.",
+    "Strength is my main focus right now; I want to feel powerful when I lift.",
+    "I want to master the big lifts and see my numbers go up consistently.",
+    "Looking for a hypertrophy-focused routine to grow my chest and back.",
+    "My resolution is to stop skipping leg day and build real lower-body strength."
+   ],
+   "cardio": [
+    "I want to run a 5K without stopping to walk.",
+    "Need to improve my stamina—I get winded climbing the stairs right now.",
+    "Looking to boost my cardiovascular fitness so I don't feel out of breath during workouts.",
+    "My goal is to be able to jog for 30 minutes straight without feeling like I'm dying.",
+    "I want to burn more calories and improve my heart health overall.",
+    "Training for a half marathon next spring, so endurance is absolutely key.",
+    "Help me build up my lung capacity and general aerobic fitness.",
+    "I want to do HIIT classes and actually keep up without feeling sick.",
+    "I want to build my aerobic base so I can keep a conversation while running.",
+    "Aiming to lower my resting heart rate and improve my cardio endurance.",
+    "I want to be able to play basketball with my kids without getting exhausted.",
+    "Focus is on stamina and conditioning—I want to sweat hard and breathe heavy."
+   ],
+   "flexibility": [
+    "I want to finally touch my toes without bending my knees.",
+    "My hips are super tight—I really need to work on mobility and stretching.",
+    "Looking to improve my range of motion so I can do a full split eventually.",
+    "I want to be more flexible for yoga and just moving around pain-free.",
+    "Help me loosen up my shoulders and neck after sitting at a desk all day.",
+    "I need better ankle mobility so I can walk without feeling stiff.",
+    "I want to stretch more regularly and feel less stiff when I wake up.",
+    "Flexibility is my top priority—I want to move freely without any tightness.",
+    "Trying to improve my posture through better mobility in my upper back.",
+    "I want to be able to do the splits and backbends like I could when I was a kid.",
+    "Need to work on my hamstring flexibility; they're always so tight after sitting.",
+    "Looking for a routine focused on stretching and joint mobility, not heavy weights."
+   ]
+  },
+  "shared_bills": {
+   "equal": [
+    "Let's just split everything three ways — same amount for each of us.",
+    "Everyone pays £400 this month, no exceptions.",
+    "I divided the total by three, so we each owe exactly the same.",
+    "Can we do an even split? £150 each sounds fair to me.",
+    "Same share for all three of us, regardless of room size.",
+    "I've worked it out so we all pay the identical amount.",
+    "Keep it simple: total bill divided equally by the number of people.",
+    "You, me, and Sam all pay the same flat rate this month.",
+    "Equal split is easiest — everyone contributes X pounds.",
+    "Just divide by three and that's what you pay, same as everyone else.",
+    "We're all paying the same amount, full stop.",
+    "£200 each, nice and even across the board."
+   ],
+   "weighted": [
+    "Since your room is twice the size, you should pay a bigger share of the rent.",
+    "Let's weight it by square footage — master bedroom pays 40%, others 30% each.",
+    "I'll pay less for electricity since I'm rarely home; you two use way more.",
+    "Can we split proportional to room size? Mine's smallest so I'll pay 25%.",
+    "The bigger rooms pay more — that seems only fair.",
+    "Let's factor in usage: whoever uses the heating most pays the larger portion.",
+    "I propose weighting by income — higher earners contribute a bigger percentage.",
+    "Since you have the ensuite, cover an extra £100 on the water bill.",
+    "Split according to how much common space each person actually uses.",
+    "My room is half your size, so I'll pay half what you pay for rent.",
+    "Let's do percentages: big room 50%, medium 30%, small 20%.",
+    "You use the dishwasher daily, I barely touch it, so adjust the shares accordingly."
+   ]
+  },
+  "plant_watering": {
+   "summer": [
+    "The tomatoes are finally ripening on the vine and the basil is going wild in this heat.",
+    "Had to water the hanging baskets twice today—the sun is relentless and everything's wilting by noon.",
+    "Long evenings mean I can get out there after work and still have plenty of light to weed the beds.",
+    "It's so hot the slugs have all hidden under the pots, but the zucchini flowers are opening everywhere.",
+    "Spent the morning deadheading the roses before the afternoon thunderstorm rolls in.",
+    "The lawn's gone brown and crispy; I'm just hoping for a good soak from those dark clouds on the horizon.",
+    "Kids are out of school so I'm trying to keep the veg patch alive with a daily drink.",
+    "Sun's blazing and the bees are loving the lavender—busy as ever in the borders.",
+    "It's humid and sticky today, perfect for the cucumbers but miserable for mowing the grass.",
+    "Harvested the first courgettes this morning before the heat got too intense.",
+    "The greenhouse is like an oven by ten o'clock, so I've propped the door open and shaded the seedlings.",
+    "Evening air smells of jasmine and cut grass—classic July night in the garden."
+   ],
+   "winter": [
+    "Frost on the lawn this morning, so I've covered the tender dahlias with fleece before they turn black.",
+    "Bare branches everywhere and the soil's too hard to dig—good job I mulched the roses last month.",
+    "Short days mean I'm done by four, but at least the structure of the beds looks sharp in the low light.",
+    "Snow's settled on the greenhouse roof and the birds are emptying the feeder in minutes.",
+    "Spent the afternoon pruning the apple trees while they're dormant—nice and clear without the leaves.",
+    "The pond's frozen over and the herbaceous borders are sleeping under a blanket of dead leaves.",
+    "Cold wind today, so I've tucked the pots of geraniums into the shed for the night.",
+    "It's dark and chilly out there, but the winter jasmine is starting to flower along the fence.",
+    "Ground's waterlogged and muddy; I'm just tidying the tools and planning next year's veg rotation.",
+    "Heavy frost again—had to scrape the car before heading out to check the winter cabbages.",
+    "The garden looks stark and brown, but the robins are singing and the snowdrops are pushing through.",
+    "Rain and sleet all day, so I stayed in with a cuppa and ordered seeds for the spring instead."
+   ]
+  },
+  "train_fares": {
+   "peak": [
+    "We're catching the 8:15am train on Tuesday, right in the morning rush.",
+    "Heading out Thursday at 5:30pm—peak time, so expect a packed carriage.",
+    "Our group leaves Monday at 7:45am, smack in the commuter peak.",
+    "Let's meet at the station Wednesday at 8am for the peak departure.",
+    "We'll be on the 6:15pm service Friday, the evening peak.",
+    "The 8:30am train next Tuesday is peak, so book seats early.",
+    "Traveling Thursday morning at 7:50, the height of rush hour.",
+    "We're taking the 4:45pm train on Monday—definitely peak.",
+    "Departure is 8:05am Wednesday. Peak hours, so it'll be busy.",
+    "Going on the 6:45pm service Tuesday, peak time for commuters.",
+    "We leave Friday at 8:20am, peak morning rush.",
+    "Catching the 5pm train Thursday, right in the evening peak."
+   ],
+   "offpeak": [
+    "We're traveling Wednesday at 11am, off-peak and quiet.",
+    "Let's take the 2:30pm train Thursday. Mid-afternoon is nicely off-peak.",
+    "Our group leaves Tuesday at 10am, well outside the rush.",
+    "Catching the 1:15pm service Friday, definitely off-peak.",
+    "We'll go on the 9:45am train Monday, just after the morning peak ends.",
+    "Traveling Thursday at 3pm, off-peak so seats should be easy.",
+    "The 11:30am departure Wednesday is off-peak.",
+    "We're on the 2pm train next Tuesday, off-peak afternoon.",
+    "Leaving Friday at 10:30am, off-peak time.",
+    "Our train is at 12:45pm Monday, lunchtime off-peak.",
+    "We'll catch the 3:30pm service Thursday, off-peak.",
+    "Going at 10:15am Wednesday. It's off-peak and calm."
+   ],
+   "weekend": [
+    "We're traveling this Saturday at 10am.",
+    "Our train leaves Sunday morning at 9:30.",
+    "Heading out Saturday afternoon around 2pm.",
+    "We'll catch the 11am train this Sunday.",
+    "Traveling next Saturday at 4pm.",
+    "Our group goes on Sunday at 1:30pm.",
+    "Leaving Saturday evening at 6pm.",
+    "We're on the 9am train this Sunday morning.",
+    "Catching the 3pm service on Saturday.",
+    "Going out Sunday at 11:45am.",
+    "Our departure is Saturday at 2:30pm.",
+    "We travel Sunday afternoon at 4:15."
+   ]
+  },
+  "reading_challenge": {
+   "mystery": [
+    "This month we're diving into whodunits and detective stories. Grab your magnifying glass and prepare to piece together the clues.",
+    "Get ready to solve crimes from your armchair! Our challenge this month is all mystery and suspense novels.",
+    "Someone's been murdered in the library... well, in the books at least. Join us for a month of gripping crime fiction.",
+    "This month's pick: locked-room mysteries and hard-boiled detectives. Can you crack the case before the last page?",
+    "We're going dark this month with psychological thrillers and classic whodunits. Trust no one, especially not the butler.",
+    "Put on your detective hat—this month is all about mysteries that'll keep you guessing until the very end.",
+    "Blood, clues, and red herrings await! Join our crime book challenge this month.",
+    "This month we're reading books where everyone's a suspect. Perfect for fans of Agatha Christie and modern noir.",
+    "A body has been discovered... in our reading list. Dive into our mystery month and find out who did it.",
+    "Cold cases, private eyes, and plot twists galore. That's what this month's challenge is all about.",
+    "Who committed the crime? You'll have to read to find out. Mystery novels are our theme this month.",
+    "Sharpen your pencils for note-taking—this month's books are full of puzzles, secrets, and shocking reveals."
+   ],
+   "romance": [
+    "This month we're all about love stories and happy endings. Bring your tissues and your swoon-worthy bookmarks.",
+    "Hearts, flowers, and maybe a wedding or two—romance novels are taking over our reading list this month.",
+    "Fall in love all over again with this month's challenge: contemporary rom-coms and epic love stories.",
+    "Love is in the air (and in our books)! Join us for a month of passionate romance novels.",
+    "From meet-cutes to grand gestures, we're reading all things romance this month. Cupid would be proud.",
+    "This month's theme: books that make you believe in love again. Grab your favorite blanket and a box of chocolates.",
+    "We're diving into love stories of every flavor this month—sweet, spicy, and everything in between.",
+    "Boy meets girl, girl meets boy, and everyone lives happily ever after. That's our romance challenge this month.",
+    "Get ready to swoon! This month we're reading contemporary romance and second-chance love stories.",
+    "Love conquers all, especially in this month's reading challenge. Expect kisses, confessions, and plenty of drama.",
+    "This month's books are all about finding your perfect match. Warning: may cause excessive daydreaming.",
+    "We're celebrating love in all its forms this month with romance novels that'll make your heart flutter."
+   ],
+   "history": [
+    "This month we're traveling back in time with non-fiction and historical fiction. Dust off your history books—literally!",
+    "From ancient Rome to the World Wars, we're exploring the past this month. History comes alive in these pages.",
+    "Pack your bags for a journey through the centuries! Our challenge this month is all history books.",
+    "This month's theme: real events and real people from bygone eras. Let's learn from the past together.",
+    "We're reading stories set in different historical periods this month. Expect kings, queens, and revolutions.",
+    "Time travel without a machine—just pick up a history book! Join us for a month of looking backward.",
+    "This month we're diving into biographies of historical figures and firsthand accounts from the past. The past is our playground.",
+    "From medieval castles to the swinging sixties, history books are our focus this month.",
+    "Let's explore how the world used to be with this month's reading challenge: history, historical memoirs, and historical fiction.",
+    "This month's books are all about real places and times that shaped our world. History buffs, this one's for you.",
+    "We're going back to school—history class, that is! Join our challenge of reading historical non-fiction and novels.",
+    "Discover the events that changed everything in this month's history reading challenge."
+   ],
+   "science": [
+    "This month we're exploring the universe, from quantum physics to marine biology. Science books are our challenge!",
+    "Get your lab coats ready—we're diving into science this month. Expect everything from space to cells.",
+    "Curious about how the world works? This month's challenge is all popular science and discoveries.",
+    "From black holes to DNA, we're reading science books this month—nerd out with us!",
+    "This month's theme: understanding the natural world through science. Physics, chemistry, biology—bring it on.",
+    "We're blasting off into science this month with books about space, technology, and the human body.",
+    "Put on your thinking cap! Our reading challenge this month focuses on scientific exploration and research.",
+    "This month we're learning about everything from evolution to artificial intelligence, science books only.",
+    "Explore the wonders of the natural world with us this month. Our challenge: popular science and nature writing.",
+    "Lab experiments in your living room—well, in your books at least. Join our science reading month.",
+    "This month's books explain the how and why of everything around us. Science is our theme.",
+    "From the tiniest atoms to the vast cosmos, we're reading science this month. Let's get curious!"
+   ]
+  },
+  "lab_ph": {
+   "water": [
+    "All twelve bottles came back clear with no visible sediment; pH is holding at 7.2 across the batch.",
+    "Turbidity readings are under 1 NTU for every sample, so I went ahead and filtered the replicates.",
+    "The tap water controls look fine, but two of the field samples have a faint chlorine smell.",
+    "I labeled the aliquots and stored them at 4 °C; conductivity is around 540 µS/cm for most of them.",
+    "One bottle leaked in transit, so I only have 200 mL left for that one, but the rest are full.",
+    "These are all aqueous, so I ran them on the TOC analyzer first thing this morning.",
+    "The membrane filters came back clean after 48 hours, and the samples themselves stayed crystal clear.",
+    "I adjusted the pH of the Milli-Q blanks before spiking them with the standard.",
+    "The surface water samples have a slight green tint, probably algae, but the lab water is colorless.",
+    "I measured 250 mL into each graduated cylinder and recorded the temperature before testing.",
+    "All the rinse water was collected in the waste container; the samples themselves are in the fridge.",
+    "Salinity looks consistent with last week's batch, around 0.5 ppt for the estuary samples."
+   ],
+   "soil": [
+    "The cores came in still damp, so I weighed them before and after oven-drying to get gravimetric moisture.",
+    "I sieved everything through a 2 mm mesh and removed the roots and stones before bagging the fines.",
+    "Texture feels like a sandy loam for most of these; a couple are heavier clay near the bottom of the plot.",
+    "I recorded the horizon for each sample, since the topsoil and subsoil look quite different in color.",
+    "The samples are still field-moist, so I put them in the drying oven at 105 °C overnight.",
+    "I homogenized each bag and split it into subsamples for the pH and organic matter tests.",
+    "There's a lot of grit in these; I had to rinse the auger between cores to avoid cross-contamination.",
+    "Bulk density rings were taken at two depths, and the soil was pretty compacted at the lower one.",
+    "I air-dried the samples on the bench, then ground them with the mortar and pestle for the nutrient panel.",
+    "The pH is around 6.5 for the agricultural plots, a bit lower than the forest samples.",
+    "I kept the samples in paper bags so they could breathe; the plastic liners were only for transport.",
+    "One core collapsed when I tried to section it, but I still got enough material for the archive."
+   ],
+   "blood": [
+    "All the EDTA tubes were filled to the line and inverted gently eight times right after collection.",
+    "I centrifuged the samples at 3000 rpm for ten minutes and the plasma separated cleanly.",
+    "Two of the tubes show slight hemolysis, so I flagged them before loading the analyzer.",
+    "The whole blood samples were kept at room temperature and mixed on the roller for twenty minutes.",
+    "I aliquoted the serum into cryovials and froze them at -80 °C within the hour.",
+    "Clotting time was normal for most, but one sample didn't clot fully in the SST tube.",
+    "I labeled each vacutainer with the barcode and checked that none were underfilled.",
+    "The red cell count came back low on sample 7, so I made a smear to double-check morphology.",
+    "I thawed the plasma aliquots on ice and ran the coagulation panel straight away.",
+    "The buffy coat was visible in every tube after spinning, which is what we expected.",
+    "I disposed of the sharps and the used needles in the biohazard container after processing.",
+    "Hemoglobin levels are within range for the batch, and the samples were stored at 2–8 °C overnight."
+   ]
+  },
+  "donation_match": {
+   "disaster": [
+    "The earthquake left thousands homeless in our region. Please help us deliver emergency shelter and food supplies to displaced families.",
+    "Hurricane Maria devastated our coastal villages last week. We're raising funds for temporary housing and rebuilding materials for those who lost everything.",
+    "Wildfires have destroyed over 200 homes in our county. Your donation will help survivors find safe shelter and start rebuilding their lives.",
+    "A massive flood swept through the valley overnight, cutting off all access to the town. We need urgent support to bring in relief convoys and emergency supplies.",
+    "The tsunami destroyed the fishing fleet and coastal homes. Help us provide immediate relief to survivors struggling to find food and shelter.",
+    "After the landslide buried three neighborhoods, rescue teams are working around the clock. Donate now to support search efforts and provide tents for victims.",
+    "Cyclone Idai has left a trail of destruction across the region. We're collecting funds for emergency food, blankets, and temporary shelters for families who lost their homes.",
+    "The dam broke and flooded the lower district without warning. Families are stranded on rooftops—please help us get rescue boats and supplies to them immediately.",
+    "An earthquake struck at dawn, collapsing buildings across the city. We are raising money for emergency shelters and food distribution for the homeless.",
+    "Severe flooding has destroyed crops and homes in three provinces. Your gift will help us deliver emergency food rations and tarps to affected communities.",
+    "The volcanic eruption forced 10,000 people to evacuate their homes. Support our disaster relief fund to provide tents, food, and clean-up equipment to evacuees in the camps.",
+    "A tornado tore through the town center, destroying homes and businesses. Help us deliver immediate aid and start the long road to recovery for our neighbors."
+   ],
+   "education": [
+    "Every child deserves a chance to learn. Your donation will provide books and school supplies to underfunded classrooms in rural areas.",
+    "Help us build a new library for the local primary school so students can access books and computers after class.",
+    "Sponsor a scholarship for a bright student who can't afford tuition. Together we can keep her dream of becoming a teacher alive.",
+    "We're raising funds to train teachers in remote villages and give them the resources they need to inspire young minds.",
+    "Donate today to help us renovate the school playground and create a safe space for children to learn and play.",
+    "Many girls in our community drop out of school early due to poverty. Your support will provide uniforms, fees, and mentorship to keep them in class.",
+    "Help us send 500 children back to school with new backpacks, notebooks, and uniforms for the new term.",
+    "We're building a STEM lab at the high school so students can learn coding and robotics. Every dollar brings us closer to opening day.",
+    "Adult literacy changes lives. Fund our evening classes so parents can learn to read and help their children with homework.",
+    "A new school building will replace the old one that was condemned. Help us lay the foundation for 300 students' futures.",
+    "Donate to provide free school meals so no child has to try to learn on an empty stomach.",
+    "Help us establish a scholarship fund for first-generation college students from low-income families."
+   ],
+   "health": [
+    "Our local clinic needs new equipment to treat patients in rural areas. Your donation will help us buy essential diagnostic tools.",
+    "Help us fund life-saving surgeries for children born with heart defects who cannot afford treatment.",
+    "Vaccines save lives. Donate to help us reach remote villages with immunization programs against measles and polio.",
+    "Mental health matters. Support our counseling center for teenagers struggling with anxiety and depression.",
+    "We're building a maternity ward so mothers don't have to travel for days to give birth safely. Every gift brings better care closer to home.",
+    "Donate to provide free medication for elderly patients who can't afford their prescriptions.",
+    "Help us fight malaria by distributing insecticide-treated bed nets and antimalarial drugs to at-risk families.",
+    "Our hospital's cancer ward needs renovation to give patients a dignified place to heal. Please contribute to the building fund.",
+    "Support our mobile health clinic that brings check-ups and medicine to homeless communities downtown.",
+    "Fund our clinic's pharmacy to treat infections and chronic illnesses in the community.",
+    "Help us train community health workers to recognize early signs of diabetes and hypertension before they become deadly.",
+    "Dental care is health care too. Sponsor a free dental screening day for kids in low-income neighborhoods."
+   ],
+   "animals": [
+    "The animal shelter is overflowing with abandoned dogs and cats. Your donation will provide food and medical care until they find forever homes.",
+    "Help us rescue injured wildlife from illegal traps and rehabilitate them for release back into their natural habitat.",
+    "Stray dogs in our city need vaccinations and sterilization to control the population humanely. Fund our mobile vet clinic.",
+    "We're building a new sanctuary for rescued farm animals. Donate to help us provide them with a safe, permanent home.",
+    "Elephants are being poached at alarming rates. Support our anti-poaching patrols to protect these endangered animals.",
+    "Help us feed the horses at our rescue center who were seized from neglectful owners. They need hay, care, and love to recover.",
+    "Our wildlife hospital treats injured birds and foxes every day. Your gift will buy medicine and bandages for their recovery.",
+    "Donate to help us build better enclosures at the sanctuary so the rescued animals have more space and enrichment activities.",
+    "Thousands of sea turtles are getting caught in fishing nets. Fund our rescue team to free them and protect nesting beaches.",
+    "The local cat colony needs spay/neuter surgeries to stop the cycle of suffering. Help us pay for the vet bills.",
+    "Help us care for the retired racing greyhounds who need foster homes and medical attention after their careers end.",
+    "Many koalas are losing their habitat to deforestation. Donate to our sanctuary to care for orphaned joeys and plant eucalyptus trees for their future."
+   ]
+  }
+ },
+ "excluded": [
+  {
+   "shape": "lab_ph",
+   "label": "water",
+   "text": "One bottle leaked in transit, so I only have 200 mL left for that one, but the rest are full.",
+   "reason": "a leaked bottle of 200 mL; nothing says the samples are water"
+  },
+  {
+   "shape": "lab_ph",
+   "label": "water",
+   "text": "I measured 250 mL into each graduated cylinder and recorded the temperature before testing.",
+   "reason": "measuring 250 mL into cylinders; any liquid sample"
+  },
+  {
+   "shape": "lab_ph",
+   "label": "water",
+   "text": "All the rinse water was collected in the waste container; the samples themselves are in the fridge.",
+   "reason": "only the rinse water is water; the samples' type is not given"
+  }
+ ],
+ "hand_check": {
+  "by": "assistant",
+  "date": "2026-11-18",
+  "rule": "Every text read against its planted label before any model saw it; a text is excluded if the label is not clearly right or another label fits too.",
+  "excluded": 3,
+  "borderline_kept": [
+   {
+    "shape": "lab_ph",
+    "label": "water",
+    "index": 7,
+    "reason": "Milli-Q blanks are water"
+   },
+   {
+    "shape": "lab_ph",
+    "label": "soil",
+    "index": 10,
+    "reason": "samples kept in paper bags to breathe; soil practice"
+   },
+   {
+    "shape": "lab_ph",
+    "label": "blood",
+    "index": 10,
+    "reason": "sharps and needles imply blood draws"
+   },
+   {
+    "shape": "donation_match",
+    "label": "education",
+    "index": 10,
+    "reason": "free school meals so children can learn; could read as health"
+   }
+  ]
+ }
+}

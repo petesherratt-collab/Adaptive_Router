@@ -3820,3 +3820,766 @@ provider calls, 7 invalid responses, no unanswered job.
 |---|---|
 | `fast_path_planned_v2_long.jsonl` | `844adab42aada6d993f03a276a5d9ab75c4b68e5bf8d037636834fdcafe4cc6c` |
 | `fast_path_planned_v2_long_analysis.json` | `5c6d921486826f87ea02d5c07631ee6ace1ee0e9814823e0d24a62e5daf47fe7` |
+
+---
+
+## 2026-11-17 — Follow-up 7 frozen: cheaper learning (handoff item 1)
+
+New session, working through the handoff's open items in order at the owner's
+request. `FastPathRouter` gains an optional `learning_models` roster: function
+steps learned in the background (step races in plan trials and shadow runs,
+and probe answers) ask only these models; live answers, live plan steps and
+judgement steps keep the full roster. Default `null` keeps earlier behaviour.
+`UsageMeter` now meters calls and tokens by purpose, and the analysis reports
+them. Full suite passed (562 tests). Recorded as follow-up 7 in
+`FAST_PATH_PLANNED_V2_PLAN.md`. Credit before the run: about $13.25.
+
+| File | SHA-256 |
+|---|---|
+| `fast_path.py` | `01262b2e97fc24c494340a4224e81782ca85eae88510219d9d171b90ad087d89` |
+| `planner.py` | `941d7f2baaa04caa7f92b5ae369760e3a10f6a0acdf2e925c87b6807aa3dccb3` |
+| `pipeline.py` | `fecc96aee7349fbf2229dad47207c7467a76c884fec281dd596d35185f528e83` |
+| `config_fast_path.json` | `785e0a8b2ba76b6be33d5ebdfb2c4b3533f27b70cbd16a77ef9bd9c01b3f42df` |
+| `run_fast_path_planned_v1.py` | `e6696d96bfd20d1278b1ea98e58055fcde34b9f49ab10dc716b35548a3d684ce` |
+| `analyze_fast_path_planned_v1.py` | `7f8c08f7b4eebddbb7c46be623be2e1456f36140b2161d3daea51a9ea7cf497e` |
+| `FAST_PATH_PLANNED_V2_PLAN.md` | `e43d80fd7cb1e73b73dda43f198d1068c11d4c07e1aa96413e4f3c143222c2d9` |
+
+---
+
+## 2026-11-17 — Planned jobs V3 stage 1 frozen: new shapes and code-only rules, before any text exists
+
+Handoff items 2 and 4 share one benchmark (`FAST_PATH_PLANNED_V3_PLAN.md`):
+8 new, more varied job shapes, and keyword reading rules for a code-only arm,
+written from the descriptions alone. Recorded here before the reading texts
+are generated, so the rules cannot have been fitted to them. Follow-up 7 was
+running meanwhile; nothing here touches its files.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v3.py` | `5248a055c80d11e9d55b3280102ac23dd844d055fdd4476597386e7a4fbfbc70` |
+| `fast_path_code_only_v1.py` | `843a14b6496b675c01ea8f1f43a9c1916209142a93bd6c63ca3dea7bc101a9f5` |
+| `fast_path_ceiling_v3.py` | `4420adde077c3d03c186f207a6b77f6d71c05a937d5c6360cd9806a90a6959a6` |
+| `make_bench_v3_prose.py` | `ac306989534241c9f413f870596520193bbb9159ed60011396cfa7cafebed868` |
+| `FAST_PATH_PLANNED_V3_PLAN.md` | `e19b8177286dd2ee196342082ea2d94d02994489eaada0e01792e45f04e46809` |
+
+---
+
+## 2026-11-17 — Follow-up 7: cheaper learning with a two-model learning roster
+
+Label `lean_learning`: as follow-up 6 plus `learning_models`
+`["google/gemini-3.8-flash", "openai/gpt-5.6-luna"]`. 4,866 provider calls
+(follow-up 6: 7,025), 3 HTTP 429 and 2 invalid responses, no unanswered job.
+
+| Arm | Correct | Median ms | Calls | Prompt tokens | Completion tokens |
+|---|---:|---:|---:|---:|---:|
+| A | 143/160 | 3631 | 160 | 81,152 | 47,431 |
+| R | 148/160 | 2830 | 800 | 449,450 | 604,161 |
+| C | 148/160 | 2759 | 3,106 | 951,053 | 1,100,486 |
+| D | 160/160 | 854 | 800 | 140,795 | 30,229 |
+
+- Arm C by purpose: whole-task races 720 calls, step and probe answers 2,217,
+  probe proposals 74, synthesis 85, plans 10. Learning calls (everything but
+  the whole-task race) about 2,386, against an estimated 4,660 in follow-up 6
+  (not metered by purpose; its 116 race-routed jobs and a few audits account
+  for about 600 of its 5,265 calls).
+- Money did not fall: about $4.45 for this run against about $4.15 for
+  follow-up 6. The learning pair includes the roster's most expensive model
+  per token (`google/gemini-3.8-flash`, $0.75 and $3.75 per million prompt and
+  completion tokens; `openai/gpt-6-luna` and `anthropic/claude-haiku-5.5` are
+  $0.10 and $0.50), so fewer calls did not mean less spend. Cost is not an
+  objective, but the remaining credit is a limit.
+- Plans live: `expense_claims` from job index 30 (after 9 shadow runs, all
+  15 function steps promoted; it never went live in follow-up 6),
+  `survey_scores` from job index 34 (after 13). `shipment_tracking` stayed in shadow
+  (25 of 26 function steps promoted; the unpromoted `action` step kept shadow
+  runs at 2.1 to 4.4 s against a race median of 2.0 s). `timesheet` lost its
+  plan to a shadow mismatch and had no attempts left. 16 plan-served jobs (all
+  correct, median 1029 ms) against 44 in follow-up 6.
+- C/R 0.975 (0.936 to 1.034); C minus R 0.000 (-0.050 to +0.038). Wrong job
+  examples 0. D reading 160/160.
+
+Reading: the learning roster cut learning calls by about half, as intended,
+but neither time nor money improved in this run. Which plans the planner
+writes, and whether one step resists promotion, varied more between the two
+runs than anything the roster changed. One run per setting cannot separate
+the two. A cheaper pair by price (for example `openai/gpt-6-luna` with
+`deepseek/deepseek-v4.1-flash`, 240 of 251 agreed in the development data,
+1 agreed and wrong) is untested.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v2_lean.jsonl` | `ad843e7d6aa69c10b862c52c289604854abe19893f222f6b4b1055d49bd58a11` |
+| `fast_path_planned_v2_lean_analysis.json` | `c1cf18797b379ae53ad9dd2fd0c4955d47e8ec78c4fa7bfc352cce8644d8ee71` |
+
+---
+
+## 2026-11-17 — V3 reading texts generated and hand-checked (before any rule is scored)
+
+`make_bench_v3_prose.py` (hash above) wrote 12 texts per label, 324 in all,
+with one call per shape to `mistralai/mistral-large-4-0`. The assistant read
+every text against its planted label before any rule or model saw it:
+none excluded, 7 borderline texts kept with reasons (recorded in the file).
+The sensor notes all name their site outright, and the delivery notes mostly
+name a city and postcode; the urgency, department, diet, issue, request and
+formality texts mostly do not use the label word.
+
+| File | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v3_prose.json` | `efaf393f643cb108d10ecd0bd170856f5cf5149a249c01a5c6341044b9005cf4` |
+
+---
+
+## 2026-11-17 — Code-only rules scored on unseen text; V3 run frozen (stage 2)
+
+Handoff item 2. `score_code_only_v1.py` scored the frozen keyword rules on the
+hand-checked texts, with no provider call: 293 of 324 distinct texts (90.4%),
+220 of 240 jobs on the 30-job stream. Perfect on urgency and site, weakest on
+library requests (39/48) and diets (29/36). Details in `code_only_v1_scores.json`
+and `FAST_PATH_PLANNED_V3_PLAN.md`.
+
+Runner and analysis gain arm E (code only: rules plus reference code, no
+model, never metered) and its summary (reading accuracy per shape; R, C and D
+against E). Stage 2 of `FAST_PATH_PLANNED_V3_PLAN.md` frozen: 8 shapes, 20
+jobs each, arms A, R, C, D, E, drained arrival, plans live on adoption. Full
+suite passed (568 tests). Credit at the freeze: about $8.75.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path.py` | `01262b2e97fc24c494340a4224e81782ca85eae88510219d9d171b90ad087d89` |
+| `planner.py` | `941d7f2baaa04caa7f92b5ae369760e3a10f6a0acdf2e925c87b6807aa3dccb3` |
+| `pipeline.py` | `fecc96aee7349fbf2229dad47207c7467a76c884fec281dd596d35185f528e83` |
+| `sandbox.py` | `b132f5d8175e60916baa0550c09d2f5d34e247e99bd390eee07510f596a9dcff` |
+| `remote.py` | `4efc49ab45e68d09f026e75fca9e3aff2780fac8682b3b27f7fa983eda51afc2` |
+| `config_fast_path.json` | `785e0a8b2ba76b6be33d5ebdfb2c4b3533f27b70cbd16a77ef9bd9c01b3f42df` |
+| `run_fast_path_planned_v1.py` | `6913fe3d017e0a9ba31f27ad37a29bd3295833439f036db8bc6697d6f20fe44e` |
+| `analyze_fast_path_planned_v1.py` | `548f0ab690bd0b5cfcf16b2a72a11e15daa9010c56aaed449d1106c6525792d3` |
+| `fast_path_planned_bench_v3.py` | `5248a055c80d11e9d55b3280102ac23dd844d055fdd4476597386e7a4fbfbc70` |
+| `fast_path_planned_bench_v3_prose.json` | `efaf393f643cb108d10ecd0bd170856f5cf5149a249c01a5c6341044b9005cf4` |
+| `fast_path_ceiling_v3.py` | `4420adde077c3d03c186f207a6b77f6d71c05a937d5c6360cd9806a90a6959a6` |
+| `fast_path_code_only_v1.py` | `843a14b6496b675c01ea8f1f43a9c1916209142a93bd6c63ca3dea7bc101a9f5` |
+| `score_code_only_v1.py` | `77140d74e9838a11c80e643453490b7ffc8573e8d749abc31be0fe4946fa7088` |
+| `code_only_v1_scores.json` | `690ca3e75ff2c9142781976a2bec4816042f22130fcf695b550f726c444e5c3f` |
+| `FAST_PATH_PLANNED_V3_PLAN.md` | `468c2348cd0b51cb37cef479ec123c57ef78948e32185f13cc4774861abb1514` |
+
+---
+
+## 2026-11-17 — Planned jobs V3 primary result (prospective; handoff items 2 and 4)
+
+Label `v3_primary`: 8 fresh shapes, 20 jobs each, arms A, R, C, D, E, drained
+arrival, plans live on adoption. 10,153 provider calls, 14 invalid responses,
+no unanswered job. Cost about $2.43.
+
+| Arm | Correct | Median ms | Last five ms | Calls | Prompt tokens | Completion tokens |
+|---|---:|---:|---:|---:|---:|---:|
+| A | 153/160 | 3086 | 3210 | 160 | 68,026 | 28,327 |
+| R | 155/160 | 1957 | 1834 | 800 | 375,371 | 420,438 |
+| C | 158/160 | 2078 | 1186 | 8,393 | 1,833,375 | 1,185,950 |
+| D | 160/160 | 872 | 870 | 800 | 154,682 | 40,847 |
+| E | 148/160 | 0.16 | 0.15 | 0 | 0 | 0 |
+
+**Primary decision: NOT SUPPORTED.** C/R 1.062 (0.684 to 1.440): the time
+criterion fails. C minus R +0.019 (+0.006 to +0.037): the correctness
+criterion holds.
+
+- Plans adopted for 7 of 8 shapes, all from job index 2; 126 plan-served jobs,
+  all correct (median 1861 ms). `fleet_fuel` had both plans rejected and ran
+  on the race throughout (its two wrong C answers came from the race). 15 plan
+  attempts: 12 adopted, 3 rejected. 70 function steps, 62 promoted. No wrong
+  job example, no demotion.
+- Shapes where C was slower than R, with the reason in their records:
+  `library_loans` (3343 against 2036 ms; three date-arithmetic steps,
+  `overdue`, `days`, `most_title`, never promoted and raced in a chain),
+  `room_bookings` (2264 against 1885; three floor-lookup steps unpromoted),
+  `fleet_fuel` (no plan), and `ticket_queue` and `event_rsvps` before their
+  steps were promoted. Where every step was promoted, C ran at about 0.8 to
+  1.1 s against the race's 1.6 to 2.7 s.
+- Ceiling: D reading 160/160; C/D 2.38 (1.54 to 3.33).
+- Code-only test (fixed in advance): E 148/160, exactly as stage 1 predicted.
+  C minus E +0.063 (+0.013 to +0.113): **C beats code**. D minus E +0.075
+  (+0.038 to +0.119): **models read better than the rules**. R minus E +0.044
+  (-0.006 to +0.094): the race does **not** clear the bar. E is about 10,000
+  times faster than any model arm.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_planned_v3_primary.jsonl` | `0c9a5b7835e658c6d9fade95c3929aefc479839acbb3ab8455f4629fe356fb57` |
+| `fast_path_planned_v3_primary_analysis.json` | `2af7cea26a5e75b1508169ad63c389a59ae392237ca47c16e3040a87cac0e67d` |
+
+---
+
+## 2026-11-18 — Write-once arm frozen (next step 1 of 3)
+
+At the owner's request (credit topped up to about $10.50), the competitor the
+planning router has to beat: `write_once.py`, a router that has one model
+write the whole job once and keeps it only if it reproduces two agreed answers.
+The runner gains arm W and `--arms`; `analyze_write_once_v1.py` analyses it.
+Full suite passed. Plan: `FAST_PATH_WRITE_ONCE_V1_PLAN.md`.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `write_once.py` | `4f222c320a16269357d5aa45fa11a7e7f08edf196496b2aab026fe4e911f0ce2` |
+| `run_fast_path_planned_v1.py` | `3f27601a162bfe3ed8e5ff59ce7f11e6054126ef864fdf3fe3759f520a864751` |
+| `analyze_write_once_v1.py` | `a4eaf4b591bdabe17cf571d1328bd402fb5c2406ed2820e5d249867c7267f3df` |
+| `analyze_fast_path_planned_v1.py` | `ac7a63d137d0f2eb21923e26e1bcd7738bda574b54f2d7288708a0c934d230a5` |
+| `config_fast_path.json` | `785e0a8b2ba76b6be33d5ebdfb2c4b3533f27b70cbd16a77ef9bd9c01b3f42df` |
+| `fast_path.py` | `01262b2e97fc24c494340a4224e81782ca85eae88510219d9d171b90ad087d89` |
+| `planner.py` | `941d7f2baaa04caa7f92b5ae369760e3a10f6a0acdf2e925c87b6807aa3dccb3` |
+| `sandbox.py` | `b132f5d8175e60916baa0550c09d2f5d34e247e99bd390eee07510f596a9dcff` |
+| `fast_path_planned_bench_v3.py` | `5248a055c80d11e9d55b3280102ac23dd844d055fdd4476597386e7a4fbfbc70` |
+| `fast_path_planned_bench_v3_prose.json` | `efaf393f643cb108d10ecd0bd170856f5cf5149a249c01a5c6341044b9005cf4` |
+| `fast_path_ceiling_v3.py` | `4420adde077c3d03c186f207a6b77f6d71c05a937d5c6360cd9806a90a6959a6` |
+| `fast_path_code_only_v1.py` | `843a14b6496b675c01ea8f1f43a9c1916209142a93bd6c63ca3dea7bc101a9f5` |
+| `FAST_PATH_WRITE_ONCE_V1_PLAN.md` | `bd40c172c69c19b40591e83a736a702f8ee31617d2dbfe61922450edd0b792a1` |
+
+---
+
+## 2026-11-18 — Write-once arm result (descriptive)
+
+Label `write_once_v1`: V3 jobs (8 shapes, 20 each), arms R, D, E, W, drained.
+2,548 provider calls, 3 invalid responses, no unanswered job. Cost about $1.23.
+
+| Arm | Correct | Median ms | Last five ms | Calls | Prompt tokens | Completion tokens |
+|---|---:|---:|---:|---:|---:|---:|
+| R | 155/160 | 1963 | 1866 | 800 | 374,422 | 415,263 |
+| D | 160/160 | 925 | 925 | 800 | 154,688 | 45,288 |
+| E | 148/160 | 0.17 | 0.17 | 0 | 0 | 0 |
+| W | 156/160 | 1018 | 1002 | 948 | 227,352 | 147,728 |
+| C (V3 primary, other run) | 158/160 | 2078 | 1186 | 8,393 | 1,833,375 | 1,185,950 |
+
+- **Every shape adopted a program at its first attempt**, at job index 2
+  (four shapes), 3 (two), 4 and 5. Each program had one reading step and 16
+  to 50 lines of code. No demotion. 134 program-served jobs, 133 correct
+  (median 977 ms); the one wrong answer was a reading, not code: the
+  borderline `recipe_scaling` text flagged in the hand check ("No steak or
+  salmon...") read as 'any' under the program's own, vaguer reading spec.
+  The three other wrong W answers came from the race before adoption.
+- W/R 0.519 (0.423 to 0.613); W minus R +0.006 (-0.013 to +0.025).
+  W/D 1.10 (1.05 to 1.22); W minus D -0.025 (-0.050 to -0.006).
+  W minus E +0.050 (-0.006 to +0.106).
+- Against the planning router on the same jobs (other run, descriptive): W
+  answered faster (1018 against 2078 ms median), went to code on every shape
+  where C left `fleet_fuel` unplanned and three shapes with unpromoted steps,
+  and made 948 calls against 8,393.
+
+Reading: writing the job once, checked against two agreed answers, beat
+learning it step by step on every measure except a small correctness margin,
+and came within 10% of the hand-written ceiling. The planning router's
+step-by-step learning is not justified on jobs like these.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_write_once_v1.jsonl` | `a3415cfecea27dcf7ccc726b0ed61d0d7f6f5a6c11442d11cd8e10545815ee82` |
+| `fast_path_write_once_v1_analysis.json` | `5dcff012e82474c5a625c91b411ae6d00f981c4e57c2a09636924e89c4fd2151` |
+
+---
+
+## 2026-11-18 — Repair V1 frozen (next step 2 of 3)
+
+`repair_attempts` (default 0) and per-step learning diagnostics, tested with
+fake models; full suite passed. Plan: `FAST_PATH_REPAIR_V1_PLAN.md`.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path.py` | `753fef2c26534cabd0f6efbc7a2da0baf64b0ba3e2ac2572e2cd4217e2886caa` |
+| `planner.py` | `941d7f2baaa04caa7f92b5ae369760e3a10f6a0acdf2e925c87b6807aa3dccb3` |
+| `pipeline.py` | `fecc96aee7349fbf2229dad47207c7467a76c884fec281dd596d35185f528e83` |
+| `config_fast_path.json` | `6d994e62ef672619a88aeb909032ea9681766decf274152e2b64d99d027cda10` |
+| `run_fast_path_planned_v1.py` | `949b6dae148988ab4d55a8394aac1c343c29b2ccb0b082a01e744a99151541c7` |
+| `FAST_PATH_REPAIR_V1_PLAN.md` | `7a1c0af0ef0a668468a87cffb193d27a2225d90d198ee79b7824478d1bf9742c` |
+
+---
+
+## 2026-11-18 — Repair V1 result (descriptive)
+
+Label `repair_v1`: `library_loans`, `room_bookings`, `event_rsvps`, 20 jobs
+each, arms R and C, `repair_attempts` 1. 4,375 provider calls, 6 invalid
+responses. Cost about $1.47.
+
+| Shape | C median (this run) | C median (V3 primary) | R median | C promoted |
+|---|---:|---:|---:|---:|
+| `library_loans` | 983 | 3343 | 2062 | 10/10 |
+| `room_bookings` | 1434 | 2264 | 1920 | 11/12 |
+| `event_rsvps` | 1826 | 1795 | 1793 | 11/12 |
+
+- **Why steps stay on the models** (new diagnostics): each stuck step had
+  plenty of agreed examples (28, with 12 agreed probes and no racer
+  disagreement) and failed the gate on mismatches: 12 of 15 and 12 of 16
+  examples matched on both blind attempts.
+- **The repair did not help.** Two repairs were tried
+  (`room_duration_pairs`, `maybe_entries`); shown two failing cases, the
+  rewritten code matched fewer examples (6 of 17 and 10 of 17). Neither was
+  promoted. No repair was needed in `library_loans`.
+- The speed gains against the V3 primary run come from the planner writing
+  different plans this time (every `library_loans` step was promoted), not
+  from repair. Run-to-run variation in plans again dominates.
+- All 60 C answers and all 60 R answers correct.
+
+Reading: the stuck steps return structured values (lists of pairs or rows)
+whose exact form the racers agree on but the code writer does not reproduce
+from the spec. The fix would lie in the plan's step specs or in agreeing on a
+canonical form, not in showing failures to the code writer. Given the
+write-once result, this line is not worth pursuing further now.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_repair_v1.jsonl` | `59ae3d512287e934e14e7088be503382d27114f120f981aeb852ea2e08082f7c` |
+| `fast_path_repair_v1_analysis.json` | `d31a159f21e2d3d393eedaea30ad464298040585ecc99e221a8e68e6b43978dd` |
+
+---
+
+## 2026-11-18 — Write-once V2 stage 1 frozen: unseen jobs and rules before any text exists
+
+At the owner's request (estimated cost about $5.20 of $7.80). Plan:
+`FAST_PATH_WRITE_ONCE_V2_PLAN.md`.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v4.py` | `7bdc4dc5a86c3e1710e3076c9ccf8f87fd7236ec6cd5851995caf550cfe2679d` |
+| `fast_path_code_only_v2.py` | `37be79b8d1ff4bc45cb49e623612a280f3c658ba745e86bf27a4a0709c993ae2` |
+| `fast_path_ceiling_v4.py` | `bcab5bb6034e1849397ad116d8e39030cc06673a749ff0691a8373c2bce61e82` |
+| `make_bench_v4_prose.py` | `0a6a4b5080b9bda60858b56532757a94cb7f87252d526f5a9096a7c58b578f01` |
+| `FAST_PATH_WRITE_ONCE_V2_PLAN.md` | `81c5829758ad8fbee89ba77399972b7542d75f80f8ce8ade15ed63d176b93dc9` |
+
+Amendment before any text was kept: the first generation stopped at
+`energy_meter` on a provider failure (`OPENROUTER_RESPONSE_INVALID`) and,
+by design, saved nothing; the three shapes it had received were never read.
+`make_bench_v4_prose.py` now retries a failed call (up to three attempts)
+instead of stopping. The prompt is unchanged. New hash: `25f1ab5b6a1c8dbfa8c392e409f68669d386a662d04e50a7ef8d3b1f30c4ffc2`.
+
+V4 texts generated (12 per label, 360 in all) and hand-checked before any
+rule or model read them: 1 excluded (`flight_delays` information[3], which
+fits rebook too), 2 borderline kept with reasons.
+
+| File | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v4_prose.json` | `8b12829bdf1e69825d610c06940eaf6f7ede074b2894c47b843b4399ff3d4b7d` |
+
+---
+
+## 2026-11-18 — Write-once V2 stage 2 frozen
+
+Rules v2 scored offline: 308/359 texts, 127/160 stream labels. Runs frozen in
+`FAST_PATH_WRITE_ONCE_V2_PLAN.md`; the analysis gains a decision for W
+against R and W/C, C/R pairs. Credit at the freeze: about $7.75.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `write_once.py` | `4f222c320a16269357d5aa45fa11a7e7f08edf196496b2aab026fe4e911f0ce2` |
+| `run_fast_path_planned_v1.py` | `949b6dae148988ab4d55a8394aac1c343c29b2ccb0b082a01e744a99151541c7` |
+| `analyze_write_once_v1.py` | `766c1365f4e2e1c8e5d552bcd6c4e9689ffd8fb5e2445c3adbc80700a150670f` |
+| `config_fast_path.json` | `6d994e62ef672619a88aeb909032ea9681766decf274152e2b64d99d027cda10` |
+| `fast_path.py` | `753fef2c26534cabd0f6efbc7a2da0baf64b0ba3e2ac2572e2cd4217e2886caa` |
+| `planner.py` | `941d7f2baaa04caa7f92b5ae369760e3a10f6a0acdf2e925c87b6807aa3dccb3` |
+| `fast_path_planned_bench_v4.py` | `7bdc4dc5a86c3e1710e3076c9ccf8f87fd7236ec6cd5851995caf550cfe2679d` |
+| `fast_path_planned_bench_v4_prose.json` | `8b12829bdf1e69825d610c06940eaf6f7ede074b2894c47b843b4399ff3d4b7d` |
+| `fast_path_ceiling_v4.py` | `bcab5bb6034e1849397ad116d8e39030cc06673a749ff0691a8373c2bce61e82` |
+| `fast_path_code_only_v2.py` | `37be79b8d1ff4bc45cb49e623612a280f3c658ba745e86bf27a4a0709c993ae2` |
+| `FAST_PATH_WRITE_ONCE_V2_PLAN.md` | `3b413a2b037f3accb4ce57e6e77dc53c5a3deafae21596c8e76019550558a7ec` |
+
+---
+
+## 2026-11-18 — Write-once V2 run 1 result (prospective)
+
+Label `write_once_v2_primary`: V4 jobs (8 unseen shapes, 20 each), arms R, C,
+D, E, W, drained. 14,206 provider calls, 40 invalid responses, no unanswered
+job. **Cost about $5.62, against an estimate of $3.80** (arm C made 11,627
+calls).
+
+| Arm | Correct | Median ms | Last five ms | Calls |
+|---|---:|---:|---:|---:|
+| R | 153/160 | 2296 | 2416 | 800 |
+| C | 150/160 | 1753 | 1074 | 11,627 |
+| D | 159/160 | 912 | 926 | 800 |
+| E | 127/160 | 0.14 | 0.16 | 0 |
+| W | 151/160 | 963 | 910 | 979 |
+
+**Primary decision: NOT SUPPORTED.** W/R 0.419 (0.352 to 0.468): the time
+criterion holds. W minus R -0.013 (-0.100 to +0.050): the correctness
+criterion fails.
+
+- W adopted a program for every shape at its first attempt (job index 2 or
+  3). 139 program-served jobs, 132 correct. Of the 7 wrong: 5 were code, all
+  in `wine_orders`, where the program rounded the discounted value instead
+  of the discount, which differs only when the discount ends in exactly half
+  a cent, a case neither trial example contained. An audit caught the first
+  such program and dropped it; the second had the same fault. 2 were
+  readings (a cot request, a conference-room note), under the program's own
+  reading specs.
+- C's plans made the same rounding error on the same `wine_orders` jobs
+  (C 14/20 there). The whole-task race got all 20 right.
+- W against C: 0.55 of C's time (0.42 to 0.80), correctness +0.006 (0.000 to
+  +0.019), with 1/12 of the calls. C against R: 0.76 (0.48 to 0.99),
+  correctness -0.019 (-0.106 to +0.044).
+- W against D: 1.06 of the ceiling's time (0.99 to 1.12), -0.050 (-0.125 to
+  0.000). W and C against E: W +0.150 (-0.025 to +0.319); neither interval is
+  wholly above zero, because the rules were right on `wine_orders` where the
+  code-based arms were not.
+
+Reading: on unseen jobs writing the job once was again about twice as fast as
+the race and beat step learning on time, calls and correctness, but code
+checked against two agreed answers can carry an edge-case rule error that the
+race does not make. The two-example trial is too thin for rounding rules; the
+probes the fast path uses for single steps would be the natural guard.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_write_once_v2_primary.jsonl` | `9223f62d65cd58aac9c43c1d89965da514c30ad2016ce2b6b2e2c3cebb40092e` |
+| `fast_path_write_once_v2_primary_analysis.json` | `951ff93341bbe09b1c0abfaae39b223bf95efc64c84200102398682f710a91d4` |
+
+---
+
+## 2026-11-18 — Write-once V3 stage 1 frozen: probes and fresh unseen jobs
+
+Owner topped up to about $13 and chose: edge-case probes for write-once
+(`program_probes`, arm P in the runner), then a fresh prospective test with
+jobs drained and back to back. Estimated cost about $4.20. Full suite passed.
+Plan: `FAST_PATH_WRITE_ONCE_V3_PLAN.md`.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v5.py` | `917d653eac9cdd9b07b6b9509af298b4ae00e04e878fdf8551fe341dbbf44c55` |
+| `fast_path_ceiling_v5.py` | `9e74e0302fff403da8c00ac6d1b35faec3edbd3ad96ea50f797fd687e8ebe620` |
+| `make_bench_v5_prose.py` | `6a4143b8d034e9c83570bbc9732d21f46631e37a7390d4f78dfcd31ce42e15d1` |
+| `write_once.py` | `a9add6feeab325a90b7c9c9afc79b0d819d11f98ef9405c4fcaf8c4772a62d7f` |
+| `FAST_PATH_WRITE_ONCE_V3_PLAN.md` | `96e824456c8c3ce0724a5c839026b5ab4b0e549057609d4b6484e41164f56886` |
+
+---
+
+## 2026-11-18 — Write-once V3: texts hand-checked; runs frozen
+
+V5 texts generated (324) and hand-checked before any model read them: 3
+excluded, 4 borderline kept. Runs frozen in `FAST_PATH_WRITE_ONCE_V3_PLAN.md`.
+Credit at the freeze: about $11.90.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `write_once.py` | `a9add6feeab325a90b7c9c9afc79b0d819d11f98ef9405c4fcaf8c4772a62d7f` |
+| `run_fast_path_planned_v1.py` | `40c154947af6d6a8c62f25230f70e2cc99e2d1fa5b515fe6f4a4690fc646e30a` |
+| `analyze_write_once_v1.py` | `4f52663c636a2d17a76bbc1edf9da6dde1e49ba102e94e5ac1e7e97353946cbf` |
+| `config_fast_path.json` | `6d994e62ef672619a88aeb909032ea9681766decf274152e2b64d99d027cda10` |
+| `fast_path.py` | `753fef2c26534cabd0f6efbc7a2da0baf64b0ba3e2ac2572e2cd4217e2886caa` |
+| `fast_path_planned_bench_v5.py` | `917d653eac9cdd9b07b6b9509af298b4ae00e04e878fdf8551fe341dbbf44c55` |
+| `fast_path_planned_bench_v5_prose.json` | `408e3b4b22cae81fda3246b7cce7a6059ea3f500c938d601dc5f1be43d1fd5a4` |
+| `fast_path_ceiling_v5.py` | `9e74e0302fff403da8c00ac6d1b35faec3edbd3ad96ea50f797fd687e8ebe620` |
+| `FAST_PATH_WRITE_ONCE_V3_PLAN.md` | `40cf04c1428e0635b3cfe1318808c3d05923ae515c19c65fbbdefb494b417e12` |
+
+---
+
+## 2026-11-18 — Write-once V3 run 1 result (prospective)
+
+Label `write_once_v3_primary`: V5 jobs (8 unseen shapes, 30 each), arms R, D, W,
+P (write once with 6 edge-case probes), drained. 5,651 provider calls, 2
+invalid responses. Cost about $2.34.
+
+| Arm | Correct | Median ms | Calls | Prompt tokens | Completion tokens |
+|---|---:|---:|---:|---:|---:|
+| R | 233/240 | 1925 | 1,200 | 519,379 | 556,581 |
+| D | 240/240 | 931 | 1,200 | 229,928 | 74,583 |
+| W | 240/240 | 948 | 1,385 | 312,361 | 159,795 |
+| P | 238/240 | 961 | 1,866 | 451,967 | 266,605 |
+
+**Primary decision: SUPPORTED.** P/R 0.499 (0.449 to 0.577); P minus R +0.021
+(0.000 to +0.054).
+
+- P adopted a program for every shape at its first attempt (job index 2, and
+  4 for `shared_bills`). 222 program-served jobs, all correct; its two wrong
+  answers came from the race before adoption. Probes: 48 proposed, 46 agreed
+  by the racers, **0 failed**: no program was rejected by a probe.
+- W (no probes) was also right on all 240 jobs; two of its first programs
+  (`train_fares`, `reading_challenge`) failed the two-example trial and the
+  second attempts were adopted. W/R 0.493 (0.456 to 0.529), +0.029 (+0.004 to
+  +0.063).
+- P against W: time 1.01 (0.96 to 1.12), correctness -0.008 (-0.025 to 0.000),
+  about 35% more calls. P against D: 1.03 (0.98 to 1.14).
+
+Reading: on fresh unseen jobs written with rounding, tie and threshold rules,
+writing the job once was twice as fast as the race, at least as accurate, and
+level with the hand-written ceiling. The probes caught nothing here, so this
+run shows they are cheap, not that they help; the V4 rounding failure remains
+their only motivating case.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_write_once_v3_primary.jsonl` | `76081c55e7814211f0c9081f4e766b0fbf7841bad5718eadf2354f7519b8c4db` |
+| `fast_path_write_once_v3_primary_analysis.json` | `81fa6f983f79fe6bc3a560f7eda06db971ca8ea27194f551468bab0df33bd9da` |
+
+---
+
+## 2026-11-18 — Write-once V3 run 2: jobs back to back (descriptive)
+
+Label `write_once_v3_immediate`: the same V5 jobs, arms R and P,
+`--arrival immediate`. 3,036 provider calls, 2 invalid responses. Cost about
+$2.11.
+
+| Arm | Correct | Median ms | Last five ms | Calls |
+|---|---:|---:|---:|---:|
+| R | 239/240 | 1966 | 1889 | 1,200 |
+| P | 237/240 | 1273 | 931 | 1,836 |
+
+- P/R 0.647 (0.536 to 0.743); P minus R -0.008 (-0.017 to 0.000).
+- Programs went live at job index 10 to 21 (median 13), against 2 to 4 with
+  drained arrival: writing a program, trying it and running its probes takes
+  longer than ten jobs arriving back to back. Until then the race answered.
+- 129 program-served jobs, all correct (median 914 ms against the race's 2,015
+  ms over the same jobs); the 3 wrong P answers came from the race. Probes:
+  47 agreed, 0 failed.
+
+Reading: under live traffic write-once still saves about a third of the time
+over 30 jobs, and once live it runs at the ceiling's speed. Its start-up cost
+is a fixed delay of about a dozen jobs, far shorter than the planning
+router's 20 to 35 jobs, or never, in follow-ups 5 to 7.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_write_once_v3_immediate.jsonl` | `d0d63ebb366187b8a0f8369a191df4a1e3938f2e28431ab8c906a35005e5c84e` |
+| `fast_path_write_once_v3_immediate_analysis.json` | `b6d19846fb7561793213740b89dbfa352b84eccebd62add2c672037e00b0fc3c` |
+
+---
+
+## 2026-11-18 — Write-once becomes the multi-step path (no provider calls)
+
+At the owner's request (steps 1 to 3, with the planner on hard jobs; balance
+about $17.39):
+
+- `write_once.py`: programs and templates kept on disk (`store_dir`); readings
+  may be made on every item of a list of texts or of a text field of a list of
+  objects (`"each": true`, `"field"`), giving a list of labels; optional
+  `write_early`: the first program is written and probed when a template is
+  first seen, in parallel with the race, and tried on the examples as soon as
+  they exist. Default behaviour otherwise unchanged.
+- `main.py --task-json PATH` answers a plain-language `fast_path_task_v1`
+  document through `WriteOnceRouter` (programs in `fast_path_programs/`).
+- `config_fast_path.json`: `program_probes` 6 (probes on by default),
+  `write_early` false until tested.
+- `planner.py` marked superseded; kept for the record and for jobs a model
+  cannot write whole.
+- The runner pins arm W to no probes and no early writing, so earlier runs
+  remain comparable, and gains arm Q (`--early`: probes plus early writing).
+
+Full suite passed.
+
+---
+
+## 2026-11-18 — Hard jobs V1 stage 1 frozen, before any text exists
+
+Plan: `FAST_PATH_HARD_JOBS_V1_PLAN.md`. The runner's ceiling arm reads every
+item of a list when the reading has an `item_field`. Full suite passed.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v6.py` | `c4250db625cdce4dbd385314163ec0fcfc096666c27cba5bc8c67f61159f196d` |
+| `fast_path_ceiling_v6.py` | `20fda45f20174a57dc9e3cbfd15130a6d8a8601054a9fec4f215e59d14a24084` |
+| `make_bench_v6_prose.py` | `e7d3d885d45e52b17ad259184948de63df7b1d041f5afcf9f0c9b97f0b4ef498` |
+| `write_once.py` | `16dbbae4096222fe95fb1633a1695e3556b31f7f643b72a16aa64111c769c1bd` |
+| `run_fast_path_planned_v1.py` | `3e8741cc2701aa89eda9a94594a98fc3316fab0914c8e08dc6d6d0967f1944df` |
+| `FAST_PATH_HARD_JOBS_V1_PLAN.md` | `51ea61289d06b139da5c24fa88534e676831ad977d23e81a3292f87a1fb0a68b` |
+
+Amendment before any V6 text was kept: generation stopped at `menu_check`
+after three `OPENROUTER_RESPONSE_INVALID` replies. The raw reply showed why:
+the writer now reasons before answering and ran out of its 8,192-token limit
+with no text. `make_bench_v6_prose.py` now allows 32,000 tokens and 600 s
+per call and saves each finished shape to a `.partial` file so a failure
+loses nothing. The four shapes received before the stop were never read and
+were discarded. The prompt is unchanged. New hash: `bdb51a320dc06bd1b32c1db58bb0281bb5df70db947286a6eceb6f17330da2ba`.
+
+---
+
+## 2026-11-18 — Hard jobs V1: texts hand-checked; runs frozen
+
+V6 texts generated (336) and hand-checked before any model read them: 13
+excluded (two-allergen dishes), 4 borderline kept. Runs frozen in
+`FAST_PATH_HARD_JOBS_V1_PLAN.md`. Credit at the freeze: about $17.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `write_once.py` | `16dbbae4096222fe95fb1633a1695e3556b31f7f643b72a16aa64111c769c1bd` |
+| `run_fast_path_planned_v1.py` | `3e8741cc2701aa89eda9a94594a98fc3316fab0914c8e08dc6d6d0967f1944df` |
+| `analyze_write_once_v1.py` | `8db4c3af8d0cac541af6dcc8806b56da042e2d440e7fbfe9480051be27ed1cfc` |
+| `config_fast_path.json` | `2b94990b93115c29f80ca8035518f396d186dba1a8d353b2546d56d55c599577` |
+| `fast_path.py` | `753fef2c26534cabd0f6efbc7a2da0baf64b0ba3e2ac2572e2cd4217e2886caa` |
+| `planner.py` | `b1a43bc1efee80936362e291cd31369d039c948ead3b1acbd9deb66fc4cf8e2d` |
+| `pipeline.py` | `fecc96aee7349fbf2229dad47207c7467a76c884fec281dd596d35185f528e83` |
+| `fast_path_planned_bench_v6.py` | `c4250db625cdce4dbd385314163ec0fcfc096666c27cba5bc8c67f61159f196d` |
+| `fast_path_planned_bench_v6_prose.json` | `7e0ada753a1f1bbf589739d9fec3a640e81d2ec2eacb6a698f18a8c8a51ca1cb` |
+| `fast_path_ceiling_v6.py` | `20fda45f20174a57dc9e3cbfd15130a6d8a8601054a9fec4f215e59d14a24084` |
+| `FAST_PATH_HARD_JOBS_V1_PLAN.md` | `1ac6a9fa516e5b9b69dfe8a4c2f7e91dae579a501e4b5fc417185a13933e72ea` |
+
+---
+
+## 2026-11-18 — Hard jobs V1 run A result (prospective)
+
+Label `hard_v1_primary`: V6 jobs (8 shapes, 20 each, about 7.4 readings per
+job), arms R, C, D, P, drained. 30,807 provider calls, 208 invalid responses.
+**Cost about $12.90, against an estimate of $6** (arm C: 18,178 calls and
+8.4 million tokens). Run B is not started; the owner is asked first.
+
+| Arm | Correct | Median ms | 90th pct ms | Calls |
+|---|---:|---:|---:|---:|
+| R | 143/160 | 2245 | 3202 | 800 |
+| C | 108/160 | 2891 | 19741 | 18,178 |
+| D | 140/160 | 1806 | 3130 | 5,895 |
+| P | 143/160 | 2492 | 3941 | 5,934 |
+
+**Primary decision: NOT SUPPORTED.** P/R 1.110 (1.017 to 1.195): slower than
+the race. P minus R 0.000 (-0.038 to +0.038): the correctness bound also fails.
+
+- **The planning router did not win where it was expected to: it did worst.**
+  C against P: correctness -0.219 (-0.388 to -0.075), time 1.16 (0.93 to
+  5.56), with three times P's calls. Its plans were wrong on most jobs of
+  `applicant_screen` (6/20), `expense_lines` (9/20) and `review_digest`
+  (16/20), and its unpromoted steps gave 12 to 18 s medians on three shapes.
+- **Why write-once lost time here:** each reading of each item is its own
+  race, run in parallel, so a job waits for the slowest of about seven races;
+  the whole-task race waits for one. With one reading per job (V3 to V5) this
+  did not arise. P was 1.38 times the ceiling's time even though both read
+  per item: P also waited on the race before adoption and on program checks.
+- Write-once adopted programs for 7 of 8 shapes (job index 2 to 4);
+  `expense_lines` had both programs rejected on the trial and ran on the race
+  throughout. 117 program-served jobs, 106 correct; most wrong answers were in
+  `incident_log`, which every arm found hard (R 7/20, D 8/20, P 8/20, C 6/20):
+  one misread severity among about seven notes flips the escalation rule.
+- Probes ran only where some input is not read (3 shapes); none failed.
+
+Reading: on jobs with many readings per job, writing the job once keeps its
+accuracy but loses its speed advantage, because per-item reading races add a
+max-of-N wait. Step-by-step planning does not help; it is the least accurate
+and by far the most expensive arm. Batching a job's readings into one call is
+the obvious next fix.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_hard_v1_primary.jsonl` | `8b772f509b9f5866205a91a603c4bb844b6e041b1a9ba03cd514fdcccd7634fc` |
+| `fast_path_hard_v1_primary_analysis.json` | `8399c67bbcff543a6e23842cee47474e100fc8055cb7d90076834b4d2cb3f5ac` |
+
+---
+
+## 2026-11-20 — Reading fixes for many-reading jobs (no provider calls)
+
+At the owner's request, the three open items from the hard-jobs result, all
+opt-in settings of `WriteOnceRouter` (defaults unchanged), tested with fake
+models only:
+
+- `batch_readings`: a reading over a list is one race whose answer is a list
+  of labels; an answer of the wrong length or with an unknown label is not
+  used and the race waits for the next. Aim: remove the wait for the slowest
+  of about seven per-item races.
+- `uncertainty_gate`: readings and whole-task answers wait for a second valid
+  answer and are flagged `uncertain` when the two differ (or only one comes).
+  The answer is still returned; the flag goes with it.
+- `adaptive_width` (`{"width": 2, "after": 5}`): after five races of a reading
+  in which every valid answer agreed, race only the two models that won it
+  most often; any disagreement restores the full roster. Idea from the SAGE
+  preprint as summarised in the RAG survey the owner shared; not verified
+  against the paper.
+
+The runner gains arm B (`--fixes`: write once with probes plus all three) and
+records each answer's `uncertain` flag; the analysis reports B against R and
+P and accuracy of flagged against unflagged answers. Pull requests opened for
+both repositories (Adaptive_Router #19, evolab #1). Full suite passed (618
+tests).
+
+---
+
+## 2026-11-20 — Reading fixes V1 frozen
+
+Plan: `FAST_PATH_READING_FIXES_V1_PLAN.md`. Credit at the freeze: about $14.20.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `write_once.py` | `a131c3afe9eb3407cc67f14915ab0d1920f11fee86542ae66072d64c0bab4ba1` |
+| `run_fast_path_planned_v1.py` | `cb5052f891bba36b1e1ae7b2e75593102d0b16807204bfe4ad455c2278a274a1` |
+| `analyze_write_once_v1.py` | `5db4340d3b6a9b29ace42df11fed5e25c78b036c5e984314d2f0db6358f82f2a` |
+| `config_fast_path.json` | `2b94990b93115c29f80ca8035518f396d186dba1a8d353b2546d56d55c599577` |
+| `fast_path.py` | `753fef2c26534cabd0f6efbc7a2da0baf64b0ba3e2ac2572e2cd4217e2886caa` |
+| `fast_path_planned_bench_v6.py` | `c4250db625cdce4dbd385314163ec0fcfc096666c27cba5bc8c67f61159f196d` |
+| `fast_path_planned_bench_v6_prose.json` | `7e0ada753a1f1bbf589739d9fec3a640e81d2ec2eacb6a698f18a8c8a51ca1cb` |
+| `FAST_PATH_READING_FIXES_V1_PLAN.md` | `2b19740dfc253faf71b3e7480b2e8736d1a95f788d1146d37fec5382d1ed153d` |
+
+---
+
+## 2026-11-20 — Reading fixes V1 result (descriptive)
+
+Label `reading_fixes_v1`: V6 hard jobs (8 shapes, 20 each), arms R, P, B,
+drained. 7,502 provider calls, 10 invalid responses. Cost about $2.97
+(estimate $6).
+
+| Arm | Correct | Median ms | 90th pct ms | Calls | Prompt tokens | Completion tokens |
+|---|---:|---:|---:|---:|---:|---:|
+| R | 144/160 | 2261 | 3030 | 800 | 413,521 | 448,822 |
+| P | 147/160 | 2595 | 4223 | 5,862 | 1,335,069 | 623,493 |
+| B | 138/160 | 2289 | 3564 | 840 | 359,045 | 311,282 |
+
+- **Speed and calls:** B used 840 calls against P's 5,862 (a seventh) and
+  cut P's time to 0.88 (0.73 to 1.10), but was no faster than the race: B/R
+  1.01 (0.79 to 1.27). The speed advantage is not restored.
+- **Accuracy fell:** B minus R -0.038 (-0.088 to -0.006); B minus P -0.056
+  (-0.156 to +0.019). Most of the loss is `incident_log` (B 4/20, P 11/20,
+  R 8/20) and `expense_lines` (B 17, P 20): reading all items in one call,
+  or on two models, reads severities less well than racing each item. This run
+  cannot separate batching from the narrower race.
+- **The uncertainty flag works:** 17 of B's answers were flagged and only 3
+  of those were right (18%); unflagged answers were right 135 of 143 times
+  (94%). The flag caught 14 of B's 22 wrong answers (64%).
+- Programs adopted: B 8 of 8 shapes (one invalid first program); P 7 of 8
+  (`menu_check` rejected twice).
+
+Reading: batching and narrow races make write-once cheap on many-reading jobs
+but cost accuracy and do not beat the race on time. The uncertainty gate is
+the useful part: it separates answers that are almost always right from ones
+that are mostly wrong.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_reading_fixes_v1.jsonl` | `9fd275219631ea37ee68b7b201614594ca8d53c955d37822218df9c67cbe2e4c` |
+| `fast_path_reading_fixes_v1_analysis.json` | `4025ba86ccc29d08dade79070043e185b7a8a6ab7ac552b8c3e7ebdf4432782a` |
+
+---
+
+## 2026-11-21 — Real task V1 frozen: the owner's bank transactions
+
+First run on real work. Plan: `REAL_BANK_V1_PLAN.md`. The export itself is not
+committed; its SHA-256 is recorded so the run can be tied to it:
+`07f1d2eb3aef7abcc02ad7010b629017774d85aa4cab5884770f2eb1b08b8e46`. `.gitignore` gains `real_tasks/private/`.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `real_bank_categorise_v1.py` | `984df867d1755491cb1649d30ba5fc837ec181d0378aea1a03df655792e80e39` |
+| `REAL_BANK_V1_PLAN.md` | `8fa76cec0e441d195b3b9e05d1e7a944008713932c25f41b13348b9ed4baea00` |
+| `fast_path.py` | `753fef2c26534cabd0f6efbc7a2da0baf64b0ba3e2ac2572e2cd4217e2886caa` |
+| `config_fast_path.json` | `2b94990b93115c29f80ca8035518f396d186dba1a8d353b2546d56d55c599577` |
+
+---
+
+## 2026-11-21 — Real task V1 result: bank transaction categories
+
+475 provider calls, all titles answered. Cost about $0.25. Test: 1,934
+transactions from 2026-03-01, scored against Monzo's own category.
+
+| Arm | Correct | Accuracy | Transactions needing a model | Mean time per transaction |
+|---|---:|---:|---:|---:|
+| E. Code only (training table, unseen to `general`) | 1,636 | 84.6% | 0 | 0 ms |
+| M. Models only (race per merchant) | 1,230 | 63.6% | 1,934 | 1,070 ms |
+| H. Hybrid (table, unseen merchants to the race) | 1,836 | 94.9% | 303 | 200 ms |
+| H2. Hybrid that keeps learning | 1,820 | 94.1% | 59 | 39 ms |
+
+- **Code first, models for the new, wins**: the hybrids beat code alone by
+  about 10 points and models alone by about 31, and need a model for 3% (H2)
+  to 16% (H) of transactions.
+- Models alone are poor here because the categories follow Monzo's and the
+  owner's filing conventions, which a merchant's name does not reveal: the
+  largest disagreements were entertainment read as transport (241
+  transactions), eating out as general (197) and entertainment as eating out
+  (123). On merchants unseen in training the race was right for 208 of 303
+  transactions (69%), still far better than the code-only fallback.
+- The racers all agreed on 68 of the 95 merchants. Median race 1.2 s.
+- Prediction held except the order of the hybrids: H2 was 16 transactions
+  behind H, because a merchant's first Monzo category, which H2 then reuses,
+  was sometimes not its usual one.
+
+Only aggregate figures are committed (`real_bank_v1_summary.json`, no
+merchant names); per-merchant detail is in the git-ignored
+`real_tasks/private/`.
+
+| Artifact | SHA-256 |
+|---|---|
+| `real_bank_v1_summary.json` | `91eb2e26f00fc2ab3e06c46cdfd0c2769c35f4f8d863fd2219a8fe0fb94c6e8c` |

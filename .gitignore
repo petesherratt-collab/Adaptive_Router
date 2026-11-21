@@ -8,3 +8,5 @@ runs.jsonl
 fast_path_store/
 fast_path_runs.jsonl
 fast_path_jobs.jsonl
+fast_path_programs/
+real_tasks/private/

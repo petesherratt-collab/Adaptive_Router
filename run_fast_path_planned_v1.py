@@ -33,14 +33,16 @@ import remote
 from run_fast_path_jobs_v1 import direct, same
 from run_fast_path_timing_v1 import BASELINE_MODEL, ProviderMonitor, parse_override, sha256_file
 import sandbox
+import write_once
 
 
 ROOT = Path(__file__).resolve().parent
 ARMS = ("A", "R", "C")
+READING_FIXES = {"batch_readings": True, "uncertainty_gate": True, "adaptive_width": {"width": 2, "after": 5}}
 ARM_ORDER_SEED = 20261117
 HASHED_FILES = (
     "config_fast_path.json", "fast_path.py", "pipeline.py", "planner.py", "sandbox.py", "remote.py",
-    "run_fast_path_planned_v1.py", "analyze_fast_path_planned_v1.py",
+    "run_fast_path_planned_v1.py", "analyze_fast_path_planned_v1.py", "write_once.py",
 )
 
 
@@ -51,54 +53,111 @@ def load_bench(path):
     return module
 
 
+PURPOSES = (
+    ("Carry out the task below", "whole_task"),
+    ("Work out what the function described below returns", "step_answer"),
+    ("Plan how to compute", "plan"),
+    ("Write a Python function", "synthesis"),
+    ("List boundary and edge-case inputs", "probe_proposal"),
+)
+
+
+def purpose_of(prompt):
+    """Name what a provider call was for, from the start of its prompt.
+    ``step_answer`` covers step races and probe answers alike."""
+    for prefix, name in PURPOSES:
+        if prompt.startswith(prefix):
+            return name
+    return "other"
+
+
 class UsageMeter:
-    """Wrap a remote call and add up calls and tokens, background work included."""
+    """Wrap a remote call and add up calls and tokens, background work
+    included, in total and by purpose."""
 
     def __init__(self, remote_fn):
         self.remote_fn = remote_fn
         self.calls = self.prompt_tokens = self.completion_tokens = 0
+        self.by_purpose = {}
         self._lock = threading.Lock()
 
     def __call__(self, prompt, config, api_key):
         result = self.remote_fn(prompt, config, api_key)
+        prompt_tokens = getattr(result, "prompt_tokens", None) or 0
+        completion_tokens = getattr(result, "completion_tokens", None) or 0
         with self._lock:
             self.calls += 1
-            self.prompt_tokens += getattr(result, "prompt_tokens", None) or 0
-            self.completion_tokens += getattr(result, "completion_tokens", None) or 0
+            self.prompt_tokens += prompt_tokens
+            self.completion_tokens += completion_tokens
+            entry = self.by_purpose.setdefault(
+                purpose_of(prompt), {"calls": 0, "prompt_tokens": 0, "completion_tokens": 0})
+            entry["calls"] += 1
+            entry["prompt_tokens"] += prompt_tokens
+            entry["completion_tokens"] += completion_tokens
         return result
 
     def report(self):
         return {"calls": self.calls, "prompt_tokens": self.prompt_tokens,
-                "completion_tokens": self.completion_tokens}
+                "completion_tokens": self.completion_tokens,
+                "by_purpose": {k: dict(v) for k, v in sorted(self.by_purpose.items())}}
 
 
 def ceiling_answer(shape, reading, inputs, router):
     """Arm D: the reading step raced exactly as arm C races its judgement
-    steps, then the benchmark's own reference code for everything else.
+    steps, then the benchmark's own reference code for everything else. With
+    ``item_field`` the reading is made on every item of a list input, each
+    raced in parallel, giving a list of labels.
 
     Returns ``(answered, value, label)``. A label the reference code cannot use
     makes the job wrong, not unanswered.
     """
-    result = router.handle(
-        {"schema_version": fast_path.SCHEMA_VERSION,
-         "task": {"spec": reading["spec"], "signature": reading["signature"]},
-         "args": [inputs[reading["field"]]]},
-        learn=False,
-    )
-    if result["route"] == "none":
-        return False, None, None
-    label = result["value"]
+    def read(text):
+        return router.handle(
+            {"schema_version": fast_path.SCHEMA_VERSION,
+             "task": {"spec": reading["spec"], "signature": reading["signature"]},
+             "args": [text]},
+            learn=False,
+        )
+    if reading.get("item_field"):
+        texts = [item[reading["item_field"]] for item in inputs[reading["field"]]]
+        with ThreadPoolExecutor(max(1, len(texts))) as pool:
+            results = list(pool.map(read, texts))
+        if any(r["route"] == "none" for r in results):
+            return False, None, None
+        label = [r["value"] for r in results]
+    else:
+        result = read(inputs[reading["field"]])
+        if result["route"] == "none":
+            return False, None, None
+        label = result["value"]
     try:
         return True, shape["reference"](inputs, {reading["label"]: label}), label
     except Exception:
         return True, None, label
 
 
+def code_only_answer(shape, rules, inputs):
+    """Arm E: no model at all. The reading step is the hand-written keyword
+    rule, everything else the benchmark's reference code.
+
+    Returns ``(value, label)``; a rule that raises leaves the job wrong."""
+    field, label_name, _ = shape["reading"]
+    try:
+        label = rules[shape["name"]](inputs[field])
+        return shape["reference"](inputs, {label_name: label}), label
+    except Exception:
+        return None, None
+
+
 def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_key,
-              workdir, should_stop=lambda: False, arrival="drained", ceiling=None):
+              workdir, should_stop=lambda: False, arrival="drained", ceiling=None, code_only=None,
+              only=None, write_arm=False, probes=0, early=False, fixes=False):
     base = Path(workdir) / shape["name"]
-    arms = ARMS + (("D",) if ceiling else ())
-    meters = {arm: UsageMeter(remote_fn) for arm in arms}
+    arms = (ARMS + (("D",) if ceiling else ()) + (("E",) if code_only else ()) + (("W",) if write_arm else ())
+            + (("P",) if probes else ()) + (("Q",) if early else ()) + (("B",) if fixes else ()))
+    if only:
+        arms = tuple(arm for arm in arms if arm in only)
+    meters = {arm: UsageMeter(remote_fn) for arm in ("A", "R", "C", "D", "W", "P", "Q", "B")}
     reading = ceiling[shape["name"]] if ceiling else None
     ceiling_router = fast_path.FastPathRouter(
         {"remote": remote_config, "fast_path": {**settings, "synthesis_enabled": False}},
@@ -112,6 +171,31 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
                                       base / "race_store", base / "race_runs.jsonl",
                                       remote_fn=meters["R"], api_key=api_key)
     planning = planner.PlanningRouter(learning, base / "templates", base / "tasks.jsonl")
+    writer_router = fast_path.FastPathRouter(
+        {"remote": remote_config, "fast_path": {**settings, "synthesis_enabled": False,
+                                                "program_probes": 0, "write_early": False}},
+        base / "write_store", base / "write_runs.jsonl",
+        remote_fn=meters["W"], api_key=api_key) if "W" in arms else None
+    writer = write_once.WriteOnceRouter(writer_router) if writer_router else None
+    prober_router = fast_path.FastPathRouter(
+        {"remote": remote_config, "fast_path": {**settings, "synthesis_enabled": False,
+                                                "program_probes": probes, "write_early": False}},
+        base / "probe_store", base / "probe_runs.jsonl",
+        remote_fn=meters["P"], api_key=api_key) if "P" in arms else None
+    prober = write_once.WriteOnceRouter(prober_router) if prober_router else None
+    early_router = fast_path.FastPathRouter(
+        {"remote": remote_config, "fast_path": {**settings, "synthesis_enabled": False,
+                                                "program_probes": probes, "write_early": True}},
+        base / "early_store", base / "early_runs.jsonl",
+        remote_fn=meters["Q"], api_key=api_key) if "Q" in arms else None
+    early_writer = write_once.WriteOnceRouter(early_router) if early_router else None
+    fixed_router = fast_path.FastPathRouter(
+        {"remote": remote_config, "fast_path": {**settings, "synthesis_enabled": False,
+                                                "program_probes": probes, "write_early": False,
+                                                **READING_FIXES}},
+        base / "fixed_store", base / "fixed_runs.jsonl",
+        remote_fn=meters["B"], api_key=api_key) if "B" in arms else None
+    fixed_writer = write_once.WriteOnceRouter(fixed_router) if fixed_router else None
     order_rng = random.Random(f"{ARM_ORDER_SEED}:{shape['name']}")
     rows = []
     for index, ((inputs, labels), gold) in enumerate(zip(instances, golds)):
@@ -125,6 +209,7 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
             started = time.perf_counter()
             error, model, route, steps = None, None, None, None
             reading_correct = None
+            uncertain = None
             if arm == "A":
                 answered, value, error = direct(prompt, remote_config, settings, meters["A"], api_key)
                 model, route = BASELINE_MODEL, "direct"
@@ -132,6 +217,16 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
                 answered, value, label = ceiling_answer(shape, reading, inputs, ceiling_router)
                 route = "ceiling"
                 reading_correct = answered and label == labels.get(reading["label"])
+            elif arm == "E":
+                value, label = code_only_answer(shape, code_only, inputs)
+                answered, route = True, "code_only"
+                reading_correct = label == labels.get(shape["reading"][1])
+            elif arm in ("W", "P", "Q", "B"):
+                result = {"W": writer, "P": prober, "Q": early_writer, "B": fixed_writer}[arm].handle({"schema_version": planner.SCHEMA_VERSION,
+                                        "description": shape["description"], "inputs": inputs})
+                value, route, model = result["value"], result["route"], result["model"]
+                answered = route != planner.NO_ANSWER
+                uncertain = result.get("uncertain")
             elif arm == "R":
                 model, value = racing.race_prompt(prompt)
                 answered, route = model is not None, "race"
@@ -145,9 +240,9 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
                              for s in result["steps"]]
             answer_ms = (time.perf_counter() - started) * 1000
             background_ms = 0.0
-            if arm == "C" and arrival == "drained":
+            if arm in ("C", "W", "P", "Q", "B") and arrival == "drained":
                 started = time.perf_counter()
-                planning.drain()
+                {"C": planning, "W": writer, "P": prober, "Q": early_writer, "B": fixed_writer}[arm].drain()
                 background_ms = (time.perf_counter() - started) * 1000
             rows.append({
                 "record_type": "job", "shape": shape["name"], "index": index, "arm": arm,
@@ -155,7 +250,7 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
                 "answered": answered, "error": error, "model": model, "route": route,
                 "correct": answered and same(value, expected),
                 "value": value if answered else None, "steps": steps,
-                "reading_correct": reading_correct,
+                "reading_correct": reading_correct, "uncertain": uncertain,
             })
     template = planner.template_key(shape["description"], instances[0][0])
     planning.close()
@@ -163,10 +258,26 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
     learning.close()
     racing.close()
     summary = shape_summary(shape, instances, golds, record, learning)
+    if writer is not None:
+        writer.close()
+        summary["write_once"] = writer.summary(template)
+        writer_router.close()
+    if prober is not None:
+        prober.close()
+        summary["write_once_probed"] = prober.summary(template)
+        prober_router.close()
+    if early_writer is not None:
+        early_writer.close()
+        summary["write_once_early"] = early_writer.summary(template)
+        early_router.close()
+    if fixed_writer is not None:
+        fixed_writer.close()
+        summary["write_once_fixed"] = fixed_writer.summary(template)
+        fixed_router.close()
     if ceiling_router is not None:
         ceiling_router.close()
     summary["jobs_completed"] = len(rows) // len(arms)
-    summary["usage"] = {arm: meter.report() for arm, meter in meters.items()}
+    summary["usage"] = {arm: meter.report() for arm, meter in meters.items() if arm in arms}
     return rows, summary
 
 
@@ -188,6 +299,19 @@ def shape_summary(shape, instances, golds, record, learning):
                 stored = learning.store.get(fast_path.shape_key(step["task"]["spec"],
                                                                 step["task"]["signature"]))
                 entry["promoted"] = bool(stored and stored["function"])
+                if stored:
+                    entry["learning"] = {
+                        "examples": len(stored["examples"]),
+                        "disagreements": stored.get("disagreements", 0),
+                        "example_conflicts": stored.get("example_conflicts", 0),
+                        "probes": stored.get("probes"),
+                        "attempts": [{"outcome": a["outcome"],
+                                      "gate": a.get("gate", {}).get("reason"),
+                                      "passed": a.get("gate", {}).get("passed"),
+                                      "examples": a.get("gate", {}).get("examples"),
+                                      "repair": "repair" in a, "error": a.get("error")}
+                                     for a in stored["synthesis_attempts"]],
+                    }
             plan_steps.append(entry)
     return {
         "record_type": "shape", "shape": shape["name"],
@@ -204,13 +328,15 @@ def shape_summary(shape, instances, golds, record, learning):
 
 
 def execute(shapes, bench, remote_config, settings, remote_fn, api_key, workers, write,
-            monitor=None, arrival="drained", ceiling=None):
+            monitor=None, arrival="drained", ceiling=None, code_only=None, only=None, write_arm=False, probes=0, early=False,
+            fixes=False):
     should_stop = monitor.tripped if monitor is not None else (lambda: False)
 
     def job(shape):
         instances = bench.stream(shape)
         return run_shape(shape, instances, bench.gold(shape, instances), remote_config,
-                         settings, remote_fn, api_key, workdir, should_stop, arrival, ceiling)
+                         settings, remote_fn, api_key, workdir, should_stop, arrival, ceiling,
+                         code_only, only, write_arm, probes, early, fixes)
 
     with tempfile.TemporaryDirectory() as workdir, ThreadPoolExecutor(workers) as pool:
         for rows, summary in pool.map(job, shapes):
@@ -228,6 +354,16 @@ def main():
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--arrival", choices=("drained", "immediate"), default="drained")
     parser.add_argument("--ceiling", help="module of hand-written reading steps; adds arm D")
+    parser.add_argument("--code-only", help="module of keyword reading RULES; adds arm E (no model)")
+    parser.add_argument("--write-once", action="store_true", help="add arm W (write the job once)")
+    parser.add_argument("--probes", type=int, default=0,
+                        help="add arm P: write once, checked also on this many edge-case jobs")
+    parser.add_argument("--early", action="store_true",
+                        help="add arm Q: as P, but the program is written on first sight")
+    parser.add_argument("--fixes", action="store_true",
+                        help="add arm B: as P, with batched readings, the uncertainty gate and adaptive width")
+    parser.add_argument("--arms", help="comma-separated arms to run, e.g. R,D,E,W (default: all)")
+    parser.add_argument("--shapes", help="comma-separated shape names to run (default: all)")
     parser.add_argument("--limit-shapes", type=int)
     parser.add_argument("--limit-jobs", type=int)
     parser.add_argument("--jobs", type=int, help="jobs per shape, drawn from the bench's seeded stream")
@@ -252,7 +388,14 @@ def main():
     override = override or None
     bench = load_bench(args.bench)
     ceiling = load_bench(args.ceiling).READING if args.ceiling else None
+    code_only = load_bench(args.code_only).RULES if args.code_only else None
     shapes = bench.SHAPES[: args.limit_shapes] if args.limit_shapes else bench.SHAPES
+    if args.shapes:
+        wanted = args.shapes.split(",")
+        unknown = set(wanted) - {s["name"] for s in shapes}
+        if unknown:
+            parser.error(f"unknown shapes: {sorted(unknown)}")
+        shapes = [s for s in shapes if s["name"] in wanted]
     if args.jobs:
         full_stream = bench.stream
         bench.stream = lambda shape: full_stream(shape, length=args.jobs)
@@ -276,11 +419,16 @@ def main():
             "arm_order_seed": ARM_ORDER_SEED, "workers": args.workers, "arrival": args.arrival,
             "ceiling": ({"name": Path(args.ceiling).name, "sha256": sha256_file(args.ceiling)}
                         if args.ceiling else None),
+            "arms": args.arms, "write_once": args.write_once, "probes": args.probes, "early": args.early, "fixes": args.fixes,
+            "code_only": ({"name": Path(args.code_only).name, "sha256": sha256_file(args.code_only)}
+                          if args.code_only else None),
             "files": {name: sha256_file(ROOT / name) for name in HASHED_FILES},
         })
         monitor = ProviderMonitor(remote.generate)
         status = execute(shapes, bench, remote_config, settings, monitor, api_key,
-                         args.workers, write, monitor, args.arrival, ceiling)
+                         args.workers, write, monitor, args.arrival, ceiling, code_only,
+                         tuple(args.arms.split(",")) if args.arms else None, args.write_once, args.probes,
+                         args.early, args.fixes)
         write({"record_type": "footer", "status": status, "provider": monitor.report()})
     if status == "COMPLETED":
         partial.rename(output)

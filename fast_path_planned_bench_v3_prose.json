@@ -1,0 +1,461 @@
+{
+ "writer_model": "mistralai/mistral-large-4-0",
+ "per_label": 12,
+ "prompts": {
+  "ticket_queue": "Write short messages for a test set. The messages are emails sent to a software company's support desk.\n\nWrite 12 different messages for each of these labels:\n- urgent: the problem needs attention straight away\n- routine: the request can wait its turn in the queue\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"urgent\", \"routine\", each mapping to an array of 12 strings.",
+  "room_bookings": "Write short messages for a test set. The messages are messages from employees asking to book a meeting room, in which what the meeting is for shows which department the writer works in.\n\nWrite 12 different messages for each of these labels:\n- sales: the writer works in sales\n- engineering: the writer works in engineering\n- finance: the writer works in finance\n- legal: the writer works in the legal team\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"sales\", \"engineering\", \"finance\", \"legal\", each mapping to an array of 12 strings.",
+  "recipe_scaling": "Write short messages for a test set. The messages are notes from dinner guests to the host about what they eat.\n\nWrite 12 different messages for each of these labels:\n- vegan: the guest eats no animal products at all\n- vegetarian: the guest eats no meat or fish but does eat dairy\n- any: the guest eats everything, meat included\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"vegan\", \"vegetarian\", \"any\", each mapping to an array of 12 strings.",
+  "fleet_fuel": "Write short messages for a test set. The messages are end-of-shift reports from delivery van drivers about their van.\n\nWrite 12 different messages for each of these labels:\n- tyres: a problem with the tyres\n- brakes: a problem with the brakes\n- engine: a problem with the engine\n- none: no problem with the van\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"tyres\", \"brakes\", \"engine\", \"none\", each mapping to an array of 12 strings.",
+  "library_loans": "Write short messages for a test set. The messages are messages from library members to the library.\n\nWrite 12 different messages for each of these labels:\n- renew: the member wants to renew a loan\n- return: the member wants to return books\n- reserve: the member wants to reserve a book\n- complain: the member is making a complaint\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"renew\", \"return\", \"reserve\", \"complain\", each mapping to an array of 12 strings.",
+  "sensor_alerts": "Write short messages for a test set. The messages are notes from technicians about a sensor at one of a company's four sites, called north, south, east and west.\n\nWrite 12 different messages for each of these labels:\n- north: the note is about the north site\n- south: the note is about the south site\n- east: the note is about the east site\n- west: the note is about the west site\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"north\", \"south\", \"east\", \"west\", each mapping to an array of 12 strings.",
+  "invoice_vat": "Write short messages for a test set. The messages are notes attached to orders, from which the delivery country can be told.\n\nWrite 12 different messages for each of these labels:\n- UK: delivered to the United Kingdom\n- Ireland: delivered to Ireland\n- Spain: delivered to Spain\n- Italy: delivered to Italy\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"UK\", \"Ireland\", \"Spain\", \"Italy\", each mapping to an array of 12 strings.",
+  "event_rsvps": "Write short messages for a test set. The messages are notes sent with invitations to an event.\n\nWrite 12 different messages for each of these labels:\n- formal: the event is formal\n- casual: the event is casual\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"formal\", \"casual\", each mapping to an array of 12 strings."
+ },
+ "texts": {
+  "ticket_queue": {
+   "urgent": [
+    "Our production server is completely down and we have a client demo in two hours. We need this resolved immediately or we lose the contract.",
+    "We've detected a security breach in our system and customer data may be exposed. Please escalate this to your security team right now.",
+    "The payment processing is failing for all transactions and we're losing thousands per minute. This needs immediate attention.",
+    "Our entire team is locked out of the admin panel and we can't deploy the release that's due tonight. Please help us ASAP.",
+    "Critical bug: the app crashes every time we try to save large files. Our deadline is this afternoon and we're completely blocked.",
+    "We're getting 500 errors on every API call since this morning. Our integration is down and our customers are complaining. We need this looked at right away.",
+    "Data loss incident: our database backups failed and we need to restore from yesterday immediately. This is time-sensitive.",
+    "The login system is down for all users in Europe and our support lines are flooded. We need this fixed within the hour.",
+    "We have a compliance audit tomorrow and the audit logs feature is broken. This is a legal requirement so it can't wait.",
+    "Our staging environment is showing signs of a breach and we need to isolate it now. Please respond immediately.",
+    "The mobile app is crashing on launch for 100% of iOS users after your last update. We need a hotfix deployed in the next 30 minutes.",
+    "Our CEO is presenting to investors in 3 hours and the dashboard won't load. This is business-critical and needs instant resolution."
+   ],
+   "routine": [
+    "Hi there, just wondering if there's any update on the feature request I submitted last month about dark mode? No rush at all.",
+    "Could you let me know when you get a chance how to change the notification settings in my account? Thanks!",
+    "I'm writing to ask about your pricing plans for teams of 50+ people. Whenever you have time to reply is fine.",
+    "Just a quick question about the API documentation - does the v2 endpoint support webhooks? Take your time responding.",
+    "We'd love to see an integration with Slack in a future update. It's not urgent, just a suggestion for later.",
+    "Hi, I noticed a small typo on the login page. Not a big deal, but thought you might want to fix it when convenient.",
+    "Can you explain how the billing cycle works for annual subscriptions? I'm just curious for planning purposes.",
+    "I'm having trouble finding the export button in the new UI. Could someone point me in the right direction when they have a moment?",
+    "Just wanted to say thanks for the great service so far! Also, do you offer any training webinars for new features?",
+    "My colleague mentioned he couldn't find the settings page. Could you send him a link to the help docs when you get a chance?",
+    "We're considering upgrading our plan next quarter and wanted to know what the migration process looks like. No hurry.",
+    "Quick question: does your software support CSV imports with more than 10,000 rows? Just planning ahead for next month."
+   ]
+  },
+  "room_bookings": {
+   "sales": [
+    "Hi, can I book the conference room for tomorrow at 2pm? Need to prep for the Acme Corp pitch with the team.",
+    "Booking a room for Thursday 10-12 to go over our Q3 pipeline numbers and assign territories.",
+    "Could you reserve Boardroom B for my client demo on Friday afternoon? Showing them the new CRM features.",
+    "Need a meeting room for a contract negotiation with our biggest prospect next Tuesday morning.",
+    "Can I get the huddle room for 3pm? Quick sync with the sales team on lead qualification strategies.",
+    "Please book a room for our quarterly business review with the Johnson account on Monday.",
+    "Hi, I need a space for a win/loss analysis session with the team this Thursday at 2.",
+    "Booking a room for Friday 1-3pm to discuss pricing strategy for the new product launch.",
+    "Need a quiet room for a video call with a prospect in Dubai on Wednesday afternoon.",
+    "Could you set up the meeting room for our sales kickoff planning session next week?",
+    "Hi, can I book a room for 4pm today? Going over account plans with the enterprise team.",
+    "Can we reserve a room for a commission structure review and Q4 target setting on Thursday?"
+   ],
+   "engineering": [
+    "Can I book the war room for sprint planning tomorrow at 10? The whole dev team needs to be there.",
+    "Need a room for a code review session on the new payment module, Thursday 2-4pm.",
+    "Please reserve a conference room for our architecture review of the microservices migration on Friday.",
+    "Hi, booking a room for bug triage on the release candidate tomorrow morning at 9.",
+    "Can I get a meeting space for a system design discussion about scaling the database next Tuesday?",
+    "Need the boardroom for a post-mortem on last week's outage, Wednesday at 3pm.",
+    "Could you book a room for our deployment planning meeting on Thursday afternoon?",
+    "Hi, can I reserve a room for an API integration sync with the backend team tomorrow at 2?",
+    "Booking a space for a technical debt review session with engineering leads on Friday 10-12.",
+    "Need a room for a technical spec review of the new dashboard API, Monday at 11am.",
+    "Can we get the conference room for an infrastructure scaling discussion next Wednesday?",
+    "Please book a huddle room for a quick standup with the mobile team at 4pm today."
+   ],
+   "finance": [
+    "Can I book a room for our quarterly budget review with department heads tomorrow at 2pm?",
+    "Need a conference room for month-end close procedures on Friday, 9am-12pm.",
+    "Hi, please reserve a meeting space for audit preparation with the external auditors next Tuesday.",
+    "Could you book the boardroom for our forecasting meeting on Q4 projections, Thursday at 3.",
+    "Can I get a room for an expense report review session with the accounting team tomorrow morning?",
+    "Booking a space for payroll processing discussion on Monday at 10am.",
+    "Need a quiet room for a capital expenditure analysis presentation to the CFO on Wednesday.",
+    "Hi, can I reserve a room for tax planning with our advisors next Friday afternoon?",
+    "Please book a conference room for the month-end payment run approval, Thursday 2-4pm.",
+    "Can we get a meeting room for financial reporting prep on the new quarter, Tuesday at 11?",
+    "Need a space for a cost reduction analysis meeting with operations on Friday.",
+    "Could you set up a room for our reconciliation review session tomorrow at 3pm?"
+   ],
+   "legal": [
+    "Can I book the conference room for a review of the patent licensing terms tomorrow at 2pm?",
+    "Need a room for compliance training on the new data regulations, Thursday 10-12.",
+    "Hi, please reserve a meeting space for litigation strategy discussion with outside counsel on Friday.",
+    "Could you book a room for IP and patent review with the R&D team next Tuesday morning?",
+    "Can I get the boardroom for a review of the acquisition agreement on Wednesday at 3pm?",
+    "Booking a space for a review of our updated privacy policy, Monday at 11.",
+    "Need a quiet room for regulatory filing review with the compliance officer tomorrow.",
+    "Hi, can I reserve a room for NDA negotiations with the acquisition target on Thursday?",
+    "Please book a conference room for data privacy and GDPR compliance review next Friday.",
+    "Can we get a meeting room for a review of the discrimination claim on Tuesday afternoon?",
+    "Need a space for terms of service update review with the product team, Wednesday at 2.",
+    "Could you set up a room for a legal risk assessment meeting tomorrow at 4pm?"
+   ]
+  },
+  "recipe_scaling": {
+   "vegan": [
+    "Thanks for having me over! Just a heads-up that I'm fully vegan, so no dairy, eggs, or honey—just plants, please.",
+    "I don't eat anything from animals, so please skip the butter, cheese, and eggs in my portion.",
+    "Plant-based only here: no meat, fish, dairy, or eggs. I'm happy with whatever veggies you're serving.",
+    "I'm strictly vegan, meaning no animal products at all, including milk and honey.",
+    "Heads up: I avoid all animal-derived ingredients, so no cream, cheese, or eggs in my dish.",
+    "Just so you know, I'm vegan—no meat, dairy, eggs, or anything else that comes from an animal.",
+    "I eat only plant-based foods, so please leave out the butter, milk, and eggs.",
+    "No animal products for me, please—that includes dairy, eggs, and honey.",
+    "I'm vegan, so my plate should be free of meat, fish, dairy, eggs, and gelatin.",
+    "Thanks for the invite! I don't consume any animal products, so veggies and grains are perfect.",
+    "Strictly no dairy, eggs, meat, or fish—just plants for me tonight.",
+    "I'm fully plant-based: no animal flesh, no dairy, no eggs, no honey."
+   ],
+   "vegetarian": [
+    "I don't eat meat or fish, but I'm totally fine with cheese, milk, and eggs.",
+    "Vegetarian here: no chicken, beef, or seafood, but I love eggs and cheese.",
+    "Just a note that I skip all meat and fish, but dairy and eggs are more than welcome.",
+    "I'm vegetarian, so no meat or fish for me, but please feel free to include cheese or cream.",
+    "No flesh of any kind, but I do eat dairy products like milk, butter, and cheese.",
+    "I avoid meat and seafood entirely, but eggs and dairy are fine with me.",
+    "Vegetarian diet here—no meat, poultry, or fish, but I'm good with eggs and cheese.",
+    "I don't eat any meat or fish, but I'm not vegan, so dairy is okay.",
+    "Please no meat or fish in my portion, but I'm happy with eggs, milk, and cheese.",
+    "I'm a lacto-ovo vegetarian: no meat or fish, but I eat eggs and dairy.",
+    "No steak or salmon for me, but I'll gladly have the cheesy pasta or omelet.",
+    "I skip all meat and fish, but I'm not opposed to butter, cream, or eggs."
+   ],
+   "any": [
+    "I eat everything—meat, fish, dairy, you name it. No restrictions here!",
+    "Just so you know, I'm happy with any protein: chicken, beef, pork, fish, whatever you're serving.",
+    "No allergies or restrictions—I'll eat whatever you put on my plate, meat included.",
+    "I'm an omnivore, so feel free to include meat, fish, and dairy in my meal.",
+    "Don't worry about accommodating me—I eat literally everything, including steak and seafood.",
+    "I have no dietary preferences, so meat, poultry, and fish are all fine with me.",
+    "I'll eat anything you serve, from burgers to sushi to cheesy casseroles.",
+    "No restrictions at all—I'm good with meat, dairy, eggs, and fish.",
+    "Feel free to serve me whatever; I eat meat and all animal products without issue.",
+    "I'm not picky—bring on the meatballs, the bacon, the shrimp, whatever's cooking.",
+    "I eat everything, so don't hold back on the meat or dairy for my sake.",
+    "Omnivore here: I enjoy meat, fish, poultry, and all dairy products."
+   ]
+  },
+  "fleet_fuel": {
+   "tyres": [
+    "Front left tyre is completely flat this morning, looks like a slow puncture overnight. Had to put the spare on to finish the route.",
+    "Tyre pressure warning light came on halfway through the shift. Checked them at the depot and the rear right is way below 30 psi.",
+    "Heard a loud bang from the back around 2pm - blew a tyre on the motorway. Replaced it with the spare but the tread on the others looks pretty worn too.",
+    "Van's pulling to the left pretty hard, I think the front tyre is bald on the inside edge.",
+    "Spare tyre is missing from under the back - noticed when I checked the pressures. Also the front passenger tyre has a big nail in it.",
+    "Tyres are squealing when I go round corners, sounds like they're slipping on the wet.",
+    "One of the rear tyres is bulging on the sidewall, definitely not safe. Parked it up at the depot.",
+    "Had to pump up all four tyres at the end of shift, they were all low. Probably the cold but worth checking for leaks.",
+    "Front driver side tyre is down to the wires on the outside edge. Needs replacing before tomorrow.",
+    "Van felt wobbly at high speeds today - back left tyre has a slow leak. Topped it up but it'll need a new valve.",
+    "Tread is uneven, more worn on the outside of both front tyres. Rubber's getting thin.",
+    "Picked up a screw in the rear tyre on the industrial estate. Holding air for now but flagged it in the logbook."
+   ],
+   "brakes": [
+    "Brakes are squealing really loudly when I slow down, sounds like metal on metal. Need new pads ASAP.",
+    "Brake pedal feels spongy and goes almost to the floor before the van stops. Had to leave extra space all day.",
+    "Grinding noise from the front wheels every time I brake. Discs are probably scored.",
+    "Handbrake isn't holding on hills anymore, van rolls back even when engaged.",
+    "Brakes smell like burning after the last few stops. Think a caliper is sticking.",
+    "ABS warning light came on this morning and stayed on all shift. Brakes still work but not sure about the anti-lock.",
+    "Had to brake hard for a pedestrian and the pedal pulsed like crazy. Pads are worn thin.",
+    "Brake fluid is below the minimum line. Topped it up but it needs a proper service.",
+    "Rear brakes are grabbing unevenly, van pulls to the right when I brake.",
+    "Brake lights aren't working on the back - bulbs are fine so probably a switch.",
+    "Pedal is really stiff this evening, took a lot of effort to stop at the lights.",
+    "Heard a clunk from the front when braking at low speed. Something loose in the brake assembly."
+   ],
+   "engine": [
+    "Engine warning light came on around lunchtime and the van's running rough. Lost power going up hills.",
+    "Van wouldn't start this morning, just clicked. Jump started it but it's misfiring now.",
+    "Engine overheated - temperature gauge went into the red on the way back. Had to pull over and let it cool.",
+    "Loud knocking noise from the engine bay when accelerating. Sounds serious.",
+    "Check engine light is flashing and there's a strong smell of petrol. Running rich I think.",
+    "Engine stalled three times at traffic lights today. Starts again fine but it's not reliable.",
+    "Oil pressure warning light came on at the end of the route. Engine sounds rattly at idle too.",
+    "High-pitched whining noise from the engine when I rev it. Could be the turbo.",
+    "Engine cuts out when I come to a stop, revs drop to zero. Had to keep my foot on the accelerator at lights.",
+    "Smoke coming from under the bonnet when I parked up - smells like burning oil from the engine.",
+    "Engine is vibrating a lot more than usual, whole van shakes at idle. Might be a dodgy mount.",
+    "Won't go above 50mph - engine won't rev past 3000rpm. Feels like limp mode."
+   ],
+   "none": [
+    "All good today, van ran perfectly. No issues to report.",
+    "Shift went fine. Van started first time and drove smooth all day.",
+    "Nothing to flag - everything's working as it should.",
+    "Van was great today. No warning lights, no strange noises.",
+    "All clear from my end. Filled up with diesel and she's ready for tomorrow.",
+    "No problems at all with the van today.",
+    "Smooth shift, van performed well. See you tomorrow.",
+    "Everything's in order. Just the usual wear and tear but nothing broken.",
+    "Van drove nicely all day, no mechanical faults.",
+    "All systems normal. Handing over the keys, she's good to go.",
+    "No faults to report. Clean bill of health from me.",
+    "Did my rounds without a hitch. Van's in good shape."
+   ]
+  },
+  "library_loans": {
+   "renew": [
+    "Hi, I'd like to renew the two novels I have checked out if possible. Thanks!",
+    "Could you please extend the loan on my copy of \"The Hobbit\"? It's due tomorrow.",
+    "I'm not finished with my research book yet—can I renew it online or do I need to come in?",
+    "Please renew my library card loans for another two weeks. Much appreciated.",
+    "Is it possible to renew the DVD I borrowed last week? I still need it for my project.",
+    "I'd like to renew my items, please. The due date is today and I need more time.",
+    "Can I get an extension on the three books currently on my account?",
+    "My daughter still needs the picture books we borrowed; can we renew them?",
+    "Requesting a renewal for the biography I checked out—hope that's okay.",
+    "Please renew the magazine loan if there are no holds on it.",
+    "I forgot to renew before the due date; can you still extend my loan?",
+    "Would it be possible to renew my laptop loan for another week? I'm still using it."
+   ],
+   "return": [
+    "I'll be dropping off the three books I borrowed at the front desk this afternoon.",
+    "Just letting you know I've returned \"Pride and Prejudice\" via the after-hours slot.",
+    "I'm returning my items today—can you confirm they've been checked in?",
+    "Hi, I left the DVD and two novels in the returns box this morning.",
+    "I'd like to return the books I have out; what time does the desk close today?",
+    "Please mark my account as returned—I put the items in the trolley outside.",
+    "I'm bringing back the stack of magazines and the hardcover I borrowed last month.",
+    "Can I return these books to a different branch, or do they need to come here?",
+    "I've finished with my loans early and returned them to the drop box.",
+    "Just a note to say the children's books have been returned via the slot.",
+    "I'm returning the textbook and the novel today; please let me know if there are any fines.",
+    "Dropping off my returns now—hopefully that clears my account."
+   ],
+   "reserve": [
+    "Could you put a hold on \"Dune\" for me? I'd like to pick it up when it's available.",
+    "Please reserve the next available copy of \"Educated\" under my name.",
+    "I'd like to reserve the large-print edition of that mystery novel if possible.",
+    "Can I place a request for the book \"Sapiens\" when it comes back?",
+    "I'd like to reserve \"The Midnight Library\" for pickup at this branch.",
+    "Please add me to the waiting list for the new Sally Rooney novel.",
+    "Could you reserve the audiobook on CD for me? I can wait for the next copy.",
+    "I'm interested in reserving the graphic novel \"Maus\" if it's not available now.",
+    "Can I put a hold on any copy of the textbook \"Biology 101\"?",
+    "Please reserve the next copy of \"Project Hail Mary\" for me.",
+    "I'd like to reserve the children's book \"The Gruffalo\" for my daughter.",
+    "Is it possible to reserve the e-book version of \"Klara and the Sun\" through the app?"
+   ],
+   "complain": [
+    "The book I reserved was given to someone else even though I was first in line. That's not fair.",
+    "I've been waiting three weeks for my hold notification and still nothing. Very frustrating.",
+    "The staff at the front desk were rude to me when I asked about my fines.",
+    "My reserved book was marked as lost even though I returned it last week.",
+    "The self-checkout machine keeps rejecting my card; it's really annoying.",
+    "I was charged a fine for a book I returned on time. Please fix this.",
+    "The library was freezing cold today and no one would adjust the heating.",
+    "Someone tore pages out of the magazine I was reading—there should be better monitoring.",
+    "I emailed about my missing book two weeks ago and haven't heard back.",
+    "The online catalog says the book is available but the shelf is empty. Waste of my trip.",
+    "My child was shouted at by the librarian for being noisy. That's unacceptable.",
+    "The Wi-Fi has been down all morning and I couldn't get any work done."
+   ]
+  },
+  "sensor_alerts": {
+   "north": [
+    "Checked the sensor at the north site this morning; readings are drifting high again.",
+    "North site sensor is throwing error code 42. Rebooted it but no luck.",
+    "Heads up: the north location's sensor got knocked loose during the storm last night.",
+    "Can someone swing by north? The sensor there is beeping every five minutes.",
+    "North wing sensor calibration is off by 3 degrees. Needs a tech visit.",
+    "The sensor at our north facility seems fine today, but yesterday it was glitching.",
+    "Quick note: north site's humidity sensor is reading 0%. Probably a wiring issue.",
+    "I replaced the battery in the north sensor yesterday; it's back online now.",
+    "North campus sensor is offline since 2 PM. IT is looking into it.",
+    "Just a heads-up that the north site sensor is due for maintenance next week.",
+    "The temperature sensor at north is fluctuating wildly. Might be a bad connection.",
+    "Anyone else seeing weird data from the north location? The sensor seems stuck at 72°F."
+   ],
+   "south": [
+    "South site sensor is acting up again—keeps resetting itself.",
+    "Checked the south location this AM; the sensor there is completely dead.",
+    "South building's sensor is giving false alarms. We need to replace it.",
+    "Heads up: the sensor at south is reading way too low. Calibration needed.",
+    "I think the south site sensor got water damage from the leak yesterday.",
+    "South campus sensor is online but reporting erratic values. Investigating now.",
+    "Quick update: the south sensor was replaced this morning, all good now.",
+    "The sensor in the south wing is beeping constantly. Please check ASAP.",
+    "South facility's sensor is drifting again; last time it was the power supply.",
+    "Note: south site sensor is due for a firmware update.",
+    "Anyone at south? The sensor there is showing a hardware fault.",
+    "The south location's sensor is fine, but the mounting bracket is loose."
+   ],
+   "east": [
+    "East site sensor is throwing a comms error. Might be the cable.",
+    "Checked east this morning; the sensor is reading 10 degrees high.",
+    "East location's sensor got hit by lightning? It's fried.",
+    "Heads up: the east sensor is offline since last night. Power issue?",
+    "East wing sensor is calibrated now, readings look stable.",
+    "The sensor at our east facility is beeping every minute. Annoying.",
+    "Quick note: east site sensor needs a new battery, it's at 5%.",
+    "East campus sensor is reporting normal values today. Finally.",
+    "The east sensor is stuck on 'initializing'. Tried a hard reset.",
+    "Anyone else not getting data from east? The sensor seems down.",
+    "East site's humidity sensor is reading 100%. Probably condensation.",
+    "I tightened the connections on the east sensor; it's back to normal."
+   ],
+   "west": [
+    "West site sensor is drifting low again. Third time this month.",
+    "Checked the west location; the sensor there is covered in dust.",
+    "West building's sensor is giving error 404. Not sure what that means.",
+    "Heads up: the west sensor is offline. The breaker might be tripped.",
+    "West wing sensor is calibrated and working fine now.",
+    "The sensor at our west facility is beeping non-stop. Please fix.",
+    "Quick update: replaced the west sensor this afternoon, all readings good.",
+    "West campus sensor is showing a firmware mismatch. Needs update.",
+    "The west sensor is reading erratic values after the power outage.",
+    "Anyone at west? The sensor there is physically damaged, looks cracked.",
+    "West site's temperature sensor is stuck at 32°F. Probably frozen.",
+    "I reset the west sensor and it's back online. Monitoring for now."
+   ]
+  },
+  "invoice_vat": {
+   "UK": [
+    "Please leave the parcel with the concierge at our London flat. The postcode is EC1V 9BX.",
+    "Deliver to my mum's house in Surrey, just off the A3 near Guildford. She'll be in all day.",
+    "Ring the bell at the Manchester apartment, third floor, M1 4BT.",
+    "Send to my office in Edinburgh, EH1 1YZ. Ask for Sarah at reception.",
+    "Leave at the porch in our Cardiff home, CF10 1AA.",
+    "The gate code is 4321 for the house in Kent, TN27 8QY. Thanks!",
+    "Please use Royal Mail if you can, thanks.",
+    "Drop at the student accommodation on Byres Road in Glasgow, G12 8QQ. It's the blue door.",
+    "My nan lives in a cottage in Cornwall, TR11 5AA. Please leave by the back door.",
+    "Deliver to the Birmingham warehouse, B1 1AA, during business hours.",
+    "I'm staying in Sheffield this week, postcode S1 2HE. Ring the top-floor buzzer.",
+    "Please leave in the safe place behind the bins at our Leeds address, LS1 4DY."
+   ],
+   "Ireland": [
+    "Please leave with the neighbour at 12 Oak Drive, Dublin 6. The Eircode is D06 X123.",
+    "Deliver to my parents' house in Cork city, T12 X7Y8.",
+    "Ring the buzzer for apartment 4 on Shop Street, Galway, H91 AB12. Thanks a million.",
+    "Leave at the door of our cottage in County Kerry, V93 W456.",
+    "Send to the office on Baggot Street Lower, Dublin 2, D02 X285.",
+    "Please use An Post for the delivery if possible.",
+    "The gate is open at our place in Limerick city, V94 K7P2. Just walk in.",
+    "Drop at the student housing in Maynooth, County Kildare, W23 XK45.",
+    "My sister lives in Waterford, X35 Y678. Please ring twice.",
+    "Deliver to the farmhouse in County Galway, H53 P821. Blue gate on the left.",
+    "Please leave in the porch in Kilkenny city, R95 C6D4.",
+    "Send to my apartment in Dún Laoghaire, A96 K7P1, thanks."
+   ],
+   "Spain": [
+    "Please leave at the door of our apartment in Barcelona, 08001. It's the third floor.",
+    "Deliver to Calle Mayor 12, 2º, Madrid 28013.",
+    "Ring the intercom for piso 3B in Valencia, 46001.",
+    "Leave with the porter in our building on the Costa del Sol, 29640 Fuengirola.",
+    "Send to my villa in Marbella, 29600. The gate is open.",
+    "Please use Correos if possible, gracias.",
+    "Drop at the apartment in Seville, 41001, near the cathedral.",
+    "The gate code is 5678 for our house in Alicante, 03001.",
+    "Deliver to the office in Bilbao, 48001, attn: Carlos.",
+    "Please leave at the reception of our hotel in Ibiza Town, 07800.",
+    "Leave in the safe place at our place in Málaga, 29001. Behind the plant.",
+    "Send to Calle de Alcalá 50, 3º, Madrid, 28014."
+   ],
+   "Italy": [
+    "Please leave with the portiere at Via Roma 10, Milano, 20121.",
+    "Deliver to our apartment in Rome, 00100. Third floor, no lift.",
+    "Ring the bell for the flat in Florence, Tuscany, 50122.",
+    "Leave at the door of our house in Naples, 80100.",
+    "Send to the office in Turin, 10100, attn: Marco.",
+    "Please use Poste Italiane for delivery.",
+    "Drop at the villa on the Amalfi Coast, 84011 Praiano. Look for the blue gate.",
+    "The gate is open at our place in Bologna, 40100.",
+    "Deliver to the Piazza San Marco area, Venice, 30100.",
+    "Leave with the neighbour in our building in Palermo, Sicily, 90100.",
+    "Please leave in the courtyard of our casa in Verona, 37100.",
+    "Send to Via Dante Alighieri 5, Florence, 50122. Ring twice."
+   ]
+  },
+  "event_rsvps": {
+   "formal": [
+    "We would be honored by your presence at the annual gala. Please confirm your attendance by the fifteenth.",
+    "Kindly RSVP at your earliest convenience. Black tie attire is required.",
+    "It is with great pleasure that we invite you to the formal dinner in honor of the retiring director. Your presence would mean a great deal to us. We look forward to seeing you there.",
+    "Please join us for an evening of elegance with cocktails at seven and dinner at eight.",
+    "We cordially invite you to the awards ceremony. Kindly indicate any dietary restrictions when you respond.",
+    "Your attendance at the board meeting is respectfully requested. Please arrive promptly at nine.",
+    "We request the pleasure of your company at the wedding reception. Formal attire is requested.",
+    "Please be our guest at the opening night, followed by a champagne reception.",
+    "It would be a privilege to have you join us for the anniversary celebration. Please respond by Friday. We hope you can attend.",
+    "We are pleased to invite you to the diplomatic reception. Please present this invitation at the entrance. Security will be present.",
+    "Your presence is requested at the graduation ceremony.",
+    "Please accept this invitation to the charity ball. Valet parking will be available. We await your reply."
+   ],
+   "casual": [
+    "Come over Saturday for a BBQ!",
+    "We're having a get-together at my place Friday night. No need to dress up.",
+    "Pizza and games at ours Sunday afternoon if you're free. Let me know! Bring a friend if you want.",
+    "Come hang out at the beach this weekend? I'll bring snacks.",
+    "Movie night Thursday—feel free to bring someone. Popcorn's on me.",
+    "Potluck next week at our place. Bring a dish if you can, but no pressure at all.",
+    "Wanna grab drinks after work tomorrow?",
+    "Birthday drinks at the usual spot Saturday around 8. Hope you can make it! No gifts needed.",
+    "Low-key dinner at my place on Sunday.",
+    "Come by the park for a picnic this afternoon if you're around. I'll bring sandwiches and blankets.",
+    "Game night Friday! Bring your favorite board game and a six-pack.",
+    "Hey, we're grilling in the backyard tomorrow evening. Swing by whenever you're free."
+   ]
+  }
+ },
+ "excluded": [],
+ "hand_check": {
+  "by": "assistant",
+  "date": "2026-11-17",
+  "rule": "Every text read against its planted label before any rule or model saw it; a text is excluded if the label is not clearly right or another label fits too.",
+  "excluded": 0,
+  "borderline_kept": [
+   {
+    "shape": "recipe_scaling",
+    "label": "vegetarian",
+    "index": 10,
+    "reason": "avoids steak and salmon and wants cheese and eggs; fits only vegetarian, though meat is implied rather than named"
+   },
+   {
+    "shape": "fleet_fuel",
+    "label": "brakes",
+    "index": 9,
+    "reason": "brake lights, an electrical fault; still the only label that fits"
+   },
+   {
+    "shape": "event_rsvps",
+    "label": "formal",
+    "index": 5,
+    "reason": "a board meeting rather than a social event; formal is the only fit"
+   },
+   {
+    "shape": "invoice_vat",
+    "label": "UK",
+    "index": 6,
+    "reason": "names only the carrier (Royal Mail); the country is still clear"
+   },
+   {
+    "shape": "invoice_vat",
+    "label": "Ireland",
+    "index": 5,
+    "reason": "names only the carrier (An Post)"
+   },
+   {
+    "shape": "invoice_vat",
+    "label": "Spain",
+    "index": 5,
+    "reason": "names only the carrier (Correos)"
+   },
+   {
+    "shape": "invoice_vat",
+    "label": "Italy",
+    "index": 5,
+    "reason": "names only the carrier (Poste Italiane)"
+   }
+  ]
+ }
+}
