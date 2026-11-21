@@ -971,6 +971,27 @@ Three opt-in fixes for write-once (`batch_readings`, `uncertainty_gate`,
 
 Evidence: `fast_path_reading_fixes_v1.jsonl`, `fast_path_reading_fixes_v1_analysis.json`.
 
+### First real task: the owner's bank transactions (2026-11-21)
+
+The owner's Monzo export, 4,166 transactions over 21 months, with Monzo's own
+category for each as the correct answer. Trained on the first 12 months,
+tested on the last 9 (1,934 transactions). Plan: `REAL_BANK_V1_PLAN.md`.
+
+| Approach | Accuracy | Needs a model for | Mean time per transaction |
+|---|---:|---:|---:|
+| Code only: a table from past months | 84.6% | 0% | 0 ms |
+| Models only: race each merchant name | 63.6% | 100% | 1,070 ms |
+| Hybrid: table first, new merchants to the race | 94.9% | 16% | 200 ms |
+| Hybrid that keeps learning | 94.1% | 3% | 39 ms |
+
+On real data the project's thesis holds plainly: ordinary code (here, a
+lookup of what is already known) does most of the work instantly, and models
+earn their place only on what is new. Models alone did worst, because the
+categories follow filing conventions a merchant's name does not reveal.
+
+Only aggregate figures are in the repository (`real_bank_v1_summary.json`);
+the export and per-merchant detail stay out of it.
+
 The owner's `evolab` repository gained the matching code-only condition (branch
 `ccr-23487558-3yzwx4`, amendment 0.1-G): a scripted client that reads only the
 public task scored Brier loss 0 on all nine sealed development tasks at

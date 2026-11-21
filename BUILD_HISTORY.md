@@ -4547,3 +4547,39 @@ committed; its SHA-256 is recorded so the run can be tied to it:
 | `REAL_BANK_V1_PLAN.md` | `8fa76cec0e441d195b3b9e05d1e7a944008713932c25f41b13348b9ed4baea00` |
 | `fast_path.py` | `753fef2c26534cabd0f6efbc7a2da0baf64b0ba3e2ac2572e2cd4217e2886caa` |
 | `config_fast_path.json` | `2b94990b93115c29f80ca8035518f396d186dba1a8d353b2546d56d55c599577` |
+
+---
+
+## 2026-11-21 — Real task V1 result: bank transaction categories
+
+475 provider calls, all titles answered. Cost about $0.25. Test: 1,934
+transactions from 2026-03-01, scored against Monzo's own category.
+
+| Arm | Correct | Accuracy | Transactions needing a model | Mean time per transaction |
+|---|---:|---:|---:|---:|
+| E. Code only (training table, unseen to `general`) | 1,636 | 84.6% | 0 | 0 ms |
+| M. Models only (race per merchant) | 1,230 | 63.6% | 1,934 | 1,070 ms |
+| H. Hybrid (table, unseen merchants to the race) | 1,836 | 94.9% | 303 | 200 ms |
+| H2. Hybrid that keeps learning | 1,820 | 94.1% | 59 | 39 ms |
+
+- **Code first, models for the new, wins**: the hybrids beat code alone by
+  about 10 points and models alone by about 31, and need a model for 3% (H2)
+  to 16% (H) of transactions.
+- Models alone are poor here because the categories follow Monzo's and the
+  owner's filing conventions, which a merchant's name does not reveal: the
+  largest disagreements were entertainment read as transport (241
+  transactions), eating out as general (197) and entertainment as eating out
+  (123). On merchants unseen in training the race was right for 208 of 303
+  transactions (69%), still far better than the code-only fallback.
+- The racers all agreed on 68 of the 95 merchants. Median race 1.2 s.
+- Prediction held except the order of the hybrids: H2 was 16 transactions
+  behind H, because a merchant's first Monzo category, which H2 then reuses,
+  was sometimes not its usual one.
+
+Only aggregate figures are committed (`real_bank_v1_summary.json`, no
+merchant names); per-merchant detail is in the git-ignored
+`real_tasks/private/`.
+
+| Artifact | SHA-256 |
+|---|---|
+| `real_bank_v1_summary.json` | `91eb2e26f00fc2ab3e06c46cdfd0c2769c35f4f8d863fd2219a8fe0fb94c6e8c` |

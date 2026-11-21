@@ -35,3 +35,9 @@ transactions are filed differently from their merchant's usual category.
 
 Expected cost: under $0.50 (475 short calls). No significance test: one
 person's data, descriptive by nature.
+
+## Result (2026-11-21)
+
+Code only 84.6%; models only 63.6%; hybrid 94.9% (a model for 16% of
+transactions); learning hybrid 94.1% (a model for 3%, 39 ms mean). Models
+alone miss the owner's and Monzo's filing conventions. Cost $0.25.

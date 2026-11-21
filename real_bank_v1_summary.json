@@ -1,0 +1,47 @@
+{
+ "label": "real_bank_v1",
+ "split": "2026-03-01",
+ "train_transactions": 2232,
+ "test_transactions": 1934,
+ "test_keys": 95,
+ "test_keys_unseen_in_training": 59,
+ "test_transactions_with_unseen_key": 303,
+ "race_calls": 475,
+ "race_unanswered_keys": 0,
+ "keys_where_valid_racers_all_agreed": 68,
+ "race_median_ms": 1217.5151740000274,
+ "arms": {
+  "E": {
+   "correct": 1636,
+   "of": 1934,
+   "accuracy": 0.8459152016546019,
+   "transactions_needing_a_model": 0,
+   "median_ms": 0.0,
+   "mean_ms": 0.0
+  },
+  "M": {
+   "correct": 1230,
+   "of": 1934,
+   "accuracy": 0.6359875904860393,
+   "transactions_needing_a_model": 1934,
+   "median_ms": 976.0598979999031,
+   "mean_ms": 1069.9731558986387
+  },
+  "H": {
+   "correct": 1836,
+   "of": 1934,
+   "accuracy": 0.9493278179937953,
+   "transactions_needing_a_model": 303,
+   "median_ms": 0.0,
+   "mean_ms": 199.79229551447818
+  },
+  "H2": {
+   "correct": 1820,
+   "of": 1934,
+   "accuracy": 0.9410548086866598,
+   "transactions_needing_a_model": 59,
+   "median_ms": 0.0,
+   "mean_ms": 39.497949783867355
+  }
+ }
+}

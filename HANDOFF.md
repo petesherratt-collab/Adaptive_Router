@@ -7,7 +7,7 @@ the planned-jobs part) and `BUILD_HISTORY.md` (every freeze, hash and result).
 
 - Work branch `ccr-23487558-3yzwx4` (this repo and `evolab`); not merged.
 - Full suite: `python -m unittest discover -s tests` (568 tests, passing).
-- OpenRouter credit left: about $11.20.
+- OpenRouter credit left: about $11.00.
 - Conventions unchanged: freeze and hash before provider calls; never
   overwrite evidence; promotion and adoption by execution, never by a model.
 
@@ -55,6 +55,10 @@ the planned-jobs part) and `BUILD_HISTORY.md` (every freeze, hash and result).
     races cut calls to a seventh but did not beat the race on time and lost
     3.8 points; the uncertainty flag separated answers well (flagged 3/17
     right, unflagged 135/143). Pull requests: Adaptive_Router #19, evolab #1.
+
+12. Roadmap drafted (`ROADMAP.md`). First real task: the owner's Monzo export
+    (kept out of git; `real_tasks/private/`). Categorisation: hybrid table +
+    race 94.9%, code only 84.6%, models only 63.6%.
 
 ## Open items
 

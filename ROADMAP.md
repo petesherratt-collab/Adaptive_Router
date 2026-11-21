@@ -30,7 +30,7 @@ Rules that hold throughout:
 | 3. Router writes its own step plans | **Superseded.** Passed once, margin not secure; lost every later comparison. | Planned jobs V1 to V3 |
 | 4. Write the whole job once | **Current path** (`main.py --task-json`). Prospective: one pass (0.50 of the race's time, +2.1 points), one fail (a rounding rule). | Write-once V1 to V3 |
 | 5. Jobs with many readings each | **Open.** Write-once loses its speed edge; the planner does worst; batching cut calls but cost accuracy; the uncertainty flag separates good answers from bad (94% against 18% right). | Hard jobs V1, reading fixes V1 |
-| 6. Real tasks | **Not started.** The harness exists (`real_tasks/`); no tasks supplied. | `real_tasks/README.md` |
+| 6. Real tasks | **Started.** Bank transaction categories (owner's Monzo export): hybrid 94.9% against code 84.6% and models 63.6%, a model needed for 3% to 16% of transactions. | `REAL_BANK_V1_PLAN.md` |
 
 Side line: EvoLab's code-only condition is done (evolab PR #1).
 
@@ -71,7 +71,11 @@ arrival, or fails with a stated reason.
 ### Phase D: real work (cost depends on the tasks)
 
 - Run the router on tasks the owner actually repeats, through `real_tasks/`.
-  This is the test every earlier result stands in for.
+  This is the test every earlier result stands in for. Started 2026-11-21
+  with bank transaction categories; next on the same data: the monthly or
+  weekly spending summary as a whole job (race against write-once), and the
+  router itself learning the merchant table (an answer cache for agreed
+  answers) instead of a table built by hand.
 - Without real tasks, the project ends at Phase C with a bounded claim, as the
   first line did on 2026-09-22.
 
