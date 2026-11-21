@@ -1,0 +1,238 @@
+{
+ "status": "COMPLETED",
+ "label": "write_once_v3_immediate",
+ "task_clusters": 8,
+ "arms": {
+  "R": {
+   "jobs": 240,
+   "correct": 239,
+   "unanswered": 0,
+   "median_ms": 1966.0182590000659,
+   "p90_ms": 2871.909057699849,
+   "last_five_median_ms": 1889.1201124999952
+  },
+  "P": {
+   "jobs": 240,
+   "correct": 237,
+   "unanswered": 0,
+   "median_ms": 1272.8071750000254,
+   "p90_ms": 2410.13280090001,
+   "last_five_median_ms": 931.1889900000097
+  }
+ },
+ "primary_arm": "P",
+ "w_vs_r": null,
+ "p_vs_r": {
+  "time_ratio": 0.6474035371611382,
+  "time_ratio_interval_95": [
+   0.5360424832407757,
+   0.7434352605286902
+  ],
+  "correctness_difference": -0.008333333333333304,
+  "correctness_interval_95": [
+   -0.01666666666666672,
+   0.0
+  ]
+ },
+ "p_vs_w": null,
+ "p_vs_d": null,
+ "probe_summaries": [
+  {
+   "proposed": 6,
+   "agreed": 6,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 6,
+   "agreed": 6,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 6,
+   "agreed": 6,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 6,
+   "agreed": 6,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 6,
+   "agreed": 6,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 6,
+   "agreed": 6,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 6,
+   "agreed": 6,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 6,
+   "agreed": 5,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  }
+ ],
+ "w_vs_d": null,
+ "w_vs_e": null,
+ "w_vs_c": null,
+ "c_vs_r": null,
+ "first_program_job_index": {
+  "car_park": 10,
+  "gym_classes": 12,
+  "shared_bills": 12,
+  "plant_watering": 12,
+  "train_fares": 14,
+  "reading_challenge": 15,
+  "lab_ph": 15,
+  "donation_match": 21
+ },
+ "shapes_with_program": 8,
+ "w_routes": {
+  "race": {
+   "jobs": 111,
+   "correct": 108,
+   "median_ms": 1986.8254489997526
+  },
+  "program": {
+   "jobs": 129,
+   "correct": 129,
+   "median_ms": 914.3837530000383
+  }
+ },
+ "attempt_outcomes": {
+  "ADOPTED": 8
+ },
+ "readings_per_program": [
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1
+ ],
+ "median_after_program_ms": {
+  "P": 914.3837530000383,
+  "R": 2014.9997339999572
+ },
+ "per_shape": {
+  "car_park": {
+   "R": {
+    "correct": 29,
+    "median_ms": 2428.2656984998994
+   },
+   "P": {
+    "correct": 28,
+    "median_ms": 1201.0799879997194
+   }
+  },
+  "gym_classes": {
+   "R": {
+    "correct": 30,
+    "median_ms": 1857.662670499849
+   },
+   "P": {
+    "correct": 30,
+    "median_ms": 963.9203140002337
+   }
+  },
+  "shared_bills": {
+   "R": {
+    "correct": 30,
+    "median_ms": 2548.7060084999484
+   },
+   "P": {
+    "correct": 30,
+    "median_ms": 1115.3833949999807
+   }
+  },
+  "plant_watering": {
+   "R": {
+    "correct": 30,
+    "median_ms": 1946.2502930000483
+   },
+   "P": {
+    "correct": 30,
+    "median_ms": 1189.1824760000418
+   }
+  },
+  "train_fares": {
+   "R": {
+    "correct": 30,
+    "median_ms": 1990.65638199977
+   },
+   "P": {
+    "correct": 29,
+    "median_ms": 1313.0430960000012
+   }
+  },
+  "reading_challenge": {
+   "P": {
+    "correct": 30,
+    "median_ms": 1275.8441145001598
+   },
+   "R": {
+    "correct": 30,
+    "median_ms": 1580.8834960000695
+   }
+  },
+  "lab_ph": {
+   "P": {
+    "correct": 30,
+    "median_ms": 1310.1404525000362
+   },
+   "R": {
+    "correct": 30,
+    "median_ms": 1920.1266889999715
+   }
+  },
+  "donation_match": {
+   "R": {
+    "correct": 30,
+    "median_ms": 1690.255083000011
+   },
+   "P": {
+    "correct": 30,
+    "median_ms": 1498.2830619999277
+   }
+  }
+ },
+ "usage_per_arm": {
+  "P": {
+   "calls": 1836,
+   "prompt_tokens": 548013,
+   "completion_tokens": 454611
+  },
+  "R": {
+   "calls": 1200,
+   "prompt_tokens": 519809,
+   "completion_tokens": 557029
+  }
+ },
+ "time_criterion_met": true,
+ "correctness_criterion_met": true,
+ "decision": "SUPPORTED"
+}

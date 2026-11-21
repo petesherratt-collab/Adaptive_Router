@@ -18,7 +18,7 @@ from analyze_fast_path_timing_v1 import BOOTSTRAP_REPLICATES, bootstrap, by_shap
 
 TIME_RATIO_LIMIT = 1.0
 CORRECTNESS_MARGIN = -0.02
-ARMS = ("A", "R", "C", "D")
+ARMS = ("A", "R", "C", "D", "E", "W")
 
 
 def pair(grouped, first, second, replicates):
@@ -70,6 +70,29 @@ def ceiling_summary(jobs, grouped, replicates):
     }
 
 
+def code_only_summary(jobs, grouped, replicates):
+    """Arm E uses no model: keyword rules read the prose and the reference
+    code does the rest. Against D (same code, models read) it isolates the
+    reading; against R and C it is the research endpoint's test that a
+    model-based approach must beat ordinary code."""
+    mine = [r for r in jobs if r["arm"] == "E"]
+    if not mine:
+        return None
+    per_shape = {}
+    for row in mine:
+        entry = per_shape.setdefault(row["shape"], {"jobs": 0, "reading_correct": 0})
+        entry["jobs"] += 1
+        entry["reading_correct"] += bool(row.get("reading_correct"))
+    return {
+        "reading_correct": sum(bool(r.get("reading_correct")) for r in mine),
+        "jobs": len(mine),
+        "reading_per_shape": per_shape,
+        "r_vs_e": pair(grouped, "R", "E", replicates),
+        "c_vs_e": pair(grouped, "C", "E", replicates),
+        "d_vs_e": pair(grouped, "D", "E", replicates) if any(r["arm"] == "D" for r in jobs) else None,
+    }
+
+
 def analyse(kinds, replicates=BOOTSTRAP_REPLICATES):
     jobs = kinds.get("job", [])
     shapes = kinds.get("shape", [])
@@ -115,8 +138,10 @@ def analyse(kinds, replicates=BOOTSTRAP_REPLICATES):
                   for key in ("calls", "prompt_tokens", "completion_tokens")}
             for arm in ARMS
         } if any("usage" in s for s in shapes) else None,
+        "usage_by_purpose": usage_by_purpose(shapes),
         "arrival": header.get("arrival", "drained"),
         "ceiling": ceiling_summary(jobs, grouped, replicates),
+        "code_only": code_only_summary(jobs, grouped, replicates),
         "per_shape": {
             shape: {arm: {"correct": sum(r["correct"] for r in rows),
                           "median_ms": statistics.median(r["answer_ms"] for r in rows)}
@@ -130,6 +155,19 @@ def analyse(kinds, replicates=BOOTSTRAP_REPLICATES):
         } if first_plan else None,
     })
     return result
+
+
+def usage_by_purpose(shapes):
+    """Calls and tokens per arm and purpose, for runs that metered purposes."""
+    totals = {}
+    for shape in shapes:
+        for arm, usage in shape.get("usage", {}).items():
+            for purpose, counts in usage.get("by_purpose", {}).items():
+                entry = totals.setdefault(arm, {}).setdefault(
+                    purpose, {"calls": 0, "prompt_tokens": 0, "completion_tokens": 0})
+                for key in entry:
+                    entry[key] += counts.get(key, 0)
+    return totals or None
 
 
 def main():

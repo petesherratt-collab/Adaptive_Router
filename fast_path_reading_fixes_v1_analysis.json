@@ -1,0 +1,360 @@
+{
+ "status": "COMPLETED",
+ "label": "reading_fixes_v1",
+ "task_clusters": 8,
+ "arms": {
+  "R": {
+   "jobs": 160,
+   "correct": 144,
+   "unanswered": 0,
+   "median_ms": 2260.7199314999775,
+   "p90_ms": 3030.0505194000148,
+   "last_five_median_ms": 2227.4028919999296
+  },
+  "P": {
+   "jobs": 160,
+   "correct": 147,
+   "unanswered": 0,
+   "median_ms": 2595.351826500064,
+   "p90_ms": 4223.177441500068,
+   "last_five_median_ms": 2634.9884759999895
+  },
+  "B": {
+   "jobs": 160,
+   "correct": 138,
+   "unanswered": 0,
+   "median_ms": 2288.602668499948,
+   "p90_ms": 3564.3787953998526,
+   "last_five_median_ms": 2272.250460500004
+  }
+ },
+ "primary_arm": "B",
+ "w_vs_r": null,
+ "p_vs_r": {
+  "time_ratio": 1.1480200578308961,
+  "time_ratio_interval_95": [
+   1.0291185192492744,
+   1.3644241925667433
+  ],
+  "correctness_difference": 0.018749999999999933,
+  "correctness_interval_95": [
+   -0.02499999999999991,
+   0.06874999999999998
+  ]
+ },
+ "p_vs_w": null,
+ "p_vs_d": null,
+ "probe_summaries": [
+  {
+   "proposed": 0,
+   "agreed": 0,
+   "failed": 0,
+   "error": "NO_PROBE_INPUTS",
+   "failures": []
+  },
+  null,
+  {
+   "proposed": 0,
+   "agreed": 0,
+   "failed": 0,
+   "error": "NO_PROBE_INPUTS",
+   "failures": []
+  },
+  {
+   "proposed": 0,
+   "agreed": 0,
+   "failed": 0,
+   "error": "NO_PROBE_INPUTS",
+   "failures": []
+  },
+  {
+   "proposed": 0,
+   "agreed": 0,
+   "failed": 0,
+   "error": "NO_PROBE_INPUTS",
+   "failures": []
+  },
+  null,
+  {
+   "proposed": 3,
+   "agreed": 3,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 3,
+   "agreed": 3,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 0,
+   "agreed": 0,
+   "failed": 0,
+   "error": "NO_PROBE_INPUTS",
+   "failures": []
+  },
+  {
+   "proposed": 6,
+   "agreed": 6,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  }
+ ],
+ "q_vs_r": null,
+ "q_vs_p": null,
+ "c_vs_p": null,
+ "b_vs_r": {
+  "time_ratio": 1.012333565344147,
+  "time_ratio_interval_95": [
+   0.7906083167150627,
+   1.2658606822285583
+  ],
+  "correctness_difference": -0.03749999999999998,
+  "correctness_interval_95": [
+   -0.08750000000000002,
+   -0.006249999999999978
+  ]
+ },
+ "b_vs_p": {
+  "time_ratio": 0.8818082562571952,
+  "time_ratio_interval_95": [
+   0.7257800382881807,
+   1.1024467197864831
+  ],
+  "correctness_difference": -0.05624999999999991,
+  "correctness_interval_95": [
+   -0.15625,
+   0.018749999999999933
+  ]
+ },
+ "uncertainty": {
+  "P": {
+   "flagged": {
+    "jobs": 0,
+    "correct": 0
+   },
+   "unflagged": {
+    "jobs": 160,
+    "correct": 147
+   }
+  },
+  "B": {
+   "flagged": {
+    "jobs": 17,
+    "correct": 3
+   },
+   "unflagged": {
+    "jobs": 143,
+    "correct": 135
+   }
+  }
+ },
+ "first_program_by_arm": {
+  "P": {
+   "review_digest": 2,
+   "incident_log": 6,
+   "expense_lines": 3,
+   "survey_comments": 5,
+   "menu_check": null,
+   "applicant_screen": 2,
+   "delivery_feedback": 2,
+   "listing_filter": 2
+  },
+  "B": {
+   "review_digest": 2,
+   "incident_log": 4,
+   "expense_lines": 3,
+   "survey_comments": 2,
+   "menu_check": 3,
+   "applicant_screen": 2,
+   "delivery_feedback": 3,
+   "listing_filter": 2
+  }
+ },
+ "c_first_plan": null,
+ "w_vs_d": null,
+ "w_vs_e": null,
+ "w_vs_c": null,
+ "c_vs_r": null,
+ "first_program_job_index": {
+  "review_digest": 2,
+  "survey_comments": 2,
+  "applicant_screen": 2,
+  "listing_filter": 2,
+  "expense_lines": 3,
+  "menu_check": 3,
+  "delivery_feedback": 3,
+  "incident_log": 4
+ },
+ "shapes_with_program": 8,
+ "w_routes": {
+  "race": {
+   "jobs": 21,
+   "correct": 16,
+   "median_ms": 3014.997808999965
+  },
+  "program": {
+   "jobs": 139,
+   "correct": 122,
+   "median_ms": 2212.7616829999397
+  }
+ },
+ "attempt_outcomes": {
+  "ADOPTED": 8,
+  "REJECTED": 1,
+  "INVALID_PROGRAM": 1
+ },
+ "readings_per_program": [
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1
+ ],
+ "median_after_program_ms": {
+  "B": 2212.7616829999397,
+  "R": 2236.2314989999277,
+  "P": 2614.452791999952
+ },
+ "per_shape": {
+  "review_digest": {
+   "R": {
+    "correct": 20,
+    "median_ms": 2209.715474999939
+   },
+   "B": {
+    "correct": 20,
+    "median_ms": 1732.775389999972
+   },
+   "P": {
+    "correct": 20,
+    "median_ms": 2251.7864724999868
+   }
+  },
+  "incident_log": {
+   "B": {
+    "correct": 4,
+    "median_ms": 3164.1435209999713
+   },
+   "R": {
+    "correct": 8,
+    "median_ms": 2448.0284064999864
+   },
+   "P": {
+    "correct": 11,
+    "median_ms": 3988.766344499993
+   }
+  },
+  "expense_lines": {
+   "R": {
+    "correct": 18,
+    "median_ms": 2255.9199039999953
+   },
+   "P": {
+    "correct": 20,
+    "median_ms": 2150.081448499975
+   },
+   "B": {
+    "correct": 17,
+    "median_ms": 1695.0214145000473
+   }
+  },
+  "survey_comments": {
+   "R": {
+    "correct": 20,
+    "median_ms": 2575.9921994999786
+   },
+   "P": {
+    "correct": 19,
+    "median_ms": 2763.0684795000207
+   },
+   "B": {
+    "correct": 20,
+    "median_ms": 1878.8496334999536
+   }
+  },
+  "menu_check": {
+   "R": {
+    "correct": 19,
+    "median_ms": 2505.629696500023
+   },
+   "B": {
+    "correct": 19,
+    "median_ms": 3056.0000254999977
+   },
+   "P": {
+    "correct": 18,
+    "median_ms": 2556.10124049997
+   }
+  },
+  "applicant_screen": {
+   "P": {
+    "correct": 20,
+    "median_ms": 2039.8383495000303
+   },
+   "R": {
+    "correct": 20,
+    "median_ms": 1610.3081974999895
+   },
+   "B": {
+    "correct": 20,
+    "median_ms": 2455.0431900000262
+   }
+  },
+  "delivery_feedback": {
+   "P": {
+    "correct": 19,
+    "median_ms": 3477.921546999994
+   },
+   "B": {
+    "correct": 19,
+    "median_ms": 2905.6544274999965
+   },
+   "R": {
+    "correct": 19,
+    "median_ms": 2541.0542409999834
+   }
+  },
+  "listing_filter": {
+   "B": {
+    "correct": 19,
+    "median_ms": 1440.1463289999583
+   },
+   "P": {
+    "correct": 20,
+    "median_ms": 2091.32922699996
+   },
+   "R": {
+    "correct": 20,
+    "median_ms": 1768.0797369999937
+   }
+  }
+ },
+ "usage_per_arm": {
+  "B": {
+   "calls": 840,
+   "prompt_tokens": 359045,
+   "completion_tokens": 311282
+  },
+  "P": {
+   "calls": 5862,
+   "prompt_tokens": 1335069,
+   "completion_tokens": 623493
+  },
+  "R": {
+   "calls": 800,
+   "prompt_tokens": 413521,
+   "completion_tokens": 448822
+  }
+ },
+ "time_criterion_met": false,
+ "correctness_criterion_met": false,
+ "decision": "NOT_SUPPORTED"
+}

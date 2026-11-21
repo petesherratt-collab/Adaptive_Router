@@ -1,0 +1,522 @@
+{
+ "writer_model": "mistralai/mistral-large-4-0",
+ "per_label": 12,
+ "prompts": {
+  "review_digest": "Write short messages for a test set. The messages are short customer reviews of a product, each mainly about one thing.\n\nWrite 12 different messages for each of these labels:\n- price: mainly about the price or value for money\n- quality: mainly about the product's quality\n- delivery: mainly about the delivery\n- service: mainly about customer service\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"price\", \"quality\", \"delivery\", \"service\", each mapping to an array of 12 strings.",
+  "incident_log": "Write short messages for a test set. The messages are one-line notes in an office building's incident log.\n\nWrite 12 different messages for each of these labels:\n- low: a minor issue that can wait\n- medium: a real problem that needs attention today\n- high: a serious or dangerous problem needing immediate action\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"low\", \"medium\", \"high\", each mapping to an array of 12 strings.",
+  "expense_lines": "Write short messages for a test set. The messages are short descriptions on employees' expense lines.\n\nWrite 12 different messages for each of these labels:\n- travel: a travel cost (fares, fuel, taxis, hotels)\n- meals: a meal or food and drink\n- equipment: equipment or hardware bought for work\n- other: anything else\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"travel\", \"meals\", \"equipment\", \"other\", each mapping to an array of 12 strings.",
+  "survey_comments": "Write short messages for a test set. The messages are free-text comments left on a customer survey.\n\nWrite 12 different messages for each of these labels:\n- positive: the comment is positive\n- negative: the comment is negative\n- neutral: the comment is neutral or factual\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"positive\", \"negative\", \"neutral\", each mapping to an array of 12 strings.",
+  "menu_check": "Write short messages for a test set. The messages are short descriptions of restaurant dishes.\n\nWrite 12 different messages for each of these labels:\n- nuts: the dish contains nuts\n- dairy: the dish contains dairy but no nuts\n- gluten: the dish contains gluten but no nuts or dairy\n- none: the dish contains none of nuts, dairy or gluten\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"nuts\", \"dairy\", \"gluten\", \"none\", each mapping to an array of 12 strings.",
+  "applicant_screen": "Write short messages for a test set. The messages are short cover letters from job applicants, from which the role applied for can be told.\n\nWrite 12 different messages for each of these labels:\n- engineering: applying for an engineering role\n- design: applying for a design role\n- sales: applying for a sales role\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"engineering\", \"design\", \"sales\", each mapping to an array of 12 strings.",
+  "delivery_feedback": "Write short messages for a test set. The messages are one-line notes couriers record after a delivery attempt.\n\nWrite 12 different messages for each of these labels:\n- delivered: the parcel was delivered in good condition\n- missed: the parcel could not be delivered\n- damaged: the parcel was delivered damaged\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"delivered\", \"missed\", \"damaged\", each mapping to an array of 12 strings.",
+  "listing_filter": "Write short messages for a test set. The messages are short blurbs from flat-to-rent listings.\n\nWrite 12 different messages for each of these labels:\n- garden: the flat has a garden\n- balcony: the flat has a balcony but no garden\n- none: the flat has no outdoor space\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"garden\", \"balcony\", \"none\", each mapping to an array of 12 strings."
+ },
+ "texts": {
+  "review_digest": {
+   "price": [
+    "Absolutely not worth the money—feels like a rip-off.",
+    "Pricey, but honestly you get what you pay for.",
+    "I paid premium prices and expected better value.",
+    "Great value for money, couldn't ask for more.",
+    "The cost is just too high for a basic model.",
+    "Half the price on another site, so I regret buying here.",
+    "Cheap and cheerful—exactly what my budget needed.",
+    "Overpriced for what you actually receive.",
+    "I'd happily pay double for this again.",
+    "The price tag made me hesitate, but it was worth every penny.",
+    "Shockingly affordable compared to similar brands.",
+    "Not cheap, but the cost pays off over time."
+   ],
+   "quality": [
+    "The stitching came undone after two washes.",
+    "Feels solid and well-made, like it'll last years.",
+    "Flimsy plastic that cracked on day one.",
+    "Exquisite craftsmanship—you can tell it's handmade.",
+    "The fabric pills already and looks worn out.",
+    "Solid construction with no weak points anywhere.",
+    "Disappointing quality; the finish is rough and uneven.",
+    "Premium materials that feel luxurious to the touch.",
+    "It broke the first time I used it.",
+    "Durable and reliable, survived my toddler's abuse.",
+    "The color faded after a single wash.",
+    "Top-notch quality, no complaints at all."
+   ],
+   "delivery": [
+    "Arrived three days late without any warning.",
+    "Super fast shipping—ordered Monday, got it Wednesday.",
+    "The box was crushed when it reached my door.",
+    "Tracking updates stopped for a week and then it just showed up.",
+    "Delivered to the wrong address entirely.",
+    "Packed securely with plenty of bubble wrap.",
+    "Took over two weeks to arrive, way past the estimated date.",
+    "The courier left it with my neighbor without asking.",
+    "Arrived exactly on time, no issues at all.",
+    "The package arrived torn open and damaged inside.",
+    "Express shipping got it here the next morning—impressive.",
+    "Still waiting for it and the estimated date has passed."
+   ],
+   "service": [
+    "Customer support ignored my emails for a week.",
+    "The rep was incredibly helpful and sorted it in minutes.",
+    "They refused to answer my simple question about sizing.",
+    "Quick response and they issued a replacement right away.",
+    "Rude staff on the phone, made me feel like an inconvenience.",
+    "The live chat agent went above and beyond to help me.",
+    "No one picked up when I called the helpline.",
+    "They processed my return hassle-free and refunded me fast.",
+    "Automated responses only—no real human help.",
+    "The manager called me personally to apologize.",
+    "Waiting on hold for 45 minutes just to speak to someone.",
+    "Fantastic after-sales support, they really care."
+   ]
+  },
+  "incident_log": {
+   "low": [
+    "The fluorescent light in the 4th floor storage closet flickers occasionally but still works fine.",
+    "Coffee was spilled on the break room carpet this morning; it's wiped up but might leave a mark.",
+    "The picture frame in the lobby is hanging slightly crooked.",
+    "The second floor printer is running low on toner but should last until Friday.",
+    "The supply room door sticks a bit when you close it.",
+    "One of the chairs in the break room has a wobbly leg.",
+    "The thermostat in the east wing reads a degree colder than it feels, but it's tolerable.",
+    "The blinds in Conference Room B don't line up perfectly.",
+    "There's a small scuff on the wall by the 5th floor elevator.",
+    "The hand soap dispenser in the 3rd floor restroom is almost empty.",
+    "A notice on the bulletin board came loose and was re-taped at an angle.",
+    "The potted plant at reception looks a bit droopy; it needs water when someone has a minute."
+   ],
+   "medium": [
+    "The west elevator is making a loud grinding noise between floors 3 and 4 but is still running; maintenance should check it today.",
+    "There's a steady drip from the ceiling in the 3rd floor women's restroom, with a bucket underneath.",
+    "The air conditioning in Conference Room A has stopped working, and we have a client meeting there at 2pm.",
+    "The gate to the employee parking lot is stuck open and won't close.",
+    "A mouse was spotted near the dumpsters behind the building this morning.",
+    "The projector in the boardroom won't power on, and we have a presentation scheduled for this afternoon.",
+    "Wi-Fi has been down across the entire east wing since 9am.",
+    "The handrail on the staircase between floors 2 and 3 is loose and shifts when grabbed.",
+    "The window in the north stairwell is cracked and needs to be boarded up before tonight.",
+    "The staff kitchen refrigerator isn't cooling properly; the milk inside is already warm.",
+    "The toilet in the men's restroom on floor 4 is overflowing slightly onto the tile.",
+    "The security camera covering the loading dock has gone offline."
+   ],
+   "high": [
+    "There's a strong smell of gas in the basement near the boiler room; evacuate the area immediately.",
+    "Smoke is coming from the electrical panel on floor 2; the breaker has been switched off.",
+    "The elevator is stuck between floors 5 and 6 with two people trapped inside.",
+    "Water is pouring from the ceiling in the server room and dripping onto the racks.",
+    "There's broken glass all over the floor in the main lobby near the entrance.",
+    "A section of the ceiling in the hallway near room 301 is sagging and looks ready to collapse.",
+    "An employee slipped near the entrance and hit their head; they're conscious but an ambulance has been called.",
+    "The ground floor fire exit is completely blocked by stacked boxes.",
+    "There's an exposed live wire hanging from the ceiling in the parking garage.",
+    "A chemical drum in the storage area has spilled and fumes are spreading through the corridor.",
+    "The main entrance door lock is broken and the door won't secure; the building is currently unsecured.",
+    "Loud shouting and banging are coming from the 4th floor office; it sounds like a physical altercation."
+   ]
+  },
+  "expense_lines": {
+   "travel": [
+    "Uber from the airport to the hotel downtown.",
+    "Round-trip flight to Denver for the client kickoff. Booked it last minute so it was a bit pricey.",
+    "Three nights at the Marriott near the conference center.",
+    "Fuel for the drive to the client site last Tuesday.",
+    "Train ticket from London to Edinburgh for the site visit.",
+    "Taxi to the client's office across town this afternoon.",
+    "Mileage reimbursement for 85 miles driving to the branch office.",
+    "Lyft from the hotel to the airport this morning.",
+    "Hotel stay for two nights in Austin while I was at the training.",
+    "Airline baggage fee on the flight home yesterday.",
+    "Gas receipt from the station near the highway exit.",
+    "Flight to Chicago for the quarterly review meeting next week."
+   ],
+   "meals": [
+    "Lunch with the client at the Italian place on 5th Street.",
+    "Coffee and pastries for the morning team standup. Everyone was starving.",
+    "Dinner at the hotel restaurant after the conference sessions ended.",
+    "Pizza ordered for the late-night working session with engineering.",
+    "Two lattes and a muffin from the cafe downstairs.",
+    "Catering lunch for the quarterly review with the board.",
+    "Takeout Thai for the team on Friday afternoon.",
+    "Breakfast burrito before the 8am client call.",
+    "Bottled water and snacks for the conference room all day.",
+    "Happy hour drinks with the sales team after the demo.",
+    "Sandwich and soda from the deli around the corner.",
+    "Dinner with the vendor to discuss the contract renewal."
+   ],
+   "equipment": [
+    "New laptop for the new hire starting on Monday.",
+    "External monitor for my desk setup at home.",
+    "Wireless keyboard and mouse combo for the office.",
+    "USB-C docking station for the MacBook Pro.",
+    "Noise-canceling headphones for the open-plan office.",
+    "Webcam for the small conference room.",
+    "Printer for the marketing team's new workstation.",
+    "iPhone for the field sales representative.",
+    "Cables and adapters for the new projector in the boardroom.",
+    "Tablet for the warehouse team to scan inventory.",
+    "External hard drive for backing up project files.",
+    "Bluetooth speaker for the meeting room."
+   ],
+   "other": [
+    "Printer paper and pens for the front desk.",
+    "Monthly subscription to the project management software.",
+    "Postage and courier fees for mailing the signed contracts.",
+    "Annual membership dues for the professional accounting association.",
+    "Registration fee for the virtual training course on data privacy.",
+    "Bank wire transfer fee for the payment to the overseas vendor.",
+    "Cleaning service invoice for the office suite last week.",
+    "Books on leadership for the team library.",
+    "Monthly internet bill for the home office connection.",
+    "Notary public fee for signing the lease agreement.",
+    "Cloud storage subscription for the shared team drive.",
+    "Cyber liability insurance premium for this quarter."
+   ]
+  },
+  "survey_comments": {
+   "positive": [
+    "Absolutely love this product! It exceeded all my expectations and I've already recommended it to three friends.",
+    "Great experience from start to finish. The team was friendly and everything arrived earlier than expected.",
+    "This is hands down the best service I've used in years. Keep up the excellent work!",
+    "I'm so happy with my purchase. It works perfectly and looks even better in person.",
+    "Wonderful customer support - they resolved my issue within minutes. Couldn't ask for more.",
+    "Five stars! The quality is outstanding and the price was very reasonable.",
+    "I've been using this for a month now and it's been flawless. Very impressed.",
+    "Thank you for the amazing service today. You made my day so much easier.",
+    "Fantastic product, exactly as described. I'll definitely be buying again.",
+    "The attention to detail here is incredible. Everything felt personalized and thoughtful.",
+    "Super satisfied with how everything turned out. Exceeded my expectations completely.",
+    "Best decision I made this year. Highly recommend to anyone considering it."
+   ],
+   "negative": [
+    "Terrible experience overall. The product arrived broken and nobody responded to my emails for a week.",
+    "I'm really disappointed. This is the worst service I've had in a long time.",
+    "Complete waste of money. It stopped working after two days and support was rude.",
+    "Very frustrated with the delays. My order was supposed to arrive last Tuesday and still hasn't shown up.",
+    "The quality is awful - nothing like the pictures online. I want a full refund.",
+    "Disappointing. The app crashes constantly and customer service keeps giving me the runaround.",
+    "I regret buying this. It's poorly made and feels cheap.",
+    "Unacceptable. The representative was dismissive and hung up on me twice.",
+    "This has been a nightmare from day one. I've had nothing but problems.",
+    "Not happy at all. The item was missing parts and the instructions made no sense.",
+    "Poor performance and even worse support. I won't be coming back.",
+    "Absolutely furious about how this was handled. Total lack of professionalism."
+   ],
+   "neutral": [
+    "I received my order on Tuesday. The packaging was a standard cardboard box.",
+    "The product arrived in three business days. The exterior is blue.",
+    "I used the service once last month. The total cost was $49.99 including tax.",
+    "My package was left at the front door at 2:15 PM on Thursday.",
+    "The box contained the item and a printed manual.",
+    "I completed the purchase online. The checkout process took about five minutes.",
+    "I placed the order on Monday and it arrived on Friday. The box contained two items.",
+    "The store hours are 9 AM to 9 PM daily. I visited the location around noon on Saturday.",
+    "I have owned this product for six months. It is currently stored in my garage.",
+    "The exterior color is gray. The dimensions are 12 by 8 by 4 inches.",
+    "I contacted customer support once regarding a billing question. A response arrived the following morning.",
+    "The website loaded in approximately three seconds. The homepage lists the product categories."
+   ]
+  },
+  "menu_check": {
+   "nuts": [
+    "Crushed peanuts on top of the noodles.",
+    "Almond flour crust with a lemon glaze.",
+    "Walnut pesto tossed with the pasta.",
+    "Contains cashews in the curry sauce.",
+    "Pistachio ice cream with dark chocolate shavings.",
+    "Toasted pine nuts scattered over the greens.",
+    "Hazelnut spread on warm toast.",
+    "Pecan pie slice with whipped cream.",
+    "Chicken satay with peanut dipping sauce.",
+    "Macadamia nut cookies, fresh from the oven.",
+    "Asian-style salad with crushed peanuts and lime dressing.",
+    "The risotto is finished with toasted pine nuts. It also has parmesan."
+   ],
+   "dairy": [
+    "Creamy Alfredo pasta—contains dairy, no nuts.",
+    "Cheddar cheeseburger on a nut-free bun.",
+    "Butter chicken with naan; dairy-based, nut-free.",
+    "Mac and cheese made with real cheddar and milk—nut-free.",
+    "Greek yogurt parfait with honey—no nuts.",
+    "Cream of mushroom soup, dairy-based and nut-free.",
+    "Grilled cheese sandwich with tomato soup (no nuts).",
+    "Vanilla ice cream sundae with caramel—contains milk, nut-free.",
+    "Creamy tomato bisque, no nuts added.",
+    "Margherita pizza with fresh mozzarella—nut-free.",
+    "Mashed potatoes whipped with butter and cream, nut-free.",
+    "Creamy mushroom risotto made with butter and parmesan. Definitely nut-free."
+   ],
+   "gluten": [
+    "Turkey sandwich on wheat bread—contains gluten, no dairy or nuts.",
+    "Spaghetti with tomato sauce; wheat pasta, dairy-free and nut-free.",
+    "Soy-marinated noodles—wheat-based, no dairy, no nuts.",
+    "Flour tortilla wrap with grilled chicken, no cheese or nuts.",
+    "Beer-battered cod—wheat batter, no dairy or nuts.",
+    "Baguette slice with olive tapenade—gluten, no dairy, no nuts.",
+    "Seitan and vegetable stir-fry—wheat gluten, dairy-free, nut-free.",
+    "Wheat pancakes made with water—no milk, no nuts.",
+    "Pita bread with hummus—contains wheat, no dairy, no nuts.",
+    "Pasta aglio e olio—wheat pasta, olive oil, no dairy or nuts.",
+    "Wheat-based udon noodles in broth. No dairy or nuts added.",
+    "Couscous with roasted vegetables—wheat-based, dairy-free, nut-free."
+   ],
+   "none": [
+    "Grilled salmon with rice and asparagus—no nuts, dairy, or gluten.",
+    "Chicken and vegetable rice bowl—completely free of nuts, dairy, and gluten.",
+    "Baked sweet potato with olive oil and rosemary; no nuts, milk, or wheat.",
+    "Fresh fruit salad with mint—naturally free of nuts, dairy, and gluten.",
+    "Quinoa bowl with black beans, corn, and lime—no nuts, dairy, or gluten.",
+    "Steak with roasted potatoes and green beans—no nuts, dairy, or gluten.",
+    "Corn tortilla tacos with carnitas and salsa—no wheat, milk, or nuts.",
+    "Rice paper rolls with shrimp and vegetables—no nuts, dairy, or gluten.",
+    "Vegetable curry with coconut milk over rice—no nuts, dairy, or gluten.",
+    "Just grilled chicken breast with steamed broccoli. No nuts, dairy, or gluten.",
+    "Mango and banana smoothie with coconut water—no nuts, dairy, or gluten.",
+    "Rice noodle soup with bok choy and tofu—gluten-free, dairy-free, nut-free."
+   ]
+  },
+  "applicant_screen": {
+   "engineering": [
+    "I'm excited to apply for the backend role. I've spent four years building scalable APIs in Go and love tackling distributed systems challenges.",
+    "With a background in mechanical engineering and hands-on CAD experience, I'd love to contribute to your hardware team and help bring physical products to life.",
+    "I saw your DevOps opening and wanted to reach out—I've automated CI/CD pipelines for teams of 50+ at my current company.",
+    "As a recent CS grad passionate about algorithms, I'm eager to join your platform team and help solve tough performance bottlenecks.",
+    "I'm applying for the frontend engineer position. I build accessible, high-performance web apps with React and care deeply about clean code.",
+    "My experience with embedded systems and C++ makes me a strong fit for your firmware engineering role.",
+    "I'd love to bring five years of cloud architecture experience to your infrastructure team.",
+    "Having taken several ML projects from prototype to production, I'm applying for your machine learning engineer position.",
+    "I'm interested in the SRE role—I've maintained 99.99% uptime for critical services and enjoy on-call problem solving.",
+    "Your robotics engineer posting caught my eye; I've worked extensively with ROS and sensor fusion in my previous role.",
+    "I specialize in database optimization and would welcome the chance to improve query performance for your data platform.",
+    "With a degree in electrical engineering and PCB design experience, I'm eager to join your hardware R&D team."
+   ],
+   "design": [
+    "I'm a product designer with six years of experience crafting intuitive interfaces, and I'd love to bring my skills to your team.",
+    "Your brand identity work really resonates with me—I've spent my career shaping visual systems for consumer apps.",
+    "I noticed your UX designer opening and wanted to apply; I specialize in user research and wireframing for mobile experiences.",
+    "As a graphic designer passionate about typography, I'm excited about the chance to work on your marketing materials.",
+    "I'd love to join your team as a UI designer, focusing on building cohesive design systems in Figma.",
+    "My background in interaction design and prototyping makes me a great fit for your senior product design role.",
+    "I'm applying for the visual designer position—I have a strong portfolio of illustration and iconography work.",
+    "Having redesigned onboarding flows that boosted user satisfaction, I'm eager to contribute to your UX team.",
+    "I'm a motion designer interested in bringing dynamic storytelling to your brand through animation.",
+    "Your design systems specialist opening really spoke to me; I've built Figma libraries adopted across multiple product teams.",
+    "I specialize in accessible color palettes and inclusive design, and I'd love to apply for your senior designer role.",
+    "With experience in both print and digital media, I'm excited to apply for your brand designer position."
+   ],
+   "sales": [
+    "I'm excited to apply for the account executive role—I've consistently exceeded quota by 150% in SaaS sales.",
+    "With five years closing enterprise deals, I'd love to bring my pipeline management skills to your sales team.",
+    "I saw your BDR opening and wanted to reach out; I generated over $2M in new revenue last year alone.",
+    "As a top-performing associate passionate about consultative selling, I'm eager to join your retail sales team.",
+    "I'd love to grow your customer base as an account manager, leveraging my CRM and client retention experience.",
+    "My background in B2B tech sales and cold outreach makes me a strong candidate for your sales development role.",
+    "I'm applying for the regional sales manager position—I've led teams of eight reps to beat targets three quarters straight.",
+    "Having built strong relationships with Fortune 500 clients, I'm excited to drive revenue growth at your company.",
+    "I specialize in solution selling and would welcome the chance to expand your market share.",
+    "As a car sales professional with a 95% closing rate, I'm applying for your automotive sales consultant position.",
+    "I'm writing about your inside sales role; I thrive in fast-paced environments and love turning leads into customers.",
+    "With a track record of negotiating complex contracts, I'm eager to join your enterprise sales team."
+   ]
+  },
+  "delivery_feedback": {
+   "delivered": [
+    "Handed directly to the recipient, package in perfect condition.",
+    "Left with the concierge, box sealed and undamaged.",
+    "Signed for by the customer at the front door, no issues at all.",
+    "Placed safely behind the gate, still in good shape.",
+    "Delivered to the neighbor as requested, everything intact.",
+    "Tucked into the mailbox, parcel completely undamaged.",
+    "Given to the office receptionist, outer wrapping pristine.",
+    "Left at the doorstep, still sealed and in excellent condition.",
+    "Recipient accepted it personally, no damage whatsoever.",
+    "Dropped off at the security desk, package in great condition.",
+    "Delivered to the address, box unopened and in good order.",
+    "Left with the doorman, contents secure and packaging intact."
+   ],
+   "missed": [
+    "No one home after ringing the bell three times.",
+    "Gate was locked and no one answered the intercom.",
+    "Recipient refused the delivery at the door.",
+    "Couldn't find the apartment number on the building.",
+    "Office closed early, no one available to accept it.",
+    "Customer called to say they're out, rescheduled for tomorrow.",
+    "Address doesn't exist on this street according to the map.",
+    "Dog was too aggressive to approach the front door safely.",
+    "Building security denied me entry to the premises.",
+    "No safe place to leave it and recipient unavailable.",
+    "Left a calling card but couldn't complete the delivery.",
+    "Returned to depot, delivery attempt unsuccessful."
+   ],
+   "damaged": [
+    "Delivered to the front door, but the box was crushed on one side.",
+    "Handed directly to the recipient with the packaging torn open.",
+    "Left at the reception desk with a large dent in the cardboard.",
+    "Given to the neighbor as instructed, outer wrapping ripped.",
+    "Placed in the building lobby, box soaked through and damaged.",
+    "Delivered to the customer, seal broken and the box caved in.",
+    "Left at the doorstep, corner smashed and packaging punctured.",
+    "Handed over at the office, top of the package crushed inward.",
+    "Delivered to the address, cardboard wet and torn open.",
+    "Left with the concierge, box visibly dented.",
+    "Recipient signed for the delivery but noted the box was damaged.",
+    "Dropped off at the security desk, packaging split open at the seam."
+   ]
+  },
+  "listing_filter": {
+   "garden": [
+    "Step straight out into your own private garden. It's fully fenced and gets the sun all afternoon.",
+    "The flat shares a lovely communal garden at the back. Great for summer evenings.",
+    "Ground floor with a private lawn and patio area.",
+    "You'll have access to a large, landscaped garden with mature trees. Perfect for relaxing.",
+    "Comes with a south-facing garden that's perfect for growing veg.",
+    "Private garden with a shed. Plenty of space for a BBQ.",
+    "The rear garden is surprisingly spacious for a city flat.",
+    "Enjoy your morning coffee in the walled garden. It's completely private.",
+    "Shared lawn and flower beds just outside your door.",
+    "Fully private garden with decking. There's even a small pond.",
+    "The flat opens onto a communal garden – ideal for kids and pets.",
+    "Small but sunny private garden with raised beds."
+   ],
+   "balcony": [
+    "Bright living room with a Juliet balcony. It overlooks the high street.",
+    "Top-floor flat with a wrap-around balcony and great views – no garden though.",
+    "The bedroom has its own small balcony. Perfect for fresh air.",
+    "Spacious balcony off the lounge, ideal for a couple of plants and a chair.",
+    "You get a balcony with a view. But there's no garden.",
+    "Modern flat with a balcony facing the park (no outdoor ground space).",
+    "Compact flat. But it has a nice balcony for your morning coffee.",
+    "High floor with a small balcony and panoramic city views.",
+    "Balcony with a bistro set included. It's the only outside space.",
+    "French doors onto a balcony, no garden.",
+    "The flat has a private balcony but no garden.",
+    "Enjoy the outdoors on your balcony overlooking the courtyard."
+   ],
+   "none": [
+    "Cosy studio with no balcony or garden. Just a bright, warm interior.",
+    "Interior flat with no outdoor space at all.",
+    "No garden, no balcony. A compact city-centre pad.",
+    "This flat has no outside area. But it's steps from the park.",
+    "Second floor with no outdoor space, perfect if you're always out.",
+    "No balcony or garden here. Just a well-designed living space.",
+    "A snug flat with no outdoor space – windows face the courtyard.",
+    "Studio with no balcony or garden. Great transport links though.",
+    "No outdoor space, but the living room gets lovely afternoon sun.",
+    "All indoor – no balcony, no garden. Just a quiet flat.",
+    "Interior apartment with no access to outside space.",
+    "No balcony or garden, but close to green spaces."
+   ]
+  }
+ },
+ "excluded": [
+  {
+   "shape": "menu_check",
+   "label": "dairy",
+   "text": "Creamy Alfredo pasta—contains dairy, no nuts.",
+   "reason": "contains a second allergen (wheat, dairy or both), so another label fits too; the description gives no priority"
+  },
+  {
+   "shape": "menu_check",
+   "label": "dairy",
+   "text": "Cheddar cheeseburger on a nut-free bun.",
+   "reason": "contains a second allergen (wheat, dairy or both), so another label fits too; the description gives no priority"
+  },
+  {
+   "shape": "menu_check",
+   "label": "dairy",
+   "text": "Butter chicken with naan; dairy-based, nut-free.",
+   "reason": "contains a second allergen (wheat, dairy or both), so another label fits too; the description gives no priority"
+  },
+  {
+   "shape": "menu_check",
+   "label": "dairy",
+   "text": "Mac and cheese made with real cheddar and milk—nut-free.",
+   "reason": "contains a second allergen (wheat, dairy or both), so another label fits too; the description gives no priority"
+  },
+  {
+   "shape": "menu_check",
+   "label": "dairy",
+   "text": "Grilled cheese sandwich with tomato soup (no nuts).",
+   "reason": "contains a second allergen (wheat, dairy or both), so another label fits too; the description gives no priority"
+  },
+  {
+   "shape": "menu_check",
+   "label": "dairy",
+   "text": "Margherita pizza with fresh mozzarella—nut-free.",
+   "reason": "contains a second allergen (wheat, dairy or both), so another label fits too; the description gives no priority"
+  },
+  {
+   "shape": "menu_check",
+   "label": "nuts",
+   "text": "Crushed peanuts on top of the noodles.",
+   "reason": "contains a second allergen (wheat, dairy or both), so another label fits too; the description gives no priority"
+  },
+  {
+   "shape": "menu_check",
+   "label": "nuts",
+   "text": "Walnut pesto tossed with the pasta.",
+   "reason": "contains a second allergen (wheat, dairy or both), so another label fits too; the description gives no priority"
+  },
+  {
+   "shape": "menu_check",
+   "label": "nuts",
+   "text": "Pistachio ice cream with dark chocolate shavings.",
+   "reason": "contains a second allergen (wheat, dairy or both), so another label fits too; the description gives no priority"
+  },
+  {
+   "shape": "menu_check",
+   "label": "nuts",
+   "text": "Hazelnut spread on warm toast.",
+   "reason": "contains a second allergen (wheat, dairy or both), so another label fits too; the description gives no priority"
+  },
+  {
+   "shape": "menu_check",
+   "label": "nuts",
+   "text": "Pecan pie slice with whipped cream.",
+   "reason": "contains a second allergen (wheat, dairy or both), so another label fits too; the description gives no priority"
+  },
+  {
+   "shape": "menu_check",
+   "label": "nuts",
+   "text": "Macadamia nut cookies, fresh from the oven.",
+   "reason": "contains a second allergen (wheat, dairy or both), so another label fits too; the description gives no priority"
+  },
+  {
+   "shape": "menu_check",
+   "label": "nuts",
+   "text": "The risotto is finished with toasted pine nuts. It also has parmesan.",
+   "reason": "contains a second allergen (wheat, dairy or both), so another label fits too; the description gives no priority"
+  }
+ ],
+ "hand_check": {
+  "by": "assistant",
+  "date": "2026-11-18",
+  "rule": "Every text read against its planted label before any model saw it; a text is excluded if the label is not clearly right or another label fits too.",
+  "excluded": 13,
+  "borderline_kept": [
+   {
+    "shape": "incident_log",
+    "label": "high",
+    "index": 4,
+    "reason": "broken glass across the main lobby; a hazard needing immediate action"
+   },
+   {
+    "shape": "incident_log",
+    "label": "medium",
+    "index": 7,
+    "reason": "a loose handrail; could be read as high"
+   },
+   {
+    "shape": "menu_check",
+    "label": "dairy",
+    "index": 8,
+    "reason": "'creamy' bisque; dairy implied rather than named"
+   },
+   {
+    "shape": "menu_check",
+    "label": "dairy",
+    "index": 5,
+    "reason": "cream soup, said to be dairy-based; flour not mentioned"
+   }
+  ]
+ }
+}

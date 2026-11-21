@@ -1,0 +1,480 @@
+{
+ "writer_model": "mistralai/mistral-large-4-0",
+ "per_label": 12,
+ "prompts": {
+  "hotel_stays": "Write short messages for a test set. The messages are messages from hotel guests to the front desk before or during their stay.\n\nWrite 12 different messages for each of these labels:\n- late_checkout: the guest asks to check out late\n- extra_bed: the guest asks for an extra bed or cot\n- airport_transfer: the guest asks for transport to or from the airport\n- none: the guest asks for nothing in particular\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"late_checkout\", \"extra_bed\", \"airport_transfer\", \"none\", each mapping to an array of 12 strings.",
+  "parcel_lockers": "Write short messages for a test set. The messages are notes from customers about a parcel sent to a parcel locker.\n\nWrite 12 different messages for each of these labels:\n- damaged: the parcel arrived damaged\n- missing: the parcel was not in the locker\n- delayed: the parcel has not arrived when expected\n- wrong_item: the parcel held the wrong item\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"damaged\", \"missing\", \"delayed\", \"wrong_item\", each mapping to an array of 12 strings.",
+  "exam_marks": "Write short messages for a test set. The messages are comments from a teacher about a class after an exam, describing the class's effort.\n\nWrite 12 different messages for each of these labels:\n- high: the class worked hard\n- average: the class's effort was middling\n- low: the class made little effort\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"high\", \"average\", \"low\", each mapping to an array of 12 strings.",
+  "energy_meter": "Write short messages for a test set. The messages are notes from people about their home, sent with a meter reading, from which the number of people living there can be told.\n\nWrite 12 different messages for each of these labels:\n- single: one person lives there\n- couple: two adults live there\n- family: a family with children lives there\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"single\", \"couple\", \"family\", each mapping to an array of 12 strings.",
+  "flight_delays": "Write short messages for a test set. The messages are messages from airline passengers after a disrupted flight.\n\nWrite 12 different messages for each of these labels:\n- rebook: the passenger wants to be put on another flight\n- refund: the passenger wants their money back\n- compensation: the passenger claims compensation for the disruption\n- information: the passenger asks for information\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"rebook\", \"refund\", \"compensation\", \"information\", each mapping to an array of 12 strings.",
+  "bike_rentals": "Write short messages for a test set. The messages are notes from people returning a rental bike, mentioning the weather on their ride.\n\nWrite 12 different messages for each of these labels:\n- sunny: it was sunny\n- rainy: it rained\n- windy: it was windy\n- snowy: it snowed\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"sunny\", \"rainy\", \"windy\", \"snowy\", each mapping to an array of 12 strings.",
+  "volunteer_rota": "Write short messages for a test set. The messages are notes from a volunteer coordinator about the week's event.\n\nWrite 12 different messages for each of these labels:\n- fundraiser: the event raises money\n- cleanup: the event cleans up a public place\n- food_bank: the event runs a food bank\n- tutoring: the event tutors children\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"fundraiser\", \"cleanup\", \"food_bank\", \"tutoring\", each mapping to an array of 12 strings.",
+  "wine_orders": "Write short messages for a test set. The messages are notes sent with orders to a wine merchant.\n\nWrite 12 different messages for each of these labels:\n- wedding: the wine is for a wedding\n- birthday: the wine is for a birthday\n- corporate: the wine is for a company or business event\n- none: no occasion is given\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"wedding\", \"birthday\", \"corporate\", \"none\", each mapping to an array of 12 strings."
+ },
+ "texts": {
+  "hotel_stays": {
+   "late_checkout": [
+    "Hi, we have a slow morning planned — would it be possible to check out at 2pm instead of 11am?",
+    "Good morning! We'd love to stay in the room until 1pm if that's okay. Is there a late checkout fee?",
+    "Is late checkout available tomorrow? We'd like to leave around 3pm.",
+    "Could we possibly get a late checkout on Sunday? We'd like to keep the room until 2pm.",
+    "We're not in a rush tomorrow — can we check out at 1 o'clock instead of the usual time?",
+    "Hello, I wanted to ask if we could keep the room until 2pm on our last day. Happy to pay extra if needed.",
+    "Would it be possible to check out late? Maybe around 3pm on our departure day?",
+    "Hi there — any chance of a 12:30 checkout tomorrow? We're in no hurry to leave.",
+    "We'd really appreciate a late checkout if possible. 1pm would work great for us.",
+    "Is there a late checkout option for room 412? We'd like to stay until 2pm.",
+    "Good afternoon! Could we arrange to check out at 3pm instead of 11am? Thanks!",
+    "Our plans got pushed back, so we were hoping to keep the room until 2 or 3pm. Is that possible?"
+   ],
+   "extra_bed": [
+    "Hi! We have a toddler with us — could we get an extra cot in our room, please?",
+    "Do you have an extra bed available for our room? Our son is joining us tonight.",
+    "Hello, we'd like to request an extra bed in room 305 if possible. Thanks!",
+    "Is it possible to add a rollaway bed to our double room? We have a third guest with us.",
+    "We need an extra bed for our daughter — could you arrange that for tonight?",
+    "Hi there, could we please have a cot put in our room before we arrive?",
+    "Our friends are staying with us, so we were wondering if you could add an extra bed to our room.",
+    "Do you provide extra beds? We'd love one in our room for the rest of the week.",
+    "Could we get an additional bed in our room? We have a child traveling with us.",
+    "Hello! Is it possible to request a baby cot for our stay? Our little one sleeps better in one.",
+    "We booked a double room but need a triple — can you add an extra bed, please?",
+    "Hi, we'd like to ask for an extra bed or sofa bed in our room if available. Thank you!"
+   ],
+   "airport_transfer": [
+    "Hi! Could you arrange a taxi or shuttle to take us to the airport tomorrow morning?",
+    "Do you offer airport transfers? We'd like to book a ride to the airport for 7am.",
+    "Hello, can you organize a car to pick us up at the airport when we arrive at 9pm?",
+    "We need a transfer from the airport to the hotel on Friday — is that something you can arrange?",
+    "Could you book us a shuttle to the airport on Sunday? We'd like to be picked up at 8am.",
+    "Hi there, is there a hotel shuttle to the airport, or should we book a taxi ourselves?",
+    "We'd like to arrange a private car to take us to the airport at 6am on our last day.",
+    "Can you help us with transport to the airport? We'd like to arrive two hours before our flight.",
+    "Hello! Do you provide pickup from the airport? Our flight lands at midnight.",
+    "Could we reserve a transfer from the hotel to the airport for Thursday morning, please?",
+    "Is there a free shuttle to the airport, or do we need to pay for a taxi? We're leaving at noon.",
+    "Hi, we need a ride to the airport tomorrow — could you call a cab for us around 9am?"
+   ],
+   "none": [
+    "Hi! What time does breakfast start in the morning?",
+    "Hello, is the wifi free in the rooms? And what's the password?",
+    "Good morning! Do you have a gym or fitness center on site?",
+    "Hi there, just wanted to say the room is lovely — thank you!",
+    "Could you tell us what time the pool closes in the evening?",
+    "Hello! Is there a restaurant in the hotel, or do you have recommendations nearby?",
+    "Hi, do you have any recommendations for a nice dinner close to the hotel?",
+    "Good afternoon — where can we find extra towels?",
+    "Hi! Is parking available at the hotel, and how much is it per night?",
+    "Hello, could you recommend a good place to get coffee near the hotel?",
+    "Hi there, what time is the spa open? We'd like to book a massage.",
+    "Good morning! Just checking — is the front desk open 24 hours?"
+   ]
+  },
+  "parcel_lockers": {
+   "damaged": [
+    "The box was completely crushed when I opened the locker, and the vase inside is shattered into pieces.",
+    "My parcel arrived with a huge dent on one side and the sealing tape was ripped open.",
+    "Opened the compartment and the package was soaking wet, the cardboard is falling apart and the contents are ruined.",
+    "The corner of the box is smashed in and I can see the screen inside is cracked.",
+    "It looks like the locker door closed on the parcel; the box is bent and the item inside is broken.",
+    "My book arrived with the cover torn off and all the pages ripped.",
+    "The packaging was punctured and the ceramic mug inside is in shards.",
+    "Box arrived split open at the seam, looks like it was mishandled badly.",
+    "The parcel was crushed flat, the shoes inside are bent out of shape.",
+    "Arrived with the outer box completely destroyed, contents exposed and damaged.",
+    "The package looks like it was run over; the box is split and the electronics inside are cracked.",
+    "My parcel came with a big hole in the side and the product inside has a deep scratch across it."
+   ],
+   "missing": [
+    "I got the delivery notification but the locker was completely empty when I opened it.",
+    "The code worked fine, but there was no parcel inside, just an empty compartment.",
+    "Tracking says delivered to locker 12, but when I arrived it was empty.",
+    "Went to pick up my package and the locker was empty, nothing there at all.",
+    "The SMS said my parcel was ready, but the locker door opened to nothing.",
+    "I checked locker 5 twice and it's completely empty, no box, no bag.",
+    "My parcel is missing from the locker despite the delivered status.",
+    "Opened the locker and it was empty, where is my package?",
+    "The notification said locker 8, but that compartment was empty when I got there.",
+    "Arrived at the locker and found it empty, even though the app says delivered.",
+    "No parcel in the locker, just empty space where my box should be.",
+    "Used the pickup code and the locker was empty, my parcel isn't there."
+   ],
+   "delayed": [
+    "My parcel was supposed to arrive yesterday but still hasn't shown up.",
+    "It's been three days past the expected delivery date and I still have no locker code.",
+    "Tracking hasn't updated in 48 hours and the parcel is still not here.",
+    "Expected it on Monday, but it's now Thursday and there's no sign of it.",
+    "The delivery window was 10am-12pm today, but it's 3pm and no notification yet.",
+    "Still waiting, my parcel is running late, the estimate was two days ago.",
+    "It was due last week and I haven't received any delivery notification.",
+    "My order is overdue; the promised arrival was yesterday morning.",
+    "No sign of the parcel yet, it's past the delivery date on the website.",
+    "The app says out for delivery but it's been six hours and still no locker code.",
+    "Expected today but nothing has arrived and I haven't gotten a pickup code.",
+    "My parcel is late, the estimated delivery was this morning and it's still not here."
+   ],
+   "wrong_item": [
+    "I opened the parcel and it's a blue shirt, but I ordered a red one.",
+    "The locker contained someone else's order, this isn't what I bought at all.",
+    "I ordered a book but received a kitchen utensil instead.",
+    "The contents are wrong: I ordered size M but the label says XL.",
+    "This isn't my parcel, the packing slip inside has a different name and address.",
+    "Got the wrong product entirely: ordered headphones, received a phone case.",
+    "The item inside is a different model than the one I purchased.",
+    "Opened it up and it's the wrong color and size, I ordered black, got white.",
+    "I ordered a dress but the box contains trousers.",
+    "The parcel has the wrong item inside; the brand is completely different from my order.",
+    "This is clearly not my purchase, the invoice inside is for someone else.",
+    "Received a different item than what I ordered; the product doesn't match the photo."
+   ]
+  },
+  "exam_marks": {
+   "high": [
+    "The class really put in the work this time—I could see the effort in every answer.",
+    "Everyone came prepared and gave it their all; you could tell they'd been studying.",
+    "I was impressed by how much effort went into these exams. Well done, everyone.",
+    "You all clearly spent hours preparing, and it shows in your results.",
+    "The energy in the room was great—everyone was focused and trying their hardest.",
+    "It's clear this class didn't hold anything back; every question got a serious attempt.",
+    "I could tell you'd all been grinding away at this material for days. Great job.",
+    "The dedication here was obvious from start to finish. I'm proud of this group.",
+    "Nobody phoned it in today—every single student gave a full, thoughtful effort.",
+    "You should be proud; the work ethic on display here was outstanding.",
+    "I saw real determination in how you tackled the harder questions. Excellent effort.",
+    "This class attacked the exam with everything they had. That kind of commitment pays off."
+   ],
+   "average": [
+    "Some students really tried, but others seemed to rush through. A mixed bag overall.",
+    "The effort was there in spots, but plenty of answers looked like they were done in a hurry.",
+    "You gave a decent try, though I expected a bit more from this group.",
+    "Half the class put in solid work while the rest barely scratched the surface.",
+    "It was okay—some good attempts, but also a lot of half-finished answers.",
+    "The effort felt inconsistent; a few shone while others didn't seem to care much.",
+    "You did enough to get by, but I know you're capable of pushing further.",
+    "Some real effort showed up in a few papers, but overall it was pretty patchy.",
+    "A middling performance—neither impressive nor terrible, just... average.",
+    "I saw pockets of hard work, but too many of you settled for the easy way out.",
+    "The class gave a fair effort overall, though it varied a lot from student to student.",
+    "You weren't lazy, but you weren't exactly busting yourselves either. Middle of the road."
+   ],
+   "low": [
+    "It looks like most of you barely opened the book before this exam.",
+    "Very disappointing—way too many blank spaces and rushed answers.",
+    "I could count on one hand the students who actually tried on this one.",
+    "The lack of effort here is pretty obvious. Several papers were turned in within minutes.",
+    "You all seemed to give up at the first hard question. Not acceptable.",
+    "Honestly, this was the least effort I've seen from this class all year.",
+    "Many of you just scribbled something down and called it a day.",
+    "It's clear very little preparation went into this exam. What a waste.",
+    "I expected so much more; instead, I got a lot of empty pages and guesses.",
+    "The class barely engaged with the material—answers were short and careless.",
+    "You treated this like a joke. I saw almost no real work put in.",
+    "This was a lazy effort across the board. We need to talk about commitment."
+   ]
+  },
+  "energy_meter": {
+   "single": [
+    "Just me living here, so the bills are all mine. Meter's at 4521.",
+    "I'm on my own in this flat. Reading: 3312.",
+    "I'm the only tenant here, living alone. 2890.",
+    "Only one of me in this house. The dial shows 5102.",
+    "Me and my laptop, that's it. Meter reads 1987.",
+    "Living alone since I moved to the city. 4455 on the meter.",
+    "Single occupancy, just me. Reading 3678.",
+    "It's a one-person household. Meter: 2234.",
+    "Just me here, working from home. 2987.",
+    "On my own out in the countryside. Meter shows 3567.",
+    "One set of dishes, one bed, one me. Reading 4123.",
+    "Bachelor pad with just one occupant. 2765."
+   ],
+   "couple": [
+    "Just the two of us here—me and my wife. Meter: 5678.",
+    "My husband and I are the only ones living here. Reading 4321.",
+    "We're a couple, no kids, just us two. 6789.",
+    "Two adults sharing this place. Meter at 5432.",
+    "Me and my partner, that's the full headcount. 7890.",
+    "The two of us have been keeping the heating low. 3456.",
+    "DINK household here—double income, no children. 6543.",
+    "Just us two since we got married. Meter: 4567.",
+    "My girlfriend and I are the only ones here. 5678.",
+    "No children, just me and my spouse. Reading 3789.",
+    "Two occupants, both adults. 8901.",
+    "Us two splitting the rent and the meter. 2345."
+   ],
+   "family": [
+    "Family of four—two kids under ten. Meter reads 8765.",
+    "The children are always leaving lights on! Reading 9876.",
+    "Me, my husband, and our three kids. Meter: 6543.",
+    "Four of us here, including two teenagers. 7654.",
+    "The little ones run the washing machine constantly. Reading 8901.",
+    "We've got a toddler and a baby, so lots of laundry. Meter 5432.",
+    "Household with two school-age children. 9012.",
+    "Three kids and two adults—chaos, basically. Reading 3456.",
+    "My son and daughter share a room; we have the other. 7890.",
+    "Busy home with four children under twelve. Meter: 4567.",
+    "We're raising the grandkids now, so five of us total. Reading 5678.",
+    "Two parents and three children—meter's always high. 6789."
+   ]
+  },
+  "flight_delays": {
+   "rebook": [
+    "Can you please put me on the next flight to London tomorrow morning?",
+    "I need to be rebooked on the 6pm departure to Paris. My connection was cancelled.",
+    "Please switch my booking to flight BA204 on Friday instead.",
+    "My flight was cancelled and I need to get on another one as soon as possible.",
+    "Could you move me to the first available flight to New York?",
+    "I'd like to be rebooked on tomorrow's 9am flight to Chicago, please.",
+    "My flight was delayed overnight. Can you book me on the next morning departure?",
+    "Please transfer my reservation to the 3pm flight to Miami.",
+    "I need a new flight to Berlin, the earliest you have available.",
+    "Can you change my ticket to the Sunday flight instead?",
+    "Put me on the standby list for the next flight to Tokyo.",
+    "I want to be on a different flight, preferably this evening if possible."
+   ],
+   "refund": [
+    "I want a full refund for my cancelled flight, please.",
+    "Please return the money I paid for this ticket to my card.",
+    "You cancelled my flight. I expect my fare refunded immediately.",
+    "I'm not flying anymore, so I need my money back.",
+    "Refund my ticket price of $450, please.",
+    "I want to cancel and get a full refund of what I paid.",
+    "Give me back the cost of my booking, I won't be traveling.",
+    "Please process a refund for my unused ticket.",
+    "I demand the money I spent on this flight returned to me.",
+    "The flight was cancelled. Please refund my payment in full.",
+    "I'd like a refund of my airfare, not a voucher.",
+    "Return my $300 fare to my original payment method."
+   ],
+   "compensation": [
+    "I'm claiming €250 compensation for the 8-hour delay under EU261.",
+    "You cancelled my flight with no notice. You owe me compensation.",
+    "I want the statutory compensation for this disruption, on top of my refund.",
+    "Pay me the delay compensation of £220 as required by law.",
+    "I'm entitled to compensation for the inconvenience caused by this cancellation.",
+    "Send me the €400 compensation for the overnight delay.",
+    "I claim damages for the missed meeting due to your cancelled flight.",
+    "My flight was delayed 12 hours. Where is my compensation payment?",
+    "I want the fixed compensation amount for this disruption, please.",
+    "Compensate me for the hotel costs and the delay, per regulations.",
+    "I'm filing for compensation due to the significant delay of my flight.",
+    "Pay the compensation owed for cancelling my flight less than 14 days before departure."
+   ],
+   "information": [
+    "What time is the next flight to Rome departing?",
+    "Can you tell me why my flight was cancelled?",
+    "What options do I have available now that my connection is missed?",
+    "Is there a later flight tonight I could look at?",
+    "How long was the delay on flight AA123?",
+    "My flight has been disrupted. What is the procedure now?",
+    "Can you explain what happened to my booking?",
+    "Are there any flights to Madrid this evening?",
+    "What's the current status of my connecting flight?",
+    "How many seats are left on the 6pm departure?",
+    "When will the gate information be updated?",
+    "I have a connection. Did my checked luggage make it onto the replacement aircraft?"
+   ]
+  },
+  "bike_rentals": {
+   "sunny": [
+    "Beautiful sunny ride along the river today. The sun was warm on my face the whole way.",
+    "Just dropped the bike off. It was sunny and perfect for a ride through the park.",
+    "Lovely clear skies today! Had a great time biking in the sunshine.",
+    "Returning the bike now. Sunny weather made the ride so pleasant.",
+    "What a gorgeous sunny afternoon for a bike ride. Thanks!",
+    "Bike's back. It was sunny all morning, not a cloud in the sky.",
+    "Had a blast riding in the sun today. Clear blue skies the entire time.",
+    "Dropped off at the station. Perfect sunny weather for cycling.",
+    "The ride was amazing - sunny and warm. See you next time!",
+    "Just returned the rental. Sunshine made everything bright and cheerful today.",
+    "Sunny skies greeted me on every street. Great ride!",
+    "Bike returned. It was a beautiful sunny day, couldn't ask for better weather."
+   ],
+   "rainy": [
+    "Bike's back. It rained pretty hard on my way home, so I'm soaked.",
+    "Returning the rental now. Got caught in a downpour - it was raining cats and dogs.",
+    "Just dropped it off. The rain started halfway through my ride and didn't stop.",
+    "Soaked to the bone! It rained the entire time I had the bike.",
+    "Bike returned. Heavy rain made the roads slippery today.",
+    "Had to cut my ride short - it started raining buckets.",
+    "Dropping off the bike. It was pouring rain all afternoon.",
+    "Returned at the dock. The rain was relentless today, glad to be inside now.",
+    "Wet and miserable - it rained non-stop during my rental period.",
+    "Bike's back at the station. Light rain turned into a heavy shower.",
+    "Just returned it. The streets were flooded from all the rain.",
+    "Rental returned. It drizzled the whole time, then really poured."
+   ],
+   "windy": [
+    "Bike returned. It was so windy today, I could barely pedal against the gusts.",
+    "Just dropped it off. Strong winds made the ride really tough.",
+    "The wind was howling all afternoon - glad to return the bike.",
+    "Returning the rental. It was incredibly windy, almost blew me over!",
+    "Bike's back. Fighting against the wind the whole way home.",
+    "Dropped off at the rack. Gusty winds made cycling a challenge today.",
+    "Had a hard time with the headwind. It was windy as anything out there.",
+    "Returned the bike. The wind was so strong I had to lean into it.",
+    "Just finished my ride. Blustery winds all day - my hair is a mess!",
+    "Bike returned. It was windy enough to make the trees sway.",
+    "Dropping it off now. The wind picked up and made the ride exhausting.",
+    "Rental back. Strong gusts coming off the water made it windy today."
+   ],
+   "snowy": [
+    "Bike's back. It snowed all morning, so the roads were white and slippery.",
+    "Returning the rental. Snow was falling heavily during my ride - beautiful but cold!",
+    "Just dropped it off. It started snowing while I was out, everything's covered in white.",
+    "Snowed the whole time I had the bike. My gloves are frozen.",
+    "Bike returned. Light snow was falling, making the ride magical but chilly.",
+    "Had to be careful - it was snowing and the paths were icy.",
+    "Dropped off at the station. Snowflakes were everywhere today.",
+    "Returned the bike. It snowed buckets, visibility was terrible.",
+    "Just got back. Heavy snowfall made the ride slow but pretty.",
+    "Bike's back. It was snowing lightly the entire afternoon.",
+    "Rental returned. The snow came down hard, covering everything in a white blanket.",
+    "Dropping it off now. Snow was coming down steadily - glad I wore my warm coat."
+   ]
+  },
+  "volunteer_rota": {
+   "fundraiser": [
+    "We're hosting our annual charity gala on Saturday night—tickets are $50 and all proceeds go to the animal shelter.",
+    "Join us for a craft fair in the town square this Thursday; every item sold helps fund our summer programs.",
+    "The silent auction opens Friday at 6 PM. Bring your bids and help us reach our $10,000 goal.",
+    "We're selling raffle tickets at the front desk all week—$5 each, winner gets a weekend getaway.",
+    "Come to our trivia night fundraiser on Wednesday; entry is $20 per person.",
+    "Our crowdfunding campaign ends Sunday, so please chip in whatever you can to support the new community center.",
+    "We're holding a car wash on Saturday morning to raise money for the youth sports league—$10 per vehicle.",
+    "Buy a ticket to our spring ball fundraiser; all proceeds go toward medical research.",
+    "The 5K run/walk on Sunday is our biggest fundraiser of the year—register online to secure your spot.",
+    "We're auctioning off donated gift baskets at the fair this weekend; proceeds benefit the library.",
+    "Please consider a donation at our booth during the street festival—every dollar supports our mission.",
+    "Our casino night fundraiser is back! $100 buy-in gets you gaming chips, and all proceeds go to charity."
+   ],
+   "cleanup": [
+    "We're meeting at Riverside Park on Saturday at 9 AM to pick up litter along the trails—gloves and bags provided.",
+    "Join us for the annual beach cleanup this Sunday; we'll be removing plastic and debris from the shoreline.",
+    "Help us rake leaves and clear brush from the community garden this Thursday afternoon.",
+    "We're painting over graffiti on the underpass this weekend—bring old clothes and we'll supply the paint.",
+    "The neighborhood street sweep is happening Wednesday morning; we'll be collecting trash from the gutters and sidewalks.",
+    "Come help us clean up the riverbank after the flood—boots recommended, we'll provide grabbers and bags.",
+    "We're organizing a park beautification day on Friday: planting flowers and removing weeds from the public beds.",
+    "Bring your rake and join us at Oak Street Park to clear fallen branches and tidy up the playground.",
+    "The trail maintenance crew needs volunteers Saturday to pick up trash and trim overgrown bushes along the hiking path.",
+    "We're washing the windows and sweeping the floors at the public library this Sunday—help us spruce up the reading room.",
+    "Join the highway adoption cleanup this Saturday; we'll be clearing litter from the two-mile stretch of Route 9.",
+    "We're clearing invasive plants from the nature reserve on Thursday—long sleeves and sturdy shoes required."
+   ],
+   "food_bank": [
+    "We need volunteers Thursday afternoon to sort canned goods and organize shelves at the downtown food pantry.",
+    "Join us Saturday morning to pack grocery boxes for families—each box needs rice, pasta, and canned vegetables.",
+    "The food bank is open for distribution this Wednesday from 2-5 PM; we need help handing out bags to clients.",
+    "We're collecting food donations for the food bank at the community center all week—drop off pasta, beans, and cereal.",
+    "Help us unload the delivery truck on Friday and stock the shelves with fresh produce and dairy.",
+    "We need volunteers to prepare meal kits for seniors at the food bank kitchen this Sunday.",
+    "Sort through the donated bread and pastries at the pantry this Thursday—first come, first served for families.",
+    "We're running a mobile food pantry in the parking lot Saturday; help us load cars with groceries.",
+    "Pack weekend backpacks for kids at the food bank—each one gets peanut butter, crackers, and fruit cups.",
+    "The food bank needs help inventorying the warehouse this Wednesday—count cans and check expiration dates.",
+    "Join us Friday evening to serve hot meals at the soup kitchen attached to the food bank.",
+    "We're distributing Thanksgiving baskets at the food bank on Tuesday—volunteers needed to hand out turkeys and sides."
+   ],
+   "tutoring": [
+    "We need volunteers Tuesday and Thursday afternoons to help elementary students with their reading homework at the library.",
+    "Join us at the community center Wednesday from 4-6 PM to tutor middle schoolers in math—no experience needed, just patience.",
+    "The after-school program needs reading buddies for 1st and 2nd graders this Friday; we'll provide the books.",
+    "Help a high school student prep for the SAT this Saturday morning—focus on English and essay writing.",
+    "We're starting a homework club at the youth center on Mondays; volunteers will assist kids with science projects.",
+    "Tutor a child in basic coding this Thursday evening at the tech lab—laptops provided for the session.",
+    "The summer learning program needs one-on-one mentors for kids struggling with fractions—sessions are 45 minutes.",
+    "Help us run the reading circle for kindergarteners this Sunday afternoon at the school—stories and phonics games.",
+    "We need volunteers to grade papers and explain concepts to 8th graders during our study hall on Wednesday.",
+    "Join our ESL tutoring session this Saturday; help immigrant children practice conversational English.",
+    "The mentorship program pairs volunteers with kids for weekly math tutoring at the Boys & Girls Club on Thursdays.",
+    "Come help with the science fair projects this Friday—guide 5th graders through their experiments at the school gym."
+   ]
+  },
+  "wine_orders": {
+   "wedding": [
+    "Please deliver this to the reception venue on Saturday afternoon - it's for my sister's wedding.",
+    "We're getting married next month and need these bottles for the toast and dinner service.",
+    "This order is for the bride and groom's table at the wedding breakfast.",
+    "Wine for our wedding reception on June 15th - 80 guests expected.",
+    "Please include a card for the happy couple; this is their wedding gift from us.",
+    "Delivering to the venue for the wedding ceremony and reception that evening.",
+    "For the newlyweds' send-off party after the ceremony.",
+    "My daughter's wedding is in July and she specifically requested these vintages.",
+    "Champagne and wine for the wedding party - please chill the whites.",
+    "This is for the groom's parents to host at the rehearsal dinner.",
+    "For the first dance and reception at the wedding.",
+    "Please have this ready at the church hall for the post-wedding celebration."
+   ],
+   "birthday": [
+    "This is for my dad's 60th birthday party next weekend.",
+    "Ordering wine for Sarah's surprise birthday dinner on Friday.",
+    "For my own birthday celebration - I'm turning 30!",
+    "Birthday gift for my wife - she loves this particular red.",
+    "Please deliver before Saturday; it's my mum's 70th birthday.",
+    "Wine for the birthday boy's party at the local pub.",
+    "Celebrating my son's 18th birthday with a nice bottle.",
+    "For the birthday girl's dinner - she's turning 25.",
+    "This is for a 50th birthday bash at our house.",
+    "Birthday present for my brother - please wrap it nicely.",
+    "We're having a joint birthday party for me and my twin on Sunday.",
+    "For grandma's 90th birthday lunch - she wants her favorite champagne."
+   ],
+   "corporate": [
+    "Please deliver to our office at 123 Main Street - this is for the quarterly team meeting.",
+    "Wine for the annual company dinner next Friday.",
+    "Ordering for a client entertainment event at the conference center.",
+    "This is for our startup's launch party - 50 people in the office.",
+    "For the board meeting dinner on Thursday evening.",
+    "Corporate gift for our biggest client - please include a receipt.",
+    "Wine for the office Christmas party.",
+    "For the team building retreat at the vineyard next month.",
+    "Please invoice our company account - this is for the annual sales conference.",
+    "Business dinner with our partners from overseas - need something impressive.",
+    "For the end-of-year celebration at the firm.",
+    "Delivering to the conference room for the product launch event."
+   ],
+   "none": [
+    "Please deliver this to my home address on Thursday afternoon.",
+    "Just a regular order for the weekend - nothing special.",
+    "Restocking the cellar; we're running low on reds.",
+    "For our own enjoyment - please send to the usual address.",
+    "Standard monthly subscription delivery, please.",
+    "We're out of white wine - need a case by Friday.",
+    "Please deliver when convenient; no rush.",
+    "For the pantry - just topping up our supply.",
+    "Same order as last month, please.",
+    "Sending to my parents' house this time.",
+    "Just because we love your selection - keep it coming.",
+    "For Friday evening at home with dinner."
+   ]
+  }
+ },
+ "excluded": [
+  {
+   "shape": "flight_delays",
+   "label": "information",
+   "text": "Is there a later flight tonight I could look at?",
+   "reason": "asks about a later flight it could switch to; fits rebook too"
+  }
+ ],
+ "hand_check": {
+  "by": "assistant",
+  "date": "2026-11-18",
+  "rule": "Every text read against its planted label before any rule or model saw it; a text is excluded if the label is not clearly right or another label fits too.",
+  "excluded": 1,
+  "borderline_kept": [
+   {
+    "shape": "flight_delays",
+    "label": "information",
+    "index": 7,
+    "reason": "asks whether flights exist this evening; a question, with no request to move"
+   },
+   {
+    "shape": "exam_marks",
+    "label": "average",
+    "index": 9,
+    "reason": "pockets of hard work but many took the easy way; mixed, so average rather than low"
+   }
+  ]
+ }
+}

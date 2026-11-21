@@ -146,3 +146,26 @@ first time.
    whether and when each plan goes live, arm C's median over the jobs after
    that point against arms R and D, arm C's answers before it (which should
    match R), and calls and tokens per arm.
+
+7. `lean_learning` (item 1 of the 2026-11-17 handoff): cheaper learning. Same
+   jobs and settings as follow-up 6 (first four shapes, 40 jobs each, back to
+   back, `job_agreement_min` 4, `max_probes` 4, shadow plans, separate pools,
+   ceiling arm), with one change: `learning_models` set to
+   `["google/gemini-3.8-flash", "openai/gpt-5.6-luna"]`. Background learning
+   of a function step (step races in plan trials and shadow runs, and probe
+   answers) then asks these two models instead of all five, and an example
+   still needs both to give the same valid answer. Live answers, live plan
+   steps and every judgement step keep the full roster. The pair was chosen
+   before the run from the single-step development data
+   (`fast_path_gold_dev_run_v1_summary.json`): the most often agreeing pair
+   from different providers, 243 of 251 agreed and none of them wrong.
+   Calls are now metered by purpose (whole task, step or probe answer, plan,
+   synthesis, probe proposal).
+
+   Readings: arm C's calls and tokens, in total and by purpose, against
+   follow-up 6 (5,265 calls); whether and when each plan goes live; arm C's
+   median after that point against R and D; wrong job examples and wrong
+   promoted functions. Expected: fewer step-answer calls per shadow run; risk:
+   with two learners, a disagreement or invalid reply wastes the example, so
+   promotion and going live may come later. Descriptive, since the jobs are
+   reused.

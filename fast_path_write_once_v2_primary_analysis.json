@@ -1,0 +1,354 @@
+{
+ "status": "COMPLETED",
+ "label": "write_once_v2_primary",
+ "task_clusters": 8,
+ "arms": {
+  "R": {
+   "jobs": 160,
+   "correct": 153,
+   "unanswered": 0,
+   "median_ms": 2296.1114154998086,
+   "p90_ms": 3187.501762500051,
+   "last_five_median_ms": 2416.344209000272
+  },
+  "C": {
+   "jobs": 160,
+   "correct": 150,
+   "unanswered": 0,
+   "median_ms": 1752.6711620000697,
+   "p90_ms": 3806.3691646999814,
+   "last_five_median_ms": 1074.23972149968
+  },
+  "D": {
+   "jobs": 160,
+   "correct": 159,
+   "unanswered": 0,
+   "median_ms": 912.1503095000207,
+   "p90_ms": 1145.4690049999951,
+   "last_five_median_ms": 925.6514265000533
+  },
+  "E": {
+   "jobs": 160,
+   "correct": 127,
+   "unanswered": 0,
+   "median_ms": 0.14107600020452082,
+   "p90_ms": 0.2734513000177685,
+   "last_five_median_ms": 0.15503400004490686
+  },
+  "W": {
+   "jobs": 160,
+   "correct": 151,
+   "unanswered": 0,
+   "median_ms": 962.5251395000305,
+   "p90_ms": 2112.8858471000735,
+   "last_five_median_ms": 909.8837689998618
+  }
+ },
+ "w_vs_r": {
+  "time_ratio": 0.41919792437010805,
+  "time_ratio_interval_95": [
+   0.35238225595024997,
+   0.46753498339637084
+  ],
+  "correctness_difference": -0.012500000000000067,
+  "correctness_interval_95": [
+   -0.10000000000000009,
+   0.04999999999999993
+  ]
+ },
+ "w_vs_d": {
+  "time_ratio": 1.0552264571697858,
+  "time_ratio_interval_95": [
+   0.9859004460558929,
+   1.1165219139621154
+  ],
+  "correctness_difference": -0.050000000000000044,
+  "correctness_interval_95": [
+   -0.125,
+   0.0
+  ]
+ },
+ "w_vs_e": {
+  "time_ratio": 6822.741912902533,
+  "time_ratio_interval_95": [
+   5963.411221082096,
+   7585.1168251700055
+  ],
+  "correctness_difference": 0.15000000000000002,
+  "correctness_interval_95": [
+   -0.025000000000000022,
+   0.31875
+  ]
+ },
+ "w_vs_c": {
+  "time_ratio": 0.5491761149317023,
+  "time_ratio_interval_95": [
+   0.4238256013898816,
+   0.7975517192968354
+  ],
+  "correctness_difference": 0.006249999999999978,
+  "correctness_interval_95": [
+   0.0,
+   0.018750000000000044
+  ]
+ },
+ "c_vs_r": {
+  "time_ratio": 0.763321479162001,
+  "time_ratio_interval_95": [
+   0.4801531552708665,
+   0.9904880138964385
+  ],
+  "correctness_difference": -0.018750000000000044,
+  "correctness_interval_95": [
+   -0.10625000000000007,
+   0.04375000000000007
+  ]
+ },
+ "first_program_job_index": {
+  "parcel_lockers": 2,
+  "flight_delays": 2,
+  "bike_rentals": 2,
+  "volunteer_rota": 2,
+  "hotel_stays": 3,
+  "exam_marks": 3,
+  "energy_meter": 3,
+  "wine_orders": 3
+ },
+ "shapes_with_program": 8,
+ "w_routes": {
+  "race": {
+   "jobs": 21,
+   "correct": 19,
+   "median_ms": 2295.562830000108
+  },
+  "program": {
+   "jobs": 139,
+   "correct": 132,
+   "median_ms": 915.4379599999629
+  }
+ },
+ "attempt_outcomes": {
+  "ADOPTED": 9
+ },
+ "readings_per_program": [
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1
+ ],
+ "median_after_program_ms": {
+  "C": 1547.3708869999427,
+  "R": 2225.894331999825,
+  "W": 915.5555894999452,
+  "E": 0.13916050011175685,
+  "D": 915.2913519999402
+ },
+ "per_shape": {
+  "hotel_stays": {
+   "R": {
+    "correct": 18,
+    "median_ms": 2021.0486324999692
+   },
+   "W": {
+    "correct": 18,
+    "median_ms": 1030.1048274999403
+   },
+   "E": {
+    "correct": 18,
+    "median_ms": 0.12436100007562345
+   },
+   "D": {
+    "correct": 19,
+    "median_ms": 840.1745310002298
+   },
+   "C": {
+    "correct": 17,
+    "median_ms": 1680.6655570001112
+   }
+  },
+  "parcel_lockers": {
+   "D": {
+    "correct": 20,
+    "median_ms": 965.2685839998867
+   },
+   "W": {
+    "correct": 20,
+    "median_ms": 964.8643984999126
+   },
+   "C": {
+    "correct": 20,
+    "median_ms": 1335.5433809998658
+   },
+   "R": {
+    "correct": 19,
+    "median_ms": 1991.1666660002538
+   },
+   "E": {
+    "correct": 11,
+    "median_ms": 0.12510999977166648
+   }
+  },
+  "exam_marks": {
+   "E": {
+    "correct": 8,
+    "median_ms": 0.13093649977236055
+   },
+   "R": {
+    "correct": 18,
+    "median_ms": 2267.499476500234
+   },
+   "D": {
+    "correct": 20,
+    "median_ms": 898.4325910000734
+   },
+   "C": {
+    "correct": 19,
+    "median_ms": 893.6502249999876
+   },
+   "W": {
+    "correct": 19,
+    "median_ms": 822.471091500006
+   }
+  },
+  "energy_meter": {
+   "R": {
+    "correct": 20,
+    "median_ms": 2955.1180079999995
+   },
+   "C": {
+    "correct": 20,
+    "median_ms": 2888.5971105002
+   },
+   "D": {
+    "correct": 20,
+    "median_ms": 1024.8795525000105
+   },
+   "W": {
+    "correct": 20,
+    "median_ms": 1111.0120830001051
+   },
+   "E": {
+    "correct": 17,
+    "median_ms": 0.13245600007394387
+   }
+  },
+  "flight_delays": {
+   "W": {
+    "correct": 20,
+    "median_ms": 961.6953214999739
+   },
+   "R": {
+    "correct": 20,
+    "median_ms": 2032.2467640000923
+   },
+   "C": {
+    "correct": 20,
+    "median_ms": 2003.133072500077
+   },
+   "E": {
+    "correct": 15,
+    "median_ms": 0.13385950001065794
+   },
+   "D": {
+    "correct": 20,
+    "median_ms": 953.2199235000007
+   }
+  },
+  "bike_rentals": {
+   "R": {
+    "correct": 18,
+    "median_ms": 3158.582019500045
+   },
+   "W": {
+    "correct": 20,
+    "median_ms": 887.8967125001509
+   },
+   "E": {
+    "correct": 19,
+    "median_ms": 0.1678649998666515
+   },
+   "C": {
+    "correct": 20,
+    "median_ms": 1123.0181225000706
+   },
+   "D": {
+    "correct": 20,
+    "median_ms": 809.7158595001019
+   }
+  },
+  "volunteer_rota": {
+   "W": {
+    "correct": 20,
+    "median_ms": 986.4327794998644
+   },
+   "R": {
+    "correct": 20,
+    "median_ms": 2318.429368499892
+   },
+   "E": {
+    "correct": 19,
+    "median_ms": 0.2103240001360973
+   },
+   "C": {
+    "correct": 20,
+    "median_ms": 1679.8208494999471
+   },
+   "D": {
+    "correct": 20,
+    "median_ms": 850.7353224997587
+   }
+  },
+  "wine_orders": {
+   "E": {
+    "correct": 20,
+    "median_ms": 0.1526429998648382
+   },
+   "W": {
+    "correct": 14,
+    "median_ms": 904.2794515000878
+   },
+   "D": {
+    "correct": 20,
+    "median_ms": 896.5073464999023
+   },
+   "R": {
+    "correct": 20,
+    "median_ms": 2524.6044170000914
+   },
+   "C": {
+    "correct": 14,
+    "median_ms": 1561.8404199999532
+   }
+  }
+ },
+ "usage_per_arm": {
+  "C": {
+   "calls": 11627,
+   "prompt_tokens": 2446927,
+   "completion_tokens": 1609696
+  },
+  "D": {
+   "calls": 800,
+   "prompt_tokens": 153036,
+   "completion_tokens": 43534
+  },
+  "R": {
+   "calls": 800,
+   "prompt_tokens": 399559,
+   "completion_tokens": 483907
+  },
+  "W": {
+   "calls": 979,
+   "prompt_tokens": 248353,
+   "completion_tokens": 169379
+  }
+ },
+ "time_criterion_met": true,
+ "correctness_criterion_met": false,
+ "decision": "NOT_SUPPORTED"
+}
