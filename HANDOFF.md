@@ -1,6 +1,6 @@
 # Handoff: Adaptive Router fast-path work (updated 2026-11-18)
 
-Read this first. Detail: `README.md` (fast-path sections, newest at the end of
+Read this first, then `ROADMAP.md`. Detail: `README.md` (fast-path sections, newest at the end of
 the planned-jobs part) and `BUILD_HISTORY.md` (every freeze, hash and result).
 
 ## State
