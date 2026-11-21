@@ -1012,6 +1012,18 @@ code with no model call: on the owner's statement the first answer took about
 14 s and $0.0013, the repeat 37 ms and nothing. The cache lives in the
 git-ignored `real_tasks/private/`.
 
+Two accounts can be asked about together. `statement_pdf.py` reads Nationwide
+FlexAccount PDF statements locally (no model), by the column positions of
+`pdftotext -layout`, and checks every printed running balance; on the owner's
+11 statements (524 transactions) every balance reconciled and each statement
+opened at the previous one's close. `combine_statements.py` merges that with a
+Monzo export over the shared period and marks money moved between the owner's
+own accounts (and Monzo pots) as `internal`, pairing each transfer out of one
+account with the same amount arriving in the other within three days (all 115
+paired). Asked for a ten-category breakdown of the combined spending, the tool's
+total matched an independent computation to the penny (one question, two model
+calls, about 94 s, $0.006).
+
 The owner's `evolab` repository gained the matching code-only condition (branch
 `ccr-23487558-3yzwx4`, amendment 0.1-G): a scripted client that reads only the
 public task scored Brier loss 0 on all nine sealed development tasks at

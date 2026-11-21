@@ -15,8 +15,9 @@ small. The cache and anything derived from the data live in
 into the repository.
 
 Reads Monzo's "search" export (ID, Created, Title, Subtitle, Amount, Currency,
-Categories) and Monzo's full export (Transaction ID, Date, Time, Name,
-Category, Amount, ...).
+Categories), Monzo's full export (Transaction ID, Date, Time, Name,
+Category, Amount, ...), and the combined table from ``combine_statements.py``
+(main account plus Monzo, with ``account`` and ``internal`` columns).
 """
 
 from __future__ import annotations
@@ -51,6 +52,14 @@ def load_statement(path):
     if not raw:
         return []
     rows = []
+    if "account" in raw[0]:  # combine_statements.py output
+        for r in raw:
+            rows.append({"date": r["date"], "time": r["time"], "account": r["account"],
+                         "merchant": r["merchant"].strip(), "note": r["note"].strip(),
+                         "amount": round(float(r["amount"]), 2), "category": r["category"].strip(),
+                         "internal": r["internal"] == "True"})
+        rows.sort(key=lambda r: (r["date"], r["time"]))
+        return rows
     for r in raw:
         if "Created" in r:  # Monzo search export
             when = datetime.datetime.strptime(r["Created"], "%d/%m/%y, %H:%M")
@@ -75,6 +84,21 @@ def describe(rows):
         merchants[r["merchant"]][1][r["category"]] += 1
     listing = "\n".join(f"- {name!r}: {count} transactions, Monzo category {dict(cats)}"
                         for name, (count, cats) in sorted(merchants.items(), key=lambda m: -m[1][0]))
+    if "account" in rows[0]:
+        return (
+            f"{len(rows)} transactions from {rows[0]['date']} to {rows[-1]['date']}, all in GBP, from two of the "
+            "same person's accounts: 'main' (a current account: salary in, bills and card spending out) and "
+            "'monzo' (a spending account topped up from main).\n"
+            "Each row is a dict with keys: 'date' ('YYYY-MM-DD'), 'time' ('HH:MM', empty for main), 'account' "
+            "('main' or 'monzo'), 'merchant' (the statement name), 'note' (extra text; for main the full "
+            "statement description), 'amount' (signed pounds as a float: negative is money out, positive is "
+            "money in), 'category' (for monzo, Monzo's category id; for main, the payment type such as "
+            "'Contactless Payment', 'Direct debit', 'Card or other'), 'internal' (True for money moved between "
+            "the person's own accounts or Monzo savings pots: not spending or income, exclude it from totals "
+            "unless the question is about transfers).\n"
+            f"Example rows: {json.dumps(rows[:3])}\n\n"
+            f"Every merchant name in the data (categories shown are per account as above):\n{listing}"
+        )
     return (
         f"{len(rows)} transactions from {rows[0]['date']} to {rows[-1]['date']}, all in GBP.\n"
         "Each row is a dict with keys: 'date' ('YYYY-MM-DD'), 'time' ('HH:MM'), 'merchant' (the statement "
