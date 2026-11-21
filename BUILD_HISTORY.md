@@ -4532,3 +4532,18 @@ that are mostly wrong.
 |---|---|
 | `fast_path_reading_fixes_v1.jsonl` | `9fd275219631ea37ee68b7b201614594ca8d53c955d37822218df9c67cbe2e4c` |
 | `fast_path_reading_fixes_v1_analysis.json` | `4025ba86ccc29d08dade79070043e185b7a8a6ab7ac552b8c3e7ebdf4432782a` |
+
+---
+
+## 2026-11-21 — Real task V1 frozen: the owner's bank transactions
+
+First run on real work. Plan: `REAL_BANK_V1_PLAN.md`. The export itself is not
+committed; its SHA-256 is recorded so the run can be tied to it:
+`07f1d2eb3aef7abcc02ad7010b629017774d85aa4cab5884770f2eb1b08b8e46`. `.gitignore` gains `real_tasks/private/`.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `real_bank_categorise_v1.py` | `984df867d1755491cb1649d30ba5fc837ec181d0378aea1a03df655792e80e39` |
+| `REAL_BANK_V1_PLAN.md` | `8fa76cec0e441d195b3b9e05d1e7a944008713932c25f41b13348b9ed4baea00` |
+| `fast_path.py` | `753fef2c26534cabd0f6efbc7a2da0baf64b0ba3e2ac2572e2cd4217e2886caa` |
+| `config_fast_path.json` | `2b94990b93115c29f80ca8035518f396d186dba1a8d353b2546d56d55c599577` |
