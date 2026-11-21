@@ -1,6 +1,7 @@
 # Adaptive Router roadmap
 
-**Drafted:** 2026-11-21. **Status:** draft for the owner to amend.
+**Drafted:** 2026-11-21. **Status:** Phase A done; line **paused** 2026-11-21 for want of a
+real repeated task (`RESEARCH_PAUSE_2026-11-21.md`).
 
 The roadmap covers the fast-path line (started 2026-11-15). The earlier
 local-authority line closed on 2026-09-22 (`RESEARCH_ENDPOINT_2026-09-22.md`)
@@ -30,7 +31,7 @@ Rules that hold throughout:
 | 3. Router writes its own step plans | **Superseded.** Passed once, margin not secure; lost every later comparison. | Planned jobs V1 to V3 |
 | 4. Write the whole job once | **Current path** (`main.py --task-json`). Prospective: one pass (0.50 of the race's time, +2.1 points), one fail (a rounding rule). | Write-once V1 to V3 |
 | 5. Jobs with many readings each | **Open.** Write-once loses its speed edge; the planner does worst; batching cut calls but cost accuracy; the uncertainty flag separates good answers from bad (94% against 18% right). | Hard jobs V1, reading fixes V1 |
-| 6. Real tasks | **Started.** Bank transaction categories (owner's Monzo export): hybrid 94.9% against code 84.6% and models 63.6%, a model needed for 3% to 16% of transactions. | `REAL_BANK_V1_PLAN.md` |
+| 6. Real tasks | **Paused** (no repeated task). Bank transaction categories (owner's Monzo export): hybrid 94.9% against code 84.6% and models 63.6%, a model needed for 3% to 16% of transactions. | `REAL_BANK_V1_PLAN.md` |
 
 Side line: EvoLab's code-only condition is done (evolab PR #1).
 
@@ -45,7 +46,8 @@ Side line: EvoLab's code-only condition is done (evolab PR #1).
   keeping it for the record.
 
 **Done when:** `main` holds the current path, and the defaults match the
-evidence.
+evidence. **Done 2026-11-21:** gate on, batching and narrow racing off; the planner
+was already off the default path (`planner.py` kept, marked superseded).
 
 ### Phase B: make the flag pay (about $3 to $5)
 

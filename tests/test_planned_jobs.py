@@ -153,7 +153,7 @@ class CeilingTests(unittest.TestCase):
             return fake(prompt, config, api_key)
         return call
 
-    def run(self, mood_answer):
+    def run_ceiling(self, mood_answer):
         bench, reading = self.ceiling_bench()
         rows = []
         runner.execute(bench.SHAPES, bench, {"model": "x"}, dict(SETTINGS), self.remote(mood_answer),
@@ -161,7 +161,7 @@ class CeilingTests(unittest.TestCase):
         return rows
 
     def test_ceiling_arm_races_the_reading_step_and_runs_reference_code(self):
-        rows = self.run("up")
+        rows = self.run_ceiling("up")
         d = [r for r in rows if r["record_type"] == "job" and r["arm"] == "D"]
         self.assertEqual(len(d), 5)
         self.assertTrue(all(r["correct"] and r["reading_correct"] for r in d))
@@ -172,11 +172,11 @@ class CeilingTests(unittest.TestCase):
     def test_wrong_or_unusable_reading_makes_the_job_wrong(self):
         for answer in ("down", "sideways"):
             with self.subTest(answer=answer):
-                d = [r for r in self.run(answer) if r["record_type"] == "job" and r["arm"] == "D"]
+                d = [r for r in self.run_ceiling(answer) if r["record_type"] == "job" and r["arm"] == "D"]
                 self.assertTrue(all(r["answered"] and not r["correct"] and not r["reading_correct"] for r in d))
 
     def test_analysis_reports_the_ceiling(self):
-        rows = self.run("up")
+        rows = self.run_ceiling("up")
         kinds = {"header": [{"label": "t"}], "footer": [{"status": "COMPLETED"}]}
         for row in rows:
             kinds.setdefault(row["record_type"], []).append(row)

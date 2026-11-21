@@ -38,6 +38,9 @@
     "learning_models": null,
     "repair_attempts": 0,
     "program_probes": 6,
-    "write_early": false
+    "write_early": false,
+    "uncertainty_gate": true,
+    "batch_readings": false,
+    "adaptive_width": false
   }
 }
