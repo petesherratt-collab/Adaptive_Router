@@ -992,6 +992,26 @@ categories follow filing conventions a merchant's name does not reveal.
 Only aggregate figures are in the repository (`real_bank_v1_summary.json`);
 the export and per-merchant detail stay out of it.
 
+### Ask your statement (a practical tool, 2026-11-21)
+
+`ask_statement.py` answers plain-English questions about a bank statement
+export (Monzo's search or full export):
+
+```bash
+python ask_statement.py --csv statement.csv "Compare my spending at Morrisons and Wetherspoons per month"
+python ask_statement.py --csv statement.csv            # interactive
+python ask_statement.py --csv statement.csv --show-code "..."
+```
+
+A model decides what the question means and which merchants count (it is told
+every merchant name, so it can group variants and spot misleading ones, such as
+a canteen at an Amazon site), then writes a short function; the function runs
+locally in the sandbox over every transaction, so the arithmetic is exact. Its
+assumptions are printed with the answer. A repeated question reuses its saved
+code with no model call: on the owner's statement the first answer took about
+14 s and $0.0013, the repeat 37 ms and nothing. The cache lives in the
+git-ignored `real_tasks/private/`.
+
 The owner's `evolab` repository gained the matching code-only condition (branch
 `ccr-23487558-3yzwx4`, amendment 0.1-G): a scripted client that reads only the
 public task scored Brier loss 0 on all nine sealed development tasks at
