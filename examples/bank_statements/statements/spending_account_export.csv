@@ -1,0 +1,228 @@
+ID,Created,Title,Subtitle,Amount,Currency,Categories
+tx_000000,"12/08/26, 15:14",Transport for London,,-5.84,GBP,transport
+tx_000001,"12/08/26, 20:01",Wetherspoon,The Moon and Lantern,-11.24,GBP,eating_out
+tx_000002,"13/08/26, 09:38",MORGAN ALEX,Sent from Riverside,50.00,GBP,transfers
+tx_000003,"13/08/26, 11:49",Transport for London,,-5.83,GBP,transport
+tx_000004,"13/08/26, 12:37",Wetherspoon,The Moon and Lantern,-11.31,GBP,eating_out
+tx_000005,"14/08/26, 11:27",Sky Bet,,-10.00,GBP,entertainment
+tx_000006,"14/08/26, 13:20",The Red Lion,,-10.15,GBP,entertainment
+tx_000007,"14/08/26, 17:13",Wetherspoon,The Moon and Lantern,-8.63,GBP,eating_out
+tx_000008,"14/08/26, 17:36",Transport for London,,-7.09,GBP,transport
+tx_000009,"14/08/26, 18:10",Rainy day,Moved to pot,-20.00,GBP,savings
+tx_000010,"15/08/26, 09:58",MORGAN ALEX,Sent from Riverside,100.00,GBP,transfers
+tx_000011,"15/08/26, 14:09",The Red Lion,,-6.54,GBP,entertainment
+tx_000012,"15/08/26, 15:44",Wetherspoon,The Moon and Lantern,-14.07,GBP,eating_out
+tx_000013,"15/08/26, 21:42",Tesco,,-13.70,GBP,groceries
+tx_000014,"16/08/26, 13:41",Wetherspoon,The Moon and Lantern,-15.24,GBP,eating_out
+tx_000015,"17/08/26, 08:13",Transport for London,,-4.28,GBP,transport
+tx_000016,"17/08/26, 15:15",Wetherspoon,The Moon and Lantern,-6.73,GBP,eating_out
+tx_000017,"18/08/26, 08:03",Wetherspoon,The Moon and Lantern,-12.12,GBP,eating_out
+tx_000018,"18/08/26, 09:41",MORGAN ALEX,Sent from Riverside,100.00,GBP,transfers
+tx_000019,"18/08/26, 12:00",Tesco,,-17.82,GBP,groceries
+tx_000020,"19/08/26, 09:24",MORGAN ALEX,Sent from Riverside,100.00,GBP,transfers
+tx_000021,"19/08/26, 15:10",Transport for London,,-8.48,GBP,transport
+tx_000022,"19/08/26, 16:49",Tesco,,-12.01,GBP,groceries
+tx_000023,"19/08/26, 20:29",Wetherspoon,The Moon and Lantern,-13.23,GBP,eating_out
+tx_000024,"20/08/26, 13:42",Wetherspoon,The Moon and Lantern,-11.80,GBP,eating_out
+tx_000025,"21/08/26, 17:09",Transport for London,,-6.31,GBP,transport
+tx_000026,"22/08/26, 13:03",The Red Lion,,-6.00,GBP,entertainment
+tx_000027,"22/08/26, 15:16",Lidl,,-19.91,GBP,groceries
+tx_000028,"22/08/26, 21:01",Wetherspoon,The Moon and Lantern,-15.25,GBP,eating_out
+tx_000029,"23/08/26, 09:41",MORGAN ALEX,Sent from Riverside,100.00,GBP,transfers
+tx_000030,"23/08/26, 21:08",Greggs,,-2.56,GBP,eating_out
+tx_000031,"24/08/26, 08:31",Wetherspoon,The Moon and Lantern,-12.08,GBP,eating_out
+tx_000032,"24/08/26, 15:53",Transport for London,,-4.30,GBP,transport
+tx_000033,"25/08/26, 10:13",Wetherspoon,The Moon and Lantern,-5.34,GBP,eating_out
+tx_000034,"27/08/26, 10:29",Morrisons,,-11.41,GBP,groceries
+tx_000035,"27/08/26, 19:05",Transport for London,,-8.22,GBP,transport
+tx_000036,"28/08/26, 13:51",McDonald's,,-3.06,GBP,eating_out
+tx_000037,"28/08/26, 15:36",Tesco,,-19.87,GBP,groceries
+tx_000038,"28/08/26, 16:14",Transport for London,,-7.01,GBP,transport
+tx_000039,"28/08/26, 22:58",Wetherspoon,The Moon and Lantern,-8.70,GBP,eating_out
+tx_000040,"29/08/26, 09:01",MORGAN ALEX,Sent from Riverside,50.00,GBP,transfers
+tx_000041,"29/08/26, 15:49",Wetherspoon,The Moon and Lantern,-15.36,GBP,eating_out
+tx_000042,"29/08/26, 22:07",McDonald's,,-3.12,GBP,eating_out
+tx_000043,"30/08/26, 07:25",MORGAN ALEX,Sent from Riverside,50.00,GBP,transfers
+tx_000044,"30/08/26, 09:11",Greggs,,-5.12,GBP,eating_out
+tx_000045,"30/08/26, 12:28",eBay,,-8.73,GBP,shopping
+tx_000046,"31/08/26, 07:07",MORGAN ALEX,Sent from Riverside,50.00,GBP,transfers
+tx_000047,"31/08/26, 13:35",Sky Bet,,-10.00,GBP,entertainment
+tx_000048,"31/08/26, 15:54",Transport for London,,-4.37,GBP,transport
+tx_000049,"31/08/26, 19:25",Wetherspoon,The Moon and Lantern,-13.15,GBP,eating_out
+tx_000050,"31/08/26, 21:49",Tesco,,-11.36,GBP,groceries
+tx_000051,"02/09/26, 06:01",MORGAN ALEX,Sent from Riverside,50.00,GBP,transfers
+tx_000052,"02/09/26, 15:18",Transport for London,,-3.15,GBP,transport
+tx_000053,"02/09/26, 15:55",Tesco,,-11.38,GBP,groceries
+tx_000054,"02/09/26, 18:51",Greggs,,-2.99,GBP,eating_out
+tx_000055,"02/09/26, 20:20",Wetherspoon,The Moon and Lantern,-7.63,GBP,eating_out
+tx_000056,"03/09/26, 20:26",Wetherspoon,The Moon and Lantern,-3.48,GBP,eating_out
+tx_000057,"03/09/26, 20:45",Greggs,,-7.00,GBP,eating_out
+tx_000058,"04/09/26, 07:11",MORGAN ALEX,Sent from Riverside,20.00,GBP,transfers
+tx_000059,"04/09/26, 15:19",The Red Lion,,-7.45,GBP,entertainment
+tx_000060,"05/09/26, 08:07",Wetherspoon,The Moon and Lantern,-9.08,GBP,eating_out
+tx_000061,"05/09/26, 13:39",The Red Lion,,-12.42,GBP,entertainment
+tx_000062,"05/09/26, 21:19",Lidl,,-16.04,GBP,groceries
+tx_000063,"06/09/26, 07:06",MORGAN ALEX,Sent from Riverside,50.00,GBP,transfers
+tx_000064,"06/09/26, 10:30",Wetherspoon,The Moon and Lantern,-9.90,GBP,eating_out
+tx_000065,"06/09/26, 18:04",Morrisons,,-4.26,GBP,groceries
+tx_000066,"07/09/26, 07:42",MORGAN ALEX,Sent from Riverside,100.00,GBP,transfers
+tx_000067,"07/09/26, 11:34",Wetherspoon,The Moon and Lantern,-7.33,GBP,eating_out
+tx_000068,"07/09/26, 12:50",Transport for London,,-3.50,GBP,transport
+tx_000069,"09/09/26, 12:07",Wetherspoon,The Moon and Lantern,-13.91,GBP,eating_out
+tx_000070,"10/09/26, 10:32",Transport for London,,-4.12,GBP,transport
+tx_000071,"10/09/26, 14:18",Morrisons,,-21.42,GBP,groceries
+tx_000072,"11/09/26, 07:29",MORGAN ALEX,Sent from Riverside,50.00,GBP,transfers
+tx_000073,"11/09/26, 09:09",MORGAN ALEX,Sent from Riverside,50.00,GBP,transfers
+tx_000074,"11/09/26, 12:24",Wetherspoon,The Moon and Lantern,-5.78,GBP,eating_out
+tx_000075,"11/09/26, 18:56",Tesco,,-11.65,GBP,groceries
+tx_000076,"11/09/26, 22:55",Transport for London,,-8.29,GBP,transport
+tx_000077,"12/09/26, 06:54",MORGAN ALEX,Sent from Riverside,50.00,GBP,transfers
+tx_000078,"12/09/26, 13:39",The Red Lion,,-5.50,GBP,entertainment
+tx_000079,"12/09/26, 20:55",Wetherspoon,The Moon and Lantern,-6.26,GBP,eating_out
+tx_000080,"13/09/26, 07:07",MORGAN ALEX,Sent from Riverside,20.00,GBP,transfers
+tx_000081,"13/09/26, 21:47",Lidl,,-3.22,GBP,groceries
+tx_000082,"14/09/26, 07:10",MORGAN ALEX,Sent from Riverside,50.00,GBP,transfers
+tx_000083,"14/09/26, 16:41",Rainy day,Moved to pot,-20.00,GBP,savings
+tx_000084,"16/09/26, 09:17",Wetherspoon,The Moon and Lantern,-14.71,GBP,eating_out
+tx_000085,"16/09/26, 21:44",Transport for London,,-4.77,GBP,transport
+tx_000086,"17/09/26, 14:53",Morrisons,,-12.47,GBP,groceries
+tx_000087,"17/09/26, 19:09",Transport for London,,-3.11,GBP,transport
+tx_000088,"17/09/26, 19:53",Wetherspoon,The Moon and Lantern,-4.46,GBP,eating_out
+tx_000089,"18/09/26, 09:52",MORGAN ALEX,Sent from Riverside,50.00,GBP,transfers
+tx_000090,"18/09/26, 17:52",Transport for London,,-5.16,GBP,transport
+tx_000091,"18/09/26, 19:13",The Red Lion,,-11.96,GBP,entertainment
+tx_000092,"18/09/26, 20:39",Wetherspoon,The Moon and Lantern,-3.48,GBP,eating_out
+tx_000093,"19/09/26, 17:16",Wetherspoon,The Moon and Lantern,-5.01,GBP,eating_out
+tx_000094,"20/09/26, 07:32",MORGAN ALEX,Sent from Riverside,20.00,GBP,transfers
+tx_000095,"20/09/26, 07:33",MORGAN ALEX,Sent from Riverside,50.00,GBP,transfers
+tx_000096,"20/09/26, 09:48",Wetherspoon,The Moon and Lantern,-11.97,GBP,eating_out
+tx_000097,"20/09/26, 17:39",Amazon,,-10.52,GBP,shopping
+tx_000098,"21/09/26, 09:57",MORGAN ALEX,Sent from Riverside,50.00,GBP,transfers
+tx_000099,"21/09/26, 14:48",Wetherspoon,The Moon and Lantern,-6.13,GBP,eating_out
+tx_000100,"21/09/26, 15:00",Amazon,,-24.40,GBP,shopping
+tx_000101,"21/09/26, 19:07",Transport for London,,-3.16,GBP,transport
+tx_000102,"22/09/26, 09:11",MORGAN ALEX,Sent from Riverside,50.00,GBP,transfers
+tx_000103,"22/09/26, 11:33",Sky Bet,,-10.00,GBP,entertainment
+tx_000104,"22/09/26, 16:38",Wetherspoon,The Moon and Lantern,-5.11,GBP,eating_out
+tx_000105,"22/09/26, 16:57",Morrisons,,-13.63,GBP,groceries
+tx_000106,"23/09/26, 09:39",MORGAN ALEX,Sent from Riverside,50.00,GBP,transfers
+tx_000107,"23/09/26, 09:46",Wetherspoon,The Moon and Lantern,-4.22,GBP,eating_out
+tx_000108,"23/09/26, 19:20",Transport for London,,-7.46,GBP,transport
+tx_000109,"24/09/26, 06:56",MORGAN ALEX,Sent from Riverside,50.00,GBP,transfers
+tx_000110,"24/09/26, 16:59",Transport for London,,-6.61,GBP,transport
+tx_000111,"24/09/26, 18:10",Wetherspoon,The Moon and Lantern,-6.33,GBP,eating_out
+tx_000112,"24/09/26, 21:10",Morrisons,,-9.17,GBP,groceries
+tx_000113,"25/09/26, 19:15",Transport for London,,-8.57,GBP,transport
+tx_000114,"25/09/26, 21:34",The Red Lion,,-8.43,GBP,entertainment
+tx_000115,"26/09/26, 08:21",MORGAN ALEX,Sent from Riverside,50.00,GBP,transfers
+tx_000116,"26/09/26, 21:05",Morrisons,,-20.84,GBP,groceries
+tx_000117,"27/09/26, 08:14",Greggs,,-2.69,GBP,eating_out
+tx_000118,"27/09/26, 08:28",MORGAN ALEX,Sent from Riverside,20.00,GBP,transfers
+tx_000119,"27/09/26, 17:26",The Red Lion,,-5.77,GBP,entertainment
+tx_000120,"27/09/26, 18:17",Wetherspoon,The Moon and Lantern,-3.44,GBP,eating_out
+tx_000121,"28/09/26, 15:59",Greggs,,-4.80,GBP,eating_out
+tx_000122,"28/09/26, 17:31",Wetherspoon,The Moon and Lantern,-7.83,GBP,eating_out
+tx_000123,"29/09/26, 08:01",MORGAN ALEX,Sent from Riverside,20.00,GBP,transfers
+tx_000124,"29/09/26, 08:36",MORGAN ALEX,Sent from Riverside,20.00,GBP,transfers
+tx_000125,"29/09/26, 09:22",Transport for London,,-4.05,GBP,transport
+tx_000126,"29/09/26, 10:56",Tesco,,-14.11,GBP,groceries
+tx_000127,"29/09/26, 19:43",Wetherspoon,The Moon and Lantern,-15.71,GBP,eating_out
+tx_000128,"30/09/26, 14:59",Wetherspoon,The Moon and Lantern,-14.98,GBP,eating_out
+tx_000129,"01/10/26, 08:17",Greggs,,-6.96,GBP,eating_out
+tx_000130,"01/10/26, 08:21",MORGAN ALEX,Sent from Riverside,50.00,GBP,transfers
+tx_000131,"01/10/26, 10:44",Wetherspoon,The Moon and Lantern,-11.68,GBP,eating_out
+tx_000132,"01/10/26, 20:28",Lidl,,-13.53,GBP,groceries
+tx_000133,"02/10/26, 10:13",Greggs,,-2.67,GBP,eating_out
+tx_000134,"02/10/26, 12:27",Sky Bet,,-10.00,GBP,entertainment
+tx_000135,"02/10/26, 14:17",eBay,Refund,18.50,GBP,shopping
+tx_000136,"02/10/26, 15:34",The Red Lion,,-11.82,GBP,entertainment
+tx_000137,"02/10/26, 16:50",Transport for London,,-3.41,GBP,transport
+tx_000138,"03/10/26, 15:34",Greggs,,-5.99,GBP,eating_out
+tx_000139,"03/10/26, 22:47",Wetherspoon,The Moon and Lantern,-15.51,GBP,eating_out
+tx_000140,"04/10/26, 08:07",MORGAN ALEX,Sent from Riverside,100.00,GBP,transfers
+tx_000141,"04/10/26, 18:36",The Red Lion,,-11.54,GBP,entertainment
+tx_000142,"05/10/26, 11:24",Tesco,,-20.65,GBP,groceries
+tx_000143,"05/10/26, 18:41",Wetherspoon,The Moon and Lantern,-8.79,GBP,eating_out
+tx_000144,"06/10/26, 09:35",MORGAN ALEX,Sent from Riverside,100.00,GBP,transfers
+tx_000145,"07/10/26, 20:17",Wetherspoon,The Moon and Lantern,-5.98,GBP,eating_out
+tx_000146,"08/10/26, 08:24",Transport for London,,-5.49,GBP,transport
+tx_000147,"08/10/26, 17:42",Wetherspoon,The Moon and Lantern,-13.82,GBP,eating_out
+tx_000148,"09/10/26, 17:56",eBay,,-11.68,GBP,shopping
+tx_000149,"09/10/26, 18:37",The Red Lion,,-12.01,GBP,entertainment
+tx_000150,"09/10/26, 18:55",Transport for London,,-3.10,GBP,transport
+tx_000151,"09/10/26, 21:10",Wetherspoon,The Moon and Lantern,-4.20,GBP,eating_out
+tx_000152,"12/10/26, 08:16",MORGAN ALEX,Sent from Riverside,100.00,GBP,transfers
+tx_000153,"12/10/26, 08:25",Wetherspoon,The Moon and Lantern,-8.43,GBP,eating_out
+tx_000154,"12/10/26, 18:14",Lidl,,-18.26,GBP,groceries
+tx_000155,"13/10/26, 20:12",Transport for London,,-5.28,GBP,transport
+tx_000156,"14/10/26, 08:13",Rainy day,Moved to pot,-20.00,GBP,savings
+tx_000157,"14/10/26, 10:50",Transport for London,,-5.57,GBP,transport
+tx_000158,"14/10/26, 11:48",Wetherspoon,The Moon and Lantern,-4.90,GBP,eating_out
+tx_000159,"14/10/26, 13:52",Morrisons,,-11.90,GBP,groceries
+tx_000160,"15/10/26, 15:07",Transport for London,,-5.77,GBP,transport
+tx_000161,"15/10/26, 18:02",Morrisons,,-17.64,GBP,groceries
+tx_000162,"15/10/26, 19:27",Wetherspoon,The Moon and Lantern,-11.09,GBP,eating_out
+tx_000163,"16/10/26, 14:20",Transport for London,,-8.15,GBP,transport
+tx_000164,"16/10/26, 17:06",The Red Lion,,-12.76,GBP,entertainment
+tx_000165,"16/10/26, 17:13",McDonald's,,-3.98,GBP,eating_out
+tx_000166,"17/10/26, 06:15",MORGAN ALEX,Sent from Riverside,20.00,GBP,transfers
+tx_000167,"17/10/26, 08:29",Wetherspoon,The Moon and Lantern,-8.34,GBP,eating_out
+tx_000168,"18/10/26, 13:11",The Red Lion,,-10.22,GBP,entertainment
+tx_000169,"18/10/26, 21:40",Wetherspoon,The Moon and Lantern,-13.11,GBP,eating_out
+tx_000170,"19/10/26, 06:28",MORGAN ALEX,Sent from Riverside,20.00,GBP,transfers
+tx_000171,"19/10/26, 10:33",Greggs,,-3.16,GBP,eating_out
+tx_000172,"19/10/26, 13:47",Wetherspoon,The Moon and Lantern,-6.29,GBP,eating_out
+tx_000173,"19/10/26, 17:20",Transport for London,,-6.34,GBP,transport
+tx_000174,"20/10/26, 14:06",Transport for London,,-8.31,GBP,transport
+tx_000175,"20/10/26, 16:38",Amazon,,-21.52,GBP,shopping
+tx_000176,"20/10/26, 22:48",Wetherspoon,The Moon and Lantern,-10.86,GBP,eating_out
+tx_000177,"21/10/26, 13:55",Tesco,,-9.06,GBP,groceries
+tx_000178,"21/10/26, 18:56",Wetherspoon,The Moon and Lantern,-10.31,GBP,eating_out
+tx_000179,"22/10/26, 22:48",McDonald's,,-7.33,GBP,eating_out
+tx_000180,"23/10/26, 06:10",MORGAN ALEX,Sent from Riverside,50.00,GBP,transfers
+tx_000181,"23/10/26, 08:11",Transport for London,,-8.71,GBP,transport
+tx_000182,"24/10/26, 11:33",Wetherspoon,The Moon and Lantern,-5.03,GBP,eating_out
+tx_000183,"24/10/26, 13:32",The Red Lion,,-11.75,GBP,entertainment
+tx_000184,"24/10/26, 14:57",Lidl,,-17.83,GBP,groceries
+tx_000185,"26/10/26, 15:11",Lidl,,-17.28,GBP,groceries
+tx_000186,"27/10/26, 11:09",Wetherspoon,The Moon and Lantern,-4.88,GBP,eating_out
+tx_000187,"27/10/26, 21:54",Transport for London,,-4.20,GBP,transport
+tx_000188,"28/10/26, 11:02",Transport for London,,-3.40,GBP,transport
+tx_000189,"29/10/26, 10:12",Wetherspoon,The Moon and Lantern,-3.93,GBP,eating_out
+tx_000190,"29/10/26, 19:12",Tesco,,-4.05,GBP,groceries
+tx_000191,"29/10/26, 22:51",Amazon,,-27.24,GBP,shopping
+tx_000192,"30/10/26, 09:04",The Red Lion,,-6.83,GBP,entertainment
+tx_000193,"30/10/26, 09:11",Morrisons,,-14.48,GBP,groceries
+tx_000194,"30/10/26, 13:45",Wetherspoon,The Moon and Lantern,-14.34,GBP,eating_out
+tx_000195,"31/10/26, 08:10",MORGAN ALEX,Sent from Riverside,100.00,GBP,transfers
+tx_000196,"31/10/26, 19:58",The Red Lion,,-11.63,GBP,entertainment
+tx_000197,"31/10/26, 22:55",Tesco,,-13.93,GBP,groceries
+tx_000198,"01/11/26, 09:22",Greggs,,-4.26,GBP,eating_out
+tx_000199,"01/11/26, 11:42",Tesco,,-11.27,GBP,groceries
+tx_000200,"01/11/26, 14:07",Wetherspoon,The Moon and Lantern,-10.83,GBP,eating_out
+tx_000201,"02/11/26, 22:55",Transport for London,,-5.48,GBP,transport
+tx_000202,"03/11/26, 17:40",Wetherspoon,The Moon and Lantern,-8.73,GBP,eating_out
+tx_000203,"03/11/26, 18:35",Transport for London,,-8.88,GBP,transport
+tx_000204,"04/11/26, 06:01",MORGAN ALEX,Sent from Riverside,100.00,GBP,transfers
+tx_000205,"04/11/26, 12:01",Wetherspoon,The Moon and Lantern,-14.49,GBP,eating_out
+tx_000206,"04/11/26, 16:00",Morrisons,,-15.07,GBP,groceries
+tx_000207,"05/11/26, 18:32",Wetherspoon,The Moon and Lantern,-14.46,GBP,eating_out
+tx_000208,"06/11/26, 08:43",MORGAN ALEX,Sent from Riverside,100.00,GBP,transfers
+tx_000209,"06/11/26, 09:23",Lidl,,-9.71,GBP,groceries
+tx_000210,"06/11/26, 11:34",Greggs,,-5.97,GBP,eating_out
+tx_000211,"06/11/26, 20:17",Wetherspoon,The Moon and Lantern,-15.55,GBP,eating_out
+tx_000212,"06/11/26, 22:29",The Red Lion,,-6.65,GBP,entertainment
+tx_000213,"07/11/26, 07:36",MORGAN ALEX,Sent from Riverside,100.00,GBP,transfers
+tx_000214,"07/11/26, 19:12",The Red Lion,,-5.44,GBP,entertainment
+tx_000215,"07/11/26, 22:41",Wetherspoon,The Moon and Lantern,-4.95,GBP,eating_out
+tx_000216,"08/11/26, 07:37",MORGAN ALEX,Sent from Riverside,50.00,GBP,transfers
+tx_000217,"08/11/26, 12:32",The Red Lion,,-7.82,GBP,entertainment
+tx_000218,"09/11/26, 07:21",MORGAN ALEX,Sent from Riverside,50.00,GBP,transfers
+tx_000219,"10/11/26, 08:35",MORGAN ALEX,Sent from Riverside,100.00,GBP,transfers
+tx_000220,"10/11/26, 08:49",Transport for London,,-8.10,GBP,transport
+tx_000221,"10/11/26, 14:01",Wetherspoon,The Moon and Lantern,-3.48,GBP,eating_out
+tx_000222,"10/11/26, 22:23",eBay,,-24.09,GBP,shopping
+tx_000223,"11/11/26, 09:11",MORGAN ALEX,Sent from Riverside,100.00,GBP,transfers
+tx_000224,"11/11/26, 12:28",Greggs,,-7.67,GBP,eating_out
+tx_000225,"11/11/26, 13:59",Transport for London,,-5.00,GBP,transport
+tx_000226,"11/11/26, 14:16",Wetherspoon,The Moon and Lantern,-13.74,GBP,eating_out
