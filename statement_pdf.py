@@ -25,7 +25,7 @@ DATE = re.compile(r"^\s{0,6}(\d{2} [A-Z][a-z]{2})(?:\s{2,}(.*))?$")
 YEAR = re.compile(r"^\s{0,6}(20\d{2})(?:\s|$)")
 OPENING = re.compile(r"Balance from statement \d+ dated (\d{2})/(\d{2})/(\d{4})")
 FOOTER = ("Please check your statement", "Nationwide Building Society is authorised", "DC86 (")
-SKIP = ("Effective Date",)
+SKIP = ("Effective Date", "Closing balance", "Balance carried forward")
 KINDS = ("Contactless Payment", "Direct debit", "Bank credit", "Transfer to", "Transfer from",
          "Standing order", "Cash withdrawal", "Cheque deposit", "Payment to", "Visa purchase")
 
@@ -88,9 +88,13 @@ def parse_text(text, source=""):
                 if bal is not None:
                     checks.append((len(rows), bal, False))
             elif bal is not None:
-                if rows:  # a balance printed on its own line: it belongs to one of the day's last rows
+                if rows:  # a balance with no amount: it belongs to one of the day's last rows
                     rows[-1]["balance"] = bal
-                    checks.append((len(rows), bal, True))
+                    if text_part:  # some layouts print the balance on a continuation line (the payee)
+                        rows[-1]["description"] = f"{rows[-1]['description']} | {text_part}"
+                        checks.append((len(rows), bal, False))
+                    else:
+                        checks.append((len(rows), bal, True))
                 elif opening is None:
                     opening = bal
             elif text_part and (text_part.startswith(KINDS) or pending):
