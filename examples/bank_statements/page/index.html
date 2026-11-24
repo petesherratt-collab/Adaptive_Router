@@ -1,0 +1,262 @@
+<title>Statements to Spreadsheet</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Instrument+Sans:wght@500;600;700&display=swap">
+<style>
+/* Layout: one reading column; each pipeline stage is a band with its evidence (statement, table, chart) beside or below. */
+:root {
+  --paper: #f7f8f6; --surface: #ffffff; --ink: #18232b; --muted: #5a6872; --rule: #d8dfdc;
+  --accent: #0f6b5c;           /* ledger green: links, stage numbers */
+  --input: #fff2cc; --input-ink: #6b4e00;   /* the template's yellow input cells */
+  --output: #e2efda; --output-ink: #2f5a1e; /* the template's green output tabs */
+  --flag: #b4532a;
+  --display: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #121a1f; --surface: #1a252b; --ink: #e5ebe8; --muted: #9aaab2; --rule: #2c3a41;
+  --accent: #5cc4ad; --input: #3d3418; --input-ink: #f2d58a; --output: #22361c; --output-ink: #b5dba0; --flag: #e58b62; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #121a1f; --surface: #1a252b; --ink: #e5ebe8; --muted: #9aaab2; --rule: #2c3a41;
+  --accent: #5cc4ad; --input: #3d3418; --input-ink: #f2d58a; --output: #22361c; --output-ink: #b5dba0; --flag: #e58b62; color-scheme: dark }
+
+body { background: var(--paper); color: var(--ink); font: 16px/1.6 var(--body); margin: 0; }
+.wrap { max-width: 1040px; margin: 0 auto; padding-block: 0 4rem;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); line-height: 1.15; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); font-weight: 700; letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 600; }
+h3 { font-size: 1.05rem; font-weight: 600; }
+p { margin: 0; max-width: 65ch; }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.mono, code, pre, table.data { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+code { font-size: 0.9em; }
+.label { font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+header.hero { padding-block: 3.5rem 2.5rem; display: grid; gap: 1.25rem; border-bottom: 1px solid var(--rule); }
+.hero .lede { font-size: 1.2rem; color: var(--muted); }
+.flow { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; font-family: var(--mono); font-size: 0.9rem; }
+.flow span { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 0.3rem 0.6rem; }
+.flow span.in { background: var(--input); color: var(--input-ink); border-color: transparent; }
+.flow span.out { background: var(--output); color: var(--output-ink); border-color: transparent; }
+.flow i { font-style: normal; color: var(--muted); }
+.synthetic { font-size: 0.9rem; color: var(--muted); }
+
+section.stage { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 2rem; padding-block: 3rem; border-bottom: 1px solid var(--rule); align-items: start; }
+section.stage > * { min-width: 0; }
+.stage .text { display: grid; gap: 0.9rem; align-content: start; }
+.num { font-family: var(--mono); color: var(--accent); font-weight: 500; }
+.stage ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.35rem; max-width: 60ch; }
+.check { border-left: 3px solid var(--accent); padding: 0.4rem 0 0.4rem 0.8rem; font-size: 0.95rem; }
+.check.found { border-color: var(--flag); }
+
+.statement { border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; background: #fff; }
+.statement img { display: block; width: 100%; height: auto; }
+.scroll { overflow-x: auto; border: 1px solid var(--rule); border-radius: 4px; background: var(--surface); }
+table.data { border-collapse: collapse; font-size: 0.8rem; width: 100%; }
+table.data th, table.data td { padding: 0.35rem 0.6rem; text-align: left; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+table.data th { font-family: var(--body); font-weight: 600; font-size: 0.75rem; color: var(--muted); background: var(--paper); }
+table.data td.n { text-align: right; }
+table.data tr.pair td { background: var(--input); color: var(--input-ink); }
+pre { margin: 0; padding: 0.9rem; font-size: 0.78rem; line-height: 1.5; overflow-x: auto; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; }
+
+.tabs { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0.75rem; }
+.tab { border-radius: 4px; padding: 0.8rem 0.9rem; display: grid; gap: 0.25rem; font-size: 0.9rem; }
+.tab b { font-family: var(--display); font-size: 1rem; }
+.tab.in { background: var(--input); color: var(--input-ink); }
+.tab.out { background: var(--output); color: var(--output-ink); }
+
+.bars { display: grid; gap: 0.45rem; }
+.bar { display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr) 6.5rem; gap: 0.75rem; align-items: center; font-size: 0.85rem; }
+.bar .track { background: var(--rule); height: 0.7rem; border-radius: 2px; overflow: hidden; }
+.bar .fill { background: var(--accent); height: 100%; }
+.bar .v { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+
+.files { display: grid; gap: 1rem; padding-block: 3rem; }
+.files ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.6rem; }
+.files li { display: grid; grid-template-columns: minmax(0, 17rem) minmax(0, 1fr); gap: 1rem; padding-block: 0.6rem; border-bottom: 1px solid var(--rule); }
+.files li code { color: var(--accent); }
+.cta { display: inline-block; background: var(--accent); color: var(--paper); text-decoration: none; padding: 0.7rem 1.1rem; border-radius: 4px; font-weight: 600; justify-self: start; }
+footer { color: var(--muted); font-size: 0.85rem; padding-top: 1rem; }
+
+@media (max-width: 760px) {
+  section.stage { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; padding-block: 2.25rem; }
+  .files li { grid-template-columns: minmax(0, 1fr); gap: 0.2rem; }
+  .bar { grid-template-columns: minmax(0, 8rem) minmax(0, 1fr) 5.5rem; }
+}
+@media (prefers-reduced-motion: no-preference) { .fill { transition: width 0.6s ease-out; } }
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <span class="label">Bank statements, worked example</span>
+    <h1>Statements to Spreadsheet</h1>
+    <p class="lede">How three PDF bank statements and a banking-app export become one spreadsheet that adds itself up and checks itself. Every step is ordinary code, so the same statements always give the same answer.</p>
+    <div class="flow" aria-label="Pipeline">
+      <span>3 statement PDFs</span><span>1 app CSV</span><i>→</i><span>397 transactions</span><i>→</i><span class="in">template inputs</span><i>→</i><span class="out">summaries and checks</span>
+    </div>
+    <p class="synthetic">All data here is synthetic. Alex Morgan, Riverside Building Society, the employer, landlord and billers are invented; the shape of the finances is copied from a real two-account setup.</p>
+  </header>
+
+  <section class="stage">
+    <div class="text">
+      <span class="num">Stage 0 · What you start with</span>
+      <h2>Statements written for people, not spreadsheets</h2>
+      <p>A current account's monthly PDFs, and a spending account's export. The PDF layout is what makes this hard:</p>
+      <ul>
+        <li>a date only on the first transaction of each day</li>
+        <li>the shop name on the line below "Contactless Payment"</li>
+        <li>the balance printed once a day, not on every line</li>
+        <li>a foreign purchase followed by an exchange-rate line and a separate fee</li>
+      </ul>
+      <pre aria-label="First lines of the spending-account export">Created,Title,Amount,Categories
+12/08/26 15:14,Transport for London,-5.84,transport
+12/08/26 20:01,Wetherspoon,-11.24,eating_out
+13/08/26 09:38,MORGAN ALEX,50.00,transfers
+13/08/26 11:49,Transport for London,-5.83,transport</pre>
+    </div>
+    <figure class="statement" style="margin:0">
+      <img src="statement_page-1.png" alt="Page 1 of the synthetic September statement: dates, descriptions, money out, money in and a balance once a day." width="909" height="1286">
+    </figure>
+  </section>
+
+  <section class="stage">
+    <div class="text">
+      <span class="num">Stage 1 · Read the PDFs</span>
+      <h2>Every printed balance is recomputed</h2>
+      <p>Each line is placed in its column by position. Dates carry down to the lines below, and shop names are joined to their payments.</p>
+      <p class="check">Every balance printed on the statements is rebuilt from the opening balance plus each transaction. All three statements reconcile, and each opens where the last one closed.</p>
+      <p class="check">The extraction also matches the generator's own list on all 170 lines: date, amount and description.</p>
+    </div>
+    <div class="scroll">
+      <table class="data">
+        <thead><tr><th>date</th><th>type</th><th>merchant</th><th class="n">amount</th><th class="n">balance</th></tr></thead>
+        <tbody>
+          <tr><td>2026-08-13</td><td>Contactless Payment</td><td>WORKPLACE CANTEEN THURROCK</td><td class="n">-3.68</td><td class="n"></td></tr>
+          <tr><td>2026-08-13</td><td>Contactless Payment</td><td>WM MORRISONS STORE DARTVILLE</td><td class="n">-24.12</td><td class="n"></td></tr>
+          <tr><td>2026-08-13</td><td>Transfer to</td><td>A Morgan</td><td class="n">-50.00</td><td class="n">834.60</td></tr>
+          <tr><td>2026-08-14</td><td>Bank credit</td><td>ACME LOGISTICS LTD</td><td class="n">566.23</td><td class="n"></td></tr>
+          <tr><td>2026-08-14</td><td>Contactless Payment</td><td>WORKPLACE CANTEEN THURROCK</td><td class="n">-3.24</td><td class="n">1,397.59</td></tr>
+          <tr><td>2026-08-15</td><td>Direct debit</td><td>RIVERSIDE BORO COUNCIL</td><td class="n">-138.00</td><td class="n"></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="stage">
+    <div class="text">
+      <span class="num">Stage 2 · Combine the accounts</span>
+      <h2>Money moved between your own accounts is not spending</h2>
+      <p>"Transfer to A Morgan" on the current account is paired with "MORGAN ALEX" arriving in the spending account: same amount, within three days. Both copies are marked internal, so the £50 is not counted twice. Savings-pot moves are marked the same way.</p>
+      <p class="check">43 transfers paired, none left over.</p>
+    </div>
+    <div class="scroll">
+      <table class="data">
+        <thead><tr><th>date</th><th>account</th><th>merchant</th><th class="n">amount</th><th>internal</th></tr></thead>
+        <tbody>
+          <tr><td>2026-08-13</td><td>current</td><td>WORKPLACE CANTEEN THURROCK</td><td class="n">-3.68</td><td>no</td></tr>
+          <tr><td>2026-08-13</td><td>current</td><td>WM MORRISONS STORE DARTVILLE</td><td class="n">-24.12</td><td>no</td></tr>
+          <tr class="pair"><td>2026-08-13</td><td>current</td><td>A Morgan</td><td class="n">-50.00</td><td>yes</td></tr>
+          <tr class="pair"><td>2026-08-13</td><td>spending</td><td>MORGAN ALEX</td><td class="n">50.00</td><td>yes</td></tr>
+          <tr><td>2026-08-13</td><td>spending</td><td>Transport for London</td><td class="n">-5.83</td><td>no</td></tr>
+          <tr><td>2026-08-13</td><td>spending</td><td>Wetherspoon</td><td class="n">-11.31</td><td>no</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="stage">
+    <div class="text">
+      <span class="num">Stage 3 · Categorise</span>
+      <h2>One category per merchant, from a short list of rules</h2>
+      <p>The first rule whose words appear in the merchant's name decides. All 25 merchants matched a rule. Rules are a starting point: in the spreadsheet every merchant's category is a drop-down you can change, and every total follows.</p>
+    </div>
+    <div class="scroll">
+      <table class="data">
+        <thead><tr><th>if the name contains</th><th>category</th></tr></thead>
+        <tbody>
+          <tr><td>ACME LOGISTICS</td><td>income</td></tr>
+          <tr><td>J PATEL</td><td>rent</td></tr>
+          <tr><td>BORO COUNCIL · BRIGHTSPARK · VOXTEL</td><td>bills and utilities</td></tr>
+          <tr><td>MORRISONS · Tesco · Lidl</td><td>groceries</td></tr>
+          <tr><td>Wetherspoon · Red Lion</td><td>pubs and bars</td></tr>
+          <tr><td>CANTEEN · GREGGS · McDonald</td><td>eating out</td></tr>
+          <tr><td>Transport for London</td><td>transport</td></tr>
+          <tr><td>NETFLIX · eBay · Amazon · PIXELHOST</td><td>online shopping and subscriptions</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="stage">
+    <div class="text">
+      <span class="num">Stage 4 · Fill the template</span>
+      <h2>Four input tabs in, three output tabs out</h2>
+      <p>Only the yellow cells are written. Everything green is a formula, so changing a category or adding a month updates every total.</p>
+      <div class="tabs">
+        <div class="tab in"><b>Settings</b>First month, each account's opening balance</div>
+        <div class="tab in"><b>Categories</b>The list, and whether each counts as spending</div>
+        <div class="tab in"><b>Transactions</b>Date, account, merchant, details, out, in</div>
+        <div class="tab in"><b>Merchants</b>Each merchant and its category</div>
+        <div class="tab out"><b>Monthly summary</b>In, spent per account, net</div>
+        <div class="tab out"><b>Category by month</b>Totals, shares, averages</div>
+        <div class="tab out"><b>Checks</b>Uncategorised rows, balance mismatches</div>
+      </div>
+      <p class="check">Checks tab: 0 uncategorised, 0 balance mismatches, 0 rows outside the period. Total spending, £6,791.59, matches a count taken straight from the generator.</p>
+    </div>
+    <div class="text">
+      <span class="label">Spending by category, 12 Aug – 11 Nov (refunds netted)</span>
+      <div class="bars" role="list">
+        <div class="bar" role="listitem"><span>rent</span><span class="track"><span class="fill" style="display:block;width:100%"></span></span><span class="v">£2,685.00</span></div>
+        <div class="bar" role="listitem"><span>groceries</span><span class="track"><span class="fill" style="display:block;width:52.95%"></span></span><span class="v">£1,421.79</span></div>
+        <div class="bar" role="listitem"><span>bills and utilities</span><span class="track"><span class="fill" style="display:block;width:30.69%"></span></span><span class="v">£824.04</span></div>
+        <div class="bar" role="listitem"><span>pubs and bars</span><span class="track"><span class="fill" style="display:block;width:28.73%"></span></span><span class="v">£771.41</span></div>
+        <div class="bar" role="listitem"><span>debt repayments</span><span class="track"><span class="fill" style="display:block;width:11.17%"></span></span><span class="v">£300.00</span></div>
+        <div class="bar" role="listitem"><span>online shopping and subs</span><span class="track"><span class="fill" style="display:block;width:10.10%"></span></span><span class="v">£271.29</span></div>
+        <div class="bar" role="listitem"><span>eating out</span><span class="track"><span class="fill" style="display:block;width:8.96%"></span></span><span class="v">£240.69</span></div>
+        <div class="bar" role="listitem"><span>transport</span><span class="track"><span class="fill" style="display:block;width:8.15%"></span></span><span class="v">£218.87</span></div>
+        <div class="bar" role="listitem"><span>gambling</span><span class="track"><span class="fill" style="display:block;width:1.49%"></span></span><span class="v">£40.00</span></div>
+      </div>
+      <div class="scroll" style="margin-top:1.25rem">
+        <table class="data">
+          <thead><tr><th>month</th><th class="n">money in</th><th class="n">spent</th><th class="n">net</th></tr></thead>
+          <tbody>
+            <tr><td>Aug (from 12th)</td><td class="n">£1,752.22</td><td class="n">£968.09</td><td class="n">£784.13</td></tr>
+            <tr><td>Sep</td><td class="n">£2,600.28</td><td class="n">£2,175.02</td><td class="n">£425.26</td></tr>
+            <tr><td>Oct</td><td class="n">£2,988.54</td><td class="n">£2,232.03</td><td class="n">£756.51</td></tr>
+            <tr><td>Nov (to 11th)</td><td class="n">£600.42</td><td class="n">£1,416.45</td><td class="n">−£816.03</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="stage">
+    <div class="text">
+      <span class="num">What testing with known answers found</span>
+      <h2>Balances can all agree while names go missing</h2>
+      <p>Reconciling balances proves the amounts are right. It cannot prove the shop names are right, or that no day was dropped. Because this data is generated, the true answer is known, and comparing against it found two bugs the balance check had passed.</p>
+    </div>
+    <div class="text">
+      <p class="check found"><b>Shop names lost.</b> When a statement prints the day's balance on the same line as the shop name, the reader kept the balance and dropped the name: 35 of 170 rows. It now keeps both.</p>
+      <p class="check found"><b>First-day purchases dropped.</b> The combined period started at the current account's first transaction (13 Aug), losing two spending-account purchases on 12 Aug, £17.08. It now uses the statement period.</p>
+      <p>The fixes do not change the result for the real statements this was built on: their output is byte-for-byte the same.</p>
+    </div>
+  </section>
+
+  <section class="files">
+    <span class="label">Get the files</span>
+    <h2>The template, the sample statements and the code</h2>
+    <ul>
+      <li><code>bank_statement_template.xlsx</code><span>The blank template. Paste your own transactions; no code needed.</span></li>
+      <li><code>statements/</code><span>The three synthetic PDFs and the app export used above.</span></li>
+      <li><code>stages/</code><span>The file each stage produced, ending with the filled-in template.</span></li>
+      <li><code>run_pipeline.py</code><span>Runs stages 1 to 4. The PDF reader is written for one statement layout; other banks may need adjusting.</span></li>
+      <li><code>make_synthetic.py</code><span>Makes a fresh synthetic set, with the true list to test against.</span></li>
+    </ul>
+    <a class="cta" href="https://github.com/petesherratt-collab/Adaptive_Router/tree/ccr-23487558-3yzwx4/examples/bank_statements">Open the folder on GitHub</a>
+    <footer>Synthetic data throughout. Not financial advice; the categories are one person's choices and yours will differ.</footer>
+  </section>
+</div>

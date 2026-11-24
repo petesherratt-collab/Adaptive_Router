@@ -23,9 +23,11 @@ FIELDS = ["date", "time", "account", "merchant", "note", "amount", "category", "
 POTS = {"savings"}
 
 
-def combine(main_rows, monzo_rows, owner):
+def combine(main_rows, monzo_rows, owner, start=None, end=None):
+    """``start``/``end`` (ISO dates) default to the main account's first and last transactions;
+    pass the statement period when it starts or ends on a day with no main-account transaction."""
     owner = owner.upper()
-    start, end = main_rows[0]["date"], main_rows[-1]["date"]
+    start, end = start or main_rows[0]["date"], end or main_rows[-1]["date"]
     main = [{"date": r["date"], "time": "", "account": "main", "merchant": r["merchant"] or r["kind"],
              "note": r["description"], "amount": float(r["amount"]), "category": r["kind"], "internal": False}
             for r in main_rows]
@@ -52,10 +54,12 @@ def main():
     parser.add_argument("--monzo", required=True)
     parser.add_argument("--owner", required=True, help="a word of the owner's name as it appears on transfers")
     parser.add_argument("--out", required=True)
+    parser.add_argument("--start", help="first day of the statement period (YYYY-MM-DD)")
+    parser.add_argument("--end", help="last day of the statement period (YYYY-MM-DD)")
     args = parser.parse_args()
     with open(args.main, encoding="utf-8") as handle:
         main_rows = list(csv.DictReader(handle))
-    rows, paired = combine(main_rows, ask_statement.load_statement(args.monzo), args.owner)
+    rows, paired = combine(main_rows, ask_statement.load_statement(args.monzo), args.owner, args.start, args.end)
     with open(args.out, "w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, FIELDS)
         writer.writeheader()

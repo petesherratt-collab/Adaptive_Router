@@ -51,3 +51,16 @@ def test_combine_pairs_own_transfers():
     assert paired == 1
     assert sorted((r["merchant"], r["internal"]) for r in rows) == [
         ("BLOGGS JO", True), ("COUNCIL", False), ("Jo Bloggs", True), ("Shop", False)]
+
+
+def test_balance_printed_on_the_payee_line_keeps_the_payee():
+    text = "\n".join([
+        HEADER,
+        " 2026     Balance from statement 1 dated 11/12/2025                       100.00",
+        " 02 Jan   Contactless Payment                   3.55",
+        "          SHOP ONE TOWN                                                    96.45",
+        "Please check your statement",
+    ])
+    rows, opening, checks = statement_pdf.parse_text(text)
+    assert rows[0]["description"] == "Contactless Payment | SHOP ONE TOWN"
+    assert statement_pdf.reconcile(rows, opening, checks) == []

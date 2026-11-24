@@ -1,0 +1,398 @@
+Date,Account,Merchant,Details,Money out,Money in,Category override,Printed balance
+2026-08-12,Spending,Transport for London,transport,5.84,,,
+2026-08-12,Spending,Wetherspoon,The Moon and Lantern,11.24,,,
+2026-08-13,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,3.68,,,
+2026-08-13,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,24.12,,,
+2026-08-13,Riverside,A Morgan,Transfer to A Morgan,50.00,,internal transfer,834.6
+2026-08-13,Spending,MORGAN ALEX,Sent from Riverside,,50.00,internal transfer,
+2026-08-13,Spending,Transport for London,transport,5.83,,,
+2026-08-13,Spending,Wetherspoon,The Moon and Lantern,11.31,,,
+2026-08-14,Riverside,ACME LOGISTICS LTD,Bank credit ACME LOGISTICS LTD | REF 4471 0092,,566.23,,
+2026-08-14,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,3.24,,,1397.59
+2026-08-14,Spending,Sky Bet,entertainment,10.00,,,
+2026-08-14,Spending,The Red Lion,entertainment,10.15,,,
+2026-08-14,Spending,Wetherspoon,The Moon and Lantern,8.63,,,
+2026-08-14,Spending,Transport for London,transport,7.09,,,
+2026-08-14,Spending,Rainy day,Moved to pot,20.00,,internal transfer,
+2026-08-15,Riverside,RIVERSIDE BORO COUNCIL,Direct debit RIVERSIDE BORO COUNCIL,138.00,,,
+2026-08-15,Riverside,A Morgan,Transfer to A Morgan,100.00,,internal transfer,1159.59
+2026-08-15,Spending,MORGAN ALEX,Sent from Riverside,,100.00,internal transfer,
+2026-08-15,Spending,The Red Lion,entertainment,6.54,,,
+2026-08-15,Spending,Wetherspoon,The Moon and Lantern,14.07,,,
+2026-08-15,Spending,Tesco,groceries,13.70,,,
+2026-08-16,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,22.40,,,
+2026-08-16,Riverside,GREGGS PLC DARTVILLE,Contactless Payment | GREGGS PLC DARTVILLE,3.47,,,1133.72
+2026-08-16,Spending,Wetherspoon,The Moon and Lantern,15.24,,,
+2026-08-17,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,13.99,,,
+2026-08-17,Riverside,A Morgan,Transfer to A Morgan,100.00,,internal transfer,1019.73
+2026-08-17,Spending,Transport for London,transport,4.28,,,
+2026-08-17,Spending,Wetherspoon,The Moon and Lantern,6.73,,,
+2026-08-18,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,2.13,,,
+2026-08-18,Riverside,GREGGS PLC DARTVILLE,Contactless Payment | GREGGS PLC DARTVILLE,4.90,,,1012.7
+2026-08-18,Spending,Wetherspoon,The Moon and Lantern,12.12,,,
+2026-08-18,Spending,MORGAN ALEX,Sent from Riverside,,100.00,internal transfer,
+2026-08-18,Spending,Tesco,groceries,17.82,,,
+2026-08-19,Riverside,A Morgan,Transfer to A Morgan,100.00,,internal transfer,912.7
+2026-08-19,Spending,MORGAN ALEX,Sent from Riverside,,100.00,internal transfer,
+2026-08-19,Spending,Transport for London,transport,8.48,,,
+2026-08-19,Spending,Tesco,groceries,12.01,,,
+2026-08-19,Spending,Wetherspoon,The Moon and Lantern,13.23,,,
+2026-08-20,Riverside,BRIGHTSPARK ENERGY,Direct debit BRIGHTSPARK ENERGY,78.04,,,
+2026-08-20,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,3.60,,,
+2026-08-20,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,15.90,,,815.16
+2026-08-20,Spending,Wetherspoon,The Moon and Lantern,11.80,,,
+2026-08-21,Riverside,ACME LOGISTICS LTD,Bank credit ACME LOGISTICS LTD | REF 4471 0092,,574.22,,
+2026-08-21,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,3.09,,,
+2026-08-21,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,16.22,,,1370.07
+2026-08-21,Spending,Transport for London,transport,6.31,,,
+2026-08-22,Riverside,A Morgan,Transfer to A Morgan,100.00,,internal transfer,1270.07
+2026-08-22,Spending,The Red Lion,entertainment,6.00,,,
+2026-08-22,Spending,Lidl,groceries,19.91,,,
+2026-08-22,Spending,Wetherspoon,The Moon and Lantern,15.25,,,
+2026-08-23,Riverside,PIXELHOST.IO TALLINN,PIXELHOST.IO TALLINN | 9.000000USD at 1.34731,6.68,,,
+2026-08-23,Riverside,Foreign currency transaction fee,Foreign currency transaction fee,0.20,,,
+2026-08-23,Riverside,GREGGS PLC DARTVILLE,Contactless Payment | GREGGS PLC DARTVILLE,4.12,,,1259.07
+2026-08-23,Spending,MORGAN ALEX,Sent from Riverside,,100.00,internal transfer,
+2026-08-23,Spending,Greggs,eating_out,2.56,,,
+2026-08-24,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,2.59,,,
+2026-08-24,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,37.90,,,1218.58
+2026-08-24,Spending,Wetherspoon,The Moon and Lantern,12.08,,,
+2026-08-24,Spending,Transport for London,transport,4.30,,,
+2026-08-25,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,2.88,,,
+2026-08-25,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,24.04,,,1191.66
+2026-08-25,Spending,Wetherspoon,The Moon and Lantern,5.34,,,
+2026-08-26,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,3.64,,,
+2026-08-26,Riverside,GREGGS PLC DARTVILLE,Contactless Payment | GREGGS PLC DARTVILLE,3.27,,,1184.75
+2026-08-27,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,2.46,,,
+2026-08-27,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,29.52,,,1152.77
+2026-08-27,Spending,Morrisons,groceries,11.41,,,
+2026-08-27,Spending,Transport for London,transport,8.22,,,
+2026-08-28,Riverside,ACME LOGISTICS LTD,Bank credit ACME LOGISTICS LTD | REF 4471 0092,,611.77,,1764.54
+2026-08-28,Riverside,VOXTEL MOBILE,Direct debit VOXTEL MOBILE,58.31,,,
+2026-08-28,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,2.03,,,1704.2
+2026-08-28,Spending,McDonald's,eating_out,3.06,,,
+2026-08-28,Spending,Tesco,groceries,19.87,,,
+2026-08-28,Spending,Transport for London,transport,7.01,,,
+2026-08-28,Spending,Wetherspoon,The Moon and Lantern,8.70,,,
+2026-08-29,Riverside,A Morgan,Transfer to A Morgan,50.00,,internal transfer,1654.2
+2026-08-29,Spending,MORGAN ALEX,Sent from Riverside,,50.00,internal transfer,
+2026-08-29,Spending,Wetherspoon,The Moon and Lantern,15.36,,,
+2026-08-29,Spending,McDonald's,eating_out,3.12,,,
+2026-08-30,Riverside,A Morgan,Transfer to A Morgan,50.00,,internal transfer,1604.2
+2026-08-30,Spending,MORGAN ALEX,Sent from Riverside,,50.00,internal transfer,
+2026-08-30,Spending,Greggs,eating_out,5.12,,,
+2026-08-30,Spending,eBay,shopping,8.73,,,
+2026-08-31,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,3.25,,,
+2026-08-31,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,47.08,,,
+2026-08-31,Riverside,A Morgan,Transfer to A Morgan,50.00,,internal transfer,1503.87
+2026-08-31,Spending,MORGAN ALEX,Sent from Riverside,,50.00,internal transfer,
+2026-08-31,Spending,Sky Bet,entertainment,10.00,,,
+2026-08-31,Spending,Transport for London,transport,4.37,,,
+2026-08-31,Spending,Wetherspoon,The Moon and Lantern,13.15,,,
+2026-08-31,Spending,Tesco,groceries,11.36,,,
+2026-09-01,Riverside,J PATEL,Standing order J PATEL,895.00,,,
+2026-09-01,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,3.65,,,605.22
+2026-09-02,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,1.87,,,
+2026-09-02,Riverside,A Morgan,Transfer to A Morgan,50.00,,internal transfer,553.35
+2026-09-02,Spending,MORGAN ALEX,Sent from Riverside,,50.00,internal transfer,
+2026-09-02,Spending,Transport for London,transport,3.15,,,
+2026-09-02,Spending,Tesco,groceries,11.38,,,
+2026-09-02,Spending,Greggs,eating_out,2.99,,,
+2026-09-02,Spending,Wetherspoon,The Moon and Lantern,7.63,,,
+2026-09-03,Riverside,NETFLIX.COM 866-579-7172,NETFLIX.COM 866-579-7172,10.99,,,
+2026-09-03,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,23.84,,,518.52
+2026-09-03,Spending,Wetherspoon,The Moon and Lantern,3.48,,,
+2026-09-03,Spending,Greggs,eating_out,7.00,,,
+2026-09-04,Riverside,ACME LOGISTICS LTD,Bank credit ACME LOGISTICS LTD | REF 4471 0092,,564.44,,
+2026-09-04,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,2.48,,,
+2026-09-04,Riverside,A Morgan,Transfer to A Morgan,20.00,,internal transfer,1060.48
+2026-09-04,Spending,MORGAN ALEX,Sent from Riverside,,20.00,internal transfer,
+2026-09-04,Spending,The Red Lion,entertainment,7.45,,,
+2026-09-05,Riverside,CREDITLINE RECOVERIES,Direct debit CREDITLINE RECOVERIES,100.00,,,960.48
+2026-09-05,Spending,Wetherspoon,The Moon and Lantern,9.08,,,
+2026-09-05,Spending,The Red Lion,entertainment,12.42,,,
+2026-09-05,Spending,Lidl,groceries,16.04,,,
+2026-09-06,Riverside,A Morgan,Transfer to A Morgan,50.00,,internal transfer,910.48
+2026-09-06,Spending,MORGAN ALEX,Sent from Riverside,,50.00,internal transfer,
+2026-09-06,Spending,Wetherspoon,The Moon and Lantern,9.90,,,
+2026-09-06,Spending,Morrisons,groceries,4.26,,,
+2026-09-07,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,1.73,,,
+2026-09-07,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,17.18,,,
+2026-09-07,Riverside,GREGGS PLC DARTVILLE,Contactless Payment | GREGGS PLC DARTVILLE,6.38,,,
+2026-09-07,Riverside,A Morgan,Transfer to A Morgan,100.00,,internal transfer,785.19
+2026-09-07,Spending,MORGAN ALEX,Sent from Riverside,,100.00,internal transfer,
+2026-09-07,Spending,Wetherspoon,The Moon and Lantern,7.33,,,
+2026-09-07,Spending,Transport for London,transport,3.50,,,
+2026-09-09,Riverside,LEARNWELL ONLINE LONDON,LEARNWELL ONLINE LONDON,36.00,,,
+2026-09-09,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,2.57,,,746.62
+2026-09-09,Spending,Wetherspoon,The Moon and Lantern,13.91,,,
+2026-09-10,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,1.64,,,
+2026-09-10,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,44.96,,,
+2026-09-10,Riverside,A Morgan,Transfer to A Morgan,50.00,,internal transfer,650.02
+2026-09-10,Spending,Transport for London,transport,4.12,,,
+2026-09-10,Spending,Morrisons,groceries,21.42,,,
+2026-09-11,Riverside,ACME LOGISTICS LTD,Bank credit ACME LOGISTICS LTD | REF 4471 0092,,608.91,,
+2026-09-11,Riverside,A Morgan,Transfer to A Morgan,50.00,,internal transfer,1208.93
+2026-09-11,Spending,MORGAN ALEX,Sent from Riverside,,50.00,internal transfer,
+2026-09-11,Spending,MORGAN ALEX,Sent from Riverside,,50.00,internal transfer,
+2026-09-11,Spending,Wetherspoon,The Moon and Lantern,5.78,,,
+2026-09-11,Spending,Tesco,groceries,11.65,,,
+2026-09-11,Spending,Transport for London,transport,8.29,,,
+2026-09-12,Riverside,A Morgan,Transfer to A Morgan,50.00,,internal transfer,1158.93
+2026-09-12,Spending,MORGAN ALEX,Sent from Riverside,,50.00,internal transfer,
+2026-09-12,Spending,The Red Lion,entertainment,5.50,,,
+2026-09-12,Spending,Wetherspoon,The Moon and Lantern,6.26,,,
+2026-09-13,Riverside,A Morgan,Transfer to A Morgan,20.00,,internal transfer,1138.93
+2026-09-13,Spending,MORGAN ALEX,Sent from Riverside,,20.00,internal transfer,
+2026-09-13,Spending,Lidl,groceries,3.22,,,
+2026-09-14,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,3.49,,,
+2026-09-14,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,36.44,,,
+2026-09-14,Riverside,A Morgan,Transfer to A Morgan,50.00,,internal transfer,1049.0
+2026-09-14,Spending,MORGAN ALEX,Sent from Riverside,,50.00,internal transfer,
+2026-09-14,Spending,Rainy day,Moved to pot,20.00,,internal transfer,
+2026-09-15,Riverside,RIVERSIDE BORO COUNCIL,Direct debit RIVERSIDE BORO COUNCIL,138.00,,,911.0
+2026-09-16,Spending,Wetherspoon,The Moon and Lantern,14.71,,,
+2026-09-16,Spending,Transport for London,transport,4.77,,,
+2026-09-17,Riverside,Cheque deposit,Cheque deposit,,200.00,,
+2026-09-17,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,21.69,,,1089.31
+2026-09-17,Spending,Morrisons,groceries,12.47,,,
+2026-09-17,Spending,Transport for London,transport,3.11,,,
+2026-09-17,Spending,Wetherspoon,The Moon and Lantern,4.46,,,
+2026-09-18,Riverside,ACME LOGISTICS LTD,Bank credit ACME LOGISTICS LTD | REF 4471 0092,,612.64,,
+2026-09-18,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,2.78,,,
+2026-09-18,Riverside,A Morgan,Transfer to A Morgan,50.00,,internal transfer,1649.17
+2026-09-18,Spending,MORGAN ALEX,Sent from Riverside,,50.00,internal transfer,
+2026-09-18,Spending,Transport for London,transport,5.16,,,
+2026-09-18,Spending,The Red Lion,entertainment,11.96,,,
+2026-09-18,Spending,Wetherspoon,The Moon and Lantern,3.48,,,
+2026-09-19,Riverside,GREGGS PLC DARTVILLE,Contactless Payment | GREGGS PLC DARTVILLE,5.71,,,
+2026-09-19,Riverside,A Morgan,Transfer to A Morgan,50.00,,internal transfer,1593.46
+2026-09-19,Spending,Wetherspoon,The Moon and Lantern,5.01,,,
+2026-09-20,Riverside,BRIGHTSPARK ENERGY,Direct debit BRIGHTSPARK ENERGY,78.40,,,
+2026-09-20,Riverside,GREGGS PLC DARTVILLE,Contactless Payment | GREGGS PLC DARTVILLE,6.48,,,
+2026-09-20,Riverside,A Morgan,Transfer to A Morgan,20.00,,internal transfer,1488.58
+2026-09-20,Spending,MORGAN ALEX,Sent from Riverside,,20.00,internal transfer,
+2026-09-20,Spending,MORGAN ALEX,Sent from Riverside,,50.00,internal transfer,
+2026-09-20,Spending,Wetherspoon,The Moon and Lantern,11.97,,,
+2026-09-20,Spending,Amazon,shopping,10.52,,,
+2026-09-21,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,3.73,,,
+2026-09-21,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,19.59,,,
+2026-09-21,Riverside,A Morgan,Transfer to A Morgan,50.00,,internal transfer,1415.26
+2026-09-21,Spending,MORGAN ALEX,Sent from Riverside,,50.00,internal transfer,
+2026-09-21,Spending,Wetherspoon,The Moon and Lantern,6.13,,,
+2026-09-21,Spending,Amazon,shopping,24.40,,,
+2026-09-21,Spending,Transport for London,transport,3.16,,,
+2026-09-22,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,2.04,,,
+2026-09-22,Riverside,A Morgan,Transfer to A Morgan,50.00,,internal transfer,1363.22
+2026-09-22,Spending,MORGAN ALEX,Sent from Riverside,,50.00,internal transfer,
+2026-09-22,Spending,Sky Bet,entertainment,10.00,,,
+2026-09-22,Spending,Wetherspoon,The Moon and Lantern,5.11,,,
+2026-09-22,Spending,Morrisons,groceries,13.63,,,
+2026-09-23,Riverside,PIXELHOST.IO TALLINN,PIXELHOST.IO TALLINN | 9.000000USD at 1.34731,6.68,,,
+2026-09-23,Riverside,Foreign currency transaction fee,Foreign currency transaction fee,0.20,,,
+2026-09-23,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,34.31,,,
+2026-09-23,Riverside,A Morgan,Transfer to A Morgan,50.00,,internal transfer,1272.03
+2026-09-23,Spending,MORGAN ALEX,Sent from Riverside,,50.00,internal transfer,
+2026-09-23,Spending,Wetherspoon,The Moon and Lantern,4.22,,,
+2026-09-23,Spending,Transport for London,transport,7.46,,,
+2026-09-24,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,2.57,,,
+2026-09-24,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,30.01,,,
+2026-09-24,Riverside,A Morgan,Transfer to A Morgan,50.00,,internal transfer,1189.45
+2026-09-24,Spending,MORGAN ALEX,Sent from Riverside,,50.00,internal transfer,
+2026-09-24,Spending,Transport for London,transport,6.61,,,
+2026-09-24,Spending,Wetherspoon,The Moon and Lantern,6.33,,,
+2026-09-24,Spending,Morrisons,groceries,9.17,,,
+2026-09-25,Riverside,ACME LOGISTICS LTD,Bank credit ACME LOGISTICS LTD | REF 4471 0092,,614.29,,
+2026-09-25,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,23.43,,,
+2026-09-25,Riverside,A Morgan,Transfer to A Morgan,50.00,,internal transfer,1730.31
+2026-09-25,Spending,Transport for London,transport,8.57,,,
+2026-09-25,Spending,The Red Lion,entertainment,8.43,,,
+2026-09-26,Spending,MORGAN ALEX,Sent from Riverside,,50.00,internal transfer,
+2026-09-26,Spending,Morrisons,groceries,20.84,,,
+2026-09-27,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,46.78,,,
+2026-09-27,Riverside,A Morgan,Transfer to A Morgan,20.00,,internal transfer,1663.53
+2026-09-27,Spending,Greggs,eating_out,2.69,,,
+2026-09-27,Spending,MORGAN ALEX,Sent from Riverside,,20.00,internal transfer,
+2026-09-27,Spending,The Red Lion,entertainment,5.77,,,
+2026-09-27,Spending,Wetherspoon,The Moon and Lantern,3.44,,,
+2026-09-28,Riverside,VOXTEL MOBILE,Direct debit VOXTEL MOBILE,58.31,,,
+2026-09-28,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,1.60,,,
+2026-09-28,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,19.87,,,
+2026-09-28,Riverside,A Morgan,Transfer to A Morgan,20.00,,internal transfer,1563.75
+2026-09-28,Spending,Greggs,eating_out,4.80,,,
+2026-09-28,Spending,Wetherspoon,The Moon and Lantern,7.83,,,
+2026-09-29,Riverside,A Morgan,Transfer to A Morgan,20.00,,internal transfer,1543.75
+2026-09-29,Spending,MORGAN ALEX,Sent from Riverside,,20.00,internal transfer,
+2026-09-29,Spending,MORGAN ALEX,Sent from Riverside,,20.00,internal transfer,
+2026-09-29,Spending,Transport for London,transport,4.05,,,
+2026-09-29,Spending,Tesco,groceries,14.11,,,
+2026-09-29,Spending,Wetherspoon,The Moon and Lantern,15.71,,,
+2026-09-30,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,3.80,,,1539.95
+2026-09-30,Spending,Wetherspoon,The Moon and Lantern,14.98,,,
+2026-10-01,Riverside,J PATEL,Standing order J PATEL,895.00,,,
+2026-10-01,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,2.33,,,
+2026-10-01,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,28.30,,,
+2026-10-01,Riverside,A Morgan,Transfer to A Morgan,50.00,,internal transfer,564.32
+2026-10-01,Spending,Greggs,eating_out,6.96,,,
+2026-10-01,Spending,MORGAN ALEX,Sent from Riverside,,50.00,internal transfer,
+2026-10-01,Spending,Wetherspoon,The Moon and Lantern,11.68,,,
+2026-10-01,Spending,Lidl,groceries,13.53,,,
+2026-10-02,Riverside,ACME LOGISTICS LTD,Bank credit ACME LOGISTICS LTD | REF 4471 0092,,596.05,,
+2026-10-02,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,3.41,,,1156.96
+2026-10-02,Spending,Greggs,eating_out,2.67,,,
+2026-10-02,Spending,Sky Bet,entertainment,10.00,,,
+2026-10-02,Spending,eBay,Refund,,18.50,,
+2026-10-02,Spending,The Red Lion,entertainment,11.82,,,
+2026-10-02,Spending,Transport for London,transport,3.41,,,
+2026-10-03,Riverside,NETFLIX.COM 866-579-7172,NETFLIX.COM 866-579-7172,10.99,,,
+2026-10-03,Riverside,A Morgan,Transfer to A Morgan,100.00,,internal transfer,1045.97
+2026-10-03,Spending,Greggs,eating_out,5.99,,,
+2026-10-03,Spending,Wetherspoon,The Moon and Lantern,15.51,,,
+2026-10-04,Riverside,GREGGS PLC DARTVILLE,Contactless Payment | GREGGS PLC DARTVILLE,5.91,,,1040.06
+2026-10-04,Spending,MORGAN ALEX,Sent from Riverside,,100.00,internal transfer,
+2026-10-04,Spending,The Red Lion,entertainment,11.54,,,
+2026-10-05,Riverside,CREDITLINE RECOVERIES,Direct debit CREDITLINE RECOVERIES,100.00,,,
+2026-10-05,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,17.59,,,
+2026-10-05,Riverside,GREGGS PLC DARTVILLE,Contactless Payment | GREGGS PLC DARTVILLE,5.23,,,917.24
+2026-10-05,Spending,Tesco,groceries,20.65,,,
+2026-10-05,Spending,Wetherspoon,The Moon and Lantern,8.79,,,
+2026-10-06,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,2.72,,,
+2026-10-06,Riverside,A Morgan,Transfer to A Morgan,100.00,,internal transfer,814.52
+2026-10-06,Spending,MORGAN ALEX,Sent from Riverside,,100.00,internal transfer,
+2026-10-07,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,2.54,,,811.98
+2026-10-07,Spending,Wetherspoon,The Moon and Lantern,5.98,,,
+2026-10-08,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,27.81,,,784.17
+2026-10-08,Spending,Transport for London,transport,5.49,,,
+2026-10-08,Spending,Wetherspoon,The Moon and Lantern,13.82,,,
+2026-10-09,Riverside,ACME LOGISTICS LTD,Bank credit ACME LOGISTICS LTD | REF 4471 0092,,585.33,,
+2026-10-09,Riverside,LEARNWELL ONLINE LONDON,LEARNWELL ONLINE LONDON,36.00,,,
+2026-10-09,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,2.96,,,1330.54
+2026-10-09,Spending,eBay,shopping,11.68,,,
+2026-10-09,Spending,The Red Lion,entertainment,12.01,,,
+2026-10-09,Spending,Transport for London,transport,3.10,,,
+2026-10-09,Spending,Wetherspoon,The Moon and Lantern,4.20,,,
+2026-10-12,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,18.94,,,
+2026-10-12,Riverside,A Morgan,Transfer to A Morgan,100.00,,internal transfer,1211.6
+2026-10-12,Spending,MORGAN ALEX,Sent from Riverside,,100.00,internal transfer,
+2026-10-12,Spending,Wetherspoon,The Moon and Lantern,8.43,,,
+2026-10-12,Spending,Lidl,groceries,18.26,,,
+2026-10-13,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,3.50,,,1208.1
+2026-10-13,Spending,Transport for London,transport,5.28,,,
+2026-10-14,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,1.49,,,
+2026-10-14,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,41.18,,,1165.43
+2026-10-14,Spending,Rainy day,Moved to pot,20.00,,internal transfer,
+2026-10-14,Spending,Transport for London,transport,5.57,,,
+2026-10-14,Spending,Wetherspoon,The Moon and Lantern,4.90,,,
+2026-10-14,Spending,Morrisons,groceries,11.90,,,
+2026-10-15,Riverside,RIVERSIDE BORO COUNCIL,Direct debit RIVERSIDE BORO COUNCIL,138.00,,,
+2026-10-15,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,3.00,,,
+2026-10-15,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,23.11,,,1001.32
+2026-10-15,Spending,Transport for London,transport,5.77,,,
+2026-10-15,Spending,Morrisons,groceries,17.64,,,
+2026-10-15,Spending,Wetherspoon,The Moon and Lantern,11.09,,,
+2026-10-16,Riverside,ACME LOGISTICS LTD,Bank credit ACME LOGISTICS LTD | REF 4471 0092,,608.01,,1609.33
+2026-10-16,Spending,Transport for London,transport,8.15,,,
+2026-10-16,Spending,The Red Lion,entertainment,12.76,,,
+2026-10-16,Spending,McDonald's,eating_out,3.98,,,
+2026-10-17,Riverside,A Morgan,Transfer to A Morgan,20.00,,internal transfer,1589.33
+2026-10-17,Spending,MORGAN ALEX,Sent from Riverside,,20.00,internal transfer,
+2026-10-17,Spending,Wetherspoon,The Moon and Lantern,8.34,,,
+2026-10-18,Spending,The Red Lion,entertainment,10.22,,,
+2026-10-18,Spending,Wetherspoon,The Moon and Lantern,13.11,,,
+2026-10-19,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,38.22,,,
+2026-10-19,Riverside,A Morgan,Transfer to A Morgan,20.00,,internal transfer,1531.11
+2026-10-19,Spending,MORGAN ALEX,Sent from Riverside,,20.00,internal transfer,
+2026-10-19,Spending,Greggs,eating_out,3.16,,,
+2026-10-19,Spending,Wetherspoon,The Moon and Lantern,6.29,,,
+2026-10-19,Spending,Transport for London,transport,6.34,,,
+2026-10-20,Riverside,BRIGHTSPARK ENERGY,Direct debit BRIGHTSPARK ENERGY,78.67,,,1452.44
+2026-10-20,Spending,Transport for London,transport,8.31,,,
+2026-10-20,Spending,Amazon,shopping,21.52,,,
+2026-10-20,Spending,Wetherspoon,The Moon and Lantern,10.86,,,
+2026-10-21,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,1.76,,,1450.68
+2026-10-21,Spending,Tesco,groceries,9.06,,,
+2026-10-21,Spending,Wetherspoon,The Moon and Lantern,10.31,,,
+2026-10-22,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,1.10,,,
+2026-10-22,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,47.22,,,1402.36
+2026-10-22,Spending,McDonald's,eating_out,7.33,,,
+2026-10-23,Riverside,ACME LOGISTICS LTD,Bank credit ACME LOGISTICS LTD | REF 4471 0092,,571.91,,
+2026-10-23,Riverside,PIXELHOST.IO TALLINN,PIXELHOST.IO TALLINN | 9.000000USD at 1.34731,6.68,,,
+2026-10-23,Riverside,Foreign currency transaction fee,Foreign currency transaction fee,0.20,,,
+2026-10-23,Riverside,A Morgan,Transfer to A Morgan,50.00,,internal transfer,1917.39
+2026-10-23,Spending,MORGAN ALEX,Sent from Riverside,,50.00,internal transfer,
+2026-10-23,Spending,Transport for London,transport,8.71,,,
+2026-10-24,Spending,Wetherspoon,The Moon and Lantern,5.03,,,
+2026-10-24,Spending,The Red Lion,entertainment,11.75,,,
+2026-10-24,Spending,Lidl,groceries,17.83,,,
+2026-10-26,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,2.22,,,
+2026-10-26,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,21.53,,,1893.64
+2026-10-26,Spending,Lidl,groceries,17.28,,,
+2026-10-27,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,2.04,,,1891.6
+2026-10-27,Spending,Wetherspoon,The Moon and Lantern,4.88,,,
+2026-10-27,Spending,Transport for London,transport,4.20,,,
+2026-10-28,Riverside,VOXTEL MOBILE,Direct debit VOXTEL MOBILE,58.31,,,1833.29
+2026-10-28,Spending,Transport for London,transport,3.40,,,
+2026-10-29,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,3.43,,,
+2026-10-29,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,23.72,,,1806.14
+2026-10-29,Spending,Wetherspoon,The Moon and Lantern,3.93,,,
+2026-10-29,Spending,Tesco,groceries,4.05,,,
+2026-10-29,Spending,Amazon,shopping,27.24,,,
+2026-10-30,Riverside,ACME LOGISTICS LTD,Bank credit ACME LOGISTICS LTD | REF 4471 0092,,608.74,,
+2026-10-30,Riverside,A Morgan,Transfer to A Morgan,100.00,,internal transfer,2314.88
+2026-10-30,Spending,The Red Lion,entertainment,6.83,,,
+2026-10-30,Spending,Morrisons,groceries,14.48,,,
+2026-10-30,Spending,Wetherspoon,The Moon and Lantern,14.34,,,
+2026-10-31,Spending,MORGAN ALEX,Sent from Riverside,,100.00,internal transfer,
+2026-10-31,Spending,The Red Lion,entertainment,11.63,,,
+2026-10-31,Spending,Tesco,groceries,13.93,,,
+2026-11-01,Riverside,J PATEL,Standing order J PATEL,895.00,,,
+2026-11-01,Riverside,GREGGS PLC DARTVILLE,Contactless Payment | GREGGS PLC DARTVILLE,3.06,,,1416.82
+2026-11-01,Spending,Greggs,eating_out,4.26,,,
+2026-11-01,Spending,Tesco,groceries,11.27,,,
+2026-11-01,Spending,Wetherspoon,The Moon and Lantern,10.83,,,
+2026-11-02,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,41.17,,,1375.65
+2026-11-02,Spending,Transport for London,transport,5.48,,,
+2026-11-03,Riverside,NETFLIX.COM 866-579-7172,NETFLIX.COM 866-579-7172,10.99,,,
+2026-11-03,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,2.98,,,1361.68
+2026-11-03,Spending,Wetherspoon,The Moon and Lantern,8.73,,,
+2026-11-03,Spending,Transport for London,transport,8.88,,,
+2026-11-04,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,1.29,,,1360.39
+2026-11-04,Riverside,A Morgan,Transfer to A Morgan,100.00,,internal transfer,1260.39
+2026-11-04,Spending,MORGAN ALEX,Sent from Riverside,,100.00,internal transfer,
+2026-11-04,Spending,Wetherspoon,The Moon and Lantern,14.49,,,
+2026-11-04,Spending,Morrisons,groceries,15.07,,,
+2026-11-05,Riverside,CREDITLINE RECOVERIES,Direct debit CREDITLINE RECOVERIES,100.00,,,
+2026-11-05,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,3.89,,,
+2026-11-05,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,38.27,,,1118.23
+2026-11-05,Spending,Wetherspoon,The Moon and Lantern,14.46,,,
+2026-11-06,Riverside,ACME LOGISTICS LTD,Bank credit ACME LOGISTICS LTD | REF 4471 0092,,600.42,,
+2026-11-06,Riverside,A Morgan,Transfer to A Morgan,100.00,,internal transfer,1618.65
+2026-11-06,Spending,MORGAN ALEX,Sent from Riverside,,100.00,internal transfer,
+2026-11-06,Spending,Lidl,groceries,9.71,,,
+2026-11-06,Spending,Greggs,eating_out,5.97,,,
+2026-11-06,Spending,Wetherspoon,The Moon and Lantern,15.55,,,
+2026-11-06,Spending,The Red Lion,entertainment,6.65,,,
+2026-11-07,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,43.03,,,
+2026-11-07,Riverside,A Morgan,Transfer to A Morgan,100.00,,internal transfer,1475.62
+2026-11-07,Spending,MORGAN ALEX,Sent from Riverside,,100.00,internal transfer,
+2026-11-07,Spending,The Red Lion,entertainment,5.44,,,
+2026-11-07,Spending,Wetherspoon,The Moon and Lantern,4.95,,,
+2026-11-08,Riverside,A Morgan,Transfer to A Morgan,50.00,,internal transfer,1425.62
+2026-11-08,Spending,MORGAN ALEX,Sent from Riverside,,50.00,internal transfer,
+2026-11-08,Spending,The Red Lion,entertainment,7.82,,,
+2026-11-09,Riverside,LEARNWELL ONLINE LONDON,LEARNWELL ONLINE LONDON,36.00,,,
+2026-11-09,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,3.88,,,
+2026-11-09,Riverside,WM MORRISONS STORE DARTVILLE,Contactless Payment | WM MORRISONS STORE DARTVILLE,23.50,,,
+2026-11-09,Riverside,A Morgan,Transfer to A Morgan,50.00,,internal transfer,1312.24
+2026-11-09,Spending,MORGAN ALEX,Sent from Riverside,,50.00,internal transfer,
+2026-11-10,Riverside,WORKPLACE CANTEEN THURROCK,Contactless Payment | WORKPLACE CANTEEN THURROCK,1.75,,,
+2026-11-10,Riverside,A Morgan,Transfer to A Morgan,100.00,,internal transfer,1210.49
+2026-11-10,Spending,MORGAN ALEX,Sent from Riverside,,100.00,internal transfer,
+2026-11-10,Spending,Transport for London,transport,8.10,,,
+2026-11-10,Spending,Wetherspoon,The Moon and Lantern,3.48,,,
+2026-11-10,Spending,eBay,shopping,24.09,,,
+2026-11-11,Riverside,A Morgan,Transfer to A Morgan,100.00,,internal transfer,1110.49
+2026-11-11,Spending,MORGAN ALEX,Sent from Riverside,,100.00,internal transfer,
+2026-11-11,Spending,Greggs,eating_out,7.67,,,
+2026-11-11,Spending,Transport for London,transport,5.00,,,
+2026-11-11,Spending,Wetherspoon,The Moon and Lantern,13.74,,,
