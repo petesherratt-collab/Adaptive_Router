@@ -110,7 +110,7 @@ On the left, the statement page image (`media/statement_page-1.png`), tilted sli
 Turn PDF bank statements and a banking-app export into one spreadsheet that adds itself up and checks its own arithmetic.
 
 Free template + sample files (all synthetic data):
-https://github.com/petesherratt-collab/Adaptive_Router/tree/ccr-23487558-3yzwx4/examples/bank_statements
+https://github.com/petesherratt-collab/Adaptive_Router/tree/main/examples/bank_statements
 
 Written walkthrough: <paste your explainer page link after sharing it>
 
@@ -129,6 +129,5 @@ All names, accounts and amounts in this video are invented. Not financial advice
 
 ## Before you publish
 
-- [ ] **GitHub link.** The link above points at a working branch. Once that branch is merged into `main`, change `tree/ccr-23487558-3yzwx4` to `tree/main` in the link.
 - [ ] **Explainer page sharing.** It is private until you share it from its Share menu.
 - [ ] **Your own data.** Check every frame for your real statements, spreadsheet, notifications or browser tabs.
