@@ -66,7 +66,10 @@ outlier made a "sell" label that four of five models rejected.
   accuracy, and keep only what does not.
 
 **Done when:** a frozen run shows served answers at least as accurate as the
-race, with a stated share flagged.
+race, with a stated share flagged. **Met 2026-11-25** (flag fallback V1): served
+accuracy +4.4 points over the race, 6.4% flagged, but 1.42 times the race's time; the
+fallback itself added no accuracy, so the flag is kept as a filter and the fallback
+is not the default.
 
 ### Phase C: prove it on unseen work (about $6 to $8)
 

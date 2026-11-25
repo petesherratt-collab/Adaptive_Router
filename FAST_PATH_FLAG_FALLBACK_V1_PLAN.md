@@ -74,3 +74,36 @@ Calls, tokens and cost are reported for each arm.
 - **Stop rules:** the runner's provider-failure monitor, as before.
 - **Credit check:** credit is checked after the run. If it is below $3, nothing more
   is run until the owner tops up.
+
+## Result (2026-11-25)
+
+**Served accuracy: criterion met.** F served 147/160 answers right, against R's
+140/160: +4.4 points (95% interval +1.2 to +8.7). That is not just "at least as
+accurate as the race" but better.
+
+**Time: F was slower.** F took 1.42 times the race's median time (1.29 to 1.61).
+
+**The fallback itself added nothing:**
+- Only 9 of 140 program answers (6.4%) were flagged and sent to the fallback.
+- The fallback got 5 of those 9 right. The program would have got the same 5 right.
+- Those 9 took a median of 30 s, because a majority waits for the slowest of five models.
+
+Most of F's gain over R comes from writing the job once and reading each item
+separately. P, the same program without the fallback, scored 147/160 on these jobs in
+the reading-fixes run. Unflagged program answers were right 126 times out of 131 (96%).
+
+**M (every reading by majority)** scored 148/160 (+5.0 points against R, interval +0.6
+to +9.4) at 3.7 times R's time (3.3 to 4.5). Its flag still separated answers: right
+119 of 122 times unflagged (97.5%) and 29 of 38 times flagged (76%). Majority readings
+bought no accuracy over the earlier P result and cost a lot of time.
+
+Calls: R 800, F 6,663, M 6,868. Cost: about $4.30, against an estimate of $6.20.
+Credit after the run: $6.55.
+
+**Reading:**
+- **The flag is a good filter.** Unflagged answers are right about 96% of the time.
+- **The fallback is not worth it here.** On these jobs, re-deciding flagged answers by
+  majority did no better than the flagged program answer, and it was slow.
+- **Majority suits single judgements, not every reading.** It is right for a one-off
+  judgement step, as in change-signals, where a few seconds do not matter. It is wrong
+  for every reading in a job that someone is waiting on.

@@ -4617,3 +4617,33 @@ Plan: `FAST_PATH_FLAG_FALLBACK_V1_PLAN.md`. Credit at the freeze: $10.85.
 | `fast_path_planned_bench_v6.py` | `c4250db625cdce4dbd385314163ec0fcfc096666c27cba5bc8c67f61159f196d` |
 | `fast_path_planned_bench_v6_prose.json` | `7e0ada753a1f1bbf589739d9fec3a640e81d2ec2eacb6a698f18a8c8a51ca1cb` |
 | `FAST_PATH_FLAG_FALLBACK_V1_PLAN.md` | `4d71ed42cb8a694a4485916ebacbc800b5546ceddfb47e48b2eb7186e9c1b7a0` |
+
+## 2026-11-25 — Flag fallback V1 result (descriptive)
+
+Label `flag_fallback_v1`: V6 hard jobs (8 shapes, 20 each), arms R, F and M, drained.
+14,331 provider calls, 8 invalid responses. Cost about $4.30 (estimate $6.20).
+Credit left: $6.55.
+
+| Arm | Correct | Median ms | 90th pct ms | Calls |
+|---|---:|---:|---:|---:|
+| R | 140/160 | 2279 | 2944 | 800 |
+| F | 147/160 | 3237 | 5605 | 6,663 |
+| M | 148/160 | 8447 | 16975 | 6,868 |
+
+- **F against R, served accuracy:** +4.4 points (+1.2 to +8.7). The frozen criterion
+  (lower bound above −2 points) is **met**.
+- **F against R, time:** 1.42 (1.29 to 1.61). F is slower.
+- **F's fallback:** 9 of 140 program answers were flagged (6.4%). The fallback got 5 of
+  9 right; the program would have got the same 5. Median 30 s. Unflagged program
+  answers were right 126 of 131 times (96%).
+- **M against R:** +5.0 points (+0.6 to +9.4), at 3.7 times R's time. M's flag:
+  unflagged 119/122 right, flagged 29/38.
+
+Reading: the flag filters well and the program is accurate. A majority re-decision of
+flagged answers adds time but not accuracy on these jobs. Majority suits one-off
+judgement steps, not every reading.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_flag_fallback_v1.jsonl` | `a62bfbf8dc8f544e0e60e72fe87c0999a663bb99f11c7bf9b0850edebd316c4f` |
+| `fast_path_flag_fallback_v1_analysis.json` | `9817a71aef82486a17a0c25c927fef10d88fb817bea77a5488d8f08720108f57` |
