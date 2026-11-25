@@ -10,6 +10,8 @@ See [`RESEARCH_ENDPOINT_2026-09-22.md`](RESEARCH_ENDPOINT_2026-09-22.md) for the
 
 ## Fast path (developmental, started 2026-11-15)
 
+**Summary of findings to 2026-11-25: [`FINDINGS_2026-11-25.md`](FINDINGS_2026-11-25.md).**
+
 A second line of work reopens the project with a different question: for
 repeated single-step tasks, how much answer time can be removed by moving work
 into verified code and racing remote models for the rest? Cost is not an

@@ -25,6 +25,8 @@ Rules that hold throughout:
 
 ## Where we are
 
+The findings so far, with their limits: [`FINDINGS_2026-11-25.md`](FINDINGS_2026-11-25.md).
+
 | Stage | Status | Evidence |
 |---|---|---|
 | 1. Single steps turned into code | **Done.** Passed prospectively on easy and hard step shapes (about 40x to 90x faster than one model). | README, timing V1 and V2 |
