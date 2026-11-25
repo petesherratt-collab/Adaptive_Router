@@ -4818,3 +4818,18 @@ takes about half of a 20-job stream. It is not faster on reading-heavy jobs.
 |---|---|
 | `fast_path_phase_c_v1.jsonl` | `6fcdc3949b1753c33a6eb6a2a728c6ab6c844365c05caeace2a16d327290e261` |
 | `fast_path_phase_c_v1_analysis.json` | `b28ff64e70fedcf91045123538d62d8d8270ff119f0fab637b8d651bc848ef0b` |
+
+## 2026-11-25 — Long stream V1 frozen
+
+Plan: `FAST_PATH_LONG_STREAM_V1_PLAN.md` (descriptive). Credit at the freeze: $18.46.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v7.py` | `8239bebf7982ee7c846033d38d64d1e47de6308d5a28a70602e77703d0b726c0` |
+| `fast_path_planned_bench_v7_prose.json` | `8ae92d04867117e261984bd397d944959e5840113d286742c6846e018399df8f` |
+| `write_once.py` | `ab65b4dc3bdf8bddbdc2696cf4f795b59159b99c4d1c0d105dcf94441da3d5c1` |
+| `fast_path.py` | `36d46393af4c1377e0aa6bc8750db143a4a87da4e406542ec719fe74af128aca` |
+| `run_fast_path_planned_v1.py` | `cf738a1d8157efd2c7c726c2eddb883645cf2acc770780d89426c173a991e975` |
+| `analyze_write_once_v1.py` | `861a418a16cf8b0dc288132a332350fb1b6e8b26cfd2a29a85b6a778dc830b81` |
+| `config_fast_path.json` | `b1a26ee68d335790895d1913ab9fc8ed2ef009465e67e9768f8588b5d44cd54b` |
+| `FAST_PATH_LONG_STREAM_V1_PLAN.md` | `88ef7e11ace12a16deb9fef00ead6e7dca3268b6e45e6a986f7bd630271c7fa7` |
