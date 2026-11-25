@@ -1,7 +1,8 @@
 # Adaptive Router roadmap
 
-**Drafted:** 2026-11-21. **Status:** Phase A done; line **paused** 2026-11-21 for want of a
-real repeated task (`RESEARCH_PAUSE_2026-11-21.md`).
+**Drafted:** 2026-11-21. **Status:** Phase A done. Paused 2026-11-21 for want of a real
+repeated task; **restarted 2026-11-25** on one: `change-signals`, daily labelling of
+company web-page changes (`RESEARCH_PAUSE_2026-11-21.md`).
 
 The roadmap covers the fast-path line (started 2026-11-15). The earlier
 local-authority line closed on 2026-09-22 (`RESEARCH_ENDPOINT_2026-09-22.md`)
@@ -31,7 +32,7 @@ Rules that hold throughout:
 | 3. Router writes its own step plans | **Superseded.** Passed once, margin not secure; lost every later comparison. | Planned jobs V1 to V3 |
 | 4. Write the whole job once | **Current path** (`main.py --task-json`). Prospective: one pass (0.50 of the race's time, +2.1 points), one fail (a rounding rule). | Write-once V1 to V3 |
 | 5. Jobs with many readings each | **Open.** Write-once loses its speed edge; the planner does worst; batching cut calls but cost accuracy; the uncertainty flag separates good answers from bad (94% against 18% right). | Hard jobs V1, reading fixes V1 |
-| 6. Real tasks | **Paused** (no repeated task). Bank transaction categories (owner's Monzo export): hybrid 94.9% against code 84.6% and models 63.6%, a model needed for 3% to 16% of transactions. | `REAL_BANK_V1_PLAN.md` |
+| 6. Real tasks | **Running** (change-signals, daily, since 2026-11-24); before that, bank categories: Bank transaction categories (owner's Monzo export): hybrid 94.9% against code 84.6% and models 63.6%, a model needed for 3% to 16% of transactions. | `REAL_BANK_V1_PLAN.md` |
 
 Side line: EvoLab's code-only condition is done (evolab PR #1).
 
@@ -49,7 +50,13 @@ Side line: EvoLab's code-only condition is done (evolab PR #1).
 evidence. **Done 2026-11-21:** gate on, batching and narrow racing off; the planner
 was already off the default path (`planner.py` kept, marked superseded).
 
-### Phase B: make the flag pay (about $3 to $5)
+### Phase B: make the flag pay (about $6)
+
+Built 2026-11-25 (no provider cost): `fast_path.decide()` with two rules, "first"
+(answers someone waits on, rule-like steps) and "majority" (judgement steps), used by
+write-once through `decision: "majority"`; and an agreed-answer cache
+(`answer_cache`, off by default). change-signals showed the need for both: a fast
+outlier made a "sell" label that four of five models rejected.
 
 - Serve unflagged answers from the program; send flagged ones to a fallback
   (the full whole-task race, or "needs review").
@@ -72,6 +79,9 @@ arrival, or fails with a stated reason.
 
 ### Phase D: real work (cost depends on the tasks)
 
+- **Running:** change-signals (separate repository) labels page changes daily
+  through this router; its step-A code share and agreement are reported weekly,
+  with a criterion read on 2027-01-05.
 - Run the router on tasks the owner actually repeats, through `real_tasks/`.
   This is the test every earlier result stands in for. Started 2026-11-21
   with bank transaction categories; next on the same data: the monthly or

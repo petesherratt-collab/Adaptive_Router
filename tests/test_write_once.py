@@ -370,6 +370,23 @@ class ReadingFixTests(WriteOnceTests):
         router = self.build(Fake([]), uncertainty_gate=True)
         self.assertFalse(router.handle(request(1))["uncertain"])
 
+    def test_majority_decision_outvotes_a_dissenting_reader(self):
+        fake = BatchFake([LIST_PROGRAM])
+        router = self.adopt(fake, race_models=["a", "b", "c"], decision="majority")
+        fake.split = True  # model b now reads every text the other way; a and c still agree
+        result = router.handle(list_request(5, ["great", "bad"]))
+        router.drain()
+        self.assertEqual((result["route"], result["value"]), ("program", 6))  # 5 + one "up", as a and c read it
+        self.assertTrue(result["uncertain"])  # b disagreed, so it is flagged
+        fake.split = False
+        self.assertFalse(router.handle(list_request(6, ["great"]))["uncertain"])
+
+    def test_majority_decision_on_the_whole_task_race(self):
+        router = self.build(Fake([]), decision="majority")
+        result = router.handle(request(1))
+        self.assertEqual(result["route"], "race")
+        self.assertFalse(result["uncertain"])
+
     def test_adaptive_width_narrows_after_agreement_and_widens_on_dispute(self):
         fake = BatchFake([LIST_PROGRAM])
         router = self.adopt(fake, race_models=["a", "b", "c"], batch_readings=True,

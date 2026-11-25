@@ -262,7 +262,11 @@ class WriteOnceRouter:
 
     def _race_answer(self, futures):
         """First valid whole-task answer; with ``uncertainty_gate``, also wait
-        for a second and flag the answer if they differ."""
+        for a second and flag the answer if they differ. With
+        ``decision: "majority"``, wait for every racer and take the majority."""
+        if self.settings.get("decision") == "majority":
+            d = fast_path.decide(futures, "majority")
+            return d["model"] if d["ok"] else None, d["value"], d["uncertain"]
         if not self.settings.get("uncertainty_gate"):
             model, value = fast_path.FastPathRouter._first_valid(futures)
             return model, value, False
@@ -326,6 +330,11 @@ class WriteOnceRouter:
         prompt = fast_path.build_answer_prompt(spec, signature, [arg])
         models = self._width_models(key)
         futures = {self.router._pool().submit(self.router._ask, m, prompt): m for m in models}
+        if self.settings.get("decision") == "majority":
+            d = fast_path.decide(futures, "majority", check)
+            if self.settings.get("adaptive_width"):
+                self._submit(self._note_width, key, list(futures), d["model"])
+            return (True, d["value"], d["uncertain"]) if d["ok"] else (False, None, False)
         gate = self.settings.get("uncertainty_gate")
         first = second = None
         winner = None
@@ -350,7 +359,8 @@ class WriteOnceRouter:
     def _reading_value(self, reading, texts):
         """``(ok, value, uncertain)`` for one reading of a program."""
         labels = set(reading["labels"])
-        fixes = any(self.settings.get(k) for k in ("batch_readings", "uncertainty_gate", "adaptive_width"))
+        fixes = any(self.settings.get(k) for k in ("batch_readings", "uncertainty_gate", "adaptive_width")) \
+            or self.settings.get("decision") == "majority"
         if not reading.get("each"):
             if not fixes:
                 result = self._read(reading["spec"], texts)
