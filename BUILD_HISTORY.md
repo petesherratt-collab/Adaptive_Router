@@ -4583,3 +4583,37 @@ merchant names); per-merchant detail is in the git-ignored
 | Artifact | SHA-256 |
 |---|---|
 | `real_bank_v1_summary.json` | `91eb2e26f00fc2ab3e06c46cdfd0c2769c35f4f8d863fd2219a8fe0fb94c6e8c` |
+
+---
+
+## 2026-11-25 — Decision rules, answer cache, flag fallback (no provider calls)
+
+- `fast_path.decide()`: the rules "first" and "majority". With majority, a tie or any
+  dissent is flagged.
+- `write_once` gains two settings:
+  - `decision: "majority"`, for readings and whole-task races;
+  - `flag_fallback`: a flagged program answer is served from a decided whole-task
+    race.
+- `answer_cache`: serves an exact input's agreed answer without a race. It is off by
+  default.
+- The runner gains arms F and M (`--flagged`), and the analysis gains F and M
+  comparisons and a fallback summary.
+- Tests: 637 pass.
+
+Reason: the change-signals labeller (the owner's real daily task, restarted 2026-11-25)
+showed one fast outlier model creating a "sell" label that four of five models rejected.
+
+## 2026-11-25 — Flag fallback V1 frozen (Phase B)
+
+Plan: `FAST_PATH_FLAG_FALLBACK_V1_PLAN.md`. Credit at the freeze: $10.85.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `write_once.py` | `aea8eb0fb4476b9094a1387b66f602044cafb293b8e771b8d042132f6c85c116` |
+| `run_fast_path_planned_v1.py` | `621501e9978fc4340652a476c5011595c2348b63f1c48f714009f00b04023158` |
+| `analyze_write_once_v1.py` | `7645a4d4be8897633e9404fb2f5dbb1ff7837a78d3b8d903c835fc4e0084932c` |
+| `config_fast_path.json` | `b1a26ee68d335790895d1913ab9fc8ed2ef009465e67e9768f8588b5d44cd54b` |
+| `fast_path.py` | `d02ccdff7d5440e9bb9ac385df5d5f75c9f3872032e5884786732b1ea6d560a1` |
+| `fast_path_planned_bench_v6.py` | `c4250db625cdce4dbd385314163ec0fcfc096666c27cba5bc8c67f61159f196d` |
+| `fast_path_planned_bench_v6_prose.json` | `7e0ada753a1f1bbf589739d9fec3a640e81d2ec2eacb6a698f18a8c8a51ca1cb` |
+| `FAST_PATH_FLAG_FALLBACK_V1_PLAN.md` | `4d71ed42cb8a694a4485916ebacbc800b5546ceddfb47e48b2eb7186e9c1b7a0` |

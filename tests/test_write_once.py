@@ -381,6 +381,19 @@ class ReadingFixTests(WriteOnceTests):
         fake.split = False
         self.assertFalse(router.handle(list_request(6, ["great"]))["uncertain"])
 
+    def test_flagged_program_answer_is_served_from_the_fallback_race(self):
+        fake = BatchFake([LIST_PROGRAM])
+        router = self.adopt(fake, uncertainty_gate=True, flag_fallback="majority")
+        calm = router.handle(list_request(4, ["great"]))
+        router.drain()
+        self.assertEqual((calm["route"], calm["uncertain"]), ("program", False))
+        fake.split = True  # readers now disagree: the program's answer is flagged
+        result = router.handle(list_request(5, ["great", "bad"]))
+        router.drain()
+        self.assertEqual(result["route"], write_once.FALLBACK_ROUTE)
+        self.assertIn("program_value", result)
+        self.assertEqual(result["value"], 6)  # the whole-task race's answer
+
     def test_majority_decision_on_the_whole_task_race(self):
         router = self.build(Fake([]), decision="majority")
         result = router.handle(request(1))
@@ -406,6 +419,30 @@ class ReadingFixTests(WriteOnceTests):
         router.handle(list_request(11, ["great"]))
         router.drain()
         self.assertEqual(len([c for c in fake.calls if isinstance(c, tuple)]), 3)
+
+
+class RunnerFlaggedArmTests(unittest.TestCase):
+    def test_arms_f_and_m_run_and_are_analysed(self):
+        instances = [({"n": n, "reviews": [{"stars": 3, "text": t} for t in texts]}, {})
+                     for n, texts in enumerate([["great", "bad"], ["great"], ["meh", "great"], ["bad"]], 1)]
+        shape = {"name": "tiny", "description": LIST_DESCRIPTION, "output": "out"}
+        gold = [{"out": i["n"] + sum("great" in r["text"] for r in i["reviews"])} for i, _ in instances]
+        bench = types.SimpleNamespace(SHAPES=[shape], stream=lambda s: instances, gold=lambda s, inst: gold)
+        rows = []
+        runner.execute([shape], bench, {"model": "x"}, {**SETTINGS, "probe_model": "p", "probe_max_tokens": 64},
+                       BatchFake([LIST_PROGRAM]), "k", 1, rows.append, only=("R", "P", "F", "M"), probes=4,
+                       flagged=True)
+        jobs = [r for r in rows if r["record_type"] == "job"]
+        self.assertEqual({r["arm"] for r in jobs}, {"R", "P", "F", "M"})
+        self.assertTrue(all(r["correct"] for r in jobs))
+        summary = next(r for r in rows if r["record_type"] == "shape")
+        self.assertIn("write_once_fallback", summary)
+        self.assertIn("write_once_majority", summary)
+        import analyze_write_once_v1 as analysis
+        result = analysis.analyse({"header": [{"label": "t"}], "footer": [{"status": "COMPLETED"}],
+                                   "job": jobs, "shape": [summary]}, replicates=50, primary_arm="F")
+        self.assertEqual(result["fallback"]["fallback"]["jobs"], 0)  # nobody disagreed
+        self.assertIsNotNone(result["m_vs_p"])
 
 
 class RunnerFixedArmTests(unittest.TestCase):

@@ -50,6 +50,7 @@ import sandbox
 from shadow import should_shadow
 
 PROGRAM_ROUTE = "program"
+FALLBACK_ROUTE = "fallback"   # program answer was flagged; served from a decided race (flag_fallback)
 READING_KEYS = {"id", "input", "spec", "labels"}
 READING_OPTIONAL = {"each", "field"}
 
@@ -252,6 +253,16 @@ class WriteOnceRouter:
                     futures = self.router.start_prompt_race(
                         planner.build_task_prompt(request.description, request.inputs))
                     self._submit(self._audit, request, futures, value, program["sha256"])
+                rule = self.settings.get("flag_fallback")
+                if uncertain and rule:
+                    # Phase B: a flagged program answer is not served; a whole-task race decides instead
+                    decided = fast_path.decide(self.router.start_prompt_race(
+                        planner.build_task_prompt(request.description, request.inputs)), rule)
+                    if decided["ok"]:
+                        result = self._finish(started, decided["value"], FALLBACK_ROUTE, decided["model"],
+                                              readings, decided["uncertain"])
+                        result["program_value"] = value
+                        return result
                 return self._finish(started, value, PROGRAM_ROUTE, None, readings, uncertain)
         futures = self.router.start_prompt_race(planner.build_task_prompt(request.description, request.inputs))
         model, value, uncertain = self._race_answer(futures)

@@ -18,7 +18,7 @@ import statistics
 from analyze_fast_path_planned_v1 import pair
 from analyze_fast_path_timing_v1 import BOOTSTRAP_REPLICATES, by_shape, load, percentile
 
-ARMS = ("A", "R", "C", "D", "E", "W", "P", "Q", "B")
+ARMS = ("A", "R", "C", "D", "E", "W", "P", "Q", "B", "F", "M")
 
 
 def arm_table(jobs):
@@ -33,6 +33,23 @@ def arm_table(jobs):
                           "median_ms": statistics.median(times), "p90_ms": percentile(times, 0.9),
                           "last_five_median_ms": statistics.median(late)}
     return table
+
+
+def fallback_summary(rows):
+    """Arm F: what was served from the program unflagged, what went to the fallback race,
+    and what the flagged program would have served instead."""
+    def tally(group):
+        return {"jobs": len(group), "correct": sum(r["correct"] for r in group),
+                "median_ms": statistics.median(r["answer_ms"] for r in group) if group else None}
+    served_program = [r for r in rows if r["route"] == "program"]
+    fallback = [r for r in rows if r["route"] == "fallback"]
+    return {"program_unflagged": tally([r for r in served_program if r.get("uncertain") is False]),
+            "program_flagged_no_fallback": tally([r for r in served_program if r.get("uncertain")]),
+            "fallback": tally(fallback),
+            "fallback_program_would_have_been_correct": sum(bool(r.get("program_correct")) for r in fallback),
+            "race_before_program": tally([r for r in rows if r["route"] == "race"]),
+            "share_flagged_of_program_jobs": (len(fallback) / (len(served_program) + len(fallback))
+                                              if served_program or fallback else None)}
 
 
 def analyse(kinds, replicates=BOOTSTRAP_REPLICATES, reference=None, primary_arm="W"):
@@ -56,7 +73,8 @@ def analyse(kinds, replicates=BOOTSTRAP_REPLICATES, reference=None, primary_arm=
             entry["jobs"] += 1
             entry["correct"] += row["correct"]
             entry["ms"].append(row["answer_ms"])
-    summary_key = {"P": "write_once_probed", "B": "write_once_fixed"}.get(primary_arm, "write_once")
+    summary_key = {"P": "write_once_probed", "B": "write_once_fixed", "F": "write_once_fallback",
+                   "M": "write_once_majority"}.get(primary_arm, "write_once")
     attempts = [a for s in shapes for a in (s.get(summary_key) or {}).get("attempts", [])]
     after = {arm: [r["answer_ms"] for r in jobs if r["arm"] == arm and r["shape"] in first
                    and r["index"] >= first[r["shape"]]] for arm in present}
@@ -72,17 +90,22 @@ def analyse(kinds, replicates=BOOTSTRAP_REPLICATES, reference=None, primary_arm=
         "c_vs_p": pair(grouped, "C", "P", replicates) if {"C", "P"} <= present else None,
         "b_vs_r": pair(grouped, "B", "R", replicates) if {"B", "R"} <= present else None,
         "b_vs_p": pair(grouped, "B", "P", replicates) if {"B", "P"} <= present else None,
+        "f_vs_r": pair(grouped, "F", "R", replicates) if {"F", "R"} <= present else None,
+        "f_vs_p": pair(grouped, "F", "P", replicates) if {"F", "P"} <= present else None,
+        "m_vs_r": pair(grouped, "M", "R", replicates) if {"M", "R"} <= present else None,
+        "m_vs_p": pair(grouped, "M", "P", replicates) if {"M", "P"} <= present else None,
+        "fallback": fallback_summary([r for r in jobs if r["arm"] == "F"]) if "F" in present else None,
         "uncertainty": {
             arm: {flag: {"jobs": len(rows), "correct": sum(r["correct"] for r in rows)}
                   for flag, rows in (("flagged", [r for r in jobs if r["arm"] == arm and r.get("uncertain")]),
                                      ("unflagged", [r for r in jobs if r["arm"] == arm
                                                     and r.get("uncertain") is False]))}
-            for arm in ("W", "P", "Q", "B") if arm in present},
+            for arm in ("W", "P", "Q", "B", "F", "M") if arm in present},
         "first_program_by_arm": {
             arm: {shape: min((r["index"] for r in jobs if r["arm"] == arm and r["shape"] == shape
                               and r["route"] == "program"), default=None)
                   for shape in grouped}
-            for arm in ("W", "P", "Q", "B") if arm in present},
+            for arm in ("W", "P", "Q", "B", "F", "M") if arm in present},
         "c_first_plan": {shape: min((r["index"] for r in jobs if r["arm"] == "C" and r["shape"] == shape
                                      and r["route"] == "plan"), default=None)
                          for shape in grouped} if "C" in present else None,
@@ -104,7 +127,7 @@ def analyse(kinds, replicates=BOOTSTRAP_REPLICATES, reference=None, primary_arm=
                                 for k in ("calls", "prompt_tokens", "completion_tokens")}
                           for arm in sorted(present - {"E"})},
     })
-    primary = result[{"P": "p_vs_r", "B": "b_vs_r"}.get(primary_arm, "w_vs_r")]
+    primary = result[{"P": "p_vs_r", "B": "b_vs_r", "F": "f_vs_r", "M": "m_vs_r"}.get(primary_arm, "w_vs_r")]
     time_met = primary["time_ratio_interval_95"][1] < 1.0
     correct_met = primary["correctness_interval_95"][0] > -0.02
     result.update({"time_criterion_met": time_met, "correctness_criterion_met": correct_met,
@@ -123,7 +146,7 @@ def main():
     parser.add_argument("observations")
     parser.add_argument("--reference", help="earlier run on the same jobs with arm C")
     parser.add_argument("--output")
-    parser.add_argument("--primary", default="W", choices=("W", "P", "B"))
+    parser.add_argument("--primary", default="W", choices=("W", "P", "B", "F", "M"))
     args = parser.parse_args()
     reference = load(args.reference) if args.reference else None
     text = json.dumps(analyse(load(args.observations), reference=reference, primary_arm=args.primary),
