@@ -78,7 +78,11 @@ is not the default.
 - First measurement of early writing (`write_early`), built but never tested.
 
 **Done when:** the frozen primary test passes on unseen jobs under live
-arrival, or fails with a stated reason.
+arrival, or fails with a stated reason. **Done 2026-11-25 (Phase C V1): failed, with a
+stated reason.** Programs were adopted only at jobs 11 to 14 of 20 under back-to-back
+arrival. After adoption they ran at 0.64 of the race's time on calculation-heavy jobs,
+all right. On reading-heavy jobs they were 1.3 times slower. The flag held: unflagged
+answers were 99% right. `write_early` did not help.
 
 ### Phase D: real work (cost depends on the tasks)
 

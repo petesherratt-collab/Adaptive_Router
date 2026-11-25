@@ -4785,3 +4785,36 @@ the race roster. `analyze_phase_c.py` adds the per-family comparisons. Tests: 66
 | `analyze_phase_c.py` | `c38ba05e9bee2c04780ea37abe4fb8a0dd80efb5a2b093871c4d9b3286be4c77` |
 | `config_fast_path.json` | `b1a26ee68d335790895d1913ab9fc8ed2ef009465e67e9768f8588b5d44cd54b` |
 | `FAST_PATH_PHASE_C_V1_PLAN.md` | `3c3b5cc15e5b339b7e35621082394793f33e102c505bde1c3901b6f8e143751e` |
+
+## 2026-11-25 — Phase C V1 result (prospective)
+
+Label `phase_c_v1`: V7 unseen shapes (4 one-reading, 4 many-reading), arms R, P and Q,
+back-to-back arrival. 7,516 provider calls, including 274 rate-limit errors and 11
+invalid responses. Cost about $3.04 (estimate $4.50). Credit left: $18.46.
+
+| Arm | Correct | Median ms | 90th pct ms | Calls |
+|---|---:|---:|---:|---:|
+| R | 156/160 | 1858 | 2675 | 800 |
+| P | 157/160 | 2198 | 3572 | 3,299 |
+| Q | 159/160 | 2291 | 4008 | 3,417 |
+
+- **Primary, P against R:** time 1.18 (1.05 to 1.31), correctness +0.6 (−2.5 to +3.8).
+  **NOT SUPPORTED.**
+- **One-reading family:** time 1.10 (0.91 to 1.29), correctness −1.2 (−3.7 to 0).
+  Programs were first used at jobs 11 to 14 of 20 under back-to-back arrival. After
+  adoption P ran at 0.64 of R's time (1.02 s against 1.60 s), with 31/31 right.
+- **Many-reading family:** time 1.30 (1.23 to 1.41), correctness +2.5 (−2.5 to +7.5).
+  It is slower, as expected.
+- **Program-served answers:** 83/83 right.
+- **The flag:** unflagged answers were right 154 of 155 times.
+- **Early writing (Q):** no faster than P (1.04), and it never adopted a program for one
+  shape.
+
+Reading: the prospective claim holds only conditionally. The design is faster on
+calculation-heavy jobs once a program is adopted, which under back-to-back arrival
+takes about half of a 20-job stream. It is not faster on reading-heavy jobs.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_phase_c_v1.jsonl` | `6fcdc3949b1753c33a6eb6a2a728c6ab6c844365c05caeace2a16d327290e261` |
+| `fast_path_phase_c_v1_analysis.json` | `b28ff64e70fedcf91045123538d62d8d8270ff119f0fab637b8d651bc848ef0b` |
