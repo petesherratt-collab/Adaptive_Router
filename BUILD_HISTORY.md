@@ -4673,3 +4673,29 @@ Plan: `FAST_PATH_ALONGSIDE_V1_PLAN.md`. Credit at the freeze: $26.53.
 | `fast_path_planned_bench_v6.py` | `c4250db625cdce4dbd385314163ec0fcfc096666c27cba5bc8c67f61159f196d` |
 | `fast_path_planned_bench_v6_prose.json` | `7e0ada753a1f1bbf589739d9fec3a640e81d2ec2eacb6a698f18a8c8a51ca1cb` |
 | `FAST_PATH_ALONGSIDE_V1_PLAN.md` | `ae25e42658ff6f4439327c174f2830cd44c26c1c41ba2855acfd2f6616264384` |
+
+## 2026-11-25 — Race alongside V1 result (descriptive)
+
+Label `alongside_v1`: V6 hard jobs, arms R and S, drained. 8,063 provider calls,
+including 56 rate-limit errors and 11 invalid responses. Cost about $3.08 (estimate
+$4.70). Credit left: $23.45.
+
+| Arm | Correct | Median ms | 90th pct ms | Calls |
+|---|---:|---:|---:|---:|
+| R | 140/160 | 2262 | 2984 | 800 |
+| S | 147/160 | 2931 | 4345 | 7,263 |
+
+- **S against R:** correctness +4.4 points (0.0 to +10.0), which meets the bound.
+  Time 1.30 (1.23 to 1.40), which does not. The speed advantage is not restored.
+- **S's routes:**
+  - race, after two models agreed (including about 20 jobs before a program existed):
+    137 answers, 129 right;
+  - program: 23 answers, 18 right.
+- **Reading:** on these jobs the accuracy gain comes mainly from waiting for two racers
+  to agree. The written program adds little once that is done. A race-until-two-agree
+  arm with no program would separate the two causes.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_alongside_v1.jsonl` | `da03694d38aa2de15a3e8d9242c35f3c5298c564126bc755b21e5b73c86b224f` |
+| `fast_path_alongside_v1_analysis.json` | `a05cc1d4e3d9cdbcd45325dda5a8d4e7283161169029753232e70a671532bc0c` |

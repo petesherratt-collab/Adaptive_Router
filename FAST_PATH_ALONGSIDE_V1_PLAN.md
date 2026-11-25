@@ -72,3 +72,39 @@ those 9 answers goes away.
   tokens, or about $3.10. Adding 50% gives $4.70.
 - **Credit at freeze:** $26.53, shared with the change-signals key.
 - **Stop rules:** the runner's provider-failure monitor.
+
+## Result (2026-11-25)
+
+**Speed advantage not restored.**
+
+| Comparison with R | Result | 95% interval | Bound |
+|---|---|---|---|
+| Correctness | +4.4 points | 0.0 to +10.0 | Above −2: **met** |
+| Median time | 1.30 times R's | 1.23 to 1.40 | Below 1.0: **not met** |
+
+S answered 147/160 right at a median of 2.93 s. R answered 140/160 at 2.26 s.
+
+**Who served the answers:** the race served 137 of S's 160 answers and the program
+served 23.
+
+| Served by | Right | Median time |
+|---|---|---|
+| Race, once two models agreed (includes about 20 jobs before a program existed) | 129 of 137 (94%) | 2.94 s |
+| Program | 18 of 23 | 2.63 s |
+
+The program rarely finished first, because with the gate on every one of its readings
+waits for a second answer.
+
+**Reading:**
+- **The accuracy gain over R comes mainly from waiting until two racing models agree,
+  not from the written program.** R serves the first answer and is right 87.5% of the
+  time. Answers that two models agreed on were right about 94% of the time.
+- **That agreement costs about 0.7 s per job.**
+- **On these many-reading jobs, the program adds little once the race is held to
+  agreement.**
+- This was not separated cleanly. Separating it needs a race that waits for two models
+  to agree, with no program, which this run did not have.
+
+Calls: R 800, S 7,263. There were 56 HTTP 429 (rate limit) errors and 11 invalid
+responses; the provider-failure stop was not tripped. Cost about $3.08 (estimate
+$4.70). Credit left: $23.45.
