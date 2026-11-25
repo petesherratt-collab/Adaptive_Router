@@ -4741,3 +4741,26 @@ Label `agreement_v1`: V6 hard jobs, arms R and G, drained. 1,600 provider calls,
 |---|---|
 | `fast_path_agreement_v1.jsonl` | `dab8c7ea6510e6198fbe2547596b9e3c6ecc826eefb52205d3e7a610c4307f28` |
 | `fast_path_agreement_v1_analysis.json` | `3faae5ec7ca710a4ce289d25d50ba45a854023f92d163c30f6fa4aa56e742e13` |
+
+---
+
+## 2026-11-25 — Phase C bench V7 frozen (before its prose)
+
+`fast_path_planned_bench_v7.py` contains eight new job shapes, none of them used
+before, in two families:
+
+- **One reading, calculation-heavy:** `parcel_postage`, `room_booking`,
+  `tip_split`, `library_fines`. Each has one note, plus half-up rounding, caps,
+  thresholds and ties.
+- **Many readings, every list item read:** `ticket_triage`, `shopping_receipt`,
+  `repair_requests`, `party_replies`.
+
+The reference functions are checked against hand-worked cases. The prose is written
+next, by `make_bench_v7_prose.py` with `mistralai/mistral-large-4-0`, a model outside
+the race roster. `analyze_phase_c.py` adds the per-family comparisons. Tests: 661 pass.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v7.py` | `8239bebf7982ee7c846033d38d64d1e47de6308d5a28a70602e77703d0b726c0` |
+| `make_bench_v7_prose.py` | `c6789a69e415183724dd8960fc47b99a8679c221ac2a83a54c2e1c5509fcf8df` |
+| `analyze_phase_c.py` | `c38ba05e9bee2c04780ea37abe4fb8a0dd80efb5a2b093871c4d9b3286be4c77` |
