@@ -53,3 +53,42 @@ the same jobs.
   50% gives $2.10.
 - **Credit at freeze:** $23.45.
 - **Stop rules:** the runner's provider-failure monitor.
+
+## Result (2026-11-25)
+
+**Not confirmed.** Agreement alone did not give the accuracy gain.
+
+| Comparison | Result | 95% interval |
+|---|---|---|
+| G against R, correctness | +1.25 points | −3.1 to +6.3 |
+| G against R, median time | 1.24 times R's | 1.18 to 1.34 |
+
+- **Correctness:** G answered 144/160 right and R 142/160. The interval's lower bound
+  is not above 0, so the first condition fails.
+- **Against S:** G was within 2 points of S's 147/160 (1.9 points), so the descriptive
+  condition holds.
+- **Agreement:** two models agreed on every one of the 160 jobs, so none was served
+  unagreed.
+
+**Correction to the reading of race alongside V1.** That run's route breakdown (race
+answers 129/137 right) was confounded by selection. The race served the jobs where two
+models agreed before the program finished, and that is not a random subset. Taken
+across runs on these same jobs, every arm that uses the written program scored about
+the same, and every whole-task race scored lower:
+
+| Arm | Run | Right |
+|---|---|---|
+| P (program) | reading fixes | 147 |
+| F (program, flag fallback) | flag fallback | 147 |
+| M (program, majority readings) | flag fallback | 148 |
+| S (program raced alongside) | alongside | 147 |
+| R (race) | four runs | 144, 140, 140, 142 |
+| G (race to agreement) | this run | 144 |
+
+**Revised reading:** on these jobs the program, which reads each item separately, gives
+roughly 3 to 7 points of accuracy over racing the whole task. Waiting for agreement
+adds about 1 point and is not significant. Every program variant tried so far costs
+1.1 to 1.4 times the race's time.
+
+Calls: R 800, G 800; 11 invalid responses. Cost about $1.77 (estimate $2.10).
+Credit left: $21.68.

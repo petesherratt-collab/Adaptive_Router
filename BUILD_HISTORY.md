@@ -4719,3 +4719,25 @@ Plan: `FAST_PATH_AGREEMENT_V1_PLAN.md`. Credit at the freeze: $23.45.
 | `fast_path_planned_bench_v6.py` | `c4250db625cdce4dbd385314163ec0fcfc096666c27cba5bc8c67f61159f196d` |
 | `fast_path_planned_bench_v6_prose.json` | `7e0ada753a1f1bbf589739d9fec3a640e81d2ec2eacb6a698f18a8c8a51ca1cb` |
 | `FAST_PATH_AGREEMENT_V1_PLAN.md` | `7018572ff6c7b692c925b37340c70aec3edf049377c0914662d79a39d015325b` |
+
+## 2026-11-25 — Agreement race V1 result (descriptive)
+
+Label `agreement_v1`: V6 hard jobs, arms R and G, drained. 1,600 provider calls,
+11 invalid responses. Cost about $1.77 (estimate $2.10). Credit left: $21.68.
+
+| Arm | Correct | Median ms | 90th pct ms |
+|---|---:|---:|---:|
+| R | 142/160 | 2276 | 3062 |
+| G | 144/160 | 2813 | 3870 |
+
+- **G against R:** +1.25 points (−3.1 to +6.3), at 1.24 times R's time (1.18 to 1.34).
+  **Not confirmed:** agreement alone does not give the gain.
+- **Correction:** race alongside V1's reading ("the gain comes mainly from agreement")
+  was confounded by which jobs the race won. Across runs, the program arms score
+  147 to 148 and the races 140 to 144. The written program is the source of the
+  accuracy gain on these jobs, at 1.1 to 1.4 times the race's time.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_agreement_v1.jsonl` | `dab8c7ea6510e6198fbe2547596b9e3c6ecc826eefb52205d3e7a610c4307f28` |
+| `fast_path_agreement_v1_analysis.json` | `3faae5ec7ca710a4ce289d25d50ba45a854023f92d163c30f6fa4aa56e742e13` |

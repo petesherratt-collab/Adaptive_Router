@@ -108,3 +108,5 @@ waits for a second answer.
 Calls: R 800, S 7,263. There were 56 HTTP 429 (rate limit) errors and 11 invalid
 responses; the provider-failure stop was not tripped. Cost about $3.08 (estimate
 $4.70). Credit left: $23.45.
+
+**Corrected 2026-11-25 by agreement race V1:** the reading above, that the gain comes mainly from agreement, did not hold. See `FAST_PATH_AGREEMENT_V1_PLAN.md`.
