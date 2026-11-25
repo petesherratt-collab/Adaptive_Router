@@ -566,6 +566,27 @@ class RunnerAgreementArmTests(unittest.TestCase):
         self.assertIsNotNone(result["g_vs_r"])
 
 
+class RunnerFastArmTests(unittest.TestCase):
+    def test_arm_l_runs_and_is_analysed(self):
+        instances = [({"n": n, "reviews": [{"stars": 3, "text": t} for t in texts]}, {})
+                     for n, texts in enumerate([["great", "bad"], ["great"], ["meh", "great"], ["bad"]], 1)]
+        shape = {"name": "tiny", "description": LIST_DESCRIPTION, "output": "out"}
+        gold = [{"out": i["n"] + sum("great" in r["text"] for r in i["reviews"])} for i, _ in instances]
+        bench = types.SimpleNamespace(SHAPES=[shape], stream=lambda s: instances, gold=lambda s, inst: gold)
+        rows = []
+        runner.execute([shape], bench, {"model": "x"}, {**SETTINGS, "probe_model": "p", "probe_max_tokens": 64},
+                       BatchFake([LIST_PROGRAM]), "k", 1, rows.append, only=("R", "P", "L"), probes=4, fast=True)
+        jobs = [r for r in rows if r["record_type"] == "job"]
+        self.assertEqual({r["arm"] for r in jobs}, {"R", "P", "L"})
+        self.assertTrue(all(r["correct"] for r in jobs))
+        summary = next(r for r in rows if r["record_type"] == "shape")
+        self.assertIn("write_once_fast", summary)
+        import analyze_write_once_v1 as analysis
+        result = analysis.analyse({"header": [{"label": "t"}], "footer": [{"status": "COMPLETED"}],
+                                   "job": jobs, "shape": [summary]}, replicates=50, primary_arm="L")
+        self.assertIsNotNone(result["l_vs_p"])
+
+
 class RunnerFixedArmTests(unittest.TestCase):
     def test_arm_b_runs_with_the_reading_fixes(self):
         instances = [({"n": n, "reviews": [{"stars": 3, "text": t} for t in texts]}, {})

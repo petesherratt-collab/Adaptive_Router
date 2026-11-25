@@ -4857,3 +4857,21 @@ $16.81.
 |---|---|
 | `fast_path_long_stream_v1.jsonl` | `30d49aa29b3ef573779ba616a5c56226f6f5593962a2e9a884785bc3672dabef` |
 | `fast_path_long_stream_v1_analysis.json` | `671497e691b3f9a993cf9c98028f50611c5a2eef67139846b82724f669b5d326` |
+
+## 2026-11-25 — Fast adoption V1 frozen
+
+- `fast_adoption` is opt-in. It gives observation 16 workers and writes programs on a
+  pool of their own.
+- The runner gains arm L (`--fast-adoption`). Tests: 674 pass.
+- Plan: `FAST_PATH_FAST_ADOPTION_V1_PLAN.md`. Credit at the freeze: $16.81.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v7.py` | `8239bebf7982ee7c846033d38d64d1e47de6308d5a28a70602e77703d0b726c0` |
+| `fast_path_planned_bench_v7_prose.json` | `8ae92d04867117e261984bd397d944959e5840113d286742c6846e018399df8f` |
+| `write_once.py` | `5645fec171537a7430633597a3e4b0d1741b39f0af65e584541f73539c1dcf33` |
+| `fast_path.py` | `36d46393af4c1377e0aa6bc8750db143a4a87da4e406542ec719fe74af128aca` |
+| `run_fast_path_planned_v1.py` | `54806adf6393341548b1f89b8b61d53a06abbe3faa983bacb11d66bb2c997249` |
+| `analyze_write_once_v1.py` | `217466c60fafbe552bd069029633ae159d4fef550b291472a33a83741aaddd99` |
+| `config_fast_path.json` | `b1a26ee68d335790895d1913ab9fc8ed2ef009465e67e9768f8588b5d44cd54b` |
+| `FAST_PATH_FAST_ADOPTION_V1_PLAN.md` | `9dfeab0ac5523e290c11b619a20293e27ec88426fc91b14a2ce2c5c8f88ccd82` |
