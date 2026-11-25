@@ -4902,3 +4902,34 @@ router at 0.64 to 0.68 of the race's time on calculation-heavy jobs.
 |---|---|
 | `fast_path_fast_adoption_v1.jsonl` | `ec9f89ed6ef522342fce5a7231ea41e3286c126ee456c6be9923d81ebb9db76e` |
 | `fast_path_fast_adoption_v1_analysis.json` | `25790b9422579f0733d4f258cb23725dc4c4cd6834b0b943d1515ffbeddf7710` |
+
+## 2026-11-25 — Probation for newly adopted programs (no provider calls)
+
+`write_once` audits **every** answer of a newly adopted program until it has served
+`probation_jobs` answers. After that it falls back to the `plan_audit_rate` sample
+(1 in 10).
+
+- An audit re-races the job in the background, after the answer has been served, so
+  answer time is unchanged.
+- If the racing models agree on a different answer, the program is demoted, and the
+  shape goes back to racing and writing.
+- Audit outcomes are now counted in each shape's summary: checked, inconclusive and
+  mismatches.
+- `config_fast_path.json` sets `probation_jobs: 10`. This changes the default for runs
+  from now on. Earlier frozen runs keep the hashes recorded at their freeze.
+- The single-step fast path, which change-signals uses, is not changed.
+
+Reason: more adoption examples would delay adoption, and since edge-case probes were
+added no adopted program has been seen to be wrong, so their benefit could not be
+measured. Probation buys safety where the risk is, in a new program's first answers,
+without slowing them.
+
+Tests: a planted program that is right on its two adoption examples but wrong from the
+third job on.
+
+| Setting | Wrong answers served | Result |
+|---|---|---|
+| With probation | 1 | Caught and demoted |
+| Without probation | 4 | Never caught |
+
+678 tests pass.

@@ -17,6 +17,11 @@ GOOD = {"readings": [{"id": "mood", "input": "note", "labels": ["up", "down"],
         "code": "def solve(inputs, readings):\n    return inputs['n'] * 2 + len(inputs['text']) + "
                 "(1 if readings['mood'] == 'up' else 0)\n"}
 WRONG = {"readings": [], "code": "def solve(inputs, readings):\n    return inputs['n']\n"}
+# Right on the two adoption examples (n = 1, 2), wrong from n = 3: the kind of bug checking misses.
+SUBTLE = {"readings": GOOD["readings"],
+          "code": "def solve(inputs, readings):\n    base = inputs['n'] * 2 + len(inputs['text'])\n"
+                  "    if inputs['n'] >= 3:\n        return base\n"
+                  "    return base + (1 if readings['mood'] == 'up' else 0)\n"}
 SETTINGS = {
     "race_models": ["a", "b"], "synthesis_model": "w", "answer_max_tokens": 64,
     "synthesis_max_tokens": 64, "agreement_quorum": 2, "min_gate_examples": 2,
@@ -100,6 +105,39 @@ class WriteOnceTests(unittest.TestCase):
                 router.drain()
             self.assertEqual(len(threads), 1)
             self.assertEqual(threads[0].startswith("program-writer"), fast)
+
+    def test_probation_catches_a_program_wrong_after_adoption(self):
+        router = self.build(Fake([SUBTLE, GOOD]), probation_jobs=10)
+        results = []
+        for n in range(1, 7):
+            results.append(router.handle(request(n, "great")))
+            router.drain()
+        routes = [r["route"] for r in results]
+        self.assertEqual(routes[:3], ["race", "race", "program"])
+        self.assertNotEqual(results[2]["value"], 3 * 4 + 1)  # the planted bug served once...
+        summary = router.summary(next(iter(router._records)))
+        self.assertEqual(summary["demotions"][0]["reason"], "AUDIT_MISMATCH")  # ...then caught
+        self.assertEqual(summary["audits"]["mismatches"], 1)
+        self.assertTrue(all(r["value"] == n * 4 + 1 for n, r in enumerate(results[3:], start=4)))
+
+    def test_without_probation_the_planted_bug_keeps_serving(self):
+        router = self.build(Fake([SUBTLE, GOOD]), probation_jobs=0)
+        results = []
+        for n in range(1, 7):
+            results.append(router.handle(request(n, "great")))
+            router.drain()
+        wrong = [r for n, r in enumerate(results, start=1) if r["value"] != n * 4 + 1]
+        self.assertEqual(len(wrong), 4)  # n = 3..6, all from the program, never checked
+        self.assertEqual(router.summary(next(iter(router._records)))["demotions"], [])
+
+    def test_probation_ends_after_its_jobs(self):
+        router = self.build(Fake([GOOD]), probation_jobs=3)
+        for n in range(1, 9):
+            router.handle(request(n, "great"))
+            router.drain()
+        summary = router.summary(next(iter(router._records)))
+        self.assertEqual(summary["program_jobs"], 6)
+        self.assertEqual(summary["audits"], {"checked": 3, "inconclusive": 0, "mismatches": 0})
 
     def test_program_prompt_shows_no_answer(self):
         fake = Fake([GOOD])

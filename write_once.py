@@ -260,9 +260,13 @@ class WriteOnceRouter:
             if ok:
                 with self._lock:
                     record["jobs"] += 1
+                    # probation: every answer of a newly adopted program is audited until it has
+                    # served ``probation_jobs`` answers; after that, the ``plan_audit_rate`` sample.
+                    program["served"] = program.get("served", 0) + 1
+                    on_probation = program["served"] <= self.settings.get("probation_jobs", 0)
                 request_id = str(uuid.uuid4())
-                if should_shadow(request_id, self.settings.get("plan_audit_rate", 0.0),
-                                 self.settings.get("audit_salt", "")):
+                if on_probation or should_shadow(request_id, self.settings.get("plan_audit_rate", 0.0),
+                                                 self.settings.get("audit_salt", "")):
                     futures = self.router.start_prompt_race(
                         planner.build_task_prompt(request.description, request.inputs))
                     self._submit(self._audit, request, futures, value, program["sha256"])
@@ -682,6 +686,12 @@ class WriteOnceRouter:
     def _audit(self, request, futures, served, sha):
         agreed, value, _ = planner.PlanningRouter._agreement(
             futures, self.settings["agreement_quorum"], self.settings.get("job_agreement_min"))
+        with self._lock:
+            audits = self._records[request.template].setdefault(
+                "audits", {"checked": 0, "inconclusive": 0, "mismatches": 0})
+            audits["checked"] += 1
+            audits["inconclusive"] += not agreed
+            audits["mismatches"] += bool(agreed and sandbox.canonical(value) != sandbox.canonical(served))
         if not agreed or sandbox.canonical(value) == sandbox.canonical(served):
             return
         with self._lock:
@@ -700,4 +710,5 @@ class WriteOnceRouter:
             return {"examples": len(record["examples"]), "disagreements": record["disagreements"],
                     "attempts": record["attempts"], "adopted": program is not None,
                     "program_jobs": record["jobs"], "demotions": record["demotions"],
+                    "audits": record.get("audits", {"checked": 0, "inconclusive": 0, "mismatches": 0}),
                     "program": program}
