@@ -4833,3 +4833,27 @@ Plan: `FAST_PATH_LONG_STREAM_V1_PLAN.md` (descriptive). Credit at the freeze: $1
 | `analyze_write_once_v1.py` | `861a418a16cf8b0dc288132a332350fb1b6e8b26cfd2a29a85b6a778dc830b81` |
 | `config_fast_path.json` | `b1a26ee68d335790895d1913ab9fc8ed2ef009465e67e9768f8588b5d44cd54b` |
 | `FAST_PATH_LONG_STREAM_V1_PLAN.md` | `88ef7e11ace12a16deb9fef00ead6e7dca3268b6e45e6a986f7bd630271c7fa7` |
+
+## 2026-11-25 — Long stream V1 result (descriptive)
+
+Label `long_stream_v1`: V7 calculation-heavy shapes, 50 jobs each, R and P, back to
+back. 2,358 calls, 1 invalid response. Cost about $1.65 (estimate $2.70). Credit left:
+$16.81.
+
+| Arm | Correct | Median ms | 90th pct ms | Calls |
+|---|---:|---:|---:|---:|
+| R | 196/200 | 1661 | 2240 | 1,000 |
+| P | 198/200 | 1099 | 2479 | 1,358 |
+
+- **Time:** 0.66 (0.62 to 0.72). Met.
+- **Correctness:** +1.0 point (−2.0 to +4.0), exactly on the bound. Not met. Decision:
+  **NOT SUPPORTED**.
+- **Adoption:** first program jobs 15, 20, 21 and 15.
+- **After adoption:** P 129/129 at 1.01 s; R 125/129 at 1.64 s.
+- **Jobs 21 to 50:** 0.61 of R's time, +3.3 points (0.0 to +6.7).
+- **Program answers:** 129/129 right.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_long_stream_v1.jsonl` | `30d49aa29b3ef573779ba616a5c56226f6f5593962a2e9a884785bc3672dabef` |
+| `fast_path_long_stream_v1_analysis.json` | `671497e691b3f9a993cf9c98028f50611c5a2eef67139846b82724f669b5d326` |

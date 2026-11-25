@@ -47,3 +47,38 @@ usual bounds. P is **SUPPORTED** if both hold:
   about $1.80; adding 50% gives $2.70.
 - **Credit at freeze:** $18.46.
 - **Stop rules:** the runner's provider-failure monitor.
+
+## Result (2026-11-25)
+
+**NOT SUPPORTED under the frozen rule, by the narrowest margin.**
+
+| Reading | Result | 95% interval | Bound | Met? |
+|---|---|---|---|---|
+| Time, P against R | 0.66 | 0.62 to 0.72 | Upper bound below 1.0 | Yes |
+| Correctness, P minus R | +1.0 point | −2.0 to +4.0 | Lower bound above −2 points | No: it falls exactly on −2.0 |
+
+P answered 198/200 right at a median of 1.10 s; R answered 196/200 at 1.66 s.
+
+**Adoption under back-to-back arrival was still late.** The first program job per shape
+was 15, 20, 21 and 15.
+
+**Descriptive readings:**
+
+| Jobs | P | R | Time ratio | Correctness, P minus R |
+|---|---|---|---|---|
+| From adoption on (129 jobs) | 129/129 right, 1.01 s | 125/129 right, 1.64 s | | |
+| 21 to 50 only (120 jobs) | 120/120 right, 1.01 s | 116/120 right, 1.65 s | 0.61 (0.56 to 0.69) | +3.3 points (0.0 to +6.7) |
+
+- Every answer the program served was right: 129 of 129.
+- Unflagged answers were right 194 of 194 times; flagged answers 4 of 6.
+
+Calls: R 1,000, P 1,358; 1 invalid response, no rate-limit errors. Cost about $1.65
+(estimate $2.70). Credit left: $16.81.
+
+**Reading:**
+- **Over a 50-job stream the router took two-thirds of the race's time,** which settles
+  the speed question for calculation-heavy jobs.
+- **Accuracy was not shown to be no worse.** The interval's lower edge sits exactly on
+  the bound. All of P's misses came from races before adoption. Once the program was
+  live, it was never wrong in this run.
+- **Late adoption remains the cost:** 15 to 21 jobs.
