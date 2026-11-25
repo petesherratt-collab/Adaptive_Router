@@ -4933,3 +4933,27 @@ third job on.
 | Without probation | 4 | Never caught |
 
 678 tests pass.
+
+## 2026-11-25 — Probation for the single-step path (no provider calls)
+
+`fast_path` uses the same `probation_jobs` setting (10 in `config_fast_path.json`):
+
+- Every answer of a newly promoted function is audited until it has served 10
+  answers. After that it falls back to the `audit_sample_rate` sample.
+- An audit re-races the request in the background. When the racers agree, the answer
+  becomes an example, and the function is re-checked against all examples. If the
+  function fails the re-check, it is demoted (`EXAMPLE_MISMATCH`) and synthesis tries
+  again.
+- Audit outcomes are counted in each shape record: checked, inconclusive and
+  mismatches.
+
+Test: a planted function, right on inputs 1 to 3, wrong from 4.
+
+| Setting | Wrong answers served | Result |
+|---|---|---|
+| With probation | 1 (job 4) | Demoted, and a correct function took over from job 5 |
+| Without probation | Jobs 4 to 9 | Never caught |
+
+**change-signals**, which uses this path daily, had 21 agreed examples and **no
+promoted function** when this was written. The change is recorded there as Amendment 3
+and applies from when it reaches this repository's `main`.

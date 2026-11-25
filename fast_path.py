@@ -510,7 +510,16 @@ class FastPathRouter:
             }
             if succeeded:
                 value = run.results[0]["value"]
-                audited = should_shadow(
+                # probation: every answer of a newly promoted function is audited until it has
+                # served ``probation_jobs`` answers; after that, the ``audit_sample_rate`` sample.
+                with self.store.lock():
+                    current = self.store.get(request.shape)["function"]
+                    on_probation = False
+                    if current is not None and current["sha256"] == function["sha256"]:
+                        current["served"] = current.get("served", 0) + 1
+                        on_probation = current["served"] <= self.settings.get("probation_jobs", 0)
+                        self.store.save(request.shape)
+                audited = on_probation or should_shadow(
                     request_id,
                     self.settings["audit_sample_rate"],
                     self.settings["audit_salt"],
@@ -701,7 +710,13 @@ class FastPathRouter:
                 "example": outcome,
             }
         )
-        if function is not None:
+        if function is not None:  # an audit of a code answer
+            with self.store.lock():
+                record = self.store.get(request.shape)
+                audits = record.setdefault("audits", {"checked": 0, "inconclusive": 0, "mismatches": 0})
+                audits["checked"] += 1
+                audits["inconclusive"] += not agreed
+                self.store.save(request.shape)
             if agreed:
                 self._recheck(request.shape, function)
             return
@@ -714,6 +729,10 @@ class FastPathRouter:
             function["source"], examples, 1, self.settings["sandbox_timeout_seconds"]
         )
         if not passed:
+            with self.store.lock():
+                record = self.store.get(shape)
+                record.setdefault("audits", {"checked": 0, "inconclusive": 0, "mismatches": 0})["mismatches"] += 1
+                self.store.save(shape)
             self._demote(shape, "EXAMPLE_MISMATCH")
             self._maybe_synthesise(shape)
 

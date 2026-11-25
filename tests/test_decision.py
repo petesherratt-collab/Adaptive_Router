@@ -95,3 +95,34 @@ class RaceDecidedTests(FastPathTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+SUBTLE_SOURCE = "def solve(n):\n    return n * 2 if n <= 3 else n * 2 + 1\n"  # right on 1..3, wrong after
+GOOD_SOURCE = "def solve(n):\n    return n * 2\n"
+
+
+class SingleStepProbationTests(FastPathTestCase):
+    def run_stream(self, probation):
+        from tests.test_fast_path import double
+        remote = FakeRemote({"a": double, "b": double}, sources=[SUBTLE_SOURCE, GOOD_SOURCE])
+        router = self.build(remote, probation_jobs=probation)
+        results = []
+        for n in range(1, 10):
+            results.append(router.handle(request([n])))
+            router.drain()
+        record = router.store.get(fast_path.FastPathRequest.from_mapping(request([1])).shape)
+        router.close()
+        return results, record
+
+    def test_probation_catches_a_function_wrong_after_promotion(self):
+        results, record = self.run_stream(10)
+        wrong = [n for n, r in enumerate(results, start=1) if r["value"] != n * 2]
+        self.assertEqual(len(wrong), 1)  # served once by the planted function, then caught
+        self.assertEqual(record["demotions"][0]["reason"], "EXAMPLE_MISMATCH")
+        self.assertEqual(record["audits"]["mismatches"], 1)
+
+    def test_without_probation_the_planted_function_keeps_serving(self):
+        results, record = self.run_stream(0)
+        wrong = [n for n, r in enumerate(results, start=1) if r["value"] != n * 2]
+        self.assertGreaterEqual(len(wrong), 4)
+        self.assertEqual(record["demotions"], [])
