@@ -4875,3 +4875,30 @@ $16.81.
 | `analyze_write_once_v1.py` | `217466c60fafbe552bd069029633ae159d4fef550b291472a33a83741aaddd99` |
 | `config_fast_path.json` | `b1a26ee68d335790895d1913ab9fc8ed2ef009465e67e9768f8588b5d44cd54b` |
 | `FAST_PATH_FAST_ADOPTION_V1_PLAN.md` | `9dfeab0ac5523e290c11b619a20293e27ec88426fc91b14a2ce2c5c8f88ccd82` |
+
+## 2026-11-25 — Fast adoption V1 result (descriptive)
+
+Label `fast_adoption_v1`: the long-stream jobs, arms R, P and L, back to back. 3,687
+calls, 1 invalid response. Cost about $2.23 (estimate $3.75). Credit left: $14.58.
+
+| Arm | Correct | Median ms | 90th pct ms | Calls |
+|---|---:|---:|---:|---:|
+| R | 195/200 | 1641 | 2107 | 1,000 |
+| P | 200/200 | 1043 | 2155 | 1,338 |
+| L | 197/200 | 1109 | 2411 | 1,349 |
+
+- **Mechanism:** L earlier than P on 1 of 4 shapes. **Not met.** Adoption did not come
+  sooner.
+- **L against R:** 0.68 (0.58 to 0.77), +1.0 (0.0 to +2.0). **SUPPORTED.**
+- **P against R (descriptive):** 0.64 (0.58 to 0.70), +2.5 (+2.0 to +3.5). P adopted at
+  jobs 11 to 13 here, against 15 to 21 in long stream V1.
+- **L's two program misses** came from a misread note (room_booking), not from the code.
+
+Reading: `fast_adoption` does not help and stays off. Adoption delay is end-to-end time
+(examples, write, probes), not worker contention. Three back-to-back runs put the
+router at 0.64 to 0.68 of the race's time on calculation-heavy jobs.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_fast_adoption_v1.jsonl` | `ec9f89ed6ef522342fce5a7231ea41e3286c126ee456c6be9923d81ebb9db76e` |
+| `fast_path_fast_adoption_v1_analysis.json` | `25790b9422579f0733d4f258cb23725dc4c4cd6834b0b943d1515ffbeddf7710` |
