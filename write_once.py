@@ -196,7 +196,13 @@ class WriteOnceRouter:
         self._busy = {}  # template -> "writing" | "early"; not persisted
         self._width = {}  # reading key -> agreement streak and wins (adaptive_width)
         self._lock = threading.RLock()
-        self._background = ThreadPoolExecutor(max_workers=4)
+        # ``fast_adoption``: under back-to-back arrival each observation holds a worker until every
+        # racer answers, and writing a program held one for 5 to 9 s more, so 4 workers queued the
+        # agreed examples a program needs. Fast adoption gives observation 16 workers and writes
+        # programs on a pool of their own.
+        fast = bool(self.settings.get("fast_adoption"))
+        self._background = ThreadPoolExecutor(max_workers=16 if fast else 4)
+        self._writer = ThreadPoolExecutor(max_workers=4, thread_name_prefix="program-writer") if fast else None
         self._readers = ThreadPoolExecutor(max_workers=8)
         self._items = ThreadPoolExecutor(max_workers=32)
         self._parallel = ThreadPoolExecutor(max_workers=8)  # programs run alongside a race (race_alongside)
@@ -493,6 +499,8 @@ class WriteOnceRouter:
         self._readers.shutdown(wait=True)
         self._items.shutdown(wait=True)
         self._parallel.shutdown(wait=True)
+        if self._writer is not None:
+            self._writer.shutdown(wait=True)
 
     def _attempts_left(self, record):
         used = sum(a["outcome"] != "REMOTE_ERROR" for a in record["attempts"])
@@ -518,6 +526,13 @@ class WriteOnceRouter:
             self._busy[request.template] = "writing"
             examples = list(record["examples"][: self.settings["plan_examples"]])
             candidate, record["candidate"] = record["candidate"], None
+        if self._writer is not None:
+            self._pending.append(self._writer.submit(
+                self.router._in_background, self._attempt, request, candidate, examples))
+            return
+        self._attempt(request, candidate, examples)
+
+    def _attempt(self, request, candidate, examples):
         try:
             if candidate is not None:
                 attempt = self._judge_candidate(candidate, examples)

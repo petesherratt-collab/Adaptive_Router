@@ -76,6 +76,31 @@ class WriteOnceTests(unittest.TestCase):
         self.assertTrue(summary["adopted"])
         self.assertEqual(summary["attempts"][0]["trial"], {"examples": 2, "passed": 2})
 
+    def test_fast_adoption_adopts_the_same_way(self):
+        fake = Fake([GOOD])
+        router = self.build(fake, fast_adoption=True)
+        self.assertIsNotNone(router._writer)
+        routes = []
+        for n, note in [(1, "great"), (2, "sad"), (3, "great"), (4, "sad")]:
+            result = router.handle(request(n, note))
+            routes.append(result["route"])
+            router.drain()
+            self.assertEqual(result["value"], n * 4 + (1 if note == "great" else 0))
+        self.assertEqual(routes, ["race", "race", "program", "program"])
+
+    def test_fast_adoption_writes_programs_off_the_learning_pool(self):
+        import threading
+        for fast in (True, False):
+            router = self.build(Fake([GOOD]), fast_adoption=fast)
+            threads = []
+            original = router._write
+            router._write = lambda *a: (threads.append(threading.current_thread().name), original(*a))[1]
+            for n in (1, 2, 3):
+                router.handle(request(n))
+                router.drain()
+            self.assertEqual(len(threads), 1)
+            self.assertEqual(threads[0].startswith("program-writer"), fast)
+
     def test_program_prompt_shows_no_answer(self):
         fake = Fake([GOOD])
         router = self.build(fake)
