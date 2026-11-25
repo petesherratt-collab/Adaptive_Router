@@ -4583,3 +4583,377 @@ merchant names); per-merchant detail is in the git-ignored
 | Artifact | SHA-256 |
 |---|---|
 | `real_bank_v1_summary.json` | `91eb2e26f00fc2ab3e06c46cdfd0c2769c35f4f8d863fd2219a8fe0fb94c6e8c` |
+
+---
+
+## 2026-11-25 — Decision rules, answer cache, flag fallback (no provider calls)
+
+- `fast_path.decide()`: the rules "first" and "majority". With majority, a tie or any
+  dissent is flagged.
+- `write_once` gains two settings:
+  - `decision: "majority"`, for readings and whole-task races;
+  - `flag_fallback`: a flagged program answer is served from a decided whole-task
+    race.
+- `answer_cache`: serves an exact input's agreed answer without a race. It is off by
+  default.
+- The runner gains arms F and M (`--flagged`), and the analysis gains F and M
+  comparisons and a fallback summary.
+- Tests: 637 pass.
+
+Reason: the change-signals labeller (the owner's real daily task, restarted 2026-11-25)
+showed one fast outlier model creating a "sell" label that four of five models rejected.
+
+## 2026-11-25 — Flag fallback V1 frozen (Phase B)
+
+Plan: `FAST_PATH_FLAG_FALLBACK_V1_PLAN.md`. Credit at the freeze: $10.85.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `write_once.py` | `aea8eb0fb4476b9094a1387b66f602044cafb293b8e771b8d042132f6c85c116` |
+| `run_fast_path_planned_v1.py` | `621501e9978fc4340652a476c5011595c2348b63f1c48f714009f00b04023158` |
+| `analyze_write_once_v1.py` | `7645a4d4be8897633e9404fb2f5dbb1ff7837a78d3b8d903c835fc4e0084932c` |
+| `config_fast_path.json` | `b1a26ee68d335790895d1913ab9fc8ed2ef009465e67e9768f8588b5d44cd54b` |
+| `fast_path.py` | `d02ccdff7d5440e9bb9ac385df5d5f75c9f3872032e5884786732b1ea6d560a1` |
+| `fast_path_planned_bench_v6.py` | `c4250db625cdce4dbd385314163ec0fcfc096666c27cba5bc8c67f61159f196d` |
+| `fast_path_planned_bench_v6_prose.json` | `7e0ada753a1f1bbf589739d9fec3a640e81d2ec2eacb6a698f18a8c8a51ca1cb` |
+| `FAST_PATH_FLAG_FALLBACK_V1_PLAN.md` | `4d71ed42cb8a694a4485916ebacbc800b5546ceddfb47e48b2eb7186e9c1b7a0` |
+
+## 2026-11-25 — Flag fallback V1 result (descriptive)
+
+Label `flag_fallback_v1`: V6 hard jobs (8 shapes, 20 each), arms R, F and M, drained.
+14,331 provider calls, 8 invalid responses. Cost about $4.30 (estimate $6.20).
+Credit left: $6.55.
+
+| Arm | Correct | Median ms | 90th pct ms | Calls |
+|---|---:|---:|---:|---:|
+| R | 140/160 | 2279 | 2944 | 800 |
+| F | 147/160 | 3237 | 5605 | 6,663 |
+| M | 148/160 | 8447 | 16975 | 6,868 |
+
+- **F against R, served accuracy:** +4.4 points (+1.2 to +8.7). The frozen criterion
+  (lower bound above −2 points) is **met**.
+- **F against R, time:** 1.42 (1.29 to 1.61). F is slower.
+- **F's fallback:** 9 of 140 program answers were flagged (6.4%). The fallback got 5 of
+  9 right; the program would have got the same 5. Median 30 s. Unflagged program
+  answers were right 126 of 131 times (96%).
+- **M against R:** +5.0 points (+0.6 to +9.4), at 3.7 times R's time. M's flag:
+  unflagged 119/122 right, flagged 29/38.
+
+Reading: the flag filters well and the program is accurate. A majority re-decision of
+flagged answers adds time but not accuracy on these jobs. Majority suits one-off
+judgement steps, not every reading.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_flag_fallback_v1.jsonl` | `a62bfbf8dc8f544e0e60e72fe87c0999a663bb99f11c7bf9b0850edebd316c4f` |
+| `fast_path_flag_fallback_v1_analysis.json` | `9817a71aef82486a17a0c25c927fef10d88fb817bea77a5488d8f08720108f57` |
+
+## 2026-11-25 — Needs review and race alongside (no provider calls)
+
+- `write_once` gains two options:
+  - `flag_fallback: "review"`: a flagged answer is returned marked `needs_review`,
+    with no retry.
+  - `race_alongside`: the whole-task race and the program start together, and the
+    first trusted answer is served. Trusted means an unflagged program answer, or two
+    racing models agreeing.
+- The runner gains arm S (`--alongside`).
+- Tests: 655 pass.
+
+## 2026-11-25 — Race alongside V1 frozen
+
+Plan: `FAST_PATH_ALONGSIDE_V1_PLAN.md`. Credit at the freeze: $26.53.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `write_once.py` | `ab65b4dc3bdf8bddbdc2696cf4f795b59159b99c4d1c0d105dcf94441da3d5c1` |
+| `run_fast_path_planned_v1.py` | `0b59e4e1a5b5d39d643c672dc9a8af385c578aa0582579f300bc79126d2dffc2` |
+| `analyze_write_once_v1.py` | `fd085da9c3ed9f1edd5fe19cf4b40f22e3094080eddb83f0c69cfe553fbbd6ac` |
+| `config_fast_path.json` | `b1a26ee68d335790895d1913ab9fc8ed2ef009465e67e9768f8588b5d44cd54b` |
+| `fast_path.py` | `d02ccdff7d5440e9bb9ac385df5d5f75c9f3872032e5884786732b1ea6d560a1` |
+| `fast_path_planned_bench_v6.py` | `c4250db625cdce4dbd385314163ec0fcfc096666c27cba5bc8c67f61159f196d` |
+| `fast_path_planned_bench_v6_prose.json` | `7e0ada753a1f1bbf589739d9fec3a640e81d2ec2eacb6a698f18a8c8a51ca1cb` |
+| `FAST_PATH_ALONGSIDE_V1_PLAN.md` | `ae25e42658ff6f4439327c174f2830cd44c26c1c41ba2855acfd2f6616264384` |
+
+## 2026-11-25 — Race alongside V1 result (descriptive)
+
+Label `alongside_v1`: V6 hard jobs, arms R and S, drained. 8,063 provider calls,
+including 56 rate-limit errors and 11 invalid responses. Cost about $3.08 (estimate
+$4.70). Credit left: $23.45.
+
+| Arm | Correct | Median ms | 90th pct ms | Calls |
+|---|---:|---:|---:|---:|
+| R | 140/160 | 2262 | 2984 | 800 |
+| S | 147/160 | 2931 | 4345 | 7,263 |
+
+- **S against R:** correctness +4.4 points (0.0 to +10.0), which meets the bound.
+  Time 1.30 (1.23 to 1.40), which does not. The speed advantage is not restored.
+- **S's routes:**
+  - race, after two models agreed (including about 20 jobs before a program existed):
+    137 answers, 129 right;
+  - program: 23 answers, 18 right.
+- **Reading:** on these jobs the accuracy gain comes mainly from waiting for two racers
+  to agree. The written program adds little once that is done. A race-until-two-agree
+  arm with no program would separate the two causes.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_alongside_v1.jsonl` | `da03694d38aa2de15a3e8d9242c35f3c5298c564126bc755b21e5b73c86b224f` |
+| `fast_path_alongside_v1_analysis.json` | `a05cc1d4e3d9cdbcd45325dda5a8d4e7283161169029753232e70a671532bc0c` |
+
+## 2026-11-25 — Agreement rule and arm G (no provider calls)
+
+`fast_path.decide()` gains the rule "agreement": it returns the first answer two models
+agree on, and otherwise falls back to the majority, flagged. The runner gains arm G
+(`--agreement`): a whole-task race to agreement, with no program. Tests: 658 pass.
+
+## 2026-11-25 — Agreement race V1 frozen
+
+Plan: `FAST_PATH_AGREEMENT_V1_PLAN.md`. Credit at the freeze: $23.45.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path.py` | `36d46393af4c1377e0aa6bc8750db143a4a87da4e406542ec719fe74af128aca` |
+| `run_fast_path_planned_v1.py` | `cf738a1d8157efd2c7c726c2eddb883645cf2acc770780d89426c173a991e975` |
+| `analyze_write_once_v1.py` | `861a418a16cf8b0dc288132a332350fb1b6e8b26cfd2a29a85b6a778dc830b81` |
+| `config_fast_path.json` | `b1a26ee68d335790895d1913ab9fc8ed2ef009465e67e9768f8588b5d44cd54b` |
+| `fast_path_planned_bench_v6.py` | `c4250db625cdce4dbd385314163ec0fcfc096666c27cba5bc8c67f61159f196d` |
+| `fast_path_planned_bench_v6_prose.json` | `7e0ada753a1f1bbf589739d9fec3a640e81d2ec2eacb6a698f18a8c8a51ca1cb` |
+| `FAST_PATH_AGREEMENT_V1_PLAN.md` | `7018572ff6c7b692c925b37340c70aec3edf049377c0914662d79a39d015325b` |
+
+## 2026-11-25 — Agreement race V1 result (descriptive)
+
+Label `agreement_v1`: V6 hard jobs, arms R and G, drained. 1,600 provider calls,
+11 invalid responses. Cost about $1.77 (estimate $2.10). Credit left: $21.68.
+
+| Arm | Correct | Median ms | 90th pct ms |
+|---|---:|---:|---:|
+| R | 142/160 | 2276 | 3062 |
+| G | 144/160 | 2813 | 3870 |
+
+- **G against R:** +1.25 points (−3.1 to +6.3), at 1.24 times R's time (1.18 to 1.34).
+  **Not confirmed:** agreement alone does not give the gain.
+- **Correction:** race alongside V1's reading ("the gain comes mainly from agreement")
+  was confounded by which jobs the race won. Across runs, the program arms score
+  147 to 148 and the races 140 to 144. The written program is the source of the
+  accuracy gain on these jobs, at 1.1 to 1.4 times the race's time.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_agreement_v1.jsonl` | `dab8c7ea6510e6198fbe2547596b9e3c6ecc826eefb52205d3e7a610c4307f28` |
+| `fast_path_agreement_v1_analysis.json` | `3faae5ec7ca710a4ce289d25d50ba45a854023f92d163c30f6fa4aa56e742e13` |
+
+---
+
+## 2026-11-25 — Phase C bench V7 frozen (before its prose)
+
+`fast_path_planned_bench_v7.py` contains eight new job shapes, none of them used
+before, in two families:
+
+- **One reading, calculation-heavy:** `parcel_postage`, `room_booking`,
+  `tip_split`, `library_fines`. Each has one note, plus half-up rounding, caps,
+  thresholds and ties.
+- **Many readings, every list item read:** `ticket_triage`, `shopping_receipt`,
+  `repair_requests`, `party_replies`.
+
+The reference functions are checked against hand-worked cases. The prose is written
+next, by `make_bench_v7_prose.py` with `mistralai/mistral-large-4-0`, a model outside
+the race roster. `analyze_phase_c.py` adds the per-family comparisons. Tests: 661 pass.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v7.py` | `8239bebf7982ee7c846033d38d64d1e47de6308d5a28a70602e77703d0b726c0` |
+| `make_bench_v7_prose.py` | `c6789a69e415183724dd8960fc47b99a8679c221ac2a83a54c2e1c5509fcf8df` |
+| `analyze_phase_c.py` | `c38ba05e9bee2c04780ea37abe4fb8a0dd80efb5a2b093871c4d9b3286be4c77` |
+
+## 2026-11-25 — V7 prose written and hand checked; Phase C V1 frozen
+
+- **Prose:** written by `mistralai/mistral-large-4-0` (12 texts per label).
+- **Hand check:** all 288 texts read against their labels. One was excluded
+  (party_replies / maybe: "Tentatively yes…", which could fairly be read as a yes).
+  The bench's SHA-256 is unchanged since its freeze.
+- **Plan:** `FAST_PATH_PHASE_C_V1_PLAN.md` (prospective).
+- **Credit at the freeze:** $21.50.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v7.py` | `8239bebf7982ee7c846033d38d64d1e47de6308d5a28a70602e77703d0b726c0` |
+| `fast_path_planned_bench_v7_prose.json` | `8ae92d04867117e261984bd397d944959e5840113d286742c6846e018399df8f` |
+| `write_once.py` | `ab65b4dc3bdf8bddbdc2696cf4f795b59159b99c4d1c0d105dcf94441da3d5c1` |
+| `fast_path.py` | `36d46393af4c1377e0aa6bc8750db143a4a87da4e406542ec719fe74af128aca` |
+| `run_fast_path_planned_v1.py` | `cf738a1d8157efd2c7c726c2eddb883645cf2acc770780d89426c173a991e975` |
+| `analyze_write_once_v1.py` | `861a418a16cf8b0dc288132a332350fb1b6e8b26cfd2a29a85b6a778dc830b81` |
+| `analyze_phase_c.py` | `c38ba05e9bee2c04780ea37abe4fb8a0dd80efb5a2b093871c4d9b3286be4c77` |
+| `config_fast_path.json` | `b1a26ee68d335790895d1913ab9fc8ed2ef009465e67e9768f8588b5d44cd54b` |
+| `FAST_PATH_PHASE_C_V1_PLAN.md` | `3c3b5cc15e5b339b7e35621082394793f33e102c505bde1c3901b6f8e143751e` |
+
+## 2026-11-25 — Phase C V1 result (prospective)
+
+Label `phase_c_v1`: V7 unseen shapes (4 one-reading, 4 many-reading), arms R, P and Q,
+back-to-back arrival. 7,516 provider calls, including 274 rate-limit errors and 11
+invalid responses. Cost about $3.04 (estimate $4.50). Credit left: $18.46.
+
+| Arm | Correct | Median ms | 90th pct ms | Calls |
+|---|---:|---:|---:|---:|
+| R | 156/160 | 1858 | 2675 | 800 |
+| P | 157/160 | 2198 | 3572 | 3,299 |
+| Q | 159/160 | 2291 | 4008 | 3,417 |
+
+- **Primary, P against R:** time 1.18 (1.05 to 1.31), correctness +0.6 (−2.5 to +3.8).
+  **NOT SUPPORTED.**
+- **One-reading family:** time 1.10 (0.91 to 1.29), correctness −1.2 (−3.7 to 0).
+  Programs were first used at jobs 11 to 14 of 20 under back-to-back arrival. After
+  adoption P ran at 0.64 of R's time (1.02 s against 1.60 s), with 31/31 right.
+- **Many-reading family:** time 1.30 (1.23 to 1.41), correctness +2.5 (−2.5 to +7.5).
+  It is slower, as expected.
+- **Program-served answers:** 83/83 right.
+- **The flag:** unflagged answers were right 154 of 155 times.
+- **Early writing (Q):** no faster than P (1.04), and it never adopted a program for one
+  shape.
+
+Reading: the prospective claim holds only conditionally. The design is faster on
+calculation-heavy jobs once a program is adopted, which under back-to-back arrival
+takes about half of a 20-job stream. It is not faster on reading-heavy jobs.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_phase_c_v1.jsonl` | `6fcdc3949b1753c33a6eb6a2a728c6ab6c844365c05caeace2a16d327290e261` |
+| `fast_path_phase_c_v1_analysis.json` | `b28ff64e70fedcf91045123538d62d8d8270ff119f0fab637b8d651bc848ef0b` |
+
+## 2026-11-25 — Long stream V1 frozen
+
+Plan: `FAST_PATH_LONG_STREAM_V1_PLAN.md` (descriptive). Credit at the freeze: $18.46.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v7.py` | `8239bebf7982ee7c846033d38d64d1e47de6308d5a28a70602e77703d0b726c0` |
+| `fast_path_planned_bench_v7_prose.json` | `8ae92d04867117e261984bd397d944959e5840113d286742c6846e018399df8f` |
+| `write_once.py` | `ab65b4dc3bdf8bddbdc2696cf4f795b59159b99c4d1c0d105dcf94441da3d5c1` |
+| `fast_path.py` | `36d46393af4c1377e0aa6bc8750db143a4a87da4e406542ec719fe74af128aca` |
+| `run_fast_path_planned_v1.py` | `cf738a1d8157efd2c7c726c2eddb883645cf2acc770780d89426c173a991e975` |
+| `analyze_write_once_v1.py` | `861a418a16cf8b0dc288132a332350fb1b6e8b26cfd2a29a85b6a778dc830b81` |
+| `config_fast_path.json` | `b1a26ee68d335790895d1913ab9fc8ed2ef009465e67e9768f8588b5d44cd54b` |
+| `FAST_PATH_LONG_STREAM_V1_PLAN.md` | `88ef7e11ace12a16deb9fef00ead6e7dca3268b6e45e6a986f7bd630271c7fa7` |
+
+## 2026-11-25 — Long stream V1 result (descriptive)
+
+Label `long_stream_v1`: V7 calculation-heavy shapes, 50 jobs each, R and P, back to
+back. 2,358 calls, 1 invalid response. Cost about $1.65 (estimate $2.70). Credit left:
+$16.81.
+
+| Arm | Correct | Median ms | 90th pct ms | Calls |
+|---|---:|---:|---:|---:|
+| R | 196/200 | 1661 | 2240 | 1,000 |
+| P | 198/200 | 1099 | 2479 | 1,358 |
+
+- **Time:** 0.66 (0.62 to 0.72). Met.
+- **Correctness:** +1.0 point (−2.0 to +4.0), exactly on the bound. Not met. Decision:
+  **NOT SUPPORTED**.
+- **Adoption:** first program jobs 15, 20, 21 and 15.
+- **After adoption:** P 129/129 at 1.01 s; R 125/129 at 1.64 s.
+- **Jobs 21 to 50:** 0.61 of R's time, +3.3 points (0.0 to +6.7).
+- **Program answers:** 129/129 right.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_long_stream_v1.jsonl` | `30d49aa29b3ef573779ba616a5c56226f6f5593962a2e9a884785bc3672dabef` |
+| `fast_path_long_stream_v1_analysis.json` | `671497e691b3f9a993cf9c98028f50611c5a2eef67139846b82724f669b5d326` |
+
+## 2026-11-25 — Fast adoption V1 frozen
+
+- `fast_adoption` is opt-in. It gives observation 16 workers and writes programs on a
+  pool of their own.
+- The runner gains arm L (`--fast-adoption`). Tests: 674 pass.
+- Plan: `FAST_PATH_FAST_ADOPTION_V1_PLAN.md`. Credit at the freeze: $16.81.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v7.py` | `8239bebf7982ee7c846033d38d64d1e47de6308d5a28a70602e77703d0b726c0` |
+| `fast_path_planned_bench_v7_prose.json` | `8ae92d04867117e261984bd397d944959e5840113d286742c6846e018399df8f` |
+| `write_once.py` | `5645fec171537a7430633597a3e4b0d1741b39f0af65e584541f73539c1dcf33` |
+| `fast_path.py` | `36d46393af4c1377e0aa6bc8750db143a4a87da4e406542ec719fe74af128aca` |
+| `run_fast_path_planned_v1.py` | `54806adf6393341548b1f89b8b61d53a06abbe3faa983bacb11d66bb2c997249` |
+| `analyze_write_once_v1.py` | `217466c60fafbe552bd069029633ae159d4fef550b291472a33a83741aaddd99` |
+| `config_fast_path.json` | `b1a26ee68d335790895d1913ab9fc8ed2ef009465e67e9768f8588b5d44cd54b` |
+| `FAST_PATH_FAST_ADOPTION_V1_PLAN.md` | `9dfeab0ac5523e290c11b619a20293e27ec88426fc91b14a2ce2c5c8f88ccd82` |
+
+## 2026-11-25 — Fast adoption V1 result (descriptive)
+
+Label `fast_adoption_v1`: the long-stream jobs, arms R, P and L, back to back. 3,687
+calls, 1 invalid response. Cost about $2.23 (estimate $3.75). Credit left: $14.58.
+
+| Arm | Correct | Median ms | 90th pct ms | Calls |
+|---|---:|---:|---:|---:|
+| R | 195/200 | 1641 | 2107 | 1,000 |
+| P | 200/200 | 1043 | 2155 | 1,338 |
+| L | 197/200 | 1109 | 2411 | 1,349 |
+
+- **Mechanism:** L earlier than P on 1 of 4 shapes. **Not met.** Adoption did not come
+  sooner.
+- **L against R:** 0.68 (0.58 to 0.77), +1.0 (0.0 to +2.0). **SUPPORTED.**
+- **P against R (descriptive):** 0.64 (0.58 to 0.70), +2.5 (+2.0 to +3.5). P adopted at
+  jobs 11 to 13 here, against 15 to 21 in long stream V1.
+- **L's two program misses** came from a misread note (room_booking), not from the code.
+
+Reading: `fast_adoption` does not help and stays off. Adoption delay is end-to-end time
+(examples, write, probes), not worker contention. Three back-to-back runs put the
+router at 0.64 to 0.68 of the race's time on calculation-heavy jobs.
+
+| Artifact | SHA-256 |
+|---|---|
+| `fast_path_fast_adoption_v1.jsonl` | `ec9f89ed6ef522342fce5a7231ea41e3286c126ee456c6be9923d81ebb9db76e` |
+| `fast_path_fast_adoption_v1_analysis.json` | `25790b9422579f0733d4f258cb23725dc4c4cd6834b0b943d1515ffbeddf7710` |
+
+## 2026-11-25 — Probation for newly adopted programs (no provider calls)
+
+`write_once` audits **every** answer of a newly adopted program until it has served
+`probation_jobs` answers. After that it falls back to the `plan_audit_rate` sample
+(1 in 10).
+
+- An audit re-races the job in the background, after the answer has been served, so
+  answer time is unchanged.
+- If the racing models agree on a different answer, the program is demoted, and the
+  shape goes back to racing and writing.
+- Audit outcomes are now counted in each shape's summary: checked, inconclusive and
+  mismatches.
+- `config_fast_path.json` sets `probation_jobs: 10`. This changes the default for runs
+  from now on. Earlier frozen runs keep the hashes recorded at their freeze.
+- The single-step fast path, which change-signals uses, is not changed.
+
+Reason: more adoption examples would delay adoption, and since edge-case probes were
+added no adopted program has been seen to be wrong, so their benefit could not be
+measured. Probation buys safety where the risk is, in a new program's first answers,
+without slowing them.
+
+Tests: a planted program that is right on its two adoption examples but wrong from the
+third job on.
+
+| Setting | Wrong answers served | Result |
+|---|---|---|
+| With probation | 1 | Caught and demoted |
+| Without probation | 4 | Never caught |
+
+678 tests pass.
+
+## 2026-11-25 — Probation for the single-step path (no provider calls)
+
+`fast_path` uses the same `probation_jobs` setting (10 in `config_fast_path.json`):
+
+- Every answer of a newly promoted function is audited until it has served 10
+  answers. After that it falls back to the `audit_sample_rate` sample.
+- An audit re-races the request in the background. When the racers agree, the answer
+  becomes an example, and the function is re-checked against all examples. If the
+  function fails the re-check, it is demoted (`EXAMPLE_MISMATCH`) and synthesis tries
+  again.
+- Audit outcomes are counted in each shape record: checked, inconclusive and
+  mismatches.
+
+Test: a planted function, right on inputs 1 to 3, wrong from 4.
+
+| Setting | Wrong answers served | Result |
+|---|---|---|
+| With probation | 1 (job 4) | Demoted, and a correct function took over from job 5 |
+| Without probation | Jobs 4 to 9 | Never caught |
+
+**change-signals**, which uses this path daily, had 21 agreed examples and **no
+promoted function** when this was written. The change is recorded there as Amendment 3
+and applies from when it reaches this repository's `main`.

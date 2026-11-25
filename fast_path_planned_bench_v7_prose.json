@@ -1,0 +1,382 @@
+{
+ "writer_model": "mistralai/mistral-large-4-0",
+ "per_label": 12,
+ "prompts": {
+  "parcel_postage": "Write short messages for a test set. The messages are short messages a customer sends to a post office counter about how they want their parcels sent.\n\nWrite 12 different messages for each of these labels:\n- standard: they want the ordinary, cheapest service with no extras\n- express: they want the parcels to arrive as fast as possible\n- tracked: they want to be able to track the parcels and get proof of delivery, without needing speed\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"standard\", \"express\", \"tracked\", each mapping to an array of 12 strings.",
+  "room_booking": "Write short messages for a test set. The messages are short messages from customers booking a room at a venue, saying what the event is.\n\nWrite 12 different messages for each of these labels:\n- meeting: a business meeting or discussion\n- workshop: a hands-on workshop or training session\n- party: a party or celebration\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"meeting\", \"workshop\", \"party\", each mapping to an array of 12 strings.",
+  "tip_split": "Write short messages for a test set. The messages are short comments a table leaves about the service they had at a restaurant.\n\nWrite 12 different messages for each of these labels:\n- poor: the service was poor\n- good: the service was good\n- excellent: the service was excellent, outstanding\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"poor\", \"good\", \"excellent\", each mapping to an array of 12 strings.",
+  "library_fines": "Write short messages for a test set. The messages are short notes a librarian writes about a borrower when they return books.\n\nWrite 12 different messages for each of these labels:\n- child: the borrower is a child\n- adult: the borrower is an adult of working age\n- senior: the borrower is a pensioner or older person\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"child\", \"adult\", \"senior\", each mapping to an array of 12 strings.",
+  "ticket_triage": "Write short messages for a test set. The messages are customer support tickets, one or two sentences each.\n\nWrite 12 different messages for each of these labels:\n- billing: about a charge, invoice, refund or payment\n- bug: reporting something in the product that is broken or erroring\n- account: about logging in, passwords, profile or account settings\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"billing\", \"bug\", \"account\", each mapping to an array of 12 strings.",
+  "shopping_receipt": "Write short messages for a test set. The messages are short item descriptions as they appear on a supermarket receipt or order.\n\nWrite 12 different messages for each of these labels:\n- food: food or a non-alcoholic drink\n- household: a household item such as cleaning products or toiletries\n- alcohol: an alcoholic drink\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"food\", \"household\", \"alcohol\", each mapping to an array of 12 strings.",
+  "repair_requests": "Write short messages for a test set. The messages are short repair requests tenants send to a landlord.\n\nWrite 12 different messages for each of these labels:\n- emergency: an emergency that needs fixing at once (danger, flooding, no heating in winter, gas)\n- routine: a real fault that needs fixing soon but is not dangerous\n- cosmetic: a cosmetic issue that only affects appearance\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"emergency\", \"routine\", \"cosmetic\", each mapping to an array of 12 strings.",
+  "party_replies": "Write short messages for a test set. The messages are short replies to a party invitation.\n\nWrite 12 different messages for each of these labels:\n- yes: they are coming\n- maybe: they are not sure yet whether they can come\n- no: they cannot come\n\nEach message is one to three sentences of natural English, as a real person would write it. Vary the wording, length and style. A careful reader must be able to tell which label a message belongs to, and it must not fit any other label.\n\nReply with JSON only, no code fence: an object with the keys \"yes\", \"maybe\", \"no\", each mapping to an array of 12 strings."
+ },
+ "texts": {
+  "parcel_postage": {
+   "standard": [
+    "Just the cheapest option please, nothing fancy.",
+    "Standard post is fine. I'm not in a hurry and I don't need tracking.",
+    "I'll take the basic economy service.",
+    "Can you send it regular mail? Nothing fancy, just the ordinary service.",
+    "Cheapest rate works for me. No rush, no add-ons.",
+    "I'd like the standard service. Keep it simple and cheap.",
+    "Send it by normal post, that's all.",
+    "The slow and cheap one is fine with me.",
+    "Basic shipping please. I want to keep the cost down so no extras.",
+    "Just the regular service, nothing special.",
+    "I'll go with the standard class option.",
+    "Please use the ordinary, cheapest service available. No extras needed."
+   ],
+   "express": [
+    "I need this to arrive as fast as possible, please use the quickest service.",
+    "Send it express, it's really urgent.",
+    "Next day delivery if you can, thanks.",
+    "Please rush this one, it's time-sensitive.",
+    "I want the fastest option you have, cost doesn't matter.",
+    "Send it priority express please.",
+    "As fast as you can get it there, please.",
+    "Overnight delivery would be ideal.",
+    "Please use the express service, I need it by tomorrow.",
+    "Fastest shipping available, no matter what it costs.",
+    "Rush delivery please, this is really important.",
+    "Send it by the quickest method possible."
+   ],
+   "tracked": [
+    "I'd like tracking and proof of delivery please, speed doesn't matter.",
+    "Can I get a tracking number and a signature on delivery?",
+    "Please send it with tracking so I can see where it is, and I need proof it was delivered.",
+    "I want to be able to track the parcel and get confirmation of delivery, no rush.",
+    "Tracked service with proof of delivery, please. Take your time.",
+    "Just make sure I can track it and get a delivery confirmation.",
+    "I need a tracking reference and proof that it arrived safely.",
+    "Send it tracked with signature required, standard speed is fine.",
+    "I'd like to follow the parcel's journey and have proof of delivery.",
+    "Please add tracking and delivery confirmation, I don't need it fast.",
+    "I want tracking and a signed proof of delivery.",
+    "Can you send it with tracking and get me proof of delivery? No need to rush."
+   ]
+  },
+  "room_booking": {
+   "meeting": [
+    "We're booking the room for our quarterly board meeting on Friday afternoon. We'll need a projector and a whiteboard for the presentations.",
+    "Hi, I'd like to reserve a space for a client pitch next Tuesday. Just a small group of six, so a boardroom setup would be perfect.",
+    "Can we book the conference room for our weekly team sync? We usually meet for about two hours to discuss project updates.",
+    "We're hosting a strategy session with our department heads next month. Please arrange the chairs in a U-shape for discussion.",
+    "I need a quiet room for a job interview on Thursday morning. It's just me and one candidate, so nothing fancy required.",
+    "Booking for a sales review meeting with our regional managers. We'll need space for a conference call setup as well.",
+    "We'd like to hold our annual planning meeting in your largest room. Around twenty people, mostly discussion and agenda items.",
+    "Hi there, we're looking to book a room for a focus group discussion about our new product. About eight participants plus a moderator.",
+    "Please reserve the meeting room for our project kickoff on Monday. We'll be going over timelines and deliverables with the whole team.",
+    "We need a space for a one-on-one performance review. Just a small table and two chairs will do.",
+    "Booking for a brainstorming session with the marketing team. We want a casual setup with a flip chart and markers.",
+    "We're organizing a panel discussion with industry experts next week. It's a seated discussion format, not a presentation."
+   ],
+   "workshop": [
+    "We're running a hands-on Python coding workshop for beginners next Saturday. Participants will need tables with power outlets for their laptops.",
+    "Hi, I'd like to book your space for a full-day pottery workshop. We'll need sinks and tables that can get messy.",
+    "Can we reserve the room for a team training session on conflict resolution? It's interactive, with role-playing exercises.",
+    "We're hosting a cooking class for twelve people next Friday evening. A kitchen setup would be ideal.",
+    "Booking for a design thinking workshop where teams will be building prototypes. We'll need lots of wall space for sticky notes.",
+    "We need a venue for a safety training workshop for our staff. It involves practical demonstrations with equipment.",
+    "Hi, we're planning an art workshop where attendees will paint on canvases. Please make sure the floors are protected.",
+    "We'd like to hold a public speaking workshop next month. Participants will practice giving speeches in front of the group.",
+    "Can you accommodate a woodworking workshop? We'll be bringing in tools and materials, so we need a sturdy workbench area.",
+    "We're organizing a yoga workshop for beginners on Sunday morning. Please ensure the room has enough space for mats.",
+    "Booking for an Excel advanced training session. Everyone will be working on their own laptops with sample files.",
+    "We're running a floral arrangement workshop for a corporate event. Participants will create their own bouquets to take home."
+   ],
+   "party": [
+    "We're celebrating my daughter's 16th birthday and would love to book the garden room for a party on Saturday night.",
+    "Hi, we're hosting a Christmas party for our office next Friday. We'll need space for a buffet and some dancing.",
+    "Can we reserve the venue for our wedding reception? We're expecting about eighty guests for dinner and dancing.",
+    "We'd like to throw a surprise 50th anniversary party for my parents. Cocktail attire, drinks and canapés.",
+    "Booking for a baby shower next Sunday afternoon. It's a small gathering with about fifteen guests, mostly gifts and cake.",
+    "We're having a graduation party for my son next month. Casual dress, music, and lots of food for friends and family.",
+    "Hi, we want to host a farewell party for a colleague who's retiring. Drinks and speeches in the evening.",
+    "Can we book the room for a New Year's Eve party? We'll have a DJ and a midnight toast.",
+    "We're planning an engagement party for my sister. Cocktails and celebration for around thirty people.",
+    "Booking for my son's birthday bash. We'll have a magician and a bouncy castle for the kids in the afternoon.",
+    "We'd like to host a summer barbecue party for our neighbors. Casual, outdoors if possible, with grilled food.",
+    "Hi, we're celebrating our company's 10-year anniversary with a gala dinner and party. Formal attire, speeches, and dancing."
+   ]
+  },
+  "tip_split": {
+   "poor": [
+    "The waiter ignored us for twenty minutes and then got our order wrong.",
+    "Rude staff, cold food, and we had to ask three times for the bill.",
+    "Terrible experience. Nobody checked on us once during the whole meal.",
+    "The server was dismissive and made us feel rushed the entire time.",
+    "Waited an hour for appetizers that arrived lukewarm. Never again.",
+    "Our server forgot half our drinks and never apologized.",
+    "Absolutely dreadful service from start to finish. Left hungry and annoyed.",
+    "They mixed up our table's orders twice and charged us for extra items.",
+    "The staff seemed completely overwhelmed and unhelpful.",
+    "Cold entrees, empty water glasses, and a manager who shrugged when we complained.",
+    "Took forever to get menus, then the food came out wrong. Disappointing.",
+    "Worst service I've had in years. The waitress was openly hostile."
+   ],
+   "good": [
+    "The server was friendly and kept our drinks refilled. Solid experience.",
+    "Good service overall, though the kitchen was a bit slow on Saturday night.",
+    "Our waiter was attentive and checked on us at just the right times.",
+    "Nice staff, decent food, reasonable prices. Would come back.",
+    "The service was good—polite, efficient, and nothing went wrong.",
+    "Enjoyed our meal. The staff was pleasant and the timing was perfect.",
+    "Good atmosphere and the servers were courteous throughout dinner.",
+    "Our server was knowledgeable about the menu and made good recommendations.",
+    "Everything went smoothly. Friendly faces and tasty dishes.",
+    "The service was good, if a little rushed during the busy hour.",
+    "Had a pleasant evening. Staff was welcoming and the pacing was nice.",
+    "Reliable, friendly service. The food arrived hot and on time."
+   ],
+   "excellent": [
+    "Absolutely outstanding service—our server anticipated every need before we asked.",
+    "The staff went above and beyond, even bringing a complimentary dessert for our anniversary.",
+    "Best restaurant service I've ever experienced. Flawless from greeting to goodbye.",
+    "Incredible attention to detail. They remembered our names and preferences instantly.",
+    "The team was phenomenal—warm, professional, and genuinely caring.",
+    "Every course arrived perfectly timed and the server's recommendations were spot on.",
+    "Truly exceptional. They handled our large party with grace and made us feel like VIPs.",
+    "The service was impeccable; the manager personally ensured everything was perfect.",
+    "Outstanding hospitality—they turned a simple dinner into a memorable celebration.",
+    "Can't praise the staff enough. Quick, kind, and incredibly skilled at their jobs.",
+    "A masterclass in service. Every interaction felt personal and thoughtful.",
+    "Beyond excellent—the whole team created an unforgettable dining experience."
+   ]
+  },
+  "library_fines": {
+   "child": [
+    "Timmy returned the picture books with a sticker still on the cover; he told me the dinosaur was his favorite.",
+    "Little Mia left a crayon drawing inside 'The Very Hungry Caterpillar'. Absolutely adorable.",
+    "Our young reader came in with her mum and picked out three more chapter books for the weekend.",
+    "The small child struggled to reach the counter. He still managed to hand over both books with a big smile.",
+    "School library card—homework club books returned, slightly sticky from juice boxes.",
+    "He asked if we have any more books about dragons. He's seven and loves adventures.",
+    "Returned 'Matilda' with the pages all dog-eared. His mum says he read it under the covers with a torch last night.",
+    "The kid chatted about superheroes for five minutes at the desk. So much energy! He wants to know when the next issue arrives.",
+    "Guardian signed the return slip; the books were read (mostly) and only one page was torn.",
+    "Year 3 student returned his reading log along with the books. His teacher will be pleased.",
+    "She's five and whispered that the princess book was 'the best ever'. She asked when she can borrow again.",
+    "Came in straight after school with his backpack still on, eager to swap his books for new ones."
+   ],
+   "adult": [
+    "Returned the leadership manuals between meetings; asked about renewing the business journals.",
+    "Dropped off the books during his lunch break. He reads on the train commute.",
+    "She mentioned the marketing book helped with a presentation at the office this week.",
+    "Busy professional returned the stack of thrillers between client meetings. He wants holiday reading recommendations.",
+    "Came in after his shift at the hospital, still in scrubs, to swap the medical journals.",
+    "Asked to renew the project management book—deadline at work is looming.",
+    "Returned the self-help titles with a note that they actually helped with his work presentation.",
+    "He's reading up on coding for a new role at the office. He returned the old editions and took the new ones.",
+    "Dropped the books off before her evening class. She's studying for a work certification.",
+    "Mortgage advisor returned the property law texts; said the clients keep him busy at the office.",
+    "Came in on his way to work, grabbed a business magazine and a new novel for the commute.",
+    "She returned the books late because of a work crisis. She apologized and paid the fine promptly."
+   ],
+   "senior": [
+    "Mr. Henderson, 81, returned the large-print novels; he says the small font gives him a headache now.",
+    "She came in at opening time, as she does every Tuesday since retiring last year.",
+    "Retired teacher returned the history books. He mentioned he finally has time to read for pleasure again.",
+    "He's 84 and asked for large-print recommendations for his granddaughter. He said his eyesight isn't what it was.",
+    "Read the whole trilogy in a week; said retirement has its perks and he's enjoying every minute.",
+    "Mrs. Davies, 79, returned the books with her magnifying glass still tucked in her cardigan.",
+    "Came in with his walking stick and asked if we stock any books on gentle exercise for the over-70s.",
+    "At 80, she's reading to her grandkids this weekend and needed more big-picture stories. Her arthritis makes turning pages hard.",
+    "The 82-year-old returned the memoirs; said he loves reminiscing about the sixties at the bowling club.",
+    "The 85-year-old asked about the large-print crossword books—his eyes aren't what they used to be.",
+    "Pensioner returned the travel guides; planning a coach trip with his wife next spring.",
+    "She arrived slowly with her shopping trolley at 83 and returned the romance novels. She says she has all the time in the world since retiring."
+   ]
+  },
+  "ticket_triage": {
+   "billing": [
+    "I was charged twice for my subscription this month and I'd like the duplicate charge refunded.",
+    "Can you send me a copy of my invoice from March? I need it for my expense report.",
+    "My card was declined but the payment still shows as pending in my billing history. What happened?",
+    "I upgraded to the Pro plan but I'm still being billed at the old rate. Please fix this.",
+    "There's an unknown $9.99 charge on my statement from last night. I never authorized it.",
+    "How do I update the payment method so my next renewal goes through? The card on file expired.",
+    "I canceled my subscription but was still charged for the full month. I want a prorated refund.",
+    "Do you offer refunds if I downgrade in the middle of a billing cycle?",
+    "My receipt email never arrived after I paid, and the charge is showing on my bank statement.",
+    "The price at checkout was different from the advertised monthly price. Can you honor the lower amount?",
+    "I need to switch from monthly to annual billing and apply the discount to my next invoice.",
+    "Why was my payment retried three times? I only have one subscription."
+   ],
+   "bug": [
+    "The dashboard crashes every time I click on the Reports tab. I get a blank white screen.",
+    "I keep getting a 500 error when I try to save my changes in the editor.",
+    "The search bar returns no results even when I know the file exists.",
+    "After the latest update, the mobile app freezes and restarts every time I switch screens.",
+    "Exporting to CSV only downloads half the rows and then stops with no error message.",
+    "The notification bell shows unread messages, but the list is empty when I open it.",
+    "Keyboard shortcuts stopped working in the project view after I refreshed the page.",
+    "When I upload a PDF, the preview stays stuck on 'processing' forever.",
+    "The calendar view overlaps events on top of each other so I can't read the times.",
+    "Clicking 'Invite teammate' opens a modal that immediately closes again.",
+    "The dark mode toggle doesn't change anything except the sidebar color.",
+    "Connecting Google Drive fails with a generic error every time I try."
+   ],
+   "account": [
+    "I can't log in—it says my password is wrong, but I'm sure it's correct.",
+    "I never received the password reset email. Can you resend it?",
+    "How do I change the email address associated with my account?",
+    "My account is locked after too many failed login attempts. Please unlock it.",
+    "I want to enable two-factor authentication but I can't find the setting.",
+    "Where can I update my profile photo, display name, and timezone?",
+    "I signed up with Google but now I can't access the account with my email password.",
+    "Can you merge my two accounts? I accidentally created a duplicate profile.",
+    "I'm not getting any sign-in notification emails when I log in from a new device.",
+    "How do I delete my account and all my data?",
+    "My username was changed without my permission and I can't change it back.",
+    "I reset my password but I'm still unable to sign in with the new one."
+   ]
+  },
+  "shopping_receipt": {
+   "food": [
+    "Grabbed a loaf of sourdough and a carton of oat milk.",
+    "I picked up bananas, Greek yogurt, and granola for breakfast this week. Should last until Friday.",
+    "Got a rotisserie chicken and a bag of salad mix—dinner is sorted for tonight. Might add some crusty bread too.",
+    "Just need eggs, butter, and flour to bake that cake later.",
+    "Bought a six-pack of sparkling water and some fresh limes.",
+    "Added pasta, jarred marinara, and parmesan to my cart.",
+    "Making tacos tonight, so I grabbed tortillas, ground beef, and salsa.",
+    "Picked up some coffee beans and a bag of croissants.",
+    "Got a frozen pizza and garlic bread for a quick, easy meal.",
+    "Bought apples, peanut butter, and celery sticks for healthy snacks.",
+    "Need milk, cereal, and orange juice for the kids' breakfast.",
+    "Grabbed sushi rolls and edamame from the deli section on my way home."
+   ],
+   "household": [
+    "Picked up laundry detergent and fabric softener for the wash.",
+    "I grabbed dish soap, a few sponges, and a roll of trash bags on the way in. The kitchen is a disaster.",
+    "Just need shampoo, conditioner, and toothpaste—running low at home. Also grabbed some cotton pads.",
+    "Bought bleach, all-purpose cleaner, and a big pack of paper towels.",
+    "Got a new toilet brush and some bathroom cleaner while I was there.",
+    "Picked up AA batteries, a couple of light bulbs, and an extension cord.",
+    "Added air freshener and dryer sheets to the cart.",
+    "Grabbed hand soap and moisturizing lotion for the kitchen sink.",
+    "Need aluminum foil, plastic wrap, and some ziplock bags.",
+    "Bought a mop, bucket, and floor cleaner to tackle the kitchen tiles.",
+    "Picked up razors, shaving cream, and my usual deodorant.",
+    "Got a new shower curtain and a fluffy bath mat for the bathroom."
+   ],
+   "alcohol": [
+    "Grabbed a bottle of Cabernet Sauvignon and a four-pack of IPA.",
+    "Picked up vodka and tequila since we're hosting this weekend. The party should be fun.",
+    "Got a case of lager and a bottle of single malt whiskey.",
+    "Bought a bottle of champagne and some rosé for the celebration.",
+    "Added gin, white rum, and triple sec for mixing cocktails. The bar cart is fully stocked.",
+    "Picked up a few hard seltzers and a bottle of prosecco.",
+    "Grabbed a six-pack of stout and a bottle of cognac.",
+    "Need a bottle of gin and some dry vermouth for martinis.",
+    "Bought sake and soju to try with dinner.",
+    "Picked up cans of hard cider and a bottle of ruby port.",
+    "Got a bottle of mezcal and some pale ale.",
+    "Added bourbon, amaretto, and a bottle of dark rum to the cart."
+   ]
+  },
+  "repair_requests": {
+   "emergency": [
+    "Hi, there's a strong smell of gas in the kitchen and I can hear hissing near the stove. I've turned off the main valve and opened all the windows.",
+    "Water is pouring down from the bathroom ceiling and flooding the hallway. Please send someone immediately.",
+    "The heating has completely failed and it's freezing outside (-5°C). We have a small baby and the flat is getting dangerously cold.",
+    "Sparks are coming from the living room socket and there's a burning smell. I've switched off the breaker at the fuse box.",
+    "A pipe has burst under the kitchen sink and water is gushing across the floor. I've turned off the stopcock but it's still leaking.",
+    "The carbon monoxide alarm is sounding and we all feel dizzy. We've gone outside and called the emergency gas line.",
+    "Sewage is backing up into the shower and toilet and overflowing onto the bathroom floor.",
+    "Part of the living room ceiling has collapsed. There's plaster and dust everywhere.",
+    "Smoke is coming out of the boiler and the smoke alarm is going off. I've turned the boiler off at the switch.",
+    "The bedroom window has smashed and there's broken glass all over the floor. It's freezing in there.",
+    "Water is dripping through the hallway light fixture after the roof leaked. I've turned off the electricity to that circuit.",
+    "The gas hob won't turn off—I've twisted the knob to off but the flame is still on and I can smell gas."
+   ],
+   "routine": [
+    "The kitchen tap drips constantly even when it's off tight. It's wasting water and dripping all night.",
+    "Hi, the toilet in the ensuite keeps running after flushing. The cistern never stops filling.",
+    "The shower drain is really slow and water pools around my feet.",
+    "The washing machine bangs loudly during the spin cycle and walks across the floor.",
+    "One radiator upstairs stays cold even when the heating is on. The rest are fine.",
+    "The bathroom extractor fan makes a horrible grinding noise when switched on.",
+    "The oven takes ages to heat up—about 45 minutes to reach 180°C.",
+    "The dishwasher door won't stay shut; it springs open mid-cycle.",
+    "The fridge hums very loudly at night. It's still cold inside but the noise is annoying.",
+    "The sliding patio door is very stiff and hard to open. I have to use both hands.",
+    "The bathroom sink drains slowly and there's a bad smell from the plug hole.",
+    "The tumble dryer runs but doesn't dry clothes properly—they come out damp after a full cycle."
+   ],
+   "cosmetic": [
+    "There's a scuff mark on the hallway wall from the vacuum cleaner.",
+    "Hi, the paint on the living room skirting boards is chipped in a few places.",
+    "The bedroom carpet has a small stain near the wardrobe that won't shift.",
+    "There's a hairline crack in the hallway ceiling plaster.",
+    "The wallpaper in the lounge corner is peeling away from the wall.",
+    "One kitchen tile has a small chip on the edge, but it's still flat.",
+    "The grout between the bathroom tiles has gone yellow in places.",
+    "The hallway wooden floor has a few scratches from moving furniture.",
+    "The front door handle is tarnished and looks dull.",
+    "There's a dent in the spare room wall where a chair hit it.",
+    "The paint on the kitchen window sill is flaking off.",
+    "The silicone around the bath is discoloured and looks grubby."
+   ]
+  },
+  "party_replies": {
+   "yes": [
+    "Can't wait! I'll be there around 8.",
+    "Yes, absolutely! Count me in. See you Saturday!",
+    "I'm in! Thanks for inviting me, it'll be great to see everyone.",
+    "Definitely coming. Should I bring anything?",
+    "Yep, I'll be there. Looking forward to it!",
+    "Of course! I wouldn't miss it for the world.",
+    "I'll be there with bells on. Thanks for having me!",
+    "Count me in! I'll bring the snacks.",
+    "Yes, I can make it. Really excited to celebrate with you!",
+    "Absolutely, I'm coming. What time should I arrive?",
+    "I'm so in! See you there on Friday.",
+    "Yes! I'll be there. Can't wait to see you all."
+   ],
+   "maybe": [
+    "I'm not sure yet, I'll let you know by Thursday.",
+    "It depends on my work schedule, but I'm hoping to make it.",
+    "Maybe! I have a conflicting thing but I might be able to move it.",
+    "I'd love to but I'm waiting to hear back about something. I'll update you soon.",
+    "Possibly. Let me check my calendar and get back to you tomorrow.",
+    "I'm 50/50 right now. I'll confirm once I know more.",
+    "I really want to come but I'm not sure if I'll be free. Can I let you know later?",
+    "Tentatively yes, but things are up in the air right now.",
+    "I might be able to make it, depending on how things go that day.",
+    "Not sure yet—I'll give you a definite answer by the weekend.",
+    "I'm leaning towards yes but need to check with my partner first.",
+    "Hopefully! I'll know more in a few days and will text you then."
+   ],
+   "no": [
+    "Sorry, I can't make it this time. Have a great party!",
+    "I won't be able to come, unfortunately. Thanks for thinking of me though!",
+    "No, I'm afraid I'm busy that weekend. Next time!",
+    "I can't make it—I'll be out of town. Hope you all have fun!",
+    "Regrettably, I have to decline. Enjoy the celebration!",
+    "Sorry, I won't be there. I have a prior commitment.",
+    "I'm going to have to say no this time. Rain check?",
+    "Unfortunately I can't come. I'll be at my sister's wedding.",
+    "No, I'm not going to be able to make it. Thanks anyway!",
+    "I wish I could but I can't. Have a blast!",
+    "Count me out this time—I'm double-booked. See you soon though!",
+    "I'm sorry but I won't be able to attend. Please have fun without me!"
+   ]
+  }
+ },
+ "excluded": [
+  {
+   "shape": "party_replies",
+   "label": "maybe",
+   "text": "Tentatively yes, but things are up in the air right now.",
+   "reason": "'Tentatively yes' could fairly be read as a yes"
+  }
+ ],
+ "hand_check": {
+  "date": "2026-11-25",
+  "checked": 288,
+  "excluded": 1,
+  "note": "All 288 texts read by hand against their planted labels before any rule or model read them."
+ }
+}

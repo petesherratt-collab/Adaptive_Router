@@ -1,0 +1,441 @@
+{
+ "status": "COMPLETED",
+ "label": "flag_fallback_v1",
+ "task_clusters": 8,
+ "arms": {
+  "R": {
+   "jobs": 160,
+   "correct": 140,
+   "unanswered": 0,
+   "median_ms": 2278.6889824999434,
+   "p90_ms": 2943.7520406000317,
+   "last_five_median_ms": 2064.2765080000345
+  },
+  "F": {
+   "jobs": 160,
+   "correct": 147,
+   "unanswered": 0,
+   "median_ms": 3236.567549999961,
+   "p90_ms": 5605.3373396999405,
+   "last_five_median_ms": 3054.9013044999924
+  },
+  "M": {
+   "jobs": 160,
+   "correct": 148,
+   "unanswered": 0,
+   "median_ms": 8446.81083799992,
+   "p90_ms": 16975.266728200084,
+   "last_five_median_ms": 7101.960438499987
+  }
+ },
+ "primary_arm": "F",
+ "w_vs_r": null,
+ "p_vs_r": null,
+ "p_vs_w": null,
+ "p_vs_d": null,
+ "probe_summaries": [
+  {
+   "proposed": 0,
+   "agreed": 0,
+   "failed": 0,
+   "error": "NO_PROBE_INPUTS",
+   "failures": []
+  },
+  {
+   "proposed": 0,
+   "agreed": 0,
+   "failed": 0,
+   "error": "NO_PROBE_INPUTS",
+   "failures": []
+  },
+  {
+   "proposed": 0,
+   "agreed": 0,
+   "failed": 0,
+   "error": "NO_PROBE_INPUTS",
+   "failures": []
+  },
+  {
+   "proposed": 0,
+   "agreed": 0,
+   "failed": 0,
+   "error": "NO_PROBE_INPUTS",
+   "failures": []
+  },
+  {
+   "proposed": 3,
+   "agreed": 2,
+   "failed": 1,
+   "error": null,
+   "failures": [
+    {
+     "inputs": {
+      "dishes": [
+       {
+        "name": "Tart",
+        "price": "10.95",
+        "description": "Vegetable curry with coconut milk over rice\u2014no nuts, dairy, or gluten."
+       },
+       {
+        "name": "Curry",
+        "price": "18.00",
+        "description": "Couscous with roasted vegetables\u2014wheat-based, dairy-free, nut-free."
+       },
+       {
+        "name": "Bisque",
+        "price": "18.50",
+        "description": "Mango and banana smoothie with coconut water\u2014no nuts, dairy, or gluten."
+       },
+       {
+        "name": "Bake",
+        "price": "17.00",
+        "description": "Creamy tomato bisque, no nuts added."
+       },
+       {
+        "name": "Salad",
+        "price": "20.95",
+        "description": "Seitan and vegetable stir-fry\u2014wheat gluten, dairy-free, nut-free."
+       },
+       {
+        "name": "Pilaf",
+        "price": "22.00",
+        "description": "Asian-style salad with crushed peanuts and lime dressing."
+       },
+       {
+        "name": "Risotto",
+        "price": "18.95",
+        "description": "Couscous with roasted vegetables\u2014wheat-based, dairy-free, nut-free."
+       },
+       {
+        "name": "Ragu",
+        "price": "21.00",
+        "description": "Grilled salmon with rice and asparagus\u2014no nuts, dairy, or gluten."
+       },
+       {
+        "name": "Gratin",
+        "price": "7.00",
+        "description": "Turkey sandwich on wheat bread\u2014contains gluten, no dairy or nuts."
+       }
+      ],
+      "allergy": "dairy"
+     },
+     "expected": "8 of 9 safe | cheapest safe Gratin | avoid Bake",
+     "got": "9 of 9 safe | cheapest safe Gratin | avoid none"
+    }
+   ]
+  },
+  {
+   "proposed": 3,
+   "agreed": 1,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 3,
+   "agreed": 3,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 0,
+   "agreed": 0,
+   "failed": 0,
+   "error": "NO_PROBE_INPUTS",
+   "failures": []
+  },
+  {
+   "proposed": 6,
+   "agreed": 6,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  }
+ ],
+ "q_vs_r": null,
+ "q_vs_p": null,
+ "c_vs_p": null,
+ "b_vs_r": null,
+ "b_vs_p": null,
+ "f_vs_r": {
+  "time_ratio": 1.420363891192001,
+  "time_ratio_interval_95": [
+   1.2860987319230033,
+   1.607107265645695
+  ],
+  "correctness_difference": 0.043749999999999956,
+  "correctness_interval_95": [
+   0.012499999999999956,
+   0.08749999999999991
+  ]
+ },
+ "f_vs_p": null,
+ "m_vs_r": {
+  "time_ratio": 3.706873076084717,
+  "time_ratio_interval_95": [
+   3.306150750198263,
+   4.465541077632504
+  ],
+  "correctness_difference": 0.050000000000000044,
+  "correctness_interval_95": [
+   0.006249999999999978,
+   0.09375
+  ]
+ },
+ "m_vs_p": null,
+ "fallback": {
+  "program_unflagged": {
+   "jobs": 131,
+   "correct": 126,
+   "median_ms": 3229.974120999941
+  },
+  "program_flagged_no_fallback": {
+   "jobs": 0,
+   "correct": 0,
+   "median_ms": null
+  },
+  "fallback": {
+   "jobs": 9,
+   "correct": 5,
+   "median_ms": 30039.52127499997
+  },
+  "fallback_program_would_have_been_correct": 5,
+  "race_before_program": {
+   "jobs": 20,
+   "correct": 16,
+   "median_ms": 2955.7378614999834
+  },
+  "share_flagged_of_program_jobs": 0.06428571428571428
+ },
+ "uncertainty": {
+  "F": {
+   "flagged": {
+    "jobs": 11,
+    "correct": 4
+   },
+   "unflagged": {
+    "jobs": 149,
+    "correct": 143
+   }
+  },
+  "M": {
+   "flagged": {
+    "jobs": 38,
+    "correct": 29
+   },
+   "unflagged": {
+    "jobs": 122,
+    "correct": 119
+   }
+  }
+ },
+ "first_program_by_arm": {
+  "F": {
+   "review_digest": 2,
+   "incident_log": 4,
+   "expense_lines": 2,
+   "survey_comments": 3,
+   "menu_check": 3,
+   "applicant_screen": 2,
+   "delivery_feedback": 2,
+   "listing_filter": 2
+  },
+  "M": {
+   "review_digest": 2,
+   "incident_log": 4,
+   "expense_lines": 2,
+   "survey_comments": 3,
+   "menu_check": 2,
+   "applicant_screen": 2,
+   "delivery_feedback": 3,
+   "listing_filter": 2
+  }
+ },
+ "c_first_plan": null,
+ "w_vs_d": null,
+ "w_vs_e": null,
+ "w_vs_c": null,
+ "c_vs_r": null,
+ "first_program_job_index": {
+  "review_digest": 2,
+  "expense_lines": 2,
+  "applicant_screen": 2,
+  "delivery_feedback": 2,
+  "listing_filter": 2,
+  "survey_comments": 3,
+  "menu_check": 3,
+  "incident_log": 4
+ },
+ "shapes_with_program": 8,
+ "w_routes": {
+  "race": {
+   "jobs": 20,
+   "correct": 16,
+   "median_ms": 2955.7378614999834
+  },
+  "program": {
+   "jobs": 131,
+   "correct": 126,
+   "median_ms": 3229.974120999941
+  },
+  "fallback": {
+   "jobs": 9,
+   "correct": 5,
+   "median_ms": 30039.52127499997
+  }
+ },
+ "attempt_outcomes": {
+  "ADOPTED": 8,
+  "REJECTED": 1
+ },
+ "readings_per_program": [
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1
+ ],
+ "median_after_program_ms": {
+  "R": 2272.190533499952,
+  "M": 8422.293530499928,
+  "F": 3338.5266935000573
+ },
+ "per_shape": {
+  "review_digest": {
+   "R": {
+    "correct": 19,
+    "median_ms": 2264.3102490000615
+   },
+   "M": {
+    "correct": 20,
+    "median_ms": 8230.93193950001
+   },
+   "F": {
+    "correct": 20,
+    "median_ms": 2570.321563499988
+   }
+  },
+  "incident_log": {
+   "M": {
+    "correct": 9,
+    "median_ms": 12686.058251499959
+   },
+   "R": {
+    "correct": 8,
+    "median_ms": 2487.7105890000166
+   },
+   "F": {
+    "correct": 11,
+    "median_ms": 3865.5833500000654
+   }
+  },
+  "expense_lines": {
+   "R": {
+    "correct": 17,
+    "median_ms": 2278.6889824999434
+   },
+   "F": {
+    "correct": 17,
+    "median_ms": 3755.237420500009
+   },
+   "M": {
+    "correct": 20,
+    "median_ms": 8957.030088499949
+   }
+  },
+  "survey_comments": {
+   "R": {
+    "correct": 18,
+    "median_ms": 2535.2269105000005
+   },
+   "F": {
+    "correct": 20,
+    "median_ms": 3173.48096249998
+   },
+   "M": {
+    "correct": 20,
+    "median_ms": 12157.405699499976
+   }
+  },
+  "menu_check": {
+   "R": {
+    "correct": 18,
+    "median_ms": 2581.10001
+   },
+   "M": {
+    "correct": 20,
+    "median_ms": 7026.232167500098
+   },
+   "F": {
+    "correct": 19,
+    "median_ms": 4759.926714500011
+   }
+  },
+  "applicant_screen": {
+   "F": {
+    "correct": 20,
+    "median_ms": 2259.6263499999623
+   },
+   "R": {
+    "correct": 20,
+    "median_ms": 1636.7700589999004
+   },
+   "M": {
+    "correct": 20,
+    "median_ms": 7694.381839000016
+   }
+  },
+  "delivery_feedback": {
+   "F": {
+    "correct": 20,
+    "median_ms": 4093.615810499955
+   },
+   "M": {
+    "correct": 20,
+    "median_ms": 7924.31977800004
+   },
+   "R": {
+    "correct": 20,
+    "median_ms": 2523.4616469999764
+   }
+  },
+  "listing_filter": {
+   "M": {
+    "correct": 19,
+    "median_ms": 6836.262304000002
+   },
+   "F": {
+    "correct": 20,
+    "median_ms": 2111.922247999928
+   },
+   "R": {
+    "correct": 20,
+    "median_ms": 1833.8835540000673
+   }
+  }
+ },
+ "usage_per_arm": {
+  "F": {
+   "calls": 6663,
+   "prompt_tokens": 1560632,
+   "completion_tokens": 717252
+  },
+  "M": {
+   "calls": 6868,
+   "prompt_tokens": 1549777,
+   "completion_tokens": 787572
+  },
+  "R": {
+   "calls": 800,
+   "prompt_tokens": 413642,
+   "completion_tokens": 447982
+  }
+ },
+ "time_criterion_met": false,
+ "correctness_criterion_met": true,
+ "decision": "NOT_SUPPORTED"
+}

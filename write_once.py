@@ -35,7 +35,7 @@ write-once experiments of 2026-11-18 (README, "Write the job once").
 
 from __future__ import annotations
 
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, as_completed, wait
 import hashlib
 import json
 import os
@@ -50,6 +50,8 @@ import sandbox
 from shadow import should_shadow
 
 PROGRAM_ROUTE = "program"
+FALLBACK_ROUTE = "fallback"   # program answer was flagged; served from a decided race (flag_fallback)
+REVIEW_ROUTE = "needs_review"  # program answer was flagged; returned as provisional (flag_fallback: "review")
 READING_KEYS = {"id", "input", "spec", "labels"}
 READING_OPTIONAL = {"each", "field"}
 
@@ -194,9 +196,16 @@ class WriteOnceRouter:
         self._busy = {}  # template -> "writing" | "early"; not persisted
         self._width = {}  # reading key -> agreement streak and wins (adaptive_width)
         self._lock = threading.RLock()
-        self._background = ThreadPoolExecutor(max_workers=4)
+        # ``fast_adoption``: under back-to-back arrival each observation holds a worker until every
+        # racer answers, and writing a program held one for 5 to 9 s more, so 4 workers queued the
+        # agreed examples a program needs. Fast adoption gives observation 16 workers and writes
+        # programs on a pool of their own.
+        fast = bool(self.settings.get("fast_adoption"))
+        self._background = ThreadPoolExecutor(max_workers=16 if fast else 4)
+        self._writer = ThreadPoolExecutor(max_workers=4, thread_name_prefix="program-writer") if fast else None
         self._readers = ThreadPoolExecutor(max_workers=8)
         self._items = ThreadPoolExecutor(max_workers=32)
+        self._parallel = ThreadPoolExecutor(max_workers=8)  # programs run alongside a race (race_alongside)
         self._pending = []
 
     # ---- store ----------------------------------------------------------
@@ -241,17 +250,39 @@ class WriteOnceRouter:
             with self._lock:
                 self._busy[request.template] = "early"
             self._submit(self._early, request)
+        if program is not None and self.settings.get("race_alongside"):
+            served = self._alongside(request, program, record, started)
+            if served is not None:
+                return served
+            program = None  # neither side produced an answer: fall through to a plain race
         if program is not None:
             ok, value, readings, uncertain = self.run_program_flagged(program, request.inputs)
             if ok:
                 with self._lock:
                     record["jobs"] += 1
+                    # probation: every answer of a newly adopted program is audited until it has
+                    # served ``probation_jobs`` answers; after that, the ``plan_audit_rate`` sample.
+                    program["served"] = program.get("served", 0) + 1
+                    on_probation = program["served"] <= self.settings.get("probation_jobs", 0)
                 request_id = str(uuid.uuid4())
-                if should_shadow(request_id, self.settings.get("plan_audit_rate", 0.0),
-                                 self.settings.get("audit_salt", "")):
+                if on_probation or should_shadow(request_id, self.settings.get("plan_audit_rate", 0.0),
+                                                 self.settings.get("audit_salt", "")):
                     futures = self.router.start_prompt_race(
                         planner.build_task_prompt(request.description, request.inputs))
                     self._submit(self._audit, request, futures, value, program["sha256"])
+                rule = self.settings.get("flag_fallback")
+                if uncertain and rule == "review":
+                    # no retry and no extra time: the answer is returned, marked for review
+                    return self._finish(started, value, REVIEW_ROUTE, None, readings, True)
+                if uncertain and rule:
+                    # Phase B: a flagged program answer is not served; a whole-task race decides instead
+                    decided = fast_path.decide(self.router.start_prompt_race(
+                        planner.build_task_prompt(request.description, request.inputs)), rule)
+                    if decided["ok"]:
+                        result = self._finish(started, decided["value"], FALLBACK_ROUTE, decided["model"],
+                                              readings, decided["uncertain"])
+                        result["program_value"] = value
+                        return result
                 return self._finish(started, value, PROGRAM_ROUTE, None, readings, uncertain)
         futures = self.router.start_prompt_race(planner.build_task_prompt(request.description, request.inputs))
         model, value, uncertain = self._race_answer(futures)
@@ -260,9 +291,53 @@ class WriteOnceRouter:
             return self._finish(started, None, planner.NO_ANSWER, None, None)
         return self._finish(started, value, planner.RACE_ROUTE, model, None, uncertain)
 
+    def _alongside(self, request, program, record, started):
+        """``race_alongside``: start the whole-task race and the program together and
+        serve whichever first gives an answer worth trusting: the program's, if no
+        reading was flagged, or the race's, once two racers agree. If neither is
+        trusted when everything has finished, serve the program's flagged answer
+        (or the race's majority if the program failed), marked uncertain. Racers
+        still running when an answer is served finish in the background.
+        Returns None only if nothing answered."""
+        race = self.router.start_prompt_race(planner.build_task_prompt(request.description, request.inputs))
+        program_future = self._parallel.submit(self.run_program_flagged, program, request.inputs)
+        pending, votes, flagged = set(race) | {program_future}, {}, None
+        while pending:
+            done, pending = wait(pending, return_when=FIRST_COMPLETED)
+            for future in done:
+                if future is program_future:
+                    ok, value, readings, uncertain = future.result()
+                    if ok and not uncertain:
+                        with self._lock:
+                            record["jobs"] += 1
+                        return self._finish(started, value, PROGRAM_ROUTE, None, readings, False)
+                    if ok:
+                        flagged = (value, readings)
+                    continue
+                answer = future.result()
+                if not answer["valid"]:
+                    continue
+                key = sandbox.canonical(answer["value"])
+                count, value, model = votes.get(key, (0, answer["value"], answer["model"]))
+                votes[key] = (count + 1, value, model)
+                if count + 1 >= 2:
+                    return self._finish(started, value, planner.RACE_ROUTE, model, None, False)
+        if flagged is not None:
+            if self.settings.get("flag_fallback") == "review":
+                return self._finish(started, flagged[0], REVIEW_ROUTE, None, flagged[1], True)
+            return self._finish(started, flagged[0], PROGRAM_ROUTE, None, flagged[1], True)
+        if votes:
+            count, value, model = max(votes.values(), key=lambda v: v[0])
+            return self._finish(started, value, planner.RACE_ROUTE, model, None, True)
+        return None
+
     def _race_answer(self, futures):
         """First valid whole-task answer; with ``uncertainty_gate``, also wait
-        for a second and flag the answer if they differ."""
+        for a second and flag the answer if they differ. With
+        ``decision: "majority"``, wait for every racer and take the majority."""
+        if self.settings.get("decision") == "majority":
+            d = fast_path.decide(futures, "majority")
+            return d["model"] if d["ok"] else None, d["value"], d["uncertain"]
         if not self.settings.get("uncertainty_gate"):
             model, value = fast_path.FastPathRouter._first_valid(futures)
             return model, value, False
@@ -326,6 +401,11 @@ class WriteOnceRouter:
         prompt = fast_path.build_answer_prompt(spec, signature, [arg])
         models = self._width_models(key)
         futures = {self.router._pool().submit(self.router._ask, m, prompt): m for m in models}
+        if self.settings.get("decision") == "majority":
+            d = fast_path.decide(futures, "majority", check)
+            if self.settings.get("adaptive_width"):
+                self._submit(self._note_width, key, list(futures), d["model"])
+            return (True, d["value"], d["uncertain"]) if d["ok"] else (False, None, False)
         gate = self.settings.get("uncertainty_gate")
         first = second = None
         winner = None
@@ -350,7 +430,8 @@ class WriteOnceRouter:
     def _reading_value(self, reading, texts):
         """``(ok, value, uncertain)`` for one reading of a program."""
         labels = set(reading["labels"])
-        fixes = any(self.settings.get(k) for k in ("batch_readings", "uncertainty_gate", "adaptive_width"))
+        fixes = any(self.settings.get(k) for k in ("batch_readings", "uncertainty_gate", "adaptive_width")) \
+            or self.settings.get("decision") == "majority"
         if not reading.get("each"):
             if not fixes:
                 result = self._read(reading["spec"], texts)
@@ -421,6 +502,9 @@ class WriteOnceRouter:
         self._background.shutdown(wait=True)
         self._readers.shutdown(wait=True)
         self._items.shutdown(wait=True)
+        self._parallel.shutdown(wait=True)
+        if self._writer is not None:
+            self._writer.shutdown(wait=True)
 
     def _attempts_left(self, record):
         used = sum(a["outcome"] != "REMOTE_ERROR" for a in record["attempts"])
@@ -446,6 +530,13 @@ class WriteOnceRouter:
             self._busy[request.template] = "writing"
             examples = list(record["examples"][: self.settings["plan_examples"]])
             candidate, record["candidate"] = record["candidate"], None
+        if self._writer is not None:
+            self._pending.append(self._writer.submit(
+                self.router._in_background, self._attempt, request, candidate, examples))
+            return
+        self._attempt(request, candidate, examples)
+
+    def _attempt(self, request, candidate, examples):
         try:
             if candidate is not None:
                 attempt = self._judge_candidate(candidate, examples)
@@ -595,6 +686,12 @@ class WriteOnceRouter:
     def _audit(self, request, futures, served, sha):
         agreed, value, _ = planner.PlanningRouter._agreement(
             futures, self.settings["agreement_quorum"], self.settings.get("job_agreement_min"))
+        with self._lock:
+            audits = self._records[request.template].setdefault(
+                "audits", {"checked": 0, "inconclusive": 0, "mismatches": 0})
+            audits["checked"] += 1
+            audits["inconclusive"] += not agreed
+            audits["mismatches"] += bool(agreed and sandbox.canonical(value) != sandbox.canonical(served))
         if not agreed or sandbox.canonical(value) == sandbox.canonical(served):
             return
         with self._lock:
@@ -613,4 +710,5 @@ class WriteOnceRouter:
             return {"examples": len(record["examples"]), "disagreements": record["disagreements"],
                     "attempts": record["attempts"], "adopted": program is not None,
                     "program_jobs": record["jobs"], "demotions": record["demotions"],
+                    "audits": record.get("audits", {"checked": 0, "inconclusive": 0, "mismatches": 0}),
                     "program": program}

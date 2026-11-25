@@ -1,0 +1,195 @@
+{
+ "status": "COMPLETED",
+ "label": "long_stream_v1",
+ "task_clusters": 4,
+ "arms": {
+  "R": {
+   "jobs": 200,
+   "correct": 196,
+   "unanswered": 0,
+   "median_ms": 1660.8222294999848,
+   "p90_ms": 2240.4944710999926,
+   "last_five_median_ms": 1716.237161500004
+  },
+  "P": {
+   "jobs": 200,
+   "correct": 198,
+   "unanswered": 0,
+   "median_ms": 1099.28743399999,
+   "p90_ms": 2478.5508535000045,
+   "last_five_median_ms": 995.9585955000136
+  }
+ },
+ "primary_arm": "P",
+ "w_vs_r": null,
+ "p_vs_r": {
+  "time_ratio": 0.6618934973738562,
+  "time_ratio_interval_95": [
+   0.6147042622926622,
+   0.7235409496662587
+  ],
+  "correctness_difference": 0.010000000000000009,
+  "correctness_interval_95": [
+   -0.020000000000000018,
+   0.040000000000000036
+  ]
+ },
+ "p_vs_w": null,
+ "p_vs_d": null,
+ "probe_summaries": [
+  {
+   "proposed": 6,
+   "agreed": 5,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 6,
+   "agreed": 6,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 6,
+   "agreed": 1,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 6,
+   "agreed": 5,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  }
+ ],
+ "q_vs_r": null,
+ "q_vs_p": null,
+ "c_vs_p": null,
+ "b_vs_r": null,
+ "b_vs_p": null,
+ "f_vs_r": null,
+ "f_vs_p": null,
+ "m_vs_r": null,
+ "m_vs_p": null,
+ "s_vs_r": null,
+ "g_vs_r": null,
+ "fallback": null,
+ "uncertainty": {
+  "P": {
+   "flagged": {
+    "jobs": 6,
+    "correct": 4
+   },
+   "unflagged": {
+    "jobs": 194,
+    "correct": 194
+   }
+  }
+ },
+ "first_program_by_arm": {
+  "P": {
+   "parcel_postage": 15,
+   "room_booking": 20,
+   "tip_split": 21,
+   "library_fines": 15
+  }
+ },
+ "c_first_plan": null,
+ "w_vs_d": null,
+ "w_vs_e": null,
+ "w_vs_c": null,
+ "c_vs_r": null,
+ "first_program_job_index": {
+  "parcel_postage": 15,
+  "library_fines": 15,
+  "room_booking": 20,
+  "tip_split": 21
+ },
+ "shapes_with_program": 4,
+ "w_routes": {
+  "race": {
+   "jobs": 71,
+   "correct": 69,
+   "median_ms": 2273.3116989999758
+  },
+  "program": {
+   "jobs": 129,
+   "correct": 129,
+   "median_ms": 1011.1164070000314
+  }
+ },
+ "attempt_outcomes": {
+  "ADOPTED": 4
+ },
+ "readings_per_program": [
+  1,
+  1,
+  1,
+  1
+ ],
+ "median_after_program_ms": {
+  "P": 1011.1164070000314,
+  "R": 1634.8234750000188
+ },
+ "per_shape": {
+  "parcel_postage": {
+   "R": {
+    "correct": 50,
+    "median_ms": 1842.3088700000108
+   },
+   "P": {
+    "correct": 49,
+    "median_ms": 1076.3804004999997
+   }
+  },
+  "room_booking": {
+   "P": {
+    "correct": 50,
+    "median_ms": 1090.7567895000057
+   },
+   "R": {
+    "correct": 48,
+    "median_ms": 1646.360586499995
+   }
+  },
+  "tip_split": {
+   "R": {
+    "correct": 48,
+    "median_ms": 1751.4055089999943
+   },
+   "P": {
+    "correct": 50,
+    "median_ms": 1130.1003009999704
+   }
+  },
+  "library_fines": {
+   "P": {
+    "correct": 49,
+    "median_ms": 1143.6006810000094
+   },
+   "R": {
+    "correct": 50,
+    "median_ms": 1508.6196690000122
+   }
+  }
+ },
+ "usage_per_arm": {
+  "P": {
+   "calls": 1358,
+   "prompt_tokens": 405755,
+   "completion_tokens": 257293
+  },
+  "R": {
+   "calls": 1000,
+   "prompt_tokens": 422307,
+   "completion_tokens": 389985
+  }
+ },
+ "time_criterion_met": true,
+ "correctness_criterion_met": false,
+ "decision": "NOT_SUPPORTED"
+}

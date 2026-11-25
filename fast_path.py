@@ -20,7 +20,7 @@ from __future__ import annotations
 import ast
 import contextlib
 import collections
-from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, as_completed, wait
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -44,6 +44,8 @@ SCHEMA_VERSION = "fast_path_request_v1"
 ) = ("CODE_FAST_PATH", "MODEL_RACE_WON", "RACE_NO_VALID_ANSWER")
 SOURCE_CALLER, SOURCE_AGREEMENT = "caller", "model_agreement"
 SOURCE_PROBE = "probe_agreement"
+ANSWER_CACHED = "AGREED_ANSWER_CACHED"
+DECISION_RULES = ("first", "majority", "agreement")
 _SIGNATURE = re.compile(r"^def solve\(.*\)(\s*->\s*.+)?:$")
 _FENCE = re.compile(r"^```[A-Za-z0-9_-]*\n(.*?)\n?```$", re.DOTALL)
 
@@ -152,6 +154,74 @@ def load_fast_path_request(path):
     except (OSError, ValueError) as exc:
         raise FastPathRequestError("REQUEST_UNREADABLE") from exc
     return FastPathRequest.from_mapping(document)
+
+
+def _done(value):
+    """A finished future holding ``value`` (to re-decide answers already collected)."""
+    from concurrent.futures import Future
+    future = Future()
+    future.set_result(value)
+    return future
+
+
+def decide(futures, rule="first", check=None, on_tie=None):
+    """Turn a race into one answer. ``futures`` yield ``_ask`` results.
+
+    ``rule="first"``: the first valid answer, returned as soon as it arrives
+    (for answers someone is waiting on, and rule-like steps). Agreement is not
+    known, so ``agreed`` is None.
+
+    ``rule="majority"``: waits for every racer and returns the most common valid
+    answer (for judgement steps, where one fast outlier should not decide).
+    ``agreed`` is True when every valid answer matched and there were at least
+    two. A tie for the top goes to ``on_tie`` if given, otherwise to the fastest
+    of the tied answers, and is flagged ``uncertain``.
+
+    ``rule="agreement"``: returns as soon as two valid answers agree (for jobs where
+    agreement is what makes an answer trustworthy, and a few hundred milliseconds
+    are worth it). If the race ends with no two agreeing, it falls back to the
+    majority rule's answer, flagged ``uncertain``.
+
+    ``check`` (optional) must accept a value for it to count.
+    Returns ``{"ok", "value", "model", "votes", "agreed", "uncertain"}``.
+    """
+    if rule not in DECISION_RULES:
+        raise ValueError(f"unknown decision rule {rule!r}")
+    usable = lambda a: a["valid"] and (check is None or check(a["value"]))
+    if rule == "first":
+        for future in as_completed(futures):
+            answer = future.result()
+            if usable(answer):
+                return {"ok": True, "value": answer["value"], "model": answer["model"],
+                        "votes": None, "agreed": None, "uncertain": False}
+        return {"ok": False, "value": None, "model": None, "votes": None, "agreed": None, "uncertain": False}
+    if rule == "agreement":
+        seen, answers = collections.Counter(), []
+        for future in as_completed(futures):
+            answer = future.result()
+            answers.append(answer)
+            if not usable(answer):
+                continue
+            key = sandbox.canonical(answer["value"])
+            seen[key] += 1
+            if seen[key] == 2:
+                return {"ok": True, "value": answer["value"], "model": answer["model"], "votes": dict(seen),
+                        "agreed": True, "uncertain": False}
+        decided = decide([_done(a) for a in answers], "majority", check, on_tie)
+        return {**decided, "uncertain": True}
+    answers = [f.result() for f in futures]
+    valid = sorted((a for a in answers if usable(a)), key=lambda a: a["total_ms"] or 0)
+    if not valid:
+        return {"ok": False, "value": None, "model": None, "votes": {}, "agreed": False, "uncertain": True}
+    counts = collections.Counter(sandbox.canonical(a["value"]) for a in valid)
+    ranked = counts.most_common()
+    tied = [key for key, n in ranked if n == ranked[0][1]]
+    agreed = len(counts) == 1 and len(valid) >= 2
+    if len(tied) > 1 and on_tie is not None:
+        return {"ok": True, "value": on_tie, "model": None, "votes": dict(counts), "agreed": False, "uncertain": True}
+    winner = next(a for a in valid if sandbox.canonical(a["value"]) in tied)
+    return {"ok": True, "value": winner["value"], "model": winner["model"], "votes": dict(counts),
+            "agreed": agreed, "uncertain": not agreed}
 
 
 def build_answer_prompt(spec, signature, args):
@@ -397,7 +467,7 @@ class FastPathRouter:
             request = FastPathRequest.from_mapping(request)
         started = time.perf_counter()
         request_id = str(uuid.uuid4())
-        function = None
+        function = cached = None
         if learn:
             with self.store.lock():
                 record = self.store.ensure(request)
@@ -408,6 +478,10 @@ class FastPathRouter:
                 if any(outcome != "duplicate" for outcome in changed):
                     self.store.save(request.shape)
                 function = record["function"]
+                cached = None
+                if self.settings.get("answer_cache"):
+                    key = sandbox.canonical(request.args)
+                    cached = next((e for e in record["examples"] if sandbox.canonical(e["args"]) == key), None)
 
         log = {
             "record_type": "fast_path_request",
@@ -417,6 +491,10 @@ class FastPathRouter:
             "learn": learn,
             "code": {"attempted": False},
         }
+        if learn and cached is not None:
+            # this exact input already has an agreed (or caller-given) answer: no race, no code
+            log["cache"] = {"hit": True, "source": cached["source"]}
+            return self._finish(log, started, cached["expected"], "cache", ANSWER_CACHED)
         if function is not None:
             run = sandbox.run_function(
                 function["source"],
@@ -432,7 +510,16 @@ class FastPathRouter:
             }
             if succeeded:
                 value = run.results[0]["value"]
-                audited = should_shadow(
+                # probation: every answer of a newly promoted function is audited until it has
+                # served ``probation_jobs`` answers; after that, the ``audit_sample_rate`` sample.
+                with self.store.lock():
+                    current = self.store.get(request.shape)["function"]
+                    on_probation = False
+                    if current is not None and current["sha256"] == function["sha256"]:
+                        current["served"] = current.get("served", 0) + 1
+                        on_probation = current["served"] <= self.settings.get("probation_jobs", 0)
+                        self.store.save(request.shape)
+                audited = on_probation or should_shadow(
                     request_id,
                     self.settings["audit_sample_rate"],
                     self.settings["audit_salt"],
@@ -480,6 +567,11 @@ class FastPathRouter:
             self._pool().submit(self._ask, model, prompt): model
             for model in self.settings["race_models"]
         }
+
+    def race_prompt_decided(self, prompt, rule="first", check=None, on_tie=None):
+        """Race ``prompt`` across the full roster and decide with ``rule``
+        (see ``decide``). Nothing is stored or learned."""
+        return decide(self.start_prompt_race(prompt), rule, check, on_tie)
 
     def race_prompt(self, prompt):
         """Race an arbitrary prompt. Returns ``(winning model, value)``.
@@ -618,7 +710,13 @@ class FastPathRouter:
                 "example": outcome,
             }
         )
-        if function is not None:
+        if function is not None:  # an audit of a code answer
+            with self.store.lock():
+                record = self.store.get(request.shape)
+                audits = record.setdefault("audits", {"checked": 0, "inconclusive": 0, "mismatches": 0})
+                audits["checked"] += 1
+                audits["inconclusive"] += not agreed
+                self.store.save(request.shape)
             if agreed:
                 self._recheck(request.shape, function)
             return
@@ -631,6 +729,10 @@ class FastPathRouter:
             function["source"], examples, 1, self.settings["sandbox_timeout_seconds"]
         )
         if not passed:
+            with self.store.lock():
+                record = self.store.get(shape)
+                record.setdefault("audits", {"checked": 0, "inconclusive": 0, "mismatches": 0})["mismatches"] += 1
+                self.store.save(shape)
             self._demote(shape, "EXAMPLE_MISMATCH")
             self._maybe_synthesise(shape)
 

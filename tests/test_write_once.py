@@ -1,4 +1,5 @@
 import json
+import time
 from pathlib import Path
 import tempfile
 import types
@@ -16,6 +17,11 @@ GOOD = {"readings": [{"id": "mood", "input": "note", "labels": ["up", "down"],
         "code": "def solve(inputs, readings):\n    return inputs['n'] * 2 + len(inputs['text']) + "
                 "(1 if readings['mood'] == 'up' else 0)\n"}
 WRONG = {"readings": [], "code": "def solve(inputs, readings):\n    return inputs['n']\n"}
+# Right on the two adoption examples (n = 1, 2), wrong from n = 3: the kind of bug checking misses.
+SUBTLE = {"readings": GOOD["readings"],
+          "code": "def solve(inputs, readings):\n    base = inputs['n'] * 2 + len(inputs['text'])\n"
+                  "    if inputs['n'] >= 3:\n        return base\n"
+                  "    return base + (1 if readings['mood'] == 'up' else 0)\n"}
 SETTINGS = {
     "race_models": ["a", "b"], "synthesis_model": "w", "answer_max_tokens": 64,
     "synthesis_max_tokens": 64, "agreement_quorum": 2, "min_gate_examples": 2,
@@ -74,6 +80,64 @@ class WriteOnceTests(unittest.TestCase):
         summary = router.summary(next(iter(router._records)))
         self.assertTrue(summary["adopted"])
         self.assertEqual(summary["attempts"][0]["trial"], {"examples": 2, "passed": 2})
+
+    def test_fast_adoption_adopts_the_same_way(self):
+        fake = Fake([GOOD])
+        router = self.build(fake, fast_adoption=True)
+        self.assertIsNotNone(router._writer)
+        routes = []
+        for n, note in [(1, "great"), (2, "sad"), (3, "great"), (4, "sad")]:
+            result = router.handle(request(n, note))
+            routes.append(result["route"])
+            router.drain()
+            self.assertEqual(result["value"], n * 4 + (1 if note == "great" else 0))
+        self.assertEqual(routes, ["race", "race", "program", "program"])
+
+    def test_fast_adoption_writes_programs_off_the_learning_pool(self):
+        import threading
+        for fast in (True, False):
+            router = self.build(Fake([GOOD]), fast_adoption=fast)
+            threads = []
+            original = router._write
+            router._write = lambda *a: (threads.append(threading.current_thread().name), original(*a))[1]
+            for n in (1, 2, 3):
+                router.handle(request(n))
+                router.drain()
+            self.assertEqual(len(threads), 1)
+            self.assertEqual(threads[0].startswith("program-writer"), fast)
+
+    def test_probation_catches_a_program_wrong_after_adoption(self):
+        router = self.build(Fake([SUBTLE, GOOD]), probation_jobs=10)
+        results = []
+        for n in range(1, 7):
+            results.append(router.handle(request(n, "great")))
+            router.drain()
+        routes = [r["route"] for r in results]
+        self.assertEqual(routes[:3], ["race", "race", "program"])
+        self.assertNotEqual(results[2]["value"], 3 * 4 + 1)  # the planted bug served once...
+        summary = router.summary(next(iter(router._records)))
+        self.assertEqual(summary["demotions"][0]["reason"], "AUDIT_MISMATCH")  # ...then caught
+        self.assertEqual(summary["audits"]["mismatches"], 1)
+        self.assertTrue(all(r["value"] == n * 4 + 1 for n, r in enumerate(results[3:], start=4)))
+
+    def test_without_probation_the_planted_bug_keeps_serving(self):
+        router = self.build(Fake([SUBTLE, GOOD]), probation_jobs=0)
+        results = []
+        for n in range(1, 7):
+            results.append(router.handle(request(n, "great")))
+            router.drain()
+        wrong = [r for n, r in enumerate(results, start=1) if r["value"] != n * 4 + 1]
+        self.assertEqual(len(wrong), 4)  # n = 3..6, all from the program, never checked
+        self.assertEqual(router.summary(next(iter(router._records)))["demotions"], [])
+
+    def test_probation_ends_after_its_jobs(self):
+        router = self.build(Fake([GOOD]), probation_jobs=3)
+        for n in range(1, 9):
+            router.handle(request(n, "great"))
+            router.drain()
+        summary = router.summary(next(iter(router._records)))
+        self.assertEqual(summary["program_jobs"], 6)
+        self.assertEqual(summary["audits"], {"checked": 3, "inconclusive": 0, "mismatches": 0})
 
     def test_program_prompt_shows_no_answer(self):
         fake = Fake([GOOD])
@@ -370,6 +434,46 @@ class ReadingFixTests(WriteOnceTests):
         router = self.build(Fake([]), uncertainty_gate=True)
         self.assertFalse(router.handle(request(1))["uncertain"])
 
+    def test_majority_decision_outvotes_a_dissenting_reader(self):
+        fake = BatchFake([LIST_PROGRAM])
+        router = self.adopt(fake, race_models=["a", "b", "c"], decision="majority")
+        fake.split = True  # model b now reads every text the other way; a and c still agree
+        result = router.handle(list_request(5, ["great", "bad"]))
+        router.drain()
+        self.assertEqual((result["route"], result["value"]), ("program", 6))  # 5 + one "up", as a and c read it
+        self.assertTrue(result["uncertain"])  # b disagreed, so it is flagged
+        fake.split = False
+        self.assertFalse(router.handle(list_request(6, ["great"]))["uncertain"])
+
+    def test_flagged_program_answer_is_served_from_the_fallback_race(self):
+        fake = BatchFake([LIST_PROGRAM])
+        router = self.adopt(fake, uncertainty_gate=True, flag_fallback="majority")
+        calm = router.handle(list_request(4, ["great"]))
+        router.drain()
+        self.assertEqual((calm["route"], calm["uncertain"]), ("program", False))
+        fake.split = True  # readers now disagree: the program's answer is flagged
+        result = router.handle(list_request(5, ["great", "bad"]))
+        router.drain()
+        self.assertEqual(result["route"], write_once.FALLBACK_ROUTE)
+        self.assertIn("program_value", result)
+        self.assertEqual(result["value"], 6)  # the whole-task race's answer
+
+    def test_flagged_answer_is_returned_for_review_without_a_retry(self):
+        fake = BatchFake([LIST_PROGRAM])
+        router = self.adopt(fake, uncertainty_gate=True, flag_fallback="review")
+        fake.split = True
+        before = len(fake.calls)
+        result = router.handle(list_request(5, ["great", "bad"]))
+        self.assertEqual((result["route"], result["uncertain"]), (write_once.REVIEW_ROUTE, True))
+        self.assertIsNotNone(result["value"])  # the program's answer, provisional
+        self.assertFalse(any(isinstance(c, str) and c.startswith("Carry out the task") for c in fake.calls[before:]))  # no whole-task race
+
+    def test_majority_decision_on_the_whole_task_race(self):
+        router = self.build(Fake([]), decision="majority")
+        result = router.handle(request(1))
+        self.assertEqual(result["route"], "race")
+        self.assertFalse(result["uncertain"])
+
     def test_adaptive_width_narrows_after_agreement_and_widens_on_dispute(self):
         fake = BatchFake([LIST_PROGRAM])
         router = self.adopt(fake, race_models=["a", "b", "c"], batch_readings=True,
@@ -389,6 +493,136 @@ class ReadingFixTests(WriteOnceTests):
         router.handle(list_request(11, ["great"]))
         router.drain()
         self.assertEqual(len([c for c in fake.calls if isinstance(c, tuple)]), 3)
+
+
+class TimedFake(BatchFake):
+    """BatchFake with a delay on whole-task answers or on readings, to decide who finishes first."""
+    def __init__(self, programs, race_delay=0.0, read_delay=0.0):
+        super().__init__(programs)
+        self.race_delay, self.read_delay = race_delay, read_delay
+
+    def __call__(self, prompt, config, api_key):
+        if prompt.startswith("Carry out the task"):
+            time.sleep(self.race_delay)
+        elif prompt.startswith("Work out what"):
+            time.sleep(self.read_delay)
+        return super().__call__(prompt, config, api_key)
+
+
+class AlongsideTests(ReadingFixTests):
+    def test_program_wins_when_the_race_is_slow(self):
+        fake = TimedFake([LIST_PROGRAM])
+        router = self.adopt(fake, uncertainty_gate=True, race_alongside=True)
+        fake.race_delay = 0.3
+        result = router.handle(list_request(5, ["great", "bad"]))
+        router.drain()
+        self.assertEqual((result["route"], result["value"], result["uncertain"]), ("program", 6, False))
+        self.assertLess(result["total_ms"], 300)
+
+    def test_race_wins_when_the_readings_are_slow(self):
+        fake = TimedFake([LIST_PROGRAM])
+        router = self.adopt(fake, uncertainty_gate=True, race_alongside=True)
+        fake.read_delay = 0.3
+        result = router.handle(list_request(5, ["great", "bad"]))
+        self.assertEqual((result["route"], result["value"], result["uncertain"]), ("race", 6, False))
+        self.assertLess(result["total_ms"], 300)
+        router.drain()
+
+    def test_flagged_program_waits_for_race_agreement(self):
+        fake = TimedFake([LIST_PROGRAM])
+        router = self.adopt(fake, uncertainty_gate=True, race_alongside=True)
+        fake.split = True  # program's readings disagree: flagged, so the race decides
+        fake.race_delay = 0.1
+        result = router.handle(list_request(5, ["great", "bad"]))
+        router.drain()
+        self.assertEqual((result["route"], result["value"], result["uncertain"]), ("race", 6, False))
+
+
+class RunnerFlaggedArmTests(unittest.TestCase):
+    def test_arms_f_and_m_run_and_are_analysed(self):
+        instances = [({"n": n, "reviews": [{"stars": 3, "text": t} for t in texts]}, {})
+                     for n, texts in enumerate([["great", "bad"], ["great"], ["meh", "great"], ["bad"]], 1)]
+        shape = {"name": "tiny", "description": LIST_DESCRIPTION, "output": "out"}
+        gold = [{"out": i["n"] + sum("great" in r["text"] for r in i["reviews"])} for i, _ in instances]
+        bench = types.SimpleNamespace(SHAPES=[shape], stream=lambda s: instances, gold=lambda s, inst: gold)
+        rows = []
+        runner.execute([shape], bench, {"model": "x"}, {**SETTINGS, "probe_model": "p", "probe_max_tokens": 64},
+                       BatchFake([LIST_PROGRAM]), "k", 1, rows.append, only=("R", "P", "F", "M"), probes=4,
+                       flagged=True)
+        jobs = [r for r in rows if r["record_type"] == "job"]
+        self.assertEqual({r["arm"] for r in jobs}, {"R", "P", "F", "M"})
+        self.assertTrue(all(r["correct"] for r in jobs))
+        summary = next(r for r in rows if r["record_type"] == "shape")
+        self.assertIn("write_once_fallback", summary)
+        self.assertIn("write_once_majority", summary)
+        import analyze_write_once_v1 as analysis
+        result = analysis.analyse({"header": [{"label": "t"}], "footer": [{"status": "COMPLETED"}],
+                                   "job": jobs, "shape": [summary]}, replicates=50, primary_arm="F")
+        self.assertEqual(result["fallback"]["fallback"]["jobs"], 0)  # nobody disagreed
+        self.assertIsNotNone(result["m_vs_p"])
+
+
+class RunnerAlongsideArmTests(unittest.TestCase):
+    def test_arm_s_runs_and_is_analysed(self):
+        instances = [({"n": n, "reviews": [{"stars": 3, "text": t} for t in texts]}, {})
+                     for n, texts in enumerate([["great", "bad"], ["great"], ["meh", "great"], ["bad"]], 1)]
+        shape = {"name": "tiny", "description": LIST_DESCRIPTION, "output": "out"}
+        gold = [{"out": i["n"] + sum("great" in r["text"] for r in i["reviews"])} for i, _ in instances]
+        bench = types.SimpleNamespace(SHAPES=[shape], stream=lambda s: instances, gold=lambda s, inst: gold)
+        rows = []
+        runner.execute([shape], bench, {"model": "x"}, {**SETTINGS, "probe_model": "p", "probe_max_tokens": 64},
+                       BatchFake([LIST_PROGRAM]), "k", 1, rows.append, only=("R", "S"), probes=4, alongside=True)
+        jobs = [r for r in rows if r["record_type"] == "job"]
+        self.assertEqual({r["arm"] for r in jobs}, {"R", "S"})
+        self.assertTrue(all(r["correct"] for r in jobs))
+        summary = next(r for r in rows if r["record_type"] == "shape")
+        self.assertIn("write_once_alongside", summary)
+        import analyze_write_once_v1 as analysis
+        result = analysis.analyse({"header": [{"label": "t"}], "footer": [{"status": "COMPLETED"}],
+                                   "job": jobs, "shape": [summary]}, replicates=50, primary_arm="S")
+        self.assertIsNotNone(result["s_vs_r"])
+
+
+class RunnerAgreementArmTests(unittest.TestCase):
+    def test_arm_g_races_to_agreement_and_is_analysed(self):
+        instances = [({"n": n, "reviews": [{"stars": 3, "text": t} for t in texts]}, {})
+                     for n, texts in enumerate([["great", "bad"], ["great"], ["meh", "great"], ["bad"]], 1)]
+        shape = {"name": "tiny", "description": LIST_DESCRIPTION, "output": "out"}
+        gold = [{"out": i["n"] + sum("great" in r["text"] for r in i["reviews"])} for i, _ in instances]
+        bench = types.SimpleNamespace(SHAPES=[shape], stream=lambda s: instances, gold=lambda s, inst: gold)
+        rows = []
+        runner.execute([shape], bench, {"model": "x"}, {**SETTINGS, "probe_model": "p", "probe_max_tokens": 64},
+                       BatchFake([LIST_PROGRAM]), "k", 1, rows.append, only=("R", "G"), agreement=True)
+        jobs = [r for r in rows if r["record_type"] == "job"]
+        g = [r for r in jobs if r["arm"] == "G"]
+        self.assertEqual(len(g), 4)
+        self.assertTrue(all(r["correct"] and r["route"] == "race_agreed" and r["uncertain"] is False for r in g))
+        import analyze_write_once_v1 as analysis
+        summary = next(r for r in rows if r["record_type"] == "shape")
+        result = analysis.analyse({"header": [{"label": "t"}], "footer": [{"status": "COMPLETED"}],
+                                   "job": jobs, "shape": [summary]}, replicates=50, primary_arm="G")
+        self.assertIsNotNone(result["g_vs_r"])
+
+
+class RunnerFastArmTests(unittest.TestCase):
+    def test_arm_l_runs_and_is_analysed(self):
+        instances = [({"n": n, "reviews": [{"stars": 3, "text": t} for t in texts]}, {})
+                     for n, texts in enumerate([["great", "bad"], ["great"], ["meh", "great"], ["bad"]], 1)]
+        shape = {"name": "tiny", "description": LIST_DESCRIPTION, "output": "out"}
+        gold = [{"out": i["n"] + sum("great" in r["text"] for r in i["reviews"])} for i, _ in instances]
+        bench = types.SimpleNamespace(SHAPES=[shape], stream=lambda s: instances, gold=lambda s, inst: gold)
+        rows = []
+        runner.execute([shape], bench, {"model": "x"}, {**SETTINGS, "probe_model": "p", "probe_max_tokens": 64},
+                       BatchFake([LIST_PROGRAM]), "k", 1, rows.append, only=("R", "P", "L"), probes=4, fast=True)
+        jobs = [r for r in rows if r["record_type"] == "job"]
+        self.assertEqual({r["arm"] for r in jobs}, {"R", "P", "L"})
+        self.assertTrue(all(r["correct"] for r in jobs))
+        summary = next(r for r in rows if r["record_type"] == "shape")
+        self.assertIn("write_once_fast", summary)
+        import analyze_write_once_v1 as analysis
+        result = analysis.analyse({"header": [{"label": "t"}], "footer": [{"status": "COMPLETED"}],
+                                   "job": jobs, "shape": [summary]}, replicates=50, primary_arm="L")
+        self.assertIsNotNone(result["l_vs_p"])
 
 
 class RunnerFixedArmTests(unittest.TestCase):

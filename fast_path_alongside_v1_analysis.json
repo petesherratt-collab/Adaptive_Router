@@ -1,0 +1,276 @@
+{
+ "status": "COMPLETED",
+ "label": "alongside_v1",
+ "task_clusters": 8,
+ "arms": {
+  "R": {
+   "jobs": 160,
+   "correct": 140,
+   "unanswered": 0,
+   "median_ms": 2262.4666764999974,
+   "p90_ms": 2984.1600712999875,
+   "last_five_median_ms": 2201.0183419999694
+  },
+  "S": {
+   "jobs": 160,
+   "correct": 147,
+   "unanswered": 0,
+   "median_ms": 2930.6536300000375,
+   "p90_ms": 4345.0572802000015,
+   "last_five_median_ms": 2883.2167750000226
+  }
+ },
+ "primary_arm": "S",
+ "w_vs_r": null,
+ "p_vs_r": null,
+ "p_vs_w": null,
+ "p_vs_d": null,
+ "probe_summaries": [
+  {
+   "proposed": 0,
+   "agreed": 0,
+   "failed": 0,
+   "error": "NO_PROBE_INPUTS",
+   "failures": []
+  },
+  null,
+  {
+   "proposed": 0,
+   "agreed": 0,
+   "failed": 0,
+   "error": "NO_PROBE_INPUTS",
+   "failures": []
+  },
+  null,
+  {
+   "proposed": 0,
+   "agreed": 0,
+   "failed": 0,
+   "error": "NO_PROBE_INPUTS",
+   "failures": []
+  },
+  {
+   "proposed": 0,
+   "agreed": 0,
+   "failed": 0,
+   "error": "NO_PROBE_INPUTS",
+   "failures": []
+  },
+  {
+   "proposed": 3,
+   "agreed": 3,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 3,
+   "agreed": 3,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 0,
+   "agreed": 0,
+   "failed": 0,
+   "error": "NO_PROBE_INPUTS",
+   "failures": []
+  },
+  {
+   "proposed": 6,
+   "agreed": 6,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  }
+ ],
+ "q_vs_r": null,
+ "q_vs_p": null,
+ "c_vs_p": null,
+ "b_vs_r": null,
+ "b_vs_p": null,
+ "f_vs_r": null,
+ "f_vs_p": null,
+ "m_vs_r": null,
+ "m_vs_p": null,
+ "s_vs_r": {
+  "time_ratio": 1.2953356000512306,
+  "time_ratio_interval_95": [
+   1.2265019927272822,
+   1.3976507742055306
+  ],
+  "correctness_difference": 0.043749999999999956,
+  "correctness_interval_95": [
+   0.0,
+   0.09999999999999998
+  ]
+ },
+ "fallback": null,
+ "uncertainty": {
+  "S": {
+   "flagged": {
+    "jobs": 0,
+    "correct": 0
+   },
+   "unflagged": {
+    "jobs": 160,
+    "correct": 147
+   }
+  }
+ },
+ "first_program_by_arm": {
+  "S": {
+   "review_digest": 3,
+   "incident_log": 5,
+   "expense_lines": 6,
+   "survey_comments": 9,
+   "menu_check": 2,
+   "applicant_screen": null,
+   "delivery_feedback": null,
+   "listing_filter": 6
+  }
+ },
+ "c_first_plan": null,
+ "w_vs_d": null,
+ "w_vs_e": null,
+ "w_vs_c": null,
+ "c_vs_r": null,
+ "first_program_job_index": {
+  "menu_check": 2,
+  "review_digest": 3,
+  "incident_log": 5,
+  "expense_lines": 6,
+  "listing_filter": 6,
+  "survey_comments": 9
+ },
+ "shapes_with_program": 6,
+ "w_routes": {
+  "race": {
+   "jobs": 137,
+   "correct": 129,
+   "median_ms": 2936.211362999984
+  },
+  "program": {
+   "jobs": 23,
+   "correct": 18,
+   "median_ms": 2633.8819170000534
+  }
+ },
+ "attempt_outcomes": {
+  "ADOPTED": 8,
+  "REJECTED": 1,
+  "INVALID_PROGRAM": 1
+ },
+ "readings_per_program": [
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1
+ ],
+ "median_after_program_ms": {
+  "S": 3115.9366349999686,
+  "R": 2399.444317000018
+ },
+ "per_shape": {
+  "review_digest": {
+   "R": {
+    "correct": 19,
+    "median_ms": 2304.2553284999913
+   },
+   "S": {
+    "correct": 20,
+    "median_ms": 2796.695845000002
+   }
+  },
+  "incident_log": {
+   "R": {
+    "correct": 9,
+    "median_ms": 2602.3233555000047
+   },
+   "S": {
+    "correct": 8,
+    "median_ms": 3685.341444000045
+   }
+  },
+  "expense_lines": {
+   "R": {
+    "correct": 18,
+    "median_ms": 2441.8477345000156
+   },
+   "S": {
+    "correct": 19,
+    "median_ms": 2948.810105999982
+   }
+  },
+  "survey_comments": {
+   "R": {
+    "correct": 16,
+    "median_ms": 2659.4464955000203
+   },
+   "S": {
+    "correct": 20,
+    "median_ms": 3353.420160999974
+   }
+  },
+  "menu_check": {
+   "R": {
+    "correct": 18,
+    "median_ms": 2610.585142000019
+   },
+   "S": {
+    "correct": 20,
+    "median_ms": 3259.561854999987
+   }
+  },
+  "applicant_screen": {
+   "S": {
+    "correct": 20,
+    "median_ms": 1818.0690330000004
+   },
+   "R": {
+    "correct": 20,
+    "median_ms": 1662.3226865000333
+   }
+  },
+  "delivery_feedback": {
+   "S": {
+    "correct": 20,
+    "median_ms": 3943.9573604999796
+   },
+   "R": {
+    "correct": 20,
+    "median_ms": 2429.2741085000102
+   }
+  },
+  "listing_filter": {
+   "S": {
+    "correct": 20,
+    "median_ms": 2499.1469094999843
+   },
+   "R": {
+    "correct": 20,
+    "median_ms": 1780.5177184999934
+   }
+  }
+ },
+ "usage_per_arm": {
+  "R": {
+   "calls": 800,
+   "prompt_tokens": 410934,
+   "completion_tokens": 449889
+  },
+  "S": {
+   "calls": 7263,
+   "prompt_tokens": 1923435,
+   "completion_tokens": 1003360
+  }
+ },
+ "time_criterion_met": false,
+ "correctness_criterion_met": true,
+ "decision": "NOT_SUPPORTED"
+}

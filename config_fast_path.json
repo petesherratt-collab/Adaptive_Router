@@ -41,6 +41,7 @@
     "write_early": false,
     "uncertainty_gate": true,
     "batch_readings": false,
-    "adaptive_width": false
+    "adaptive_width": false,
+    "probation_jobs": 10
   }
 }

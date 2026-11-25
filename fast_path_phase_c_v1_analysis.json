@@ -1,0 +1,507 @@
+{
+ "status": "COMPLETED",
+ "label": "phase_c_v1",
+ "task_clusters": 8,
+ "arms": {
+  "R": {
+   "jobs": 160,
+   "correct": 156,
+   "unanswered": 0,
+   "median_ms": 1857.998805999955,
+   "p90_ms": 2674.7885922999785,
+   "last_five_median_ms": 1863.1496199999447
+  },
+  "P": {
+   "jobs": 160,
+   "correct": 157,
+   "unanswered": 0,
+   "median_ms": 2198.3588310000073,
+   "p90_ms": 3571.963058500023,
+   "last_five_median_ms": 1436.141618000022
+  },
+  "Q": {
+   "jobs": 160,
+   "correct": 159,
+   "unanswered": 0,
+   "median_ms": 2290.7810224999707,
+   "p90_ms": 4008.32035340004,
+   "last_five_median_ms": 2051.9359630000054
+  }
+ },
+ "primary_arm": "P",
+ "w_vs_r": null,
+ "p_vs_r": {
+  "time_ratio": 1.1831863529195725,
+  "time_ratio_interval_95": [
+   1.0474392699104769,
+   1.3109669797433552
+  ],
+  "correctness_difference": 0.006249999999999978,
+  "correctness_interval_95": [
+   -0.025000000000000022,
+   0.03750000000000009
+  ]
+ },
+ "p_vs_w": null,
+ "p_vs_d": null,
+ "probe_summaries": [
+  {
+   "proposed": 6,
+   "agreed": 6,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 6,
+   "agreed": 6,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 6,
+   "agreed": 0,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 6,
+   "agreed": 6,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 6,
+   "agreed": 1,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 0,
+   "agreed": 0,
+   "failed": 0,
+   "error": "NO_PROBE_INPUTS",
+   "failures": []
+  },
+  null,
+  {
+   "proposed": 0,
+   "agreed": 0,
+   "failed": 0,
+   "error": "NO_PROBE_INPUTS",
+   "failures": []
+  },
+  {
+   "proposed": 0,
+   "agreed": 0,
+   "failed": 0,
+   "error": "NO_PROBE_INPUTS",
+   "failures": []
+  }
+ ],
+ "q_vs_r": {
+  "time_ratio": 1.2329292220761665,
+  "time_ratio_interval_95": [
+   1.0441150818316325,
+   1.3487091664804158
+  ],
+  "correctness_difference": 0.018750000000000044,
+  "correctness_interval_95": [
+   0.0,
+   0.04375000000000007
+  ]
+ },
+ "q_vs_p": {
+  "time_ratio": 1.0420414493742687,
+  "time_ratio_interval_95": [
+   0.8997559117331143,
+   1.12289020991848
+  ],
+  "correctness_difference": 0.012500000000000067,
+  "correctness_interval_95": [
+   0.0,
+   0.025000000000000022
+  ]
+ },
+ "c_vs_p": null,
+ "b_vs_r": null,
+ "b_vs_p": null,
+ "f_vs_r": null,
+ "f_vs_p": null,
+ "m_vs_r": null,
+ "m_vs_p": null,
+ "s_vs_r": null,
+ "g_vs_r": null,
+ "fallback": null,
+ "uncertainty": {
+  "P": {
+   "flagged": {
+    "jobs": 5,
+    "correct": 3
+   },
+   "unflagged": {
+    "jobs": 155,
+    "correct": 154
+   }
+  },
+  "Q": {
+   "flagged": {
+    "jobs": 4,
+    "correct": 3
+   },
+   "unflagged": {
+    "jobs": 156,
+    "correct": 156
+   }
+  }
+ },
+ "first_program_by_arm": {
+  "P": {
+   "parcel_postage": 11,
+   "room_booking": 11,
+   "tip_split": 13,
+   "library_fines": 14,
+   "ticket_triage": 13,
+   "shopping_receipt": 4,
+   "repair_requests": 7,
+   "party_replies": 4
+  },
+  "Q": {
+   "parcel_postage": 8,
+   "room_booking": null,
+   "tip_split": 18,
+   "library_fines": 13,
+   "ticket_triage": 11,
+   "shopping_receipt": 5,
+   "repair_requests": 4,
+   "party_replies": 5
+  }
+ },
+ "c_first_plan": null,
+ "w_vs_d": null,
+ "w_vs_e": null,
+ "w_vs_c": null,
+ "c_vs_r": null,
+ "first_program_job_index": {
+  "shopping_receipt": 4,
+  "party_replies": 4,
+  "repair_requests": 7,
+  "parcel_postage": 11,
+  "room_booking": 11,
+  "tip_split": 13,
+  "ticket_triage": 13,
+  "library_fines": 14
+ },
+ "shapes_with_program": 8,
+ "w_routes": {
+  "race": {
+   "jobs": 77,
+   "correct": 74,
+   "median_ms": 2317.435350999972
+  },
+  "program": {
+   "jobs": 83,
+   "correct": 83,
+   "median_ms": 2052.35954900013
+  }
+ },
+ "attempt_outcomes": {
+  "ADOPTED": 8,
+  "REJECTED": 1
+ },
+ "readings_per_program": [
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1
+ ],
+ "median_after_program_ms": {
+  "P": 2052.35954900013,
+  "Q": 2517.1713740000996,
+  "R": 1922.557361000031
+ },
+ "per_shape": {
+  "parcel_postage": {
+   "R": {
+    "correct": 20,
+    "median_ms": 1818.4778130000154
+   },
+   "Q": {
+    "correct": 20,
+    "median_ms": 1176.0956575000705
+   },
+   "P": {
+    "correct": 20,
+    "median_ms": 1654.5428979999883
+   }
+  },
+  "room_booking": {
+   "P": {
+    "correct": 20,
+    "median_ms": 1430.6641720000357
+   },
+   "Q": {
+    "correct": 20,
+    "median_ms": 2116.327763499953
+   },
+   "R": {
+    "correct": 20,
+    "median_ms": 1570.7236730000318
+   }
+  },
+  "tip_split": {
+   "Q": {
+    "correct": 20,
+    "median_ms": 2021.9025539999507
+   },
+   "R": {
+    "correct": 20,
+    "median_ms": 1843.5658669999953
+   },
+   "P": {
+    "correct": 20,
+    "median_ms": 1913.1713170000353
+   }
+  },
+  "library_fines": {
+   "P": {
+    "correct": 19,
+    "median_ms": 2019.979213000056
+   },
+   "Q": {
+    "correct": 20,
+    "median_ms": 1601.2132010000073
+   },
+   "R": {
+    "correct": 20,
+    "median_ms": 1522.1324595000283
+   }
+  },
+  "ticket_triage": {
+   "Q": {
+    "correct": 19,
+    "median_ms": 2697.0490850000033
+   },
+   "R": {
+    "correct": 17,
+    "median_ms": 1978.2892834999757
+   },
+   "P": {
+    "correct": 19,
+    "median_ms": 2745.0497710000263
+   }
+  },
+  "shopping_receipt": {
+   "P": {
+    "correct": 20,
+    "median_ms": 3097.072389499999
+   },
+   "R": {
+    "correct": 20,
+    "median_ms": 2522.736041500025
+   },
+   "Q": {
+    "correct": 20,
+    "median_ms": 3991.914902499957
+   }
+  },
+  "repair_requests": {
+   "P": {
+    "correct": 20,
+    "median_ms": 2946.9195319999244
+   },
+   "R": {
+    "correct": 19,
+    "median_ms": 2367.926916999977
+   },
+   "Q": {
+    "correct": 20,
+    "median_ms": 2773.5035995000317
+   }
+  },
+  "party_replies": {
+   "R": {
+    "correct": 20,
+    "median_ms": 1838.1920379999883
+   },
+   "P": {
+    "correct": 19,
+    "median_ms": 2269.7247725000125
+   },
+   "Q": {
+    "correct": 20,
+    "median_ms": 2522.783118999996
+   }
+  }
+ },
+ "usage_per_arm": {
+  "P": {
+   "calls": 3299,
+   "prompt_tokens": 820071,
+   "completion_tokens": 403452
+  },
+  "Q": {
+   "calls": 3417,
+   "prompt_tokens": 892414,
+   "completion_tokens": 525432
+  },
+  "R": {
+   "calls": 800,
+   "prompt_tokens": 373152,
+   "completion_tokens": 381348
+  }
+ },
+ "time_criterion_met": false,
+ "correctness_criterion_met": false,
+ "decision": "NOT_SUPPORTED",
+ "by_family": {
+  "one": {
+   "shapes": [
+    "library_fines",
+    "parcel_postage",
+    "room_booking",
+    "tip_split"
+   ],
+   "arms": {
+    "R": {
+     "jobs": 80,
+     "correct": 80,
+     "unanswered": 0,
+     "median_ms": 1607.1729580000351,
+     "p90_ms": 2116.9359818000885,
+     "last_five_median_ms": 1594.6538159999477
+    },
+    "P": {
+     "jobs": 80,
+     "correct": 79,
+     "unanswered": 0,
+     "median_ms": 1770.3232780000349,
+     "p90_ms": 2558.207630900074,
+     "last_five_median_ms": 1011.4626925000607
+    },
+    "Q": {
+     "jobs": 80,
+     "correct": 80,
+     "unanswered": 0,
+     "median_ms": 1763.8741855000148,
+     "p90_ms": 2637.496756100041,
+     "last_five_median_ms": 1085.3472880000368
+    }
+   },
+   "p_vs_r": {
+    "time_ratio": 1.101513853370843,
+    "time_ratio_interval_95": [
+     0.9076121373826012,
+     1.290930940829436
+    ],
+    "correctness_difference": -0.012499999999999956,
+    "correctness_interval_95": [
+     -0.03749999999999998,
+     0.0
+    ]
+   },
+   "q_vs_r": {
+    "time_ratio": 1.0975011598595952,
+    "time_ratio_interval_95": [
+     0.7727382473749914,
+     1.2595254589050529
+    ],
+    "correctness_difference": 0.0,
+    "correctness_interval_95": [
+     0.0,
+     0.0
+    ]
+   },
+   "q_vs_p": {
+    "time_ratio": 0.9963571102633267,
+    "time_ratio_interval_95": [
+     0.7425051624759182,
+     1.3360787436603299
+    ],
+    "correctness_difference": 0.012499999999999956,
+    "correctness_interval_95": [
+     0.0,
+     0.03749999999999998
+    ]
+   }
+  },
+  "many": {
+   "shapes": [
+    "party_replies",
+    "repair_requests",
+    "shopping_receipt",
+    "ticket_triage"
+   ],
+   "arms": {
+    "R": {
+     "jobs": 80,
+     "correct": 76,
+     "unanswered": 0,
+     "median_ms": 2199.225957000067,
+     "p90_ms": 2826.14090280008,
+     "last_five_median_ms": 2064.8200514999644
+    },
+    "P": {
+     "jobs": 80,
+     "correct": 78,
+     "unanswered": 0,
+     "median_ms": 2850.9006169999793,
+     "p90_ms": 4121.993824200035,
+     "last_five_median_ms": 2524.562403499999
+    },
+    "Q": {
+     "jobs": 80,
+     "correct": 79,
+     "unanswered": 0,
+     "median_ms": 2792.975583500038,
+     "p90_ms": 4458.880166099948,
+     "last_five_median_ms": 2784.9695410000095
+    }
+   },
+   "p_vs_r": {
+    "time_ratio": 1.2963200111046582,
+    "time_ratio_interval_95": [
+     1.2276640673268666,
+     1.4131067349858948
+    ],
+    "correctness_difference": 0.025000000000000022,
+    "correctness_interval_95": [
+     -0.025000000000000022,
+     0.07500000000000007
+    ]
+   },
+   "q_vs_r": {
+    "time_ratio": 1.269981183429599,
+    "time_ratio_interval_95": [
+     1.1481356097733713,
+     1.441199980752429
+    ],
+    "correctness_difference": 0.03750000000000009,
+    "correctness_interval_95": [
+     0.0,
+     0.07500000000000007
+    ]
+   },
+   "q_vs_p": {
+    "time_ratio": 0.9796818474995118,
+    "time_ratio_interval_95": [
+     0.9106187201381211,
+     1.1341167995606627
+    ],
+    "correctness_difference": 0.012500000000000067,
+    "correctness_interval_95": [
+     0.0,
+     0.03749999999999998
+    ]
+   }
+  }
+ }
+}

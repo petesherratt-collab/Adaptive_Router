@@ -1,0 +1,267 @@
+{
+ "status": "COMPLETED",
+ "label": "fast_adoption_v1",
+ "task_clusters": 4,
+ "arms": {
+  "R": {
+   "jobs": 200,
+   "correct": 195,
+   "unanswered": 0,
+   "median_ms": 1640.9706455000332,
+   "p90_ms": 2107.4024924000014,
+   "last_five_median_ms": 1681.660230499972
+  },
+  "P": {
+   "jobs": 200,
+   "correct": 200,
+   "unanswered": 0,
+   "median_ms": 1043.1830145000163,
+   "p90_ms": 2154.979351499969,
+   "last_five_median_ms": 997.8212560000088
+  },
+  "L": {
+   "jobs": 200,
+   "correct": 197,
+   "unanswered": 0,
+   "median_ms": 1109.4260364999968,
+   "p90_ms": 2410.6933126999934,
+   "last_five_median_ms": 1062.5466994999329
+  }
+ },
+ "primary_arm": "L",
+ "w_vs_r": null,
+ "p_vs_r": {
+  "time_ratio": 0.6357109539775708,
+  "time_ratio_interval_95": [
+   0.5763661576610365,
+   0.6963408996328786
+  ],
+  "correctness_difference": 0.025000000000000022,
+  "correctness_interval_95": [
+   0.020000000000000018,
+   0.03500000000000003
+  ]
+ },
+ "p_vs_w": null,
+ "p_vs_d": null,
+ "probe_summaries": [
+  {
+   "proposed": 6,
+   "agreed": 5,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  null,
+  {
+   "proposed": 6,
+   "agreed": 6,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 6,
+   "agreed": 0,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  },
+  {
+   "proposed": 6,
+   "agreed": 6,
+   "failed": 0,
+   "error": null,
+   "failures": []
+  }
+ ],
+ "q_vs_r": null,
+ "q_vs_p": null,
+ "c_vs_p": null,
+ "b_vs_r": null,
+ "b_vs_p": null,
+ "f_vs_r": null,
+ "f_vs_p": null,
+ "m_vs_r": null,
+ "m_vs_p": null,
+ "s_vs_r": null,
+ "g_vs_r": null,
+ "l_vs_r": {
+  "time_ratio": 0.6760791483640067,
+  "time_ratio_interval_95": [
+   0.5829769038619987,
+   0.7738169669448474
+  ],
+  "correctness_difference": 0.010000000000000009,
+  "correctness_interval_95": [
+   0.0,
+   0.020000000000000018
+  ]
+ },
+ "l_vs_p": {
+  "time_ratio": 1.0635008632993608,
+  "time_ratio_interval_95": [
+   0.9892126901223375,
+   1.120495852925095
+  ],
+  "correctness_difference": -0.015000000000000013,
+  "correctness_interval_95": [
+   -0.030000000000000027,
+   0.0
+  ]
+ },
+ "fallback": null,
+ "uncertainty": {
+  "P": {
+   "flagged": {
+    "jobs": 2,
+    "correct": 2
+   },
+   "unflagged": {
+    "jobs": 198,
+    "correct": 198
+   }
+  },
+  "L": {
+   "flagged": {
+    "jobs": 4,
+    "correct": 3
+   },
+   "unflagged": {
+    "jobs": 196,
+    "correct": 194
+   }
+  }
+ },
+ "first_program_by_arm": {
+  "P": {
+   "parcel_postage": 11,
+   "room_booking": 11,
+   "tip_split": 11,
+   "library_fines": 13
+  },
+  "L": {
+   "parcel_postage": 10,
+   "room_booking": 15,
+   "tip_split": 21,
+   "library_fines": 13
+  }
+ },
+ "c_first_plan": null,
+ "w_vs_d": null,
+ "w_vs_e": null,
+ "w_vs_c": null,
+ "c_vs_r": null,
+ "first_program_job_index": {
+  "parcel_postage": 10,
+  "library_fines": 13,
+  "room_booking": 15,
+  "tip_split": 21
+ },
+ "shapes_with_program": 4,
+ "w_routes": {
+  "race": {
+   "jobs": 59,
+   "correct": 58,
+   "median_ms": 2106.210674999943
+  },
+  "program": {
+   "jobs": 141,
+   "correct": 139,
+   "median_ms": 1017.2630020000497
+  }
+ },
+ "attempt_outcomes": {
+  "ADOPTED": 4,
+  "REJECTED": 1
+ },
+ "readings_per_program": [
+  1,
+  1,
+  1,
+  1
+ ],
+ "median_after_program_ms": {
+  "P": 997.4637010000151,
+  "L": 1017.2630020000497,
+  "R": 1643.781501000035
+ },
+ "per_shape": {
+  "parcel_postage": {
+   "R": {
+    "correct": 49,
+    "median_ms": 1827.8662900000313
+   },
+   "L": {
+    "correct": 50,
+    "median_ms": 1008.7180339999691
+   },
+   "P": {
+    "correct": 50,
+    "median_ms": 1040.9399380000082
+   }
+  },
+  "room_booking": {
+   "P": {
+    "correct": 50,
+    "median_ms": 1033.035408499984
+   },
+   "L": {
+    "correct": 48,
+    "median_ms": 1152.8948385000035
+   },
+   "R": {
+    "correct": 48,
+    "median_ms": 1485.874220000028
+   }
+  },
+  "tip_split": {
+   "L": {
+    "correct": 49,
+    "median_ms": 1162.5145924999742
+   },
+   "R": {
+    "correct": 49,
+    "median_ms": 1769.6471020000217
+   },
+   "P": {
+    "correct": 50,
+    "median_ms": 1037.3627519999786
+   }
+  },
+  "library_fines": {
+   "P": {
+    "correct": 50,
+    "median_ms": 1100.7379965000155
+   },
+   "L": {
+    "correct": 50,
+    "median_ms": 1174.968066999952
+   },
+   "R": {
+    "correct": 49,
+    "median_ms": 1521.1233084999662
+   }
+  }
+ },
+ "usage_per_arm": {
+  "L": {
+   "calls": 1349,
+   "prompt_tokens": 375136,
+   "completion_tokens": 233986
+  },
+  "P": {
+   "calls": 1338,
+   "prompt_tokens": 372125,
+   "completion_tokens": 228450
+  },
+  "R": {
+   "calls": 1000,
+   "prompt_tokens": 422285,
+   "completion_tokens": 380013
+  }
+ },
+ "time_criterion_met": true,
+ "correctness_criterion_met": true,
+ "decision": "SUPPORTED"
+}

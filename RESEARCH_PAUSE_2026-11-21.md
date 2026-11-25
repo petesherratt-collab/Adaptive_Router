@@ -1,6 +1,13 @@
-# Fast-path line: paused 2026-11-21
+# Fast-path line: paused 2026-11-21, restarted 2026-11-25
 
-**Status:** paused, not closed. It restarts if the owner has a real task they
+**Restarted 2026-11-25.** A real repeated task now exists: the owner's
+`change-signals` repository polls 51 company web pages daily and labels each change
+through this router (step A, "is it cosmetic?", on the fast path with learning on;
+step B, "buy, sell or irrelevant?", raced and decided by majority). Its router
+measures and a criterion read on 2027-01-05 were frozen in that repository's
+`AMENDMENT_1.md`. Development continues here at Phase B of `ROADMAP.md`.
+
+**Status before the restart:** paused, not closed. It restarts if the owner has a real task they
 repeat often enough to measure (see "What would restart it").
 
 ## The bounded claim
