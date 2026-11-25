@@ -45,7 +45,7 @@ SCHEMA_VERSION = "fast_path_request_v1"
 SOURCE_CALLER, SOURCE_AGREEMENT = "caller", "model_agreement"
 SOURCE_PROBE = "probe_agreement"
 ANSWER_CACHED = "AGREED_ANSWER_CACHED"
-DECISION_RULES = ("first", "majority")
+DECISION_RULES = ("first", "majority", "agreement")
 _SIGNATURE = re.compile(r"^def solve\(.*\)(\s*->\s*.+)?:$")
 _FENCE = re.compile(r"^```[A-Za-z0-9_-]*\n(.*?)\n?```$", re.DOTALL)
 
@@ -156,6 +156,14 @@ def load_fast_path_request(path):
     return FastPathRequest.from_mapping(document)
 
 
+def _done(value):
+    """A finished future holding ``value`` (to re-decide answers already collected)."""
+    from concurrent.futures import Future
+    future = Future()
+    future.set_result(value)
+    return future
+
+
 def decide(futures, rule="first", check=None, on_tie=None):
     """Turn a race into one answer. ``futures`` yield ``_ask`` results.
 
@@ -168,6 +176,11 @@ def decide(futures, rule="first", check=None, on_tie=None):
     ``agreed`` is True when every valid answer matched and there were at least
     two. A tie for the top goes to ``on_tie`` if given, otherwise to the fastest
     of the tied answers, and is flagged ``uncertain``.
+
+    ``rule="agreement"``: returns as soon as two valid answers agree (for jobs where
+    agreement is what makes an answer trustworthy, and a few hundred milliseconds
+    are worth it). If the race ends with no two agreeing, it falls back to the
+    majority rule's answer, flagged ``uncertain``.
 
     ``check`` (optional) must accept a value for it to count.
     Returns ``{"ok", "value", "model", "votes", "agreed", "uncertain"}``.
@@ -182,6 +195,20 @@ def decide(futures, rule="first", check=None, on_tie=None):
                 return {"ok": True, "value": answer["value"], "model": answer["model"],
                         "votes": None, "agreed": None, "uncertain": False}
         return {"ok": False, "value": None, "model": None, "votes": None, "agreed": None, "uncertain": False}
+    if rule == "agreement":
+        seen, answers = collections.Counter(), []
+        for future in as_completed(futures):
+            answer = future.result()
+            answers.append(answer)
+            if not usable(answer):
+                continue
+            key = sandbox.canonical(answer["value"])
+            seen[key] += 1
+            if seen[key] == 2:
+                return {"ok": True, "value": answer["value"], "model": answer["model"], "votes": dict(seen),
+                        "agreed": True, "uncertain": False}
+        decided = decide([_done(a) for a in answers], "majority", check, on_tie)
+        return {**decided, "uncertain": True}
     answers = [f.result() for f in futures]
     valid = sorted((a for a in answers if usable(a)), key=lambda a: a["total_ms"] or 0)
     if not valid:

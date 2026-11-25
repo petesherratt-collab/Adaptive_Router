@@ -40,6 +40,18 @@ class DecideTests(unittest.TestCase):
             fast_path.decide([], "vote")
 
 
+class AgreementTests(unittest.TestCase):
+    def test_returns_on_the_second_matching_answer(self):
+        d = fast_path.decide([done("a", 5, 1), done("b", 6, 2), done("c", 5, 3)], "agreement")  # only 5 can reach two
+        self.assertEqual((d["value"], d["agreed"], d["uncertain"]), (5, True, False))
+        self.assertIn(d["model"], ("a", "c"))  # one of the two that agreed; finished futures have no order
+
+    def test_no_two_agree_falls_back_to_majority_flagged(self):
+        d = fast_path.decide([done("a", 1, 1), done("b", 2, 2), done("c", None, 3, valid=False)], "agreement")
+        self.assertTrue(d["ok"] and d["uncertain"])
+        self.assertIn(d["value"], (1, 2))
+
+
 class CacheTests(FastPathTestCase):
     def test_agreed_answer_is_served_without_a_race(self):
         remote = FakeRemote({"a": "ANSWER: 6", "b": "ANSWER: 6"})

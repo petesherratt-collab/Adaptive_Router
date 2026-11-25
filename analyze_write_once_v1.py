@@ -18,7 +18,7 @@ import statistics
 from analyze_fast_path_planned_v1 import pair
 from analyze_fast_path_timing_v1 import BOOTSTRAP_REPLICATES, by_shape, load, percentile
 
-ARMS = ("A", "R", "C", "D", "E", "W", "P", "Q", "B", "F", "M", "S")
+ARMS = ("A", "R", "C", "D", "E", "W", "P", "Q", "B", "F", "M", "S", "G")
 
 
 def arm_table(jobs):
@@ -95,13 +95,14 @@ def analyse(kinds, replicates=BOOTSTRAP_REPLICATES, reference=None, primary_arm=
         "m_vs_r": pair(grouped, "M", "R", replicates) if {"M", "R"} <= present else None,
         "m_vs_p": pair(grouped, "M", "P", replicates) if {"M", "P"} <= present else None,
         "s_vs_r": pair(grouped, "S", "R", replicates) if {"S", "R"} <= present else None,
+        "g_vs_r": pair(grouped, "G", "R", replicates) if {"G", "R"} <= present else None,
         "fallback": fallback_summary([r for r in jobs if r["arm"] == "F"]) if "F" in present else None,
         "uncertainty": {
             arm: {flag: {"jobs": len(rows), "correct": sum(r["correct"] for r in rows)}
                   for flag, rows in (("flagged", [r for r in jobs if r["arm"] == arm and r.get("uncertain")]),
                                      ("unflagged", [r for r in jobs if r["arm"] == arm
                                                     and r.get("uncertain") is False]))}
-            for arm in ("W", "P", "Q", "B", "F", "M", "S") if arm in present},
+            for arm in ("W", "P", "Q", "B", "F", "M", "S", "G") if arm in present},
         "first_program_by_arm": {
             arm: {shape: min((r["index"] for r in jobs if r["arm"] == arm and r["shape"] == shape
                               and r["route"] == "program"), default=None)
@@ -128,7 +129,7 @@ def analyse(kinds, replicates=BOOTSTRAP_REPLICATES, reference=None, primary_arm=
                                 for k in ("calls", "prompt_tokens", "completion_tokens")}
                           for arm in sorted(present - {"E"})},
     })
-    primary = result[{"P": "p_vs_r", "B": "b_vs_r", "F": "f_vs_r", "M": "m_vs_r", "S": "s_vs_r"}.get(primary_arm, "w_vs_r")]
+    primary = result[{"P": "p_vs_r", "B": "b_vs_r", "F": "f_vs_r", "M": "m_vs_r", "S": "s_vs_r", "G": "g_vs_r"}.get(primary_arm, "w_vs_r")]
     time_met = primary["time_ratio_interval_95"][1] < 1.0
     correct_met = primary["correctness_interval_95"][0] > -0.02
     result.update({"time_criterion_met": time_met, "correctness_criterion_met": correct_met,
@@ -147,7 +148,7 @@ def main():
     parser.add_argument("observations")
     parser.add_argument("--reference", help="earlier run on the same jobs with arm C")
     parser.add_argument("--output")
-    parser.add_argument("--primary", default="W", choices=("W", "P", "B", "F", "M", "S"))
+    parser.add_argument("--primary", default="W", choices=("W", "P", "B", "F", "M", "S", "G"))
     args = parser.parse_args()
     reference = load(args.reference) if args.reference else None
     text = json.dumps(analyse(load(args.observations), reference=reference, primary_arm=args.primary),

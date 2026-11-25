@@ -4699,3 +4699,23 @@ $4.70). Credit left: $23.45.
 |---|---|
 | `fast_path_alongside_v1.jsonl` | `da03694d38aa2de15a3e8d9242c35f3c5298c564126bc755b21e5b73c86b224f` |
 | `fast_path_alongside_v1_analysis.json` | `a05cc1d4e3d9cdbcd45325dda5a8d4e7283161169029753232e70a671532bc0c` |
+
+## 2026-11-25 — Agreement rule and arm G (no provider calls)
+
+`fast_path.decide()` gains the rule "agreement": it returns the first answer two models
+agree on, and otherwise falls back to the majority, flagged. The runner gains arm G
+(`--agreement`): a whole-task race to agreement, with no program. Tests: 658 pass.
+
+## 2026-11-25 — Agreement race V1 frozen
+
+Plan: `FAST_PATH_AGREEMENT_V1_PLAN.md`. Credit at the freeze: $23.45.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path.py` | `36d46393af4c1377e0aa6bc8750db143a4a87da4e406542ec719fe74af128aca` |
+| `run_fast_path_planned_v1.py` | `cf738a1d8157efd2c7c726c2eddb883645cf2acc770780d89426c173a991e975` |
+| `analyze_write_once_v1.py` | `861a418a16cf8b0dc288132a332350fb1b6e8b26cfd2a29a85b6a778dc830b81` |
+| `config_fast_path.json` | `b1a26ee68d335790895d1913ab9fc8ed2ef009465e67e9768f8588b5d44cd54b` |
+| `fast_path_planned_bench_v6.py` | `c4250db625cdce4dbd385314163ec0fcfc096666c27cba5bc8c67f61159f196d` |
+| `fast_path_planned_bench_v6_prose.json` | `7e0ada753a1f1bbf589739d9fec3a640e81d2ec2eacb6a698f18a8c8a51ca1cb` |
+| `FAST_PATH_AGREEMENT_V1_PLAN.md` | `7018572ff6c7b692c925b37340c70aec3edf049377c0914662d79a39d015325b` |

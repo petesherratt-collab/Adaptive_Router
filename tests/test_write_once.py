@@ -520,6 +520,27 @@ class RunnerAlongsideArmTests(unittest.TestCase):
         self.assertIsNotNone(result["s_vs_r"])
 
 
+class RunnerAgreementArmTests(unittest.TestCase):
+    def test_arm_g_races_to_agreement_and_is_analysed(self):
+        instances = [({"n": n, "reviews": [{"stars": 3, "text": t} for t in texts]}, {})
+                     for n, texts in enumerate([["great", "bad"], ["great"], ["meh", "great"], ["bad"]], 1)]
+        shape = {"name": "tiny", "description": LIST_DESCRIPTION, "output": "out"}
+        gold = [{"out": i["n"] + sum("great" in r["text"] for r in i["reviews"])} for i, _ in instances]
+        bench = types.SimpleNamespace(SHAPES=[shape], stream=lambda s: instances, gold=lambda s, inst: gold)
+        rows = []
+        runner.execute([shape], bench, {"model": "x"}, {**SETTINGS, "probe_model": "p", "probe_max_tokens": 64},
+                       BatchFake([LIST_PROGRAM]), "k", 1, rows.append, only=("R", "G"), agreement=True)
+        jobs = [r for r in rows if r["record_type"] == "job"]
+        g = [r for r in jobs if r["arm"] == "G"]
+        self.assertEqual(len(g), 4)
+        self.assertTrue(all(r["correct"] and r["route"] == "race_agreed" and r["uncertain"] is False for r in g))
+        import analyze_write_once_v1 as analysis
+        summary = next(r for r in rows if r["record_type"] == "shape")
+        result = analysis.analyse({"header": [{"label": "t"}], "footer": [{"status": "COMPLETED"}],
+                                   "job": jobs, "shape": [summary]}, replicates=50, primary_arm="G")
+        self.assertIsNotNone(result["g_vs_r"])
+
+
 class RunnerFixedArmTests(unittest.TestCase):
     def test_arm_b_runs_with_the_reading_fixes(self):
         instances = [({"n": n, "reviews": [{"stars": 3, "text": t} for t in texts]}, {})
