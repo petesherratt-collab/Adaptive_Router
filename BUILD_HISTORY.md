@@ -4647,3 +4647,29 @@ judgement steps, not every reading.
 |---|---|
 | `fast_path_flag_fallback_v1.jsonl` | `a62bfbf8dc8f544e0e60e72fe87c0999a663bb99f11c7bf9b0850edebd316c4f` |
 | `fast_path_flag_fallback_v1_analysis.json` | `9817a71aef82486a17a0c25c927fef10d88fb817bea77a5488d8f08720108f57` |
+
+## 2026-11-25 — Needs review and race alongside (no provider calls)
+
+- `write_once` gains two options:
+  - `flag_fallback: "review"`: a flagged answer is returned marked `needs_review`,
+    with no retry.
+  - `race_alongside`: the whole-task race and the program start together, and the
+    first trusted answer is served. Trusted means an unflagged program answer, or two
+    racing models agreeing.
+- The runner gains arm S (`--alongside`).
+- Tests: 655 pass.
+
+## 2026-11-25 — Race alongside V1 frozen
+
+Plan: `FAST_PATH_ALONGSIDE_V1_PLAN.md`. Credit at the freeze: $26.53.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `write_once.py` | `ab65b4dc3bdf8bddbdc2696cf4f795b59159b99c4d1c0d105dcf94441da3d5c1` |
+| `run_fast_path_planned_v1.py` | `0b59e4e1a5b5d39d643c672dc9a8af385c578aa0582579f300bc79126d2dffc2` |
+| `analyze_write_once_v1.py` | `fd085da9c3ed9f1edd5fe19cf4b40f22e3094080eddb83f0c69cfe553fbbd6ac` |
+| `config_fast_path.json` | `b1a26ee68d335790895d1913ab9fc8ed2ef009465e67e9768f8588b5d44cd54b` |
+| `fast_path.py` | `d02ccdff7d5440e9bb9ac385df5d5f75c9f3872032e5884786732b1ea6d560a1` |
+| `fast_path_planned_bench_v6.py` | `c4250db625cdce4dbd385314163ec0fcfc096666c27cba5bc8c67f61159f196d` |
+| `fast_path_planned_bench_v6_prose.json` | `7e0ada753a1f1bbf589739d9fec3a640e81d2ec2eacb6a698f18a8c8a51ca1cb` |
+| `FAST_PATH_ALONGSIDE_V1_PLAN.md` | `ae25e42658ff6f4439327c174f2830cd44c26c1c41ba2855acfd2f6616264384` |

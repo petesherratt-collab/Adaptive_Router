@@ -151,14 +151,14 @@ def code_only_answer(shape, rules, inputs):
 
 def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_key,
               workdir, should_stop=lambda: False, arrival="drained", ceiling=None, code_only=None,
-              only=None, write_arm=False, probes=0, early=False, fixes=False, flagged=False):
+              only=None, write_arm=False, probes=0, early=False, fixes=False, flagged=False, alongside=False):
     base = Path(workdir) / shape["name"]
     arms = (ARMS + (("D",) if ceiling else ()) + (("E",) if code_only else ()) + (("W",) if write_arm else ())
             + (("P",) if probes else ()) + (("Q",) if early else ()) + (("B",) if fixes else ())
-            + (("F", "M") if flagged else ()))
+            + (("F", "M") if flagged else ()) + (("S",) if alongside else ()))
     if only:
         arms = tuple(arm for arm in arms if arm in only)
-    meters = {arm: UsageMeter(remote_fn) for arm in ("A", "R", "C", "D", "W", "P", "Q", "B", "F", "M")}
+    meters = {arm: UsageMeter(remote_fn) for arm in ("A", "R", "C", "D", "W", "P", "Q", "B", "F", "M", "S")}
     reading = ceiling[shape["name"]] if ceiling else None
     ceiling_router = fast_path.FastPathRouter(
         {"remote": remote_config, "fast_path": {**settings, "synthesis_enabled": False}},
@@ -208,6 +208,7 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
         return write_once.WriteOnceRouter(router)
     fallback_writer = variant("F", {"uncertainty_gate": True, "flag_fallback": "majority"})
     majority_writer = variant("M", {"decision": "majority"})
+    alongside_writer = variant("S", {"uncertainty_gate": True, "race_alongside": True})
     order_rng = random.Random(f"{ARM_ORDER_SEED}:{shape['name']}")
     rows = []
     for index, ((inputs, labels), gold) in enumerate(zip(instances, golds)):
@@ -234,9 +235,9 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
                 value, label = code_only_answer(shape, code_only, inputs)
                 answered, route = True, "code_only"
                 reading_correct = label == labels.get(shape["reading"][1])
-            elif arm in ("W", "P", "Q", "B", "F", "M"):
+            elif arm in ("W", "P", "Q", "B", "F", "M", "S"):
                 result = {"W": writer, "P": prober, "Q": early_writer, "B": fixed_writer, "F": fallback_writer,
-                          "M": majority_writer}[arm].handle({"schema_version": planner.SCHEMA_VERSION,
+                          "M": majority_writer, "S": alongside_writer}[arm].handle({"schema_version": planner.SCHEMA_VERSION,
                                         "description": shape["description"], "inputs": inputs})
                 value, route, model = result["value"], result["route"], result["model"]
                 answered = route != planner.NO_ANSWER
@@ -256,10 +257,10 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
                              for s in result["steps"]]
             answer_ms = (time.perf_counter() - started) * 1000
             background_ms = 0.0
-            if arm in ("C", "W", "P", "Q", "B", "F", "M") and arrival == "drained":
+            if arm in ("C", "W", "P", "Q", "B", "F", "M", "S") and arrival == "drained":
                 started = time.perf_counter()
                 {"C": planning, "W": writer, "P": prober, "Q": early_writer, "B": fixed_writer,
-                 "F": fallback_writer, "M": majority_writer}[arm].drain()
+                 "F": fallback_writer, "M": majority_writer, "S": alongside_writer}[arm].drain()
                 background_ms = (time.perf_counter() - started) * 1000
             rows.append({
                 "record_type": "job", "shape": shape["name"], "index": index, "arm": arm,
@@ -292,7 +293,8 @@ def run_shape(shape, instances, golds, remote_config, settings, remote_fn, api_k
         fixed_writer.close()
         summary["write_once_fixed"] = fixed_writer.summary(template)
         fixed_router.close()
-    for key, extra_writer in (("write_once_fallback", fallback_writer), ("write_once_majority", majority_writer)):
+    for key, extra_writer in (("write_once_fallback", fallback_writer), ("write_once_majority", majority_writer),
+                              ("write_once_alongside", alongside_writer)):
         if extra_writer is not None:
             extra_writer.close()
             summary[key] = extra_writer.summary(template)
@@ -352,14 +354,14 @@ def shape_summary(shape, instances, golds, record, learning):
 
 def execute(shapes, bench, remote_config, settings, remote_fn, api_key, workers, write,
             monitor=None, arrival="drained", ceiling=None, code_only=None, only=None, write_arm=False, probes=0, early=False,
-            fixes=False, flagged=False):
+            fixes=False, flagged=False, alongside=False):
     should_stop = monitor.tripped if monitor is not None else (lambda: False)
 
     def job(shape):
         instances = bench.stream(shape)
         return run_shape(shape, instances, bench.gold(shape, instances), remote_config,
                          settings, remote_fn, api_key, workdir, should_stop, arrival, ceiling,
-                         code_only, only, write_arm, probes, early, fixes, flagged)
+                         code_only, only, write_arm, probes, early, fixes, flagged, alongside)
 
     with tempfile.TemporaryDirectory() as workdir, ThreadPoolExecutor(workers) as pool:
         for rows, summary in pool.map(job, shapes):
@@ -387,6 +389,8 @@ def main():
                         help="add arm B: as P, with batched readings, the uncertainty gate and adaptive width")
     parser.add_argument("--flagged", action="store_true",
                         help="add arms F (as P; a flagged answer is served from a majority race) and M (as P, readings by majority)")
+    parser.add_argument("--alongside", action="store_true",
+                        help="add arm S (as P; the whole-task race starts with the program, first trusted answer served)")
     parser.add_argument("--arms", help="comma-separated arms to run, e.g. R,D,E,W (default: all)")
     parser.add_argument("--shapes", help="comma-separated shape names to run (default: all)")
     parser.add_argument("--limit-shapes", type=int)
@@ -444,7 +448,7 @@ def main():
             "arm_order_seed": ARM_ORDER_SEED, "workers": args.workers, "arrival": args.arrival,
             "ceiling": ({"name": Path(args.ceiling).name, "sha256": sha256_file(args.ceiling)}
                         if args.ceiling else None),
-            "arms": args.arms, "write_once": args.write_once, "probes": args.probes, "early": args.early, "fixes": args.fixes, "flagged": args.flagged,
+            "arms": args.arms, "write_once": args.write_once, "probes": args.probes, "early": args.early, "fixes": args.fixes, "flagged": args.flagged, "alongside": args.alongside,
             "code_only": ({"name": Path(args.code_only).name, "sha256": sha256_file(args.code_only)}
                           if args.code_only else None),
             "files": {name: sha256_file(ROOT / name) for name in HASHED_FILES},
@@ -453,7 +457,7 @@ def main():
         status = execute(shapes, bench, remote_config, settings, monitor, api_key,
                          args.workers, write, monitor, args.arrival, ceiling, code_only,
                          tuple(args.arms.split(",")) if args.arms else None, args.write_once, args.probes,
-                         args.early, args.fixes, args.flagged)
+                         args.early, args.fixes, args.flagged, args.alongside)
         write({"record_type": "footer", "status": status, "provider": monitor.report()})
     if status == "COMPLETED":
         partial.rename(output)
