@@ -4764,3 +4764,24 @@ the race roster. `analyze_phase_c.py` adds the per-family comparisons. Tests: 66
 | `fast_path_planned_bench_v7.py` | `8239bebf7982ee7c846033d38d64d1e47de6308d5a28a70602e77703d0b726c0` |
 | `make_bench_v7_prose.py` | `c6789a69e415183724dd8960fc47b99a8679c221ac2a83a54c2e1c5509fcf8df` |
 | `analyze_phase_c.py` | `c38ba05e9bee2c04780ea37abe4fb8a0dd80efb5a2b093871c4d9b3286be4c77` |
+
+## 2026-11-25 — V7 prose written and hand checked; Phase C V1 frozen
+
+- **Prose:** written by `mistralai/mistral-large-4-0` (12 texts per label).
+- **Hand check:** all 288 texts read against their labels. One was excluded
+  (party_replies / maybe: "Tentatively yes…", which could fairly be read as a yes).
+  The bench's SHA-256 is unchanged since its freeze.
+- **Plan:** `FAST_PATH_PHASE_C_V1_PLAN.md` (prospective).
+- **Credit at the freeze:** $21.50.
+
+| Frozen file | SHA-256 |
+|---|---|
+| `fast_path_planned_bench_v7.py` | `8239bebf7982ee7c846033d38d64d1e47de6308d5a28a70602e77703d0b726c0` |
+| `fast_path_planned_bench_v7_prose.json` | `8ae92d04867117e261984bd397d944959e5840113d286742c6846e018399df8f` |
+| `write_once.py` | `ab65b4dc3bdf8bddbdc2696cf4f795b59159b99c4d1c0d105dcf94441da3d5c1` |
+| `fast_path.py` | `36d46393af4c1377e0aa6bc8750db143a4a87da4e406542ec719fe74af128aca` |
+| `run_fast_path_planned_v1.py` | `cf738a1d8157efd2c7c726c2eddb883645cf2acc770780d89426c173a991e975` |
+| `analyze_write_once_v1.py` | `861a418a16cf8b0dc288132a332350fb1b6e8b26cfd2a29a85b6a778dc830b81` |
+| `analyze_phase_c.py` | `c38ba05e9bee2c04780ea37abe4fb8a0dd80efb5a2b093871c4d9b3286be4c77` |
+| `config_fast_path.json` | `b1a26ee68d335790895d1913ab9fc8ed2ef009465e67e9768f8588b5d44cd54b` |
+| `FAST_PATH_PHASE_C_V1_PLAN.md` | `3c3b5cc15e5b339b7e35621082394793f33e102c505bde1c3901b6f8e143751e` |
